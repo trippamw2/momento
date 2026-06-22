@@ -205,7 +205,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
 
   return (
     <div className="pt-16">
-      <AuthModal onClose={() => setAuthOpen(false)} />
+      {authOpen && <AuthModal onClose={() => setAuthOpen(false)} />}
       {/* ─── Hero Image Gallery ─── */}
       <section className="relative">
         <div className="relative h-[50vh] sm:h-[65vh] md:h-[75vh]">
@@ -273,7 +273,13 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                 {exp.location}
                 <span className="text-[#6B7280]">·</span>
-                <span className="text-[#6B7280]">{exp.distance}</span>
+                <span className="text-[#6B7280]">{exp.city}</span>
+                {exp.distance && (
+                  <>
+                    <span className="text-[#6B7280]">·</span>
+                    <span className="text-[#6B7280]">{exp.distance}</span>
+                  </>
+                )}
               </div>
               <div className="flex items-center gap-1.5 text-body-sm text-[#A1A1AA]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -381,7 +387,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   loading="lazy"
                 />
                 <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-lg bg-black/80 backdrop-blur-md text-caption text-[#A1A1AA] border border-white/[0.08]">
-                  📍 {exp.location} · {exp.distance}
+                  📍 {exp.location} · {exp.city}
                 </div>
               </div>
             </div>

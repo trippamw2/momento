@@ -20,6 +20,7 @@ export interface Experience {
   currency: string;
   partner: string;
   location: string;
+  city: string;
   distance: string;
   duration: string;
   mood: Mood[];

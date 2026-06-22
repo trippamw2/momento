@@ -47,6 +47,7 @@ export async function POST(request: Request) {
       special_requests?: string;
       contact_phone?: string;
       contact_email?: string;
+      gift_card_code?: string;
     }>(request);
 
     if (!body.experience_id || !body.guests_count || !body.total_price || !body.experience_date) {
@@ -57,7 +58,7 @@ export async function POST(request: Request) {
 
     const { data: experience } = await supabase
       .from("experiences")
-      .select("id, title, price, max_guests")
+      .select("id, title, price, max_guests, city, location")
       .eq("id", body.experience_id)
       .eq("status", "published")
       .single();
@@ -68,7 +69,40 @@ export async function POST(request: Request) {
       return json({ error: `Maximum ${experience.max_guests} guests allowed` }, 400);
     }
 
+    const serverPrice = experience.price * body.guests_count;
+    const priceTolerance = Math.abs(serverPrice - body.total_price);
+
+    if (priceTolerance > 100) {
+      return json({
+        error: "Price mismatch - please refresh and try again",
+        expected_price: serverPrice,
+        sent_price: body.total_price,
+      }, 400);
+    }
+
     const admin = createAdminClient();
+
+    if (body.gift_card_code) {
+      const { data: giftCard } = await admin
+        .from("gift_cards")
+        .select("*")
+        .eq("code", body.gift_card_code.toUpperCase())
+        .single();
+
+      if (giftCard && giftCard.status === "active" && giftCard.balance > 0) {
+        const redeemAmount = Math.min(giftCard.balance, serverPrice);
+
+        await admin
+          .from("gift_cards")
+          .update({
+            balance: giftCard.balance - redeemAmount,
+            status: giftCard.balance - redeemAmount === 0 ? "redeemed" : "active",
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", giftCard.id);
+      }
+    }
+
     const { data, error } = await admin
       .from("bookings")
       .insert({
@@ -76,7 +110,7 @@ export async function POST(request: Request) {
         experience_id: body.experience_id,
         availability_id: body.availability_id ?? null,
         guests_count: body.guests_count,
-        total_price: body.total_price,
+        total_price: serverPrice,
         currency: "MWK",
         status: "pending",
         notes: body.notes ?? null,

@@ -1,12 +1,18 @@
 import { getUser, json, handleRouteError, parseBody } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
 
+interface RedeemRequest {
+  code: string;
+  booking_id?: string;
+  amount?: number;
+}
+
 export async function POST(request: Request) {
   try {
     const user = await getUser(request);
     if (!user) return json({ error: "Unauthorized" }, 401);
 
-    const body = await parseBody<{ code: string; booking_id?: string }>(request);
+    const body = await parseBody<RedeemRequest>(request);
     if (!body.code) return json({ error: "Gift card code is required" }, 400);
 
     const admin = createAdminClient();
@@ -31,12 +37,52 @@ export async function POST(request: Request) {
       return json({ error: "Gift card has no remaining balance" }, 400);
     }
 
+    const redeemAmount = body.amount ?? giftCard.balance;
+
+    if (redeemAmount <= 0 || redeemAmount > giftCard.balance) {
+      return json({ error: `Invalid amount. Available balance: ${giftCard.balance}` }, 400);
+    }
+
+    const newBalance = giftCard.balance - redeemAmount;
+    const now = new Date().toISOString();
+
+    const updates: Record<string, unknown> = {
+      balance: newBalance,
+      updated_at: now,
+    };
+
+    if (newBalance === 0) {
+      updates.status = "redeemed";
+      updates.redeemed_at = now;
+      updates.redeemed_by = user.id;
+    }
+
+    const { error: updateError } = await admin
+      .from("gift_cards")
+      .update(updates)
+      .eq("id", giftCard.id);
+
+    if (updateError) return json({ error: updateError.message }, 400);
+
+    if (body.booking_id) {
+      await admin.from("gift_card_transactions").insert({
+        gift_card_id: giftCard.id,
+        booking_id: body.booking_id,
+        type: "redemption",
+        amount: redeemAmount,
+        balance_after: newBalance,
+      });
+    }
+
     return json({
       valid: true,
-      balance: giftCard.balance,
+      redeemed: true,
+      amount_redeemed: redeemAmount,
+      remaining_balance: newBalance,
       currency: giftCard.currency,
       recipient_name: giftCard.recipient_name,
       sender_name: giftCard.sender_name,
+      status: newBalance === 0 ? "redeemed" : "active",
     });
   } catch (error) {
     return handleRouteError(error);

@@ -1,4 +1,5 @@
 import { Experience, Mood, NavItem, CollectionKey, Review } from "./types";
+import { haversineDistance, formatDistance, AFRICAN_CITY_COORDS } from "./geo";
 
 export const moods: { label: Mood; emoji: string; description: string }[] = [
   { label: "Romantic", emoji: "🌹", description: "Perfect for two" },
@@ -15,18 +16,6 @@ export const navItems: NavItem[] = [
   { label: "Bookings", href: "/bookings", icon: "calendar" },
   { label: "Partners", href: "/profile", icon: "briefcase" },
 ];
-
-const locationCoords: Record<string, { lat: number; lng: number }> = {
-  "Cape Maclear": { lat: -14.0167, lng: 34.85 },
-  "Lilongwe": { lat: -13.9626, lng: 33.7741 },
-  "Salima": { lat: -13.7833, lng: 34.4333 },
-  "Blantyre": { lat: -15.7861, lng: 35.0058 },
-  "Mangochi": { lat: -14.4667, lng: 35.2667 },
-  "Zomba": { lat: -15.3867, lng: 35.3188 },
-  "Dedza": { lat: -14.3667, lng: 34.3333 },
-  "Liwonde": { lat: -15.0667, lng: 35.2167 },
-  "Various": { lat: -13.9626, lng: 33.7741 },
-};
 
 const gallerySets: Record<string, string[]> = {
   Dining: [
@@ -187,8 +176,23 @@ function getCapacity(category: string): number {
   return capacityMap[category] || 8;
 }
 
+function nearestCity(location: string): string {
+  const cityMap: Record<string, string> = {
+    "Cape Maclear": "Lilongwe",
+    "Lilongwe": "Lilongwe",
+    "Salima": "Lilongwe",
+    "Blantyre": "Blantyre",
+    "Mangochi": "Blantyre",
+    "Zomba": "Blantyre",
+    "Dedza": "Lilongwe",
+    "Liwonde": "Blantyre",
+    "Various": "Lilongwe",
+  };
+  return cityMap[location] || "Lilongwe";
+}
+
 function getCoords(location: string): { lat: number; lng: number } {
-  return locationCoords[location] || { lat: -13.9626, lng: 33.7741 };
+  return AFRICAN_CITY_COORDS[location] || AFRICAN_CITY_COORDS["Lilongwe"];
 }
 
 function generateReviews(id: string, baseRating: number): Review[] {
@@ -212,7 +216,6 @@ interface RawExperience {
   price: number;
   currency: string;
   location: string;
-  distance: string;
   duration: string;
   mood: Mood[];
   rating: number;
@@ -231,7 +234,6 @@ const rawExperiences: RawExperience[] = [
     price: 55000,
     currency: "MWK",
     location: "Cape Maclear",
-    distance: "2.3 km",
     duration: "3 hours",
     mood: ["Romantic", "Escape", "Relax"],
     rating: 4.9,
@@ -248,7 +250,6 @@ const rawExperiences: RawExperience[] = [
     price: 45000,
     currency: "MWK",
     location: "Lilongwe",
-    distance: "0.8 km",
     duration: "4 hours",
     mood: ["Relax", "Treat Myself"],
     rating: 4.8,
@@ -265,7 +266,6 @@ const rawExperiences: RawExperience[] = [
     price: 65000,
     currency: "MWK",
     location: "Salima",
-    distance: "5.1 km",
     duration: "3 hours",
     mood: ["Romantic", "Celebrate"],
     rating: 4.9,
@@ -282,7 +282,6 @@ const rawExperiences: RawExperience[] = [
     price: 85000,
     currency: "MWK",
     location: "Blantyre",
-    distance: "1.2 km",
     duration: "6 hours",
     mood: ["Relax", "Treat Myself"],
     rating: 4.7,
@@ -299,7 +298,6 @@ const rawExperiences: RawExperience[] = [
     price: 35000,
     currency: "MWK",
     location: "Lilongwe",
-    distance: "0.3 km",
     duration: "3 hours",
     mood: ["Relax", "Celebrate", "Treat Myself"],
     rating: 4.6,
@@ -316,7 +314,6 @@ const rawExperiences: RawExperience[] = [
     price: 180000,
     currency: "MWK",
     location: "Mangochi",
-    distance: "12.4 km",
     duration: "2 nights",
     mood: ["Escape", "Romantic", "Relax"],
     rating: 4.9,
@@ -333,7 +330,6 @@ const rawExperiences: RawExperience[] = [
     price: 55000,
     currency: "MWK",
     location: "Lilongwe",
-    distance: "1.5 km",
     duration: "6 hours",
     mood: ["Celebrate", "Treat Myself"],
     rating: 4.7,
@@ -349,8 +345,7 @@ const rawExperiences: RawExperience[] = [
     image: "https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=600&q=80",
     price: 120000,
     currency: "MWK",
-    location: "Various",
-    distance: "0 km",
+    location: "Lilongwe",
     duration: "4 hours",
     mood: ["Celebrate"],
     rating: 4.8,
@@ -367,7 +362,6 @@ const rawExperiences: RawExperience[] = [
     price: 150000,
     currency: "MWK",
     location: "Salima",
-    distance: "6.8 km",
     duration: "2 days",
     mood: ["Relax", "Escape", "Treat Myself"],
     rating: 4.8,
@@ -384,7 +378,6 @@ const rawExperiences: RawExperience[] = [
     price: 40000,
     currency: "MWK",
     location: "Zomba",
-    distance: "3.5 km",
     duration: "2.5 hours",
     mood: ["Romantic", "Treat Myself"],
     rating: 4.5,
@@ -401,7 +394,6 @@ const rawExperiences: RawExperience[] = [
     price: 70000,
     currency: "MWK",
     location: "Dedza",
-    distance: "8.2 km",
     duration: "8 hours",
     mood: ["Escape", "Celebrate"],
     rating: 4.6,
@@ -418,7 +410,6 @@ const rawExperiences: RawExperience[] = [
     price: 55000,
     currency: "MWK",
     location: "Salima",
-    distance: "5.1 km",
     duration: "90 minutes",
     mood: ["Romantic", "Relax"],
     rating: 4.9,
@@ -435,7 +426,6 @@ const rawExperiences: RawExperience[] = [
     price: 65000,
     currency: "MWK",
     location: "Lilongwe",
-    distance: "0.5 km",
     duration: "3 hours",
     mood: ["Treat Myself", "Celebrate"],
     rating: 4.7,
@@ -452,7 +442,6 @@ const rawExperiences: RawExperience[] = [
     price: 30000,
     currency: "MWK",
     location: "Cape Maclear",
-    distance: "2.3 km",
     duration: "3 hours",
     mood: ["Escape", "Treat Myself"],
     rating: 4.5,
@@ -469,7 +458,6 @@ const rawExperiences: RawExperience[] = [
     price: 75000,
     currency: "MWK",
     location: "Lilongwe",
-    distance: "0.2 km",
     duration: "3 hours",
     mood: ["Romantic", "Celebrate", "Treat Myself"],
     rating: 4.8,
@@ -486,7 +474,6 @@ const rawExperiences: RawExperience[] = [
     price: 25000,
     currency: "MWK",
     location: "Lilongwe",
-    distance: "0.6 km",
     duration: "2 hours",
     mood: ["Relax", "Treat Myself"],
     rating: 4.4,
@@ -503,7 +490,6 @@ const rawExperiences: RawExperience[] = [
     price: 95000,
     currency: "MWK",
     location: "Liwonde",
-    distance: "45.2 km",
     duration: "4 hours",
     mood: ["Escape", "Romantic", "Celebrate"],
     rating: 4.9,
@@ -520,7 +506,6 @@ const rawExperiences: RawExperience[] = [
     price: 130000,
     currency: "MWK",
     location: "Cape Maclear",
-    distance: "2.8 km",
     duration: "4 hours",
     mood: ["Romantic", "Escape"],
     rating: 5.0,
@@ -537,7 +522,6 @@ const rawExperiences: RawExperience[] = [
     price: 200000,
     currency: "MWK",
     location: "Mangochi",
-    distance: "14.7 km",
     duration: "2 nights",
     mood: ["Escape", "Romantic", "Relax"],
     rating: 4.7,
@@ -554,7 +538,6 @@ const rawExperiences: RawExperience[] = [
     price: 35000,
     currency: "MWK",
     location: "Lilongwe",
-    distance: "1.1 km",
     duration: "3 hours",
     mood: ["Celebrate", "Treat Myself", "Relax"],
     rating: 4.6,
@@ -564,27 +547,47 @@ const rawExperiences: RawExperience[] = [
   },
 ];
 
-export const experiences: Experience[] = rawExperiences.map((e) => ({
-  ...e,
-  images: [e.image, ...getGalleryImages(e.category)],
-  partner: getPartner(e.title),
-  includes: getIncludes(e.category),
-  capacity: getCapacity(e.category),
-  coordinates: getCoords(e.location),
-  reviews: generateReviews(e.id, e.rating),
-}));
+export const experiences: Experience[] = rawExperiences.map((e) => {
+  const city = nearestCity(e.location);
+  return {
+    ...e,
+    images: [e.image, ...getGalleryImages(e.category)],
+    partner: getPartner(e.title),
+    includes: getIncludes(e.category),
+    capacity: getCapacity(e.category),
+    coordinates: getCoords(e.location),
+    city,
+    distance: "",
+    reviews: generateReviews(e.id, e.rating),
+  };
+});
 
-export const collections: Record<CollectionKey, { title: string; getExperiences: () => Experience[] }> = {
+export const CITIES = Array.from(new Set(experiences.map((e) => e.city)));
+
+export function experiencesNear(userLocation: { lat: number; lng: number }): Experience[] {
+  return [...experiences]
+    .map((e) => ({
+      ...e,
+      distance: formatDistance(haversineDistance(userLocation, e.coordinates)),
+    }))
+    .sort((a, b) => {
+      const dA = haversineDistance(userLocation, a.coordinates);
+      const dB = haversineDistance(userLocation, b.coordinates);
+      return dA - dB;
+    });
+}
+
+export const collections: Record<CollectionKey, { title: string; getExperiences: (userLocation?: { lat: number; lng: number }) => Experience[] }> = {
   trending: {
     title: "Trending This Weekend",
     getExperiences: () => experiences.filter((e) => e.rating >= 4.8).slice(0, 6),
   },
   popular: {
     title: "Popular Near You",
-    getExperiences: () =>
-      [...experiences]
-        .sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
-        .slice(0, 6),
+    getExperiences: (userLocation) => {
+      if (!userLocation) return experiences.filter((e) => e.featured).slice(0, 6);
+      return experiencesNear(userLocation).slice(0, 6);
+    },
   },
   recommended: {
     title: "Recommended For You",
@@ -618,6 +621,41 @@ export const collections: Record<CollectionKey, { title: string; getExperiences:
         : experiences.slice(0, 4),
   },
 };
+
+export const collectionsByCity: Record<string, { title: string; getExperiences: (userLocation?: { lat: number; lng: number }) => Experience[] }[]> = {};
+
+CITIES.forEach((city) => {
+  collectionsByCity[city] = [
+    {
+      title: `Trending in ${city}`,
+      getExperiences: () =>
+        experiences.filter((e) => e.city === city && e.rating >= 4.8).slice(0, 6),
+    },
+    {
+      title: `All Experiences in ${city}`,
+      getExperiences: () =>
+        experiences.filter((e) => e.city === city).slice(0, 8),
+    },
+    {
+      title: `Popular Near ${city}`,
+      getExperiences: (userLocation) => {
+        const base = experiences.filter((e) => e.city === city);
+        if (!userLocation) return base.slice(0, 6);
+        return [...base]
+          .map((e) => ({
+            ...e,
+            distance: formatDistance(haversineDistance(userLocation, e.coordinates)),
+          }))
+          .sort((a, b) => {
+            const dA = haversineDistance(userLocation, a.coordinates);
+            const dB = haversineDistance(userLocation, b.coordinates);
+            return dA - dB;
+          })
+          .slice(0, 6);
+      },
+    },
+  ];
+});
 
 export const collectionOrder: CollectionKey[] = [
   "trending",
@@ -656,7 +694,9 @@ export function filterExperiences(opts: {
   mood?: Mood | null;
   priceRange?: string;
   location?: string;
+  city?: string;
   nearby?: boolean;
+  userLocation?: { lat: number; lng: number };
 }): Experience[] {
   let result = [...experiences];
 
@@ -668,6 +708,7 @@ export function filterExperiences(opts: {
         e.subtitle.toLowerCase().includes(q) ||
         e.description.toLowerCase().includes(q) ||
         e.location.toLowerCase().includes(q) ||
+        e.city.toLowerCase().includes(q) ||
         e.category.toLowerCase().includes(q)
     );
   }
@@ -689,8 +730,22 @@ export function filterExperiences(opts: {
     result = result.filter((e) => e.location === opts.location);
   }
 
+  if (opts.city) {
+    result = result.filter((e) => e.city === opts.city);
+  }
+
   if (opts.nearby) {
-    result.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
+    const loc = opts.userLocation || AFRICAN_CITY_COORDS["Lilongwe"];
+    result = result
+      .map((e) => ({
+        ...e,
+        distance: formatDistance(haversineDistance(loc, e.coordinates)),
+      }))
+      .sort((a, b) => {
+        const dA = haversineDistance(loc, a.coordinates);
+        const dB = haversineDistance(loc, b.coordinates);
+        return dA - dB;
+      });
   }
 
   return result;

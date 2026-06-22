@@ -8,6 +8,7 @@ import { useState, useCallback } from "react";
 interface ExperienceCardProps {
   experience: Experience;
   size?: "sm" | "md";
+  showCity?: boolean;
 }
 
 function loadSaved(): string[] {
@@ -22,7 +23,7 @@ function loadSaved(): string[] {
   }
 }
 
-export default function ExperienceCard({ experience: exp, size = "md" }: ExperienceCardProps) {
+export default function ExperienceCard({ experience: exp, size = "md", showCity = true }: ExperienceCardProps) {
   const width = size === "sm" ? "w-52" : "w-72";
   const [saved, setSaved] = useState(() => loadSaved().includes(exp.id));
 
@@ -57,7 +58,7 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
 
         <div className="absolute top-3 left-3">
           <span className="px-2.5 py-1 rounded-full text-caption font-medium bg-white/[0.08] backdrop-blur-md text-white/90 border border-white/[0.08]">
-            {exp.distance}
+            {exp.distance ? exp.distance : exp.city}
           </span>
         </div>
 

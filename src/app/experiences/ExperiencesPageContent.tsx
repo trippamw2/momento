@@ -236,7 +236,7 @@ export default function ExperiencesPageContent() {
                     <div className="gradient-overlay-bottom absolute inset-0" />
                     <div className="absolute top-2 left-2">
                       <span className="px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-white/10 backdrop-blur-md text-white/90 border border-white/10">
-                        {exp.distance}
+                        {exp.distance ? exp.distance : exp.city}
                       </span>
                     </div>
                     <button
