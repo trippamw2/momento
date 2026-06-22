@@ -243,8 +243,14 @@ export default function ExperiencesPageContent() {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
+                        const savedIds = JSON.parse(localStorage.getItem("momento-saved") || '{"savedIds":[],"collections":[]}').savedIds || [];
+                        const next = savedIds.includes(exp.id) ? savedIds.filter((id: string) => id !== exp.id) : [...savedIds, exp.id];
+                        const state = JSON.parse(localStorage.getItem("momento-saved") || '{"savedIds":[],"collections":[]}');
+                        state.savedIds = next;
+                        localStorage.setItem("momento-saved", JSON.stringify(state));
+                        window.dispatchEvent(new Event("storage"));
                       }}
-                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-brand-hot-pink/60"
+                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-[#FF2D7A]/60"
                     >
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />

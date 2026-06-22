@@ -347,7 +347,7 @@ export default function SavedPageContent() {
           <>
             <div className="flex items-center justify-between mb-4">
               <p className="text-text-secondary text-body-sm">{recentlyViewedMock.length} recently viewed</p>
-              <button className="text-caption text-text-tertiary hover:text-text-secondary transition-colors">Clear history</button>
+              <button onClick={() => {}} className="text-caption text-[#6B7280] hover:text-[#A1A1AA] transition-colors cursor-not-allowed opacity-50" title="Coming soon">Clear history</button>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
               {recentlyViewedMock.map((rv) => {

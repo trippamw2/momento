@@ -10,11 +10,10 @@ export const moods: { label: Mood; emoji: string; description: string }[] = [
 
 export const navItems: NavItem[] = [
   { label: "Discover", href: "/", icon: "compass" },
-  { label: "Experiences", href: "/experiences", icon: "sparkles" },
   { label: "Gift", href: "/gift", icon: "gift" },
   { label: "Saved", href: "/saved", icon: "heart" },
   { label: "Bookings", href: "/bookings", icon: "calendar" },
-  { label: "Profile", href: "/profile", icon: "user" },
+  { label: "Partners", href: "/profile", icon: "briefcase" },
 ];
 
 const locationCoords: Record<string, { lat: number; lng: number }> = {

@@ -35,6 +35,27 @@ export default function GiftPageContent() {
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [redemptionCode, setRedemptionCode] = useState("");
+  const [trackCode, setTrackCode] = useState("");
+  const [tracking, setTracking] = useState(false);
+  const [trackResult, setTrackResult] = useState<{ found: boolean; value?: string; status?: string } | null>(null);
+
+  const handleTrackCode = async () => {
+    if (!trackCode.trim()) return;
+    setTracking(true);
+    try {
+      const res = await fetch(`/api/gift-cards/check?code=${trackCode}`);
+      const data = await res.json();
+      if (res.ok && data) {
+        setTrackResult({ found: true, value: `MK ${data.amount?.toLocaleString() || "0"}`, status: data.status || "active" });
+      } else {
+        setTrackResult({ found: false });
+      }
+    } catch {
+      setTrackResult({ found: false });
+    } finally {
+      setTracking(false);
+    }
+  };
 
   const handleSend = () => {
     setSending(true);
@@ -339,21 +360,47 @@ export default function GiftPageContent() {
         {/* ─── Track Redemption ─── */}
         <section className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-heading-md font-bold text-text-primary mb-2">Track Redemption</h2>
-            <p className="text-text-secondary text-body-sm">Enter a redemption code to check its status</p>
+            <h2 className="text-heading-md font-bold text-white mb-2">Track Redemption</h2>
+            <p className="text-[#A1A1AA] text-body-sm">Enter a redemption code to check its status</p>
           </div>
 
-          <div className="bg-surface-secondary rounded-2xl border border-border-default p-6 sm:p-8">
+          <div className="bg-[#0A101B] rounded-2xl border border-[rgba(255,255,255,0.08)] p-6 sm:p-8">
             <div className="flex gap-3 mb-6">
               <input
                 type="text"
                 placeholder="Enter code (e.g. MOMO-XXXXXX)"
-                className="flex-1 px-4 py-3 rounded-xl bg-surface-tertiary border border-border-subtle text-text-primary text-body placeholder:text-text-tertiary/60 focus:outline-none focus:border-brand-hot-pink focus:ring-1 focus:ring-brand-hot-pink/50 transition-all font-mono uppercase"
+                value={trackCode}
+                onChange={(e) => setTrackCode(e.target.value.toUpperCase())}
+                className="flex-1 px-4 py-3 rounded-xl bg-[#111827] border border-[rgba(255,255,255,0.08)] text-white text-body placeholder:text-[#6B7280] focus:outline-none focus:border-[#FF2D7A] focus:ring-1 focus:ring-[#FF2D7A]/50 transition-all font-mono uppercase"
               />
-              <button className="px-6 py-3 rounded-xl gradient-brand text-text-on-gradient font-semibold text-body-sm hover:shadow-brand-glow transition-all duration-300 whitespace-nowrap">
-                Check
+              <button
+                onClick={handleTrackCode}
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all duration-300 whitespace-nowrap"
+              >
+                {tracking ? (
+                  <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                ) : (
+                  "Check"
+                )}
               </button>
             </div>
+
+            {trackResult && (
+              <div className={`p-4 rounded-xl mb-4 border ${
+                trackResult.found
+                  ? "bg-emerald-400/5 border-emerald-400/20"
+                  : "bg-red-400/5 border-red-400/20"
+              }`}>
+                <p className={`text-body-sm font-medium ${trackResult.found ? "text-emerald-400" : "text-red-400"}`}>
+                  {trackResult.found ? "✓ Gift card found" : "✗ Code not found"}
+                </p>
+                {trackResult.found && (
+                  <p className="text-caption text-[#A1A1AA] mt-1">
+                    Value: {trackResult.value} · Status: {trackResult.status}
+                  </p>
+                )}
+              </div>
+            )}
 
             {/* Status Steps */}
             <div className="grid grid-cols-4 gap-2">
@@ -364,10 +411,10 @@ export default function GiftPageContent() {
                 { step: "Redeemed", icon: "✅", done: false },
               ].map((s) => (
                 <div key={s.step} className={`text-center p-3 rounded-xl transition-all ${
-                  s.done ? "bg-surface-tertiary" : "bg-surface-tertiary/50"
+                  s.done ? "bg-[#111827]" : "bg-[#111827]/50"
                 }`}>
                   <span className={`text-xl block mb-1 ${s.done ? "" : "opacity-30"}`}>{s.icon}</span>
-                  <p className={`text-caption font-medium ${s.done ? "text-text-primary" : "text-text-tertiary"}`}>{s.step}</p>
+                  <p className={`text-caption font-medium ${s.done ? "text-white" : "text-[#6B7280]"}`}>{s.step}</p>
                 </div>
               ))}
             </div>
