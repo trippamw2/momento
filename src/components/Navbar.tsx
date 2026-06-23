@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Logo from "@/components/Logo";
 import AuthModal from "./AuthModal";
 
@@ -19,12 +19,20 @@ export default function Navbar() {
   const [notifOpen, setNotifOpen] = useState(false);
   const [nearbyActive, setNearbyActive] = useState(false);
 
+  const [signedIn, setSignedIn] = useState(false);
+
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("momento-auth-token") : null;
+    setSignedIn(!!token);
+  }, []);
+
   const navItems = [
     { label: "Discover", href: "/" },
+    { label: "Experiences", href: "/experiences" },
     { label: "Gift", href: "/gift" },
     { label: "Saved", href: "/saved" },
-    { label: "Bookings", href: "/bookings" },
-    { label: "Partners", href: "/profile" },
+    { label: "Memories", href: "/bookings" },
+    ...(signedIn ? [{ label: "Profile", href: "/profile" }] : []),
   ];
 
   return (
@@ -59,36 +67,28 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-1">
               <button
                 onClick={() => setNearbyActive(!nearbyActive)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-body-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-2 rounded-xl text-body-sm font-medium transition-all duration-200 ${
                   nearbyActive
                     ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white"
                     : "text-[#A1A1AA] hover:text-white hover:bg-white/[0.04]"
                 }`}
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                </svg>
                 Near Me
               </button>
 
               <button
                 onClick={() => setNotifOpen(!notifOpen)}
-                className="relative p-2.5 rounded-xl text-[#A1A1AA] hover:text-white hover:bg-white/[0.04] transition-all"
+                className="relative px-3 py-2 rounded-xl text-[#A1A1AA] hover:text-white hover:bg-white/[0.04] transition-all font-medium"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                </svg>
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF2D7A]" />
+                Notifications
+                <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#FF2D7A]" />
               </button>
 
               <button
                 onClick={() => setAuthOpen(true)}
-                className="p-2.5 rounded-xl text-[#A1A1AA] hover:text-white hover:bg-white/[0.04] transition-all"
+                className="px-3 py-2 rounded-xl text-[#A1A1AA] hover:text-white hover:bg-white/[0.04] transition-all font-medium"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                </svg>
+                Profile
               </button>
             </div>
 
@@ -128,9 +128,9 @@ export default function Navbar() {
               })}
               <hr className="my-2 border-[rgba(255,255,255,0.06)]" />
               {[
-                { label: "Near Me", href: "/experiences?nearby=true", icon: "compass" },
-                { label: "Notifications", href: "#notifications", icon: "bell" },
-                { label: "Profile", href: "#auth", icon: "user" },
+                { label: "Near Me", href: "/experiences?nearby=true" },
+                { label: "Notifications", href: "#notifications" },
+                { label: "Profile", href: "#auth" },
               ].map((item) => (
                 <button
                   key={item.label}
@@ -139,7 +139,7 @@ export default function Navbar() {
                     if (item.href === "#auth") setAuthOpen(true);
                     else if (item.href === "#notifications") setNotifOpen(!notifOpen);
                   }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-body-sm text-[#A1A1AA] hover:text-white hover:bg-white/[0.04] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl text-body-sm text-[#A1A1AA] hover:text-white hover:bg-white/[0.04] transition-colors font-medium"
                 >
                   {item.label}
                 </button>
@@ -156,8 +156,8 @@ export default function Navbar() {
           <div className="w-full max-w-sm mx-4 rounded-2xl bg-[#0A101B] border border-[rgba(255,255,255,0.08)] p-5 shadow-xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-body font-semibold text-white">Notifications</h2>
-              <button onClick={() => setNotifOpen(false)} className="text-[#A1A1AA] hover:text-white">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              <button onClick={() => setNotifOpen(false)} className="text-[#A1A1AA] hover:text-white font-bold text-heading">
+                ✕
               </button>
             </div>
             <div className="space-y-3">

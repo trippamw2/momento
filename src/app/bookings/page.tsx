@@ -112,21 +112,21 @@ const rawBookings: Booking[] = [
 
 type SidebarTab = "all" | "upcoming" | "completed" | "cancelled" | "payments" | "gifted" | "refunds";
 
-const sidebarItems: { key: SidebarTab; label: string; icon: string }[] = [
-  { key: "all", label: "All Bookings", icon: "📋" },
-  { key: "upcoming", label: "Upcoming", icon: "📅" },
-  { key: "completed", label: "Completed", icon: "✓" },
-  { key: "cancelled", label: "Cancelled", icon: "✕" },
-  { key: "payments", label: "Payments", icon: "💳" },
-  { key: "gifted", label: "Gifted Experiences", icon: "🎁" },
-  { key: "refunds", label: "Refunds", icon: "↩" },
+const sidebarItems: { key: SidebarTab; label: string }[] = [
+  { key: "all", label: "All Memories" },
+  { key: "upcoming", label: "Upcoming" },
+  { key: "completed", label: "Completed" },
+  { key: "cancelled", label: "Cancelled" },
+  { key: "payments", label: "Payments" },
+  { key: "gifted", label: "Gifted Experiences" },
+  { key: "refunds", label: "Refunds" },
 ];
 
 const features = [
-  { title: "Easy Reschedule", desc: "Change your booking up to 48 hours before, free of charge.", icon: "🔄" },
-  { title: "Secure Payments", desc: "Your payments are encrypted and processed securely.", icon: "🔒" },
-  { title: "24/7 Support", desc: "Our team is always available to help with any questions.", icon: "💬" },
-  { title: "Best Price Guarantee", desc: "Found a better price? We'll match it or refund the difference.", icon: "🏷️" },
+  { title: "Easy Reschedule", desc: "Change your booking up to 48 hours before, free of charge." },
+  { title: "Secure Payments", desc: "Your payments are encrypted and processed securely." },
+  { title: "24/7 Support", desc: "Our team is always available to help with any questions." },
+  { title: "Best Price Guarantee", desc: "Found a better price? We'll match it or refund the difference." },
 ];
 
 export default function BookingsPage() {
@@ -188,7 +188,7 @@ export default function BookingsPage() {
           <aside className="hidden sm:flex flex-col w-56 flex-shrink-0 sticky top-24 self-start">
             <div className="bg-[#0A101B] border border-white/[0.06] rounded-2xl overflow-hidden">
               <div className="px-5 py-4 border-b border-white/[0.06]">
-                <h2 className="text-heading-sm font-bold text-white">My Bookings</h2>
+                <h2 className="text-heading-sm font-bold text-white">My Memories</h2>
                 <p className="text-caption text-[#6B7280] mt-0.5">{rawBookings.length} total</p>
               </div>
               <nav className="p-2 space-y-0.5">
@@ -202,13 +202,12 @@ export default function BookingsPage() {
                     <button
                       key={item.key}
                       onClick={() => setSidebarTab(item.key)}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all duration-200 ${
+                      className={`w-full px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all duration-200 ${
                         sidebarTab === item.key
                           ? "bg-gradient-to-r from-[#FF2D7A]/15 to-[#FF7A18]/15 text-white border border-[#FF2D7A]/20"
                           : "text-[#A1A1AA] hover:text-white hover:bg-white/[0.04]"
                       }`}
                     >
-                      <span className="w-5 h-5 flex items-center justify-center text-sm">{item.icon}</span>
                       <span className="flex-1 text-left">{item.label}</span>
                       {count > 0 && (
                         <span className={`text-caption px-1.5 py-0.5 rounded-md ${
@@ -231,13 +230,12 @@ export default function BookingsPage() {
                 <button
                   key={item.key}
                   onClick={() => setSidebarTab(item.key)}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all ${
+                  className={`px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all ${
                     sidebarTab === item.key
                       ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white"
                       : "bg-[#111827] text-[#A1A1AA] border border-white/[0.06]"
                   }`}
                 >
-                  <span>{item.icon}</span>
                   {item.label}
                 </button>
               ))}
@@ -469,7 +467,7 @@ export default function BookingsPage() {
                     {features.map((f) => (
                       <div key={f.title} className="text-center p-5 rounded-2xl bg-[#0A101B] border border-white/[0.06] hover:border-white/[0.12] transition-all">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF2D7A]/20 to-[#FF7A18]/20 flex items-center justify-center mx-auto mb-3">
-                          <span className="text-xl">{f.icon}</span>
+                          <span className="text-xl font-bold text-white">M</span>
                         </div>
                         <h3 className="text-heading-sm font-bold text-white mb-1">{f.title}</h3>
                         <p className="text-[#A1A1AA] text-body-sm leading-relaxed">{f.desc}</p>

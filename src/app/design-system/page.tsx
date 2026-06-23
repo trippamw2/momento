@@ -233,12 +233,12 @@ export default function DesignSystemPage() {
         <Section title="Mood Pills">
           <div className="flex flex-wrap gap-3">
             {moods.map((mood) => (
-              <MoodPill key={mood.label} label={mood.label} emoji={mood.emoji} />
+              <MoodPill key={mood.label} label={mood.label} />
             ))}
           </div>
           <div className="flex flex-wrap gap-3 mt-3">
             {moods.map((mood) => (
-              <MoodPill key={mood.label} label={mood.label} emoji={mood.emoji} active />
+              <MoodPill key={mood.label} label={mood.label} active />
             ))}
           </div>
         </Section>

@@ -4,7 +4,7 @@ import { useState, useMemo, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Experience } from "@/lib/types";
-import { moods } from "@/lib/data";
+
 import ContentRail from "./ContentRail";
 import AuthModal from "./AuthModal";
 
@@ -256,10 +256,9 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
             {/* Mood Tags */}
             <div className="flex flex-wrap items-center gap-2 mb-4">
               {exp.mood.map((m) => {
-                const moodData = moods.find((md) => md.label === m);
                 return (
                   <span key={m} className="px-3 py-1 rounded-full bg-[#111827] text-caption text-[#A1A1AA] border border-[rgba(255,255,255,0.06)]">
-                    {moodData?.emoji} {m}
+                    {m}
                   </span>
                 );
               })}

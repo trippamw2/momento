@@ -6,33 +6,31 @@ import Link from "next/link";
 import { experiences } from "@/lib/data";
 import ContentRail from "@/components/ContentRail";
 
-const categories = ["All", "Dining", "Wellness", "Day Out", "Adventure", "Overnight"];
+const categories = ["All", "Romantic", "Wellness", "Luxury", "Adventure", "Family"];
 const locations = ["All", "Lilongwe", "Blantyre", "Lusaka", "Harare", "Johannesburg", "Dar es Salaam", "Nairobi", "Cape Maclear", "Salima"];
 
-const giftIdeas = ["Date Night", "Pool & Lunch", "Spa Day", "Brunch Experience", "Staycation"].map(
-  (title) => experiences.find((e) => e.title === title)!
-).filter(Boolean);
+const giftIdeas = experiences.slice(0, 5);
 
 const occasions = [
-  { label: "Birthday", emoji: "🎂" },
-  { label: "Anniversary", emoji: "💍" },
-  { label: "Valentine's", emoji: "❤️" },
-  { label: "Thank You", emoji: "🙏" },
-  { label: "Congratulations", emoji: "🎉" },
-  { label: "Just Because", emoji: "✨" },
+  { label: "Birthday" },
+  { label: "Anniversary" },
+  { label: "Valentine's" },
+  { label: "Thank You" },
+  { label: "Congratulations" },
+  { label: "Just Because" },
 ];
 
 const giftCardValues = [
   { value: 100000, label: "MK 100,000", desc: "Perfect for a brunch date or a relaxing afternoon" },
   { value: 250000, label: "MK 250,000", desc: "Ideal for a spa day or romantic dinner" },
-  { value: 450000, label: "MK 450,000", desc: "The ultimate gift for a weekend escape" },
+  { value: 300000, label: "MK 300,000", desc: "The ultimate gift for a weekend escape" },
 ];
 
 const processSteps = [
-  { step: "1", title: "Choose", desc: "Pick a gift card value or select an experience to gift", icon: "🎁" },
-  { step: "2", title: "Personalize", desc: "Add a message, choose delivery method, and set the date", icon: "✍️" },
-  { step: "3", title: "Send", desc: "Deliver instantly via email or WhatsApp", icon: "📨" },
-  { step: "4", title: "Enjoy", desc: "Recipient redeems their unforgettable moment", icon: "✨" },
+  { step: "1", title: "Choose", desc: "Pick a gift card value or select an experience to gift" },
+  { step: "2", title: "Personalize", desc: "Add a message, choose delivery method, and set the date" },
+  { step: "3", title: "Send", desc: "Deliver instantly via email or WhatsApp" },
+  { step: "4", title: "Enjoy", desc: "Recipient redeems their unforgettable moment" },
 ];
 
 type Tab = "cards" | "experiences";
@@ -259,13 +257,12 @@ export default function GiftPageContent() {
                 <button
                   key={o.label}
                   onClick={() => setOccasion(occasion === o.label ? null : o.label)}
-                  className={`inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-body-sm font-medium transition-all duration-200 ${
+                  className={`px-5 py-2.5 rounded-full text-body-sm font-medium transition-all duration-200 ${
                     occasion === o.label
                       ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white shadow-[0_4px_24px_rgba(255,45,122,0.35)]"
                       : "bg-white/[0.04] border border-white/[0.08] text-[#A1A1AA] hover:bg-white/[0.08] hover:text-white"
                   }`}
                 >
-                  <span>{o.emoji}</span>
                   {o.label}
                 </button>
               ))}
@@ -300,9 +297,9 @@ export default function GiftPageContent() {
 
                 <div className="relative z-10">
                   <div className="flex items-center justify-between mb-6">
-                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                      <span className="text-lg">🎁</span>
-                    </div>
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                    <span className="text-lg font-bold">G</span>
+                  </div>
                     <span className="text-caption font-medium text-white/70 uppercase tracking-wider">Gift Card</span>
                   </div>
 
@@ -334,10 +331,7 @@ export default function GiftPageContent() {
             {processSteps.map((item) => (
               <div key={item.step} className="text-center p-6 rounded-2xl bg-[#0A101B] border border-white/[0.06] relative">
                 <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_24px_rgba(255,45,122,0.35)]">
-                  <span className="text-2xl">{item.icon}</span>
-                </div>
-                <div className="absolute -top-2 -left-2 w-7 h-7 rounded-full bg-[#FF2D7A] text-white text-caption font-bold flex items-center justify-center">
-                  {item.step}
+                  <span className="text-2xl font-bold">{item.step}</span>
                 </div>
                 <h3 className="text-heading-sm font-bold text-white mb-1">{item.title}</h3>
                 <p className="text-[#A1A1AA] text-body-sm leading-relaxed">{item.desc}</p>

@@ -42,7 +42,16 @@ export async function GET(request: Request) {
     const { data, count, error } = await query;
     if (error) throw error;
 
-    return json({ experiences: data, total: count, page, limit });
+    const withCity = (data ?? []).map((exp) => ({
+      ...exp,
+      city: ["Cape Maclear", "Lilongwe", "Salima", "Blantyre", "Mangochi", "Zomba", "Dedza", "Liwonde", "Nkhotakota", "Mzuzu"].includes(exp.location)
+        ? (exp.location === "Cape Maclear" || exp.location === "Salima" || exp.location === "Dedza" || exp.location === "Liwonde" || exp.location === "Nkhotakota" ? "Lilongwe"
+          : exp.location === "Zomba" || exp.location === "Mangochi" ? "Blantyre"
+          : exp.location)
+        : "Lilongwe",
+    }));
+
+    return json({ experiences: withCity, total: count, page, limit });
   } catch (error) {
     return handleRouteError(error);
   }

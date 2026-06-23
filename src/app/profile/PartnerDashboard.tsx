@@ -14,17 +14,17 @@ type DashSection =
   | "reports"
   | "notifications";
 
-const partnerTypes = ["Hotels", "Restaurants", "Spas", "Resorts", "Activity Providers"];
+const partnerTypes = ["Wellness", "Dining", "Adventure", "Luxury", "Entertainment"];
 
-const nav: { key: DashSection; label: string; icon: string }[] = [
-  { key: "overview", label: "Overview", icon: "📊" },
-  { key: "experiences", label: "Manage Experiences", icon: "🎯" },
-  { key: "availability", label: "Manage Availability", icon: "🔓" },
-  { key: "bookings", label: "Manage Bookings", icon: "📅" },
-  { key: "customers", label: "Customer Insights", icon: "👥" },
-  { key: "payouts", label: "Payouts", icon: "💰" },
-  { key: "reports", label: "Reports", icon: "📈" },
-  { key: "notifications", label: "Notifications", icon: "🔔" },
+const nav: { key: DashSection; label: string }[] = [
+  { key: "overview", label: "Overview" },
+  { key: "experiences", label: "Manage Experiences" },
+  { key: "availability", label: "Manage Availability" },
+  { key: "bookings", label: "Manage Bookings" },
+  { key: "customers", label: "Customer Insights" },
+  { key: "payouts", label: "Payouts" },
+  { key: "reports", label: "Reports" },
+  { key: "notifications", label: "Notifications" },
 ];
 
 const mockBookings = [
@@ -218,19 +218,19 @@ function ExperienceForm({ onClose }: { onClose: () => void }) {
           <div>
             <label className="block text-body-sm font-medium text-white mb-1.5">Category</label>
             <select className="w-full px-4 py-2.5 rounded-xl bg-[#111827] border border-white/[0.06] text-white text-body-sm focus:outline-none focus:border-[#FF2D7A] appearance-none cursor-pointer">
-              <option>Dining</option>
+              <option>Romantic</option>
               <option>Wellness</option>
-              <option>Day Out</option>
-              <option>Nightlife</option>
+              <option>Food & Drink</option>
+              <option>Luxury</option>
               <option>Adventure</option>
-              <option>Overnight</option>
-              <option>Events</option>
+              <option>Entertainment</option>
+              <option>Family</option>
             </select>
           </div>
           <div>
             <label className="block text-body-sm font-medium text-white mb-1.5">Moods</label>
             <div className="flex flex-wrap gap-1.5">
-              {["Romantic", "Relax", "Celebrate", "Escape", "Treat Myself"].map((m) => (
+              {["Romantic", "Relax", "Celebrate", "Escape", "Indulge"].map((m) => (
                 <label key={m} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#111827] border border-white/[0.06] cursor-pointer hover:bg-[#1a2235] transition-colors">
                   <input type="checkbox" className="accent-[#FF2D7A]" />
                   <span className="text-caption text-[#A1A1AA]">{m}</span>
@@ -302,13 +302,12 @@ export default function PartnerDashboard() {
             <button
               key={item.key}
               onClick={() => { setSection(item.key); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all ${
+              className={`w-full px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all ${
                 section === item.key
                   ? "bg-gradient-to-r from-[#FF2D7A]/15 to-[#FF7A18]/15 text-white border border-[#FF2D7A]/20"
                   : "text-[#A1A1AA] hover:text-white hover:bg-white/[0.04]"
               }`}
             >
-              <span className="w-5 h-5 flex items-center justify-center">{item.icon}</span>
               {item.label}
             </button>
           ))}
@@ -336,8 +335,8 @@ export default function PartnerDashboard() {
         <header className="sticky top-0 z-20 bg-[#05070B]/80 backdrop-blur-2xl border-b border-white/[0.06]">
           <div className="flex items-center justify-between px-4 sm:px-6 h-14">
             <div className="flex items-center gap-3">
-              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/5 text-[#A1A1AA]">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/5 text-[#A1A1AA] font-bold text-heading">
+                ≡
               </button>
               <h1 className="text-heading-md font-bold text-white hidden sm:block">
                 {nav.find((n) => n.key === section)?.label}

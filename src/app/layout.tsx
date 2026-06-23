@@ -15,13 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Momento — Live The Moment",
+  title: "Momento — What do you feel like doing?",
   description:
-    "Discover, book, gift and enjoy unforgettable real-life experiences curated for every mood and occasion.",
+    "Discover unforgettable experiences curated for every mood. Romantic dinners, wellness retreats, adventures, and more — live the moment.",
   openGraph: {
-    title: "Momento — Live The Moment",
+    title: "Momento — What do you feel like doing?",
     description:
-      "Discover, book, gift and enjoy unforgettable real-life experiences curated for every mood and occasion.",
+      "Discover unforgettable experiences curated for every mood. Romantic dinners, wellness retreats, adventures, and more — live the moment.",
     siteName: "Momento",
     type: "website",
   },

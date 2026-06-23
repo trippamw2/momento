@@ -1,97 +1,40 @@
 "use client";
 
+import { useMemo } from "react";
 import HeroSection from "@/components/HeroSection";
 import ContentRail from "@/components/ContentRail";
 import Link from "next/link";
-import { useState, useMemo } from "react";
-import { experiences, CITIES, experiencesNear } from "@/lib/data";
-import { useGeolocation } from "@/hooks/useGeolocation";
-import { AFRICAN_CITY_COORDS, formatDistance, haversineDistance } from "@/lib/geo";
+import { experiences, discoveryRails, railOrder, getExperiencesByMood } from "@/lib/data";
 
 export default function Home() {
-  const { coords, loading } = useGeolocation();
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
-
-  const cityList = useMemo(() => {
-    const mainCities = ["Lilongwe", "Blantyre", "Lusaka", "Harare", "Johannesburg", "Dar es Salaam", "Nairobi"];
-    return mainCities.filter((c) => CITIES.includes(c));
+  const rails = useMemo(() => {
+    return railOrder
+      .map((key) => {
+        const rail = discoveryRails[key];
+        return { key, title: rail.title, subtitle: undefined, experiences: rail.getExperiences() };
+      })
+      .filter((r) => r.experiences.length > 0);
   }, []);
 
-  const userLocation = useMemo(() => {
-    if (coords) return coords;
-    if (selectedCity && AFRICAN_CITY_COORDS[selectedCity]) {
-      return AFRICAN_CITY_COORDS[selectedCity];
-    }
-    return AFRICAN_CITY_COORDS["Lilongwe"];
-  }, [coords, selectedCity]);
-
-  const sortedByProximity = useMemo(() => {
-    return experiencesNear(userLocation);
-  }, [userLocation]);
-
-  const nearestCity = useMemo(() => {
-    let nearest = "Lilongwe";
-    let shortest = Infinity;
-    for (const [city, cityCoords] of Object.entries(AFRICAN_CITY_COORDS)) {
-      const d = haversineDistance(userLocation, cityCoords);
-      if (d < shortest) {
-        shortest = d;
-        nearest = city;
-      }
-    }
-    return { name: nearest, distance: formatDistance(shortest) };
-  }, [userLocation]);
-
-  const featured = sortedByProximity.filter((e) => e.rating >= 4.8).slice(0, 8);
-  const nearby = sortedByProximity.slice(0, 8);
-  const becauseRelax = experiences.filter((e) => e.mood.includes("Relax")).slice(0, 8);
-  const newThisWeek = experiences.filter((e) => e.featured).slice(0, 8);
-  const affordable = experiences.filter((e) => e.price <= 50000).slice(0, 8);
-  const peopleLoving = [...experiences].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 8);
-  const weekendPlans = experiences.filter((e) => e.mood.includes("Celebrate") || e.mood.includes("Escape")).slice(0, 8);
-  const cityExperiences = experiences.filter((e) => e.city === nearestCity.name).slice(0, 8);
-  const giftIdeas = experiences.filter((e) => e.mood.includes("Treat Myself") || e.mood.includes("Romantic")).slice(0, 8);
+  const giftIdeas = useMemo(() => {
+    const all = getExperiencesByMood("Indulge").concat(getExperiencesByMood("Romantic"));
+    return all.sort(() => Math.random() - 0.5).slice(0, 4);
+  }, []);
 
   return (
     <div>
       <HeroSection />
 
-      {/* ─── City Selector ─── */}
-      <section className="relative z-10 -mt-32 pb-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-caption font-medium text-[#6B7280] uppercase tracking-wider mr-1">
-              {coords ? `📍 ${nearestCity.name}` : "Discover in"}
-            </span>
-            {cityList.map((city) => (
-              <button
-                key={city}
-                onClick={() => setSelectedCity(city)}
-                className={`px-4 py-1.5 rounded-full text-body-sm font-medium transition-all duration-200 ${
-                  selectedCity === city
-                    ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white"
-                    : "bg-white/[0.04] border border-white/[0.08] text-[#A1A1AA] hover:bg-white/[0.08] hover:text-white"
-                }`}
-              >
-                {city}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="relative z-10 pb-16 space-y-1">
-        <ContentRail
-          title={coords ? `Near You in ${nearestCity.name}` : "Experiences Near You"}
-          experiences={nearby}
-          viewAllHref="/experiences?nearby=true"
-        />
-        <ContentRail title="Trending This Weekend" experiences={featured} viewAllHref="/experiences" />
-        <ContentRail title={`Popular in ${nearestCity.name}`} experiences={cityExperiences} viewAllHref={`/experiences?city=${nearestCity.name}`} />
-        <ContentRail title="Because You Like Relaxing" experiences={becauseRelax} viewAllHref="/experiences?mood=relax" />
-        <ContentRail title="New Experiences This Week" experiences={newThisWeek} viewAllHref="/experiences" />
-        <ContentRail title="Affordable Experiences" experiences={affordable} viewAllHref="/experiences?price=0-50000" />
-        <ContentRail title="People Are Loving These" experiences={peopleLoving} viewAllHref="/experiences" />
+      <div className="relative z-10 -mt-16 pb-16 space-y-1">
+        {rails.map((rail) => (
+          <ContentRail
+            key={rail.key}
+            title={rail.title}
+            subtitle={rail.subtitle}
+            experiences={rail.experiences}
+            viewAllHref="/experiences"
+          />
+        ))}
 
         {/* ─── Gift A Moment ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-10">
@@ -124,7 +67,7 @@ export default function Home() {
                 </div>
                 <div className="flex-1 w-full max-w-md">
                   <div className="grid grid-cols-2 gap-3">
-                    {giftIdeas.slice(0, 4).map((exp) => (
+                    {giftIdeas.map((exp) => (
                       <Link
                         key={exp.id}
                         href={`/experiences/${exp.id}`}
@@ -149,7 +92,31 @@ export default function Home() {
           </div>
         </section>
 
-        <ContentRail title="What Are You Planning This Weekend?" experiences={weekendPlans} viewAllHref="/experiences" />
+        {/* ─── AI Concierge Teaser ─── */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-8 my-10">
+          <Link href="/experiences" className="relative rounded-2xl overflow-hidden block group">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#9F3BFF]/10 via-[#FF2D7A]/5 to-[#0A101B] border border-white/[0.06] rounded-2xl" />
+            <div className="relative z-10 p-8 sm:p-12">
+              <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-10">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#FF2D7A] to-[#9F3BFF] flex items-center justify-center flex-shrink-0 shadow-[0_8px_32px_rgba(255,45,122,0.3)]">
+                  <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
+                  </svg>
+                </div>
+                <div className="flex-1 text-center lg:text-left">
+                  <h2 className="text-heading-xl font-bold text-white mb-1">Not sure what you&apos;re in the mood for?</h2>
+                  <p className="text-[#A1A1AA] text-body-lg">Tell us how you feel, and we&apos;ll find the perfect experience.</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/[0.08] text-white font-semibold text-body-sm backdrop-blur-md border border-white/[0.08] group-hover:bg-white/[0.12] transition-all">
+                    Explore All
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </section>
 
         {/* ─── Large CTA ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-12">

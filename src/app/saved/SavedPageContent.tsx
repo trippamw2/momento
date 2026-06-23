@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { experiences } from "@/lib/data";
+import { experiences, defaultCollections, defaultSavedIds, recentlyViewedMock } from "@/lib/data";
 import { Experience } from "@/lib/types";
 
 interface Collection {
@@ -17,27 +17,6 @@ interface SavedState {
   collections: Collection[];
 }
 
-const defaultCollections: Collection[] = [
-  { id: "date-ideas", name: "Date Ideas", experienceIds: [] },
-  { id: "weekend-plans", name: "Weekend Plans", experienceIds: [] },
-  { id: "relax-recharge", name: "Relax & Recharge", experienceIds: [] },
-  { id: "gift-ideas", name: "Gift Ideas", experienceIds: [] },
-];
-
-const defaultSaved: string[] = [
-  "sunset-cruise", "spa-day", "rooftop-dining", "glamping-weekend",
-  "date-night", "pool-lunch", "brunch-experience", "private-beach-dinner",
-];
-
-const recentlyViewedMock: { id: string; timestamp: number }[] = [
-  { id: "private-beach-dinner", timestamp: Date.now() - 3600000 },
-  { id: "sunset-safari", timestamp: Date.now() - 7200000 },
-  { id: "date-night", timestamp: Date.now() - 14400000 },
-  { id: "paint-sip", timestamp: Date.now() - 86400000 },
-  { id: "pool-lunch", timestamp: Date.now() - 172800000 },
-  { id: "sunset-cruise", timestamp: Date.now() - 259200000 },
-];
-
 function timeAgo(ts: number): string {
   const diff = Date.now() - ts;
   const mins = Math.floor(diff / 60000);
@@ -49,12 +28,12 @@ function timeAgo(ts: number): string {
 }
 
 function loadState(): SavedState {
-  if (typeof window === "undefined") return { savedIds: defaultSaved, collections: defaultCollections };
+  if (typeof window === "undefined") return { savedIds: defaultSavedIds, collections: defaultCollections };
   try {
     const raw = localStorage.getItem("momento-saved");
     if (raw) return JSON.parse(raw);
   } catch {}
-  return { savedIds: defaultSaved, collections: defaultCollections };
+  return { savedIds: defaultSavedIds, collections: defaultCollections };
 }
 
 function saveState(state: SavedState) {
@@ -66,13 +45,13 @@ function saveState(state: SavedState) {
 
 type SidebarTab = "all" | "favorites" | "want-to-try" | "events" | "gift-ideas" | "recently-viewed";
 
-const sidebarItems: { key: SidebarTab; label: string; icon: string }[] = [
-  { key: "all", label: "All Saved", icon: "♥" },
-  { key: "favorites", label: "Favorites", icon: "★" },
-  { key: "want-to-try", label: "Want To Try", icon: "○" },
-  { key: "events", label: "Events", icon: "◆" },
-  { key: "gift-ideas", label: "Gift Ideas", icon: "🎁" },
-  { key: "recently-viewed", label: "Recently Viewed", icon: "⏰" },
+const sidebarItems: { key: SidebarTab; label: string }[] = [
+  { key: "all", label: "All Saved" },
+  { key: "favorites", label: "Favorites" },
+  { key: "want-to-try", label: "Want To Try" },
+  { key: "events", label: "Events" },
+  { key: "gift-ideas", label: "Gift Ideas" },
+  { key: "recently-viewed", label: "Recently Viewed" },
 ];
 
 export default function SavedPageContent() {
@@ -141,8 +120,8 @@ export default function SavedPageContent() {
       case "all": return savedExperiences;
       case "favorites": return savedExperiences.filter((e) => e.rating >= 4.8);
       case "want-to-try": return savedExperiences.filter((e) => e.category === "Adventure" || e.mood.includes("Escape"));
-      case "events": return savedExperiences.filter((e) => e.category === "Events" || e.category === "Nightlife");
-      case "gift-ideas": return savedExperiences.filter((e) => e.mood.includes("Treat Myself") || e.mood.includes("Romantic"));
+      case "events": return savedExperiences.filter((e) => e.category === "Entertainment" || e.category === "Celebrations");
+      case "gift-ideas": return savedExperiences.filter((e) => e.mood.includes("Indulge") || e.mood.includes("Romantic"));
       case "recently-viewed": return recentlyViewedMock.map((rv) => experiences.find((e) => e.id === rv.id)).filter(Boolean) as Experience[];
       default: return savedExperiences;
     }
@@ -155,8 +134,8 @@ export default function SavedPageContent() {
       case "all": return savedExperiences.length;
       case "favorites": return savedExperiences.filter((e) => e.rating >= 4.8).length;
       case "want-to-try": return savedExperiences.filter((e) => e.category === "Adventure" || e.mood.includes("Escape")).length;
-      case "events": return savedExperiences.filter((e) => e.category === "Events" || e.category === "Nightlife").length;
-      case "gift-ideas": return savedExperiences.filter((e) => e.mood.includes("Treat Myself") || e.mood.includes("Romantic")).length;
+      case "events": return savedExperiences.filter((e) => e.category === "Entertainment" || e.category === "Celebrations").length;
+      case "gift-ideas": return savedExperiences.filter((e) => e.mood.includes("Indulge") || e.mood.includes("Romantic")).length;
       case "recently-viewed": return recentlyViewedMock.length;
       default: return 0;
     }
@@ -188,7 +167,6 @@ export default function SavedPageContent() {
                         : "text-[#A1A1AA] hover:text-white hover:bg-white/[0.04]"
                     }`}
                   >
-                    <span className="w-5 h-5 flex items-center justify-center text-sm">{item.icon}</span>
                     <span className="flex-1 text-left">{item.label}</span>
                     {item.key !== "recently-viewed" && count > 0 && (
                       <span className={`text-caption px-1.5 py-0.5 rounded-md ${
@@ -211,13 +189,12 @@ export default function SavedPageContent() {
               <button
                 key={item.key}
                 onClick={() => setSidebarTab(item.key)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all ${
+                className={`px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all ${
                   sidebarTab === item.key
                     ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white"
                     : "bg-[#111827] text-[#A1A1AA] border border-white/[0.06]"
                 }`}
               >
-                <span>{item.icon}</span>
                 {item.label}
               </button>
             ))}
@@ -240,10 +217,9 @@ export default function SavedPageContent() {
             {!isRecentlyTab && displayed.length > 0 && (
               <button
                 onClick={() => window.location.href = "/experiences"}
-                className="text-body-sm text-[#A1A1AA] hover:text-white transition-colors flex items-center gap-1"
+                className="text-body-sm text-[#A1A1AA] hover:text-white transition-colors font-medium"
               >
                 Browse all
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
               </button>
             )}
           </div>
@@ -270,12 +246,11 @@ export default function SavedPageContent() {
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-heading-md font-bold text-white">Collections</h2>
                     <button
-                      onClick={() => setCreatingCollection(true)}
-                      className="text-body-sm text-[#A1A1AA] hover:text-white transition-colors flex items-center gap-1"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                      Create
-                    </button>
+                       onClick={() => setCreatingCollection(true)}
+                       className="text-body-sm text-[#A1A1AA] hover:text-white transition-colors font-medium"
+                     >
+                       Create
+                     </button>
                   </div>
 
                   <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
@@ -289,7 +264,7 @@ export default function SavedPageContent() {
                               <Image src={coverImg} alt={col.name} fill className="object-cover" sizes="192px" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center">
-                                <span className="text-2xl opacity-20">📁</span>
+                                <span className="text-2xl opacity-20 font-light">🗂</span>
                               </div>
                             )}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
@@ -297,7 +272,7 @@ export default function SavedPageContent() {
                               onClick={() => deleteCollection(col.id)}
                               className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500/60 transition-all"
                             >
-                              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                              <span className="text-body font-bold text-white">✕</span>
                             </button>
                             <div className="absolute bottom-0 left-0 right-0 p-2.5">
                               <p className="text-white font-semibold text-body-sm">{col.name}</p>
@@ -329,7 +304,7 @@ export default function SavedPageContent() {
                         onClick={() => setCreatingCollection(true)}
                         className="flex-shrink-0 w-48 rounded-xl border-2 border-dashed border-white/[0.08] hover:border-[#FF2D7A]/30 transition-all flex flex-col items-center justify-center gap-1 text-[#6B7280] hover:text-[#A1A1AA]"
                       >
-                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                        <span className="text-3xl font-light">＋</span>
                         <span className="text-caption font-medium">New Collection</span>
                       </button>
                     )}

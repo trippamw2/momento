@@ -2,95 +2,54 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-
-const moods = [
-  { label: "Romantic", emoji: "❤️" },
-  { label: "Relax", emoji: "😌" },
-  { label: "Celebrate", emoji: "🎉" },
-  { label: "Escape", emoji: "🌴" },
-  { label: "Treat Myself", emoji: "✨" },
-];
+import { moods, moodAccent } from "@/lib/data";
 
 export default function HeroSection() {
-  const [search, setSearch] = useState("");
-  const router = useRouter();
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (search.trim()) {
-      router.push(`/experiences?q=${encodeURIComponent(search.trim())}`);
-    }
-  };
-
   return (
-    <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden moody-gradient">
       <div className="absolute inset-0">
         <Image
-          src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=85"
-          alt="Luxury poolside experience"
+          src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1920&q=85"
+          alt="Luxury lifestyle experience"
           fill
-          className="object-cover"
+          className="object-cover opacity-40"
           sizes="100vw"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-[#05070B]/50 to-[#05070B]/20" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#FF2D7A]/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-[#05070B]/70 to-[#05070B]/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#FF2D7A]/5 to-transparent" />
       </div>
 
-      <div className="relative z-10 text-center px-4 max-w-3xl mx-auto -mt-16">
+      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto -mt-16">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-[#A1A1AA] text-caption font-medium mb-6 backdrop-blur-md">
           <span className="w-2 h-2 rounded-full bg-[#FF2D7A] animate-pulse" />
-          Africa&apos;s Premium Experience Marketplace
+          Live The Moment
         </div>
 
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-white mb-4 tracking-tight leading-[1.08]">
-          How do you want to
+        <h1 className="text-display-sm sm:text-display-lg md:text-display-xl font-bold text-white mb-4 tracking-tight leading-[1.08]">
+          What do you feel
           <span className="block mt-1 bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] bg-clip-text text-transparent">
-            feel today?
+            like doing?
           </span>
         </h1>
 
-        <p className="text-[#A1A1AA] text-body-lg sm:text-heading-md max-w-lg mx-auto mb-8 leading-relaxed">
-          Discover experiences tailored to your mood.
+        <p className="text-[#A1A1AA] text-body-lg sm:text-heading-md max-w-lg mx-auto mb-10 leading-relaxed">
+          Discover experiences that match your mood.
         </p>
 
-        <form onSubmit={handleSearch} className="max-w-xl mx-auto mb-10">
-          <div className="relative">
-            <svg
-              className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-[#6B7280]"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search experiences, locations, categories..."
-              className="w-full pl-14 pr-6 py-4 rounded-2xl bg-[#0A101B]/80 backdrop-blur-xl border border-white/[0.08] text-white text-body placeholder:text-[#6B7280] focus:outline-none focus:border-[#FF2D7A]/50 focus:ring-1 focus:ring-[#FF2D7A]/30 transition-all shadow-lg shadow-black/20"
-            />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all duration-300"
-            >
-              Search
-            </button>
-          </div>
-        </form>
-
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          {moods.map((mood) => (
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 max-w-3xl mx-auto">
+          {moods.slice(0, 6).map((mood) => (
             <Link
               key={mood.label}
               href={`/experiences?mood=${mood.label.toLowerCase().replace(" ", "-")}`}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-body-sm font-medium bg-white/[0.04] border border-white/[0.08] text-white/80 hover:bg-gradient-to-r hover:from-[#FF2D7A] hover:to-[#FF7A18] hover:text-white hover:border-transparent hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all duration-300"
+              className="mood-grid-item relative overflow-hidden rounded-2xl p-5 sm:p-6 bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.15] text-white group transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-br before:opacity-0 group-hover:before:opacity-100"
             >
-              <span>{mood.emoji}</span>
-              <span>{mood.label}</span>
+              <div className="absolute inset-0 bg-gradient-to-br" style={{ background: `linear-gradient(135deg, ${mood.accent.replace("from-", "").replace("to-", "").replace(" ", "")})` }} />
+              <div className="relative z-10 flex flex-col items-center gap-2 text-center">
+                <span className="text-caption text-white/50 uppercase tracking-wider">Mood</span>
+                <span className="text-body font-semibold leading-tight">{mood.label}</span>
+                <span className="text-caption text-white/40 mt-1">{mood.description}</span>
+              </div>
             </Link>
           ))}
         </div>

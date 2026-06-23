@@ -32,7 +32,13 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
       .order("created_at", { ascending: false })
       .limit(20);
 
-    return json({ ...experience, availability: availability ?? [], reviews: reviews ?? [] });
+    const city = ["Cape Maclear", "Lilongwe", "Salima", "Blantyre", "Mangochi", "Zomba", "Dedza", "Liwonde", "Nkhotakota", "Mzuzu"].includes(experience.location)
+      ? (experience.location === "Cape Maclear" || experience.location === "Salima" || experience.location === "Dedza" || experience.location === "Liwonde" || experience.location === "Nkhotakota" ? "Lilongwe"
+        : experience.location === "Zomba" || experience.location === "Mangochi" ? "Blantyre"
+        : experience.location)
+      : "Lilongwe";
+
+    return json({ ...experience, city, availability: availability ?? [], reviews: reviews ?? [] });
   } catch (error) {
     return handleRouteError(error);
   }

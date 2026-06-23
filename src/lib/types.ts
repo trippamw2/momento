@@ -1,4 +1,28 @@
-export type Mood = "Romantic" | "Relax" | "Celebrate" | "Escape" | "Treat Myself";
+export type Mood =
+  | "Romantic"
+  | "Relax"
+  | "Celebrate"
+  | "Escape"
+  | "Indulge"
+  | "Food & Drink"
+  | "Family"
+  | "Entertainment"
+  | "Adventure"
+  | "Self Care"
+  | "Social";
+
+export type V2Category =
+  | "Romantic"
+  | "Wellness"
+  | "Food & Drink"
+  | "Luxury"
+  | "Celebrations"
+  | "Entertainment"
+  | "Family"
+  | "Adventure"
+  | "Escape"
+  | "Self Care"
+  | "Social";
 
 export interface Review {
   id: string;
@@ -26,7 +50,7 @@ export interface Experience {
   mood: Mood[];
   rating: number;
   reviewCount: number;
-  category: string;
+  category: V2Category;
   featured: boolean;
   includes: string[];
   capacity: number;
@@ -40,15 +64,28 @@ export interface NavItem {
   icon: string;
 }
 
-export type CollectionKey =
+export type DiscoveryRailKey =
   | "trending"
-  | "popular"
   | "recommended"
+  | "weekend"
+  | "most-saved"
+  | "new"
   | "date-ideas"
   | "wellness"
-  | "escapes"
-  | "sunset"
-  | "staycations";
+  | "food-drink"
+  | "luxury"
+  | "celebrations"
+  | "hidden-gems"
+  | "staff-picks"
+  | "affordable"
+  | "adventure"
+  | "family";
+
+export interface DiscoveryRail {
+  key: DiscoveryRailKey;
+  title: string;
+  getExperiences: () => Experience[];
+}
 
 export const PRICE_RANGES = [
   { label: "All", value: "all" },
@@ -56,3 +93,20 @@ export const PRICE_RANGES = [
   { label: "50K-100K", value: "50000-100000" },
   { label: "100K+", value: "100000-9999999" },
 ] as const;
+
+export interface AIRecommendation {
+  query: string;
+  results: Experience[];
+  explanation: string;
+}
+
+export interface Collection {
+  id: string;
+  name: string;
+  experienceIds: string[];
+}
+
+export interface SavedState {
+  savedIds: string[];
+  collections: Collection[];
+}

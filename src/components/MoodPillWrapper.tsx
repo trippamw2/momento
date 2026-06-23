@@ -13,7 +13,6 @@ export default function MoodPillWrapper() {
         <MoodPill
           key={mood.label}
           label={mood.label}
-          emoji={mood.emoji}
           active={activeMood === mood.label}
           onClick={() => setActiveMood(activeMood === mood.label ? null : mood.label)}
         />

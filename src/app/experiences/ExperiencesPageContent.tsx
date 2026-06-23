@@ -160,13 +160,12 @@ export default function ExperiencesPageContent() {
             <button
               key={mood.label}
               onClick={() => updateFilter("mood", filters.mood === mood.label ? null : mood.label)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 ${
+              className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 ${
                 filters.mood === mood.label
                   ? "gradient-brand text-text-on-gradient"
                   : "bg-surface-tertiary text-text-secondary border border-border-subtle hover:bg-surface-elevated hover:text-text-primary"
               }`}
             >
-              <span>{mood.emoji}</span>
               {mood.label}
             </button>
           ))}
@@ -196,23 +195,19 @@ export default function ExperiencesPageContent() {
           >
             {locations.map((loc) => (
               <option key={loc} value={loc}>
-                📍 {loc === "All" ? "All Locations" : loc}
+                {loc === "All" ? "All Locations" : loc}
               </option>
             ))}
           </select>
 
           <button
             onClick={() => updateFilter("nearby", !filters.nearby)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 ${
+            className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 ${
               filters.nearby
                 ? "gradient-brand text-text-on-gradient"
                 : "bg-surface-tertiary text-text-secondary border border-border-subtle hover:bg-surface-elevated hover:text-text-primary"
             }`}
           >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
             Nearby
           </button>
         </div>

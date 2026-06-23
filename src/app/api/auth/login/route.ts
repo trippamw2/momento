@@ -1,5 +1,6 @@
+import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase-server";
-import { json, badRequest, unauthorized, handleRouteError } from "@/lib/api-helpers";
+import { badRequest, unauthorized, handleRouteError } from "@/lib/api-helpers";
 
 export async function POST(request: Request) {
   try {
@@ -10,7 +11,26 @@ export async function POST(request: Request) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return unauthorized(error.message);
 
-    return json({ user: data.user, session: data.session });
+    const response = NextResponse.json({ user: data.user, session: data.session });
+
+    if (data.session?.access_token) {
+      response.cookies.set("momento-auth-token", data.session.access_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      });
+      response.cookies.set("momento-user-role", data.user?.user_metadata?.role || "user", {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
+
+    return response;
   } catch (error) {
     return handleRouteError(error);
   }
