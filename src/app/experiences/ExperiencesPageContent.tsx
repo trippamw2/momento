@@ -4,16 +4,64 @@ import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { moods, filterExperiences, getCategories, getLocations } from "@/lib/data";
-import { Mood, PRICE_RANGES } from "@/lib/types";
+import { getExperiences } from "@/lib/api-client";
+import { transformExperience } from "@/lib/transform";
+import { Mood, PRICE_RANGES, Experience } from "@/lib/types";
 
 const ITEMS_PER_PAGE = 8;
 const LOAD_MORE = 4;
 
+const MOOD_LABELS: { label: Mood; description: string; accent: string }[] = [
+  { label: "Romantic", description: "Perfect for two", accent: "from-rose-500 to-pink-500" },
+  { label: "Relax", description: "Unwind and recharge", accent: "from-emerald-500 to-teal-500" },
+  { label: "Celebrate", description: "Make it special", accent: "from-amber-500 to-orange-500" },
+  { label: "Escape", description: "Get away from it all", accent: "from-cyan-500 to-sky-500" },
+  { label: "Indulge", description: "You deserve it", accent: "from-fuchsia-500 to-purple-500" },
+  { label: "Food & Drink", description: "Culinary delights", accent: "from-amber-600 to-orange-600" },
+  { label: "Family", description: "Fun for everyone", accent: "from-indigo-500 to-blue-500" },
+  { label: "Entertainment", description: "Live your vibe", accent: "from-violet-500 to-purple-500" },
+  { label: "Adventure", description: "Thrill & excitement", accent: "from-red-500 to-rose-500" },
+  { label: "Self Care", description: "Nurture yourself", accent: "from-green-500 to-emerald-500" },
+  { label: "Social", description: "Connect with others", accent: "from-pink-500 to-rose-500" },
+];
+
 function parseMoodParam(value: string | null): Mood | null {
   if (!value) return null;
-  const match = moods.find((m) => m.label.toLowerCase().replace(" ", "-") === value.toLowerCase());
+  const match = MOOD_LABELS.find((m) => m.label.toLowerCase().replace(" ", "-") === value.toLowerCase());
   return match ? match.label : null;
+}
+
+function filterExperiences(exps: Experience[], opts: {
+  search?: string;
+  category?: string;
+  mood?: Mood | null;
+  priceRange?: string;
+  location?: string;
+}): Experience[] {
+  let result = [...exps];
+  if (opts.search) {
+    const q = opts.search.toLowerCase();
+    result = result.filter((e) =>
+      e.title.toLowerCase().includes(q) ||
+      e.subtitle.toLowerCase().includes(q) ||
+      e.location.toLowerCase().includes(q) ||
+      e.category.toLowerCase().includes(q)
+    );
+  }
+  if (opts.category && opts.category !== "All") {
+    result = result.filter((e) => e.category === opts.category);
+  }
+  if (opts.mood) {
+    result = result.filter((e) => e.mood.includes(opts.mood as any));
+  }
+  if (opts.priceRange && opts.priceRange !== "all") {
+    const [min, max] = opts.priceRange.split("-").map(Number);
+    result = result.filter((e) => e.price >= min && e.price <= max);
+  }
+  if (opts.location && opts.location !== "All") {
+    result = result.filter((e) => e.location === opts.location);
+  }
+  return result;
 }
 
 interface FilterState {
@@ -42,7 +90,18 @@ export default function ExperiencesPageContent() {
   const [filters, setFilters] = useState<FilterState>(() => initialState(searchParams));
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [loading, setLoading] = useState(false);
+  const [allExperiences, setAllExperiences] = useState<Experience[]>([]);
+  const [fetching, setFetching] = useState(true);
   const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    getExperiences({ limit: 50 })
+      .then((res) => {
+        const mapped = (res.experiences as Record<string, unknown>[]).map(transformExperience);
+        setAllExperiences(mapped);
+      })
+      .finally(() => setFetching(false));
+  }, []);
 
   const updateFilter = useCallback(<K extends keyof FilterState>(key: K, value: FilterState[K]) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -54,20 +113,24 @@ export default function ExperiencesPageContent() {
     setVisibleCount(ITEMS_PER_PAGE);
   }, []);
 
-  const categories = useMemo(() => getCategories(), []);
-  const locations = useMemo(() => getLocations(), []);
+  const categories = useMemo(() => {
+    return ["All", ...new Set(allExperiences.map((e) => e.category))] as string[];
+  }, [allExperiences]);
+
+  const locations = useMemo(() => {
+    return ["All", ...new Set(allExperiences.map((e) => e.location))] as string[];
+  }, [allExperiences]);
 
   const filtered = useMemo(
     () =>
-      filterExperiences({
+      filterExperiences(allExperiences, {
         search: filters.search,
         category: filters.category,
         mood: filters.mood,
         priceRange: filters.price,
         location: filters.location,
-        nearby: filters.nearby,
       }),
-    [filters]
+    [allExperiences, filters]
   );
 
   const visibleExperiences = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
@@ -130,7 +193,7 @@ export default function ExperiencesPageContent() {
             placeholder="Search by title, location, category..."
             value={filters.search}
             onChange={(e) => updateFilter("search", e.target.value)}
-            className="w-full pl-12 pr-10 py-3 rounded-xl bg-surface-tertiary border border-border-subtle text-text-primary text-body placeholder:text-text-tertiary/60 focus:outline-none focus:border-brand-hot-pink focus:ring-1 focus:ring-brand-hot-pink/50 transition-all"
+            className="w-full pl-12 pr-10 py-3 rounded-xl bg-surface-primary border border-border-default text-text-primary text-body placeholder:text-text-tertiary/60 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink/30 transition-all shadow-xs"
           />
           {filters.search && (
             <button onClick={() => updateFilter("search", "")} className="absolute right-4 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary text-sm">
@@ -156,7 +219,7 @@ export default function ExperiencesPageContent() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5 mb-8">
-          {moods.map((mood) => (
+          {MOOD_LABELS.map((mood) => (
             <button
               key={mood.label}
               onClick={() => updateFilter("mood", filters.mood === mood.label ? null : mood.label)}
@@ -191,7 +254,7 @@ export default function ExperiencesPageContent() {
           <select
             value={filters.location}
             onChange={(e) => updateFilter("location", e.target.value)}
-            className="px-3 py-1.5 rounded-full text-caption font-medium bg-surface-tertiary text-text-secondary border border-border-subtle focus:outline-none focus:border-brand-hot-pink/50 appearance-none cursor-pointer hover:bg-surface-elevated transition-colors"
+            className="px-3 py-1.5 rounded-full text-caption font-medium bg-surface-primary text-text-secondary border border-border-default focus:outline-none focus:border-brand-pink/50 appearance-none cursor-pointer hover:bg-surface-hover transition-colors"
           >
             {locations.map((loc) => (
               <option key={loc} value={loc}>
@@ -245,7 +308,7 @@ export default function ExperiencesPageContent() {
                         localStorage.setItem("momento-saved", JSON.stringify(state));
                         window.dispatchEvent(new Event("storage"));
                       }}
-                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-[#FF2D7A]/60"
+                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-brand-pink/80"
                     >
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -282,13 +345,13 @@ export default function ExperiencesPageContent() {
 
         {hasMore && (
           <div ref={sentinelRef} className="flex justify-center py-10">
-            <div className="w-8 h-8 rounded-full border-2 border-brand-hot-pink/30 border-t-brand-hot-pink animate-spin" />
+            <div className="w-8 h-8 rounded-full border-2 border-brand-pink/30 border-t-brand-pink animate-spin" />
           </div>
         )}
 
         {!hasMore && filtered.length > 0 && (
           <p className="text-center text-caption text-text-tertiary py-8">
-            You&apos;ve seen them all ✨
+            You&apos;ve seen them all
           </p>
         )}
       </div>

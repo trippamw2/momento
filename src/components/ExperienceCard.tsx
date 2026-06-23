@@ -4,7 +4,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { Experience } from "@/lib/types";
 import { useState, useCallback } from "react";
-import { moodAccent } from "@/lib/data";
+
+const MOOD_GRADIENTS: Record<string, string> = {
+  Romantic: "from-rose-500 to-pink-500",
+  Relax: "from-emerald-500 to-teal-500",
+  Celebrate: "from-amber-500 to-orange-500",
+  Escape: "from-cyan-500 to-sky-500",
+  Indulge: "from-fuchsia-500 to-purple-500",
+  "Food & Drink": "from-amber-600 to-orange-600",
+  Family: "from-indigo-500 to-blue-500",
+  Entertainment: "from-violet-500 to-purple-500",
+  Adventure: "from-red-500 to-rose-500",
+  "Self Care": "from-green-500 to-emerald-500",
+  Social: "from-pink-500 to-rose-500",
+};
 
 interface ExperienceCardProps {
   experience: Experience;
@@ -27,7 +40,7 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
   const [saved, setSaved] = useState(() => loadSaved().includes(exp.id));
   const [shareFeedback, setShareFeedback] = useState(false);
   const primaryMood = exp.mood[0];
-  const moodGradient = moodAccent[primaryMood] || "from-rose-500 to-pink-500";
+  const moodGradient = MOOD_GRADIENTS[primaryMood] || "from-rose-500 to-pink-500";
 
   const toggleSave = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -58,7 +71,7 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
 
   return (
     <Link href={`/experiences/${exp.id}`} className={`${width} flex-shrink-0 snap-start group relative`}>
-      <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#111827] transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_16px_48px_rgba(0,0,0,0.5)]">
+      <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#f0f0f0] transition-all duration-500 group-hover:shadow-lg">
         <Image
           src={exp.image}
           alt={exp.title}
@@ -68,16 +81,16 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
         />
         <div className="card-overlay-gradient absolute inset-0" />
 
-        {/* Mood Badge — typographic */}
+        {/* Mood Badge */}
         <div className="absolute top-3 left-3">
-          <span className="px-3 py-1.5 rounded-full text-caption font-medium text-white backdrop-blur-sm border border-white/[0.1] relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:opacity-20" style={{ background: `linear-gradient(135deg, ${moodGradient.replace("from-", "").replace("to-", "").replace(" ", "")})` }}>
+          <span className="px-3 py-1.5 rounded-full text-caption font-medium text-white backdrop-blur-sm border border-white/[0.15] relative overflow-hidden">
             {primaryMood}
           </span>
         </div>
 
         {/* Save Button */}
         <button onClick={toggleSave} className="absolute top-3 right-3 card-action-button">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill={saved ? "white" : "none"} stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill={saved ? "#ff385c" : "none"} stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
           </svg>
         </button>
@@ -96,20 +109,20 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
 
           {/* Action Buttons */}
           <div className="flex items-center gap-1.5 mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-            <span className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm text-white text-caption font-medium border border-white/[0.08]">
+            <span className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm text-white text-caption font-medium border border-white/[0.12]">
               Gift
             </span>
-            <span className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm text-white text-caption font-medium border border-white/[0.08]">
+            <span className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm text-white text-caption font-medium border border-white/[0.12]">
               Book
             </span>
-            <button onClick={handleShare} className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm text-white text-caption font-medium border border-white/[0.08] hover:bg-white/20 transition-all">
+            <button onClick={handleShare} className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm text-white text-caption font-medium border border-white/[0.12] hover:bg-white/20 transition-all">
               {shareFeedback ? "Copied" : "Share"}
             </button>
           </div>
         </div>
 
         {/* Price Tag */}
-        <div className="absolute top-3 right-14 px-3 py-1 rounded-full bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white text-caption font-semibold shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300">
+        <div className="absolute top-3 right-14 px-3 py-1 rounded-full bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white text-caption font-semibold shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300">
           MK {exp.price.toLocaleString()}
         </div>
       </div>

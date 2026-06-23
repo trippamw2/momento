@@ -16,7 +16,7 @@ function HeartIcon({ className }: { className: string }) {
     <svg className={className} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="heart-grad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#FF2D7A" />
+          <stop offset="0%" stopColor="#ff385c" />
           <stop offset="100%" stopColor="#FF7A18" />
         </linearGradient>
       </defs>
@@ -49,11 +49,11 @@ export default function Logo({ size = "md", showTagline = false }: LogoProps) {
       <HeartIcon className={`${s.icon} transition-transform duration-300 group-hover:scale-105`} />
       <div className="flex flex-col">
         <span className={`${s.logo} font-serif font-bold leading-none tracking-tight`}>
-          <span className="bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] bg-clip-text text-transparent">M</span>
-          <span className="text-white">OMENTO</span>
+          <span className="bg-gradient-to-r from-[#ff385c] to-[#FF7A18] bg-clip-text text-transparent">M</span>
+          <span className="text-[#222222]">OMENTO</span>
         </span>
         {showTagline && (
-          <span className={`${s.tagline} text-[#A1A1AA] tracking-[0.15em] uppercase mt-0.5`}>
+          <span className={`${s.tagline} text-[#6a6a6a] tracking-[0.15em] uppercase mt-0.5`}>
             Live The Moment
           </span>
         )}
