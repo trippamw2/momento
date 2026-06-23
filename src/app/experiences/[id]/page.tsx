@@ -25,7 +25,8 @@ export default async function ExperienceDetail({ params }: { params: Promise<{ i
 
   const exp = transformExperience({ ...raw, reviews: reviews ?? [] });
 
-  const { data: moodExps } = exp.mood.length > 0
+  const rawMoods = (raw.moods as Array<unknown>) ?? [];
+  const { data: moodExps } = rawMoods.length > 0
     ? await supabase
         .from("experiences")
         .select("id")
