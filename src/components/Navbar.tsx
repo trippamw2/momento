@@ -11,7 +11,6 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-  const [nearbyActive, setNearbyActive] = useState(false);
 
   const [signedIn, setSignedIn] = useState(false);
 
@@ -58,16 +57,12 @@ export default function Navbar() {
             </div>
 
             <div className="hidden md:flex items-center gap-1">
-              <button
-                onClick={() => setNearbyActive(!nearbyActive)}
-                className={`px-4 py-2 rounded-xl text-body-sm font-medium transition-all duration-200 ${
-                  nearbyActive
-                    ? "bg-[#ff385c] text-white"
-                    : "text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7]"
-                }`}
+              <Link
+                href="/experiences?nearby=true"
+                className="px-4 py-2 rounded-xl text-body-sm font-medium transition-all duration-200 text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7]"
               >
                 Near Me
-              </button>
+              </Link>
 
               <button
                 onClick={() => setNotifOpen(!notifOpen)}
@@ -120,23 +115,31 @@ export default function Navbar() {
                 );
               })}
               <hr className="my-2 border-[#dddddd]" />
-              {[
-                { label: "Near Me", href: "/experiences?nearby=true" },
-                { label: "Notifications", href: "#notifications" },
-                { label: "Profile", href: "#auth" },
-              ].map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => {
-                    setMenuOpen(false);
-                    if (item.href === "#auth") setAuthOpen(true);
-                    else if (item.href === "#notifications") setNotifOpen(!notifOpen);
-                  }}
-                  className="w-full px-4 py-3 rounded-xl text-body-sm text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7] transition-colors font-medium"
-                >
-                  {item.label}
-                </button>
-              ))}
+              <Link
+                href="/experiences?nearby=true"
+                onClick={() => setMenuOpen(false)}
+                className="block w-full px-4 py-3 rounded-xl text-body-sm text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7] transition-colors font-medium"
+              >
+                Near Me
+              </Link>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  setNotifOpen(!notifOpen);
+                }}
+                className="w-full px-4 py-3 rounded-xl text-body-sm text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7] transition-colors font-medium"
+              >
+                Notifications
+              </button>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  setAuthOpen(true);
+                }}
+                className="w-full px-4 py-3 rounded-xl text-body-sm text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7] transition-colors font-medium"
+              >
+                Profile
+              </button>
             </nav>
           </div>
         )}

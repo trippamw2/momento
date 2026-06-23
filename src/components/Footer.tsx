@@ -56,18 +56,18 @@ export default function Footer() {
             <h4 className="text-[#222222] font-semibold text-body-sm mb-4">For Partners</h4>
             <ul className="space-y-2.5 text-body-sm text-[#6a6a6a]">
               <li><Link href="/profile" className="hover:text-[#222222] transition-colors duration-200">Partner Dashboard</Link></li>
-              <li><a href="#" className="hover:text-[#222222] transition-colors duration-200">List Your Experience</a></li>
-              <li><a href="#" className="hover:text-[#222222] transition-colors duration-200">Partner Resources</a></li>
+              <li><Link href="/partner/list-experience" className="hover:text-[#222222] transition-colors duration-200">List Your Experience</Link></li>
+              <li><Link href="/partner/resources" className="hover:text-[#222222] transition-colors duration-200">Partner Resources</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-[#222222] font-semibold text-body-sm mb-4">Support</h4>
             <ul className="space-y-2.5 text-body-sm text-[#6a6a6a]">
-              <li><a href="#" className="hover:text-[#222222] transition-colors duration-200">Help Center</a></li>
-              <li><a href="#" className="hover:text-[#222222] transition-colors duration-200">Safety</a></li>
-              <li><a href="#" className="hover:text-[#222222] transition-colors duration-200">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-[#222222] transition-colors duration-200">Privacy Policy</a></li>
+              <li><Link href="/help" className="hover:text-[#222222] transition-colors duration-200">Help Center</Link></li>
+              <li><Link href="/safety" className="hover:text-[#222222] transition-colors duration-200">Safety</Link></li>
+              <li><Link href="/terms" className="hover:text-[#222222] transition-colors duration-200">Terms of Service</Link></li>
+              <li><Link href="/privacy" className="hover:text-[#222222] transition-colors duration-200">Privacy Policy</Link></li>
             </ul>
           </div>
         </div>
