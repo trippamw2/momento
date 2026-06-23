@@ -20,9 +20,9 @@
   --color-surface-glass: rgba(0, 0, 0, 0.02);
 
   /* ── Text Colors ── */
-  --color-text-primary: #222222;
-  --color-text-secondary: #6a6a6a;
-  --color-text-tertiary: #929292;
+  --color-text-primary: #111111;
+  --color-text-secondary: #4a4a4a;
+  --color-text-tertiary: #6a6a6a;
   --color-text-inverse: #ffffff;
   --color-text-on-gradient: #ffffff;
 

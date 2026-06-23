@@ -110,10 +110,10 @@ export default function Home() {
                     <svg key={s} className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
                   ))}
                 </div>
-                <p className="text-caption text-[#6a6a6a] font-medium">Trusted by 10,000+ explorers</p>
+                <p className="text-caption text-[#4a4a4a] font-medium">Trusted by 10,000+ explorers</p>
               </div>
             </div>
-            <div className="flex items-center gap-4 sm:gap-6 text-caption text-[#6a6a6a]">
+            <div className="flex items-center gap-4 sm:gap-6 text-caption text-[#4a4a4a]">
               <span className="flex items-center gap-1">✓ Curated experiences</span>
               <span className="hidden xs:inline flex items-center gap-1">✓ Instant booking</span>
               <span className="flex items-center gap-1">✓ Free cancellation</span>
@@ -129,7 +129,7 @@ export default function Home() {
             <div className="relative z-10 p-8 sm:p-12">
               <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
                 <div className="flex-1 text-center lg:text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#dddddd] text-caption text-[#6a6a6a] mb-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#dddddd] text-caption text-[#4a4a4a] mb-4">
                     Gift A Moment
                   </div>
                   <h2 className="text-heading-xl sm:text-display-sm font-bold text-[#222222] mb-3 leading-tight">
@@ -138,7 +138,7 @@ export default function Home() {
                       Give A Memory.
                     </span>
                   </h2>
-                  <p className="text-[#6a6a6a] text-body-lg max-w-md mx-auto lg:mx-0 mb-6">
+                  <p className="text-[#4a4a4a] text-body-lg max-w-md mx-auto lg:mx-0 mb-6">
                     Surprise someone special with an unforgettable experience, delivered straight to their phone.
                   </p>
                   <Link
@@ -188,7 +188,7 @@ export default function Home() {
                 </div>
                 <div className="flex-1 text-center lg:text-left">
                   <h2 className="text-heading-xl font-bold text-[#222222] mb-1">Not sure what you&apos;re in the mood for?</h2>
-                  <p className="text-[#6a6a6a] text-body-lg">Tell us how you feel, and we&apos;ll find the perfect experience.</p>
+                  <p className="text-[#4a4a4a] text-body-lg">Tell us how you feel, and we&apos;ll find the perfect experience.</p>
                 </div>
                 <div className="flex-shrink-0">
                   <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white border border-[#dddddd] text-[#222222] font-semibold text-body-sm group-hover:border-[#222222] transition-all">
@@ -209,7 +209,7 @@ export default function Home() {
               <h2 className="text-heading-xl sm:text-display-sm md:text-display-md font-bold text-[#222222] mb-4 leading-tight">
                 Life is made of moments.
               </h2>
-              <p className="text-[#6a6a6a] text-body-lg sm:text-heading-md max-w-lg mx-auto mb-8 leading-relaxed">
+              <p className="text-[#4a4a4a] text-body-lg sm:text-heading-md max-w-lg mx-auto mb-8 leading-relaxed">
                 Don&apos;t spend another weekend wondering what to do.
               </p>
               <Link

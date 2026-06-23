@@ -182,7 +182,7 @@ export default function ExperiencesPageContent() {
           <h1 className="text-display-sm font-bold text-[#222222] mb-1">
             All <span className="bg-gradient-to-r from-[#ff385c] to-[#FF7A18] bg-clip-text text-transparent">Experiences</span>
           </h1>
-          <p className="text-[#6a6a6a] text-body-lg">{filtered.length} moments to discover</p>
+          <p className="text-[#4a4a4a] text-body-lg">{filtered.length} moments to discover</p>
         </div>
 
         <div className="relative mb-6 max-w-xl">
@@ -216,7 +216,7 @@ export default function ExperiencesPageContent() {
               className={`px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all duration-200 ${
                 filters.category === cat
                   ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
-                  : "bg-[#FFF8F0] text-[#6a6a6a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
+                  : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
               }`}
             >
               {cat}
@@ -232,7 +232,7 @@ export default function ExperiencesPageContent() {
               className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 ${
                 filters.mood === mood.label
                   ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
-                  : "bg-[#FFF8F0] text-[#6a6a6a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
+                  : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
               }`}
             >
               <span>{mood.emoji}</span>
@@ -249,7 +249,7 @@ export default function ExperiencesPageContent() {
               className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 ${
                 filters.price === pr.value
                   ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
-                  : "bg-[#FFF8F0] text-[#6a6a6a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
+                  : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
               }`}
             >
               {pr.label}
@@ -261,7 +261,7 @@ export default function ExperiencesPageContent() {
           <select
             value={filters.location}
             onChange={(e) => updateFilter("location", e.target.value)}
-            className="px-3 py-1.5 rounded-full text-caption font-medium bg-[#FFF8F0] text-[#6a6a6a] border border-[#ebebeb] focus:outline-none focus:border-[#ff385c]/50 appearance-none cursor-pointer hover:bg-[#FFF0F3] transition-colors"
+            className="px-3 py-1.5 rounded-full text-caption font-medium bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] focus:outline-none focus:border-[#ff385c]/50 appearance-none cursor-pointer hover:bg-[#FFF0F3] transition-colors"
           >
             {locations.map((loc) => (
               <option key={loc} value={loc}>
@@ -275,7 +275,7 @@ export default function ExperiencesPageContent() {
             className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 ${
               filters.nearby
                 ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
-                : "bg-[#FFF8F0] text-[#6a6a6a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
+                : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
             }`}
           >
             Nearby
