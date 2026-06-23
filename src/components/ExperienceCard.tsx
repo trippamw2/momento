@@ -35,7 +35,7 @@ function loadSaved(): string[] {
 }
 
 export default function ExperienceCard({ experience: exp, size = "md" }: ExperienceCardProps) {
-  const widthMap = { sm: "w-52", md: "w-72", lg: "w-80" };
+  const widthMap = { sm: "w-44 sm:w-52", md: "w-56 sm:w-64 md:w-72", lg: "w-72 sm:w-80" };
   const width = widthMap[size];
   const [saved, setSaved] = useState(() => loadSaved().includes(exp.id));
   const [shareFeedback, setShareFeedback] = useState(false);
@@ -79,11 +79,13 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
           className="object-cover transition-transform duration-700 group-hover:scale-110"
           sizes="(max-width: 640px) 288px, 288px"
         />
+        {/* Dark fallback when image hasn't loaded */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/80" />
         <div className="card-overlay-gradient absolute inset-0" />
 
         {/* Mood Badge */}
         <div className="absolute top-3 left-3">
-          <span className="px-3 py-1.5 rounded-full text-caption font-medium text-white backdrop-blur-sm border border-white/[0.15] relative overflow-hidden">
+          <span className="px-3 py-1.5 rounded-full text-caption font-medium text-white bg-black/40 backdrop-blur-md border border-white/20 shadow-sm">
             {primaryMood}
           </span>
         </div>
@@ -108,24 +110,27 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
           <p className="text-white font-semibold text-body-sm mt-1.5">MK {exp.price.toLocaleString()}</p>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-1.5 mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-            <span className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm text-white text-caption font-medium border border-white/[0.12]">
+          <div className="flex items-center gap-1.5 mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0">
+            <Link
+              href="/gift"
+              onClick={(e) => e.stopPropagation()}
+              className="px-3 py-1.5 rounded-lg bg-white/15 backdrop-blur-sm text-white text-caption font-medium border border-white/[0.15] hover:bg-white/25 transition-all"
+            >
               Gift
-            </span>
-            <span className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm text-white text-caption font-medium border border-white/[0.12]">
-              Book
-            </span>
-            <button onClick={handleShare} className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm text-white text-caption font-medium border border-white/[0.12] hover:bg-white/20 transition-all">
-              {shareFeedback ? "Copied" : "Share"}
+            </Link>
+            <Link
+              href={`/experiences/${exp.id}#book`}
+              onClick={(e) => e.stopPropagation()}
+              className="px-3 py-1.5 rounded-lg bg-[#ff385c] text-white text-caption font-medium shadow-sm hover:bg-[#e00b41] transition-all"
+            >
+              Book Now
+            </Link>
+            <button onClick={handleShare} className="px-3 py-1.5 rounded-lg bg-white/15 backdrop-blur-sm text-white text-caption font-medium border border-white/[0.15] hover:bg-white/25 transition-all">
+              {shareFeedback ? "Copied ✓" : "Share"}
             </button>
           </div>
+          </div>
         </div>
-
-        {/* Price Tag */}
-        <div className="absolute top-3 right-14 px-3 py-1 rounded-full bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white text-caption font-semibold shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300">
-          MK {exp.price.toLocaleString()}
-        </div>
-      </div>
     </Link>
   );
 }

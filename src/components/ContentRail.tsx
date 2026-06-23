@@ -22,14 +22,14 @@ export default function ContentRail({ title, experiences, viewAllHref, subtitle 
         {viewAllHref && (
           <Link
             href={viewAllHref}
-            className="text-body-sm text-[#6a6a6a] hover:text-[#222222] transition-colors duration-200 flex items-center gap-1 flex-shrink-0"
+            className="text-body-sm text-[#6a6a6a] hover:text-[#ff385c] transition-colors duration-200 flex items-center gap-1 flex-shrink-0"
           >
             See all
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
           </Link>
         )}
       </div>
-      <div className="flex gap-4 overflow-x-auto px-4 sm:px-8 pb-4 hide-scrollbar snap-x snap-mandatory">
+      <div className="flex gap-3 sm:gap-4 overflow-x-auto px-4 sm:px-8 pb-4 hide-scrollbar snap-x snap-mandatory">
         {experiences.map((exp) => (
           <ExperienceCard key={exp.id} experience={exp} size="md" />
         ))}

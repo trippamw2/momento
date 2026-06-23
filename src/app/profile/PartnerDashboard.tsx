@@ -63,17 +63,17 @@ const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
 
 function KpiCard({ label, value, trend, icon }: { label: string; value: string; trend?: string; icon: string }) {
   return (
-    <div className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06] hover:border-white/[0.12] transition-all">
+    <div className="p-5 rounded-xl bg-white border border-[#ebebeb] hover:border-[#dddddd] transition-all shadow-sm">
       <div className="flex items-center justify-between mb-3">
         <span className="text-2xl">{icon}</span>
         {trend && (
-          <span className="text-caption font-medium text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">
+          <span className="text-caption font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
             +{trend}
           </span>
         )}
       </div>
-      <p className="text-heading-lg font-bold text-white mb-0.5">{value}</p>
-      <p className="text-caption text-[#6B7280]">{label}</p>
+      <p className="text-heading-lg font-bold text-[#222222] mb-0.5">{value}</p>
+      <p className="text-caption text-[#929292]">{label}</p>
     </div>
   );
 }
@@ -87,7 +87,7 @@ function StatusBadge({ status }: { status: string }) {
     paid: "bg-emerald-400/10 text-emerald-400 border-emerald-400/20",
   };
   return (
-    <span className={`px-2 py-0.5 rounded-full text-caption font-medium capitalize border ${colors[status] || "bg-[#111827] text-[#6B7280]"}`}>
+    <span className={`px-2 py-0.5 rounded-full text-caption font-medium capitalize border ${colors[status] || "bg-[#f7f7f7] text-[#929292] border-[#ebebeb]"}`}>
       {status}
     </span>
   );
@@ -95,13 +95,13 @@ function StatusBadge({ status }: { status: string }) {
 
 function BookingRow({ booking }: { booking: typeof mockBookings[0] }) {
   return (
-    <tr className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
-      <td className="py-3 px-2 text-body-sm text-white">{booking.id}</td>
-      <td className="py-3 px-2 text-body-sm text-white">{booking.customer}</td>
-      <td className="py-3 px-2 text-body-sm text-[#A1A1AA]">{booking.experience}</td>
-      <td className="py-3 px-2 text-body-sm text-[#A1A1AA]">{booking.date}</td>
-      <td className="py-3 px-2 text-body-sm text-[#A1A1AA]">{booking.guests}</td>
-      <td className="py-3 px-2 text-body-sm text-white font-medium">MK {booking.total.toLocaleString()}</td>
+    <tr className="border-b border-[#ebebeb] hover:bg-[#fafafa] transition-colors">
+      <td className="py-3 px-2 text-body-sm text-[#222222]">{booking.id}</td>
+      <td className="py-3 px-2 text-body-sm text-[#222222]">{booking.customer}</td>
+      <td className="py-3 px-2 text-body-sm text-[#6a6a6a]">{booking.experience}</td>
+      <td className="py-3 px-2 text-body-sm text-[#6a6a6a]">{booking.date}</td>
+      <td className="py-3 px-2 text-body-sm text-[#6a6a6a]">{booking.guests}</td>
+      <td className="py-3 px-2 text-body-sm text-[#222222] font-medium">MK {booking.total.toLocaleString()}</td>
       <td className="py-3 px-2"><StatusBadge status={booking.status} /></td>
     </tr>
   );
@@ -114,7 +114,7 @@ function MiniBar({ data, height = 40 }: { data: number[]; height?: number }) {
       {data.map((v, i) => (
         <div
           key={i}
-          className="flex-1 rounded-t-sm bg-gradient-to-t from-[#FF2D7A] to-[#FF7A18] transition-all duration-300"
+          className="flex-1 rounded-t-sm bg-[#ff385c] transition-all duration-300"
           style={{ height: `${(v / max) * 100}%` }}
         />
       ))}
@@ -137,21 +137,21 @@ function CalendarWidget() {
   for (let d = 1; d <= daysInMonth; d++) cells.push(d);
 
   return (
-    <div className="bg-[#0A101B] rounded-xl border border-white/[0.06] p-4">
+    <div className="bg-white rounded-xl border border-[#ebebeb] p-4 shadow-sm">
       <div className="flex items-center justify-between mb-3">
-        <button onClick={prev} className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/10 text-[#A1A1AA]">
+        <button onClick={prev} className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-[#f7f7f7] text-[#6a6a6a]">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
         </button>
-        <span className="text-body-sm font-semibold text-white">
+        <span className="text-body-sm font-semibold text-[#222222]">
           {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][month]} {year}
         </span>
-        <button onClick={next} className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/10 text-[#A1A1AA]">
+        <button onClick={next} className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-[#f7f7f7] text-[#6a6a6a]">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
         </button>
       </div>
       <div className="grid grid-cols-7 gap-1 mb-1.5">
         {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
-          <div key={d} className="text-center text-caption text-[#6B7280] py-1">{d}</div>
+          <div key={d} className="text-center text-caption text-[#929292] py-1">{d}</div>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-1">
@@ -163,8 +163,8 @@ function CalendarWidget() {
               key={d}
               className={`w-full aspect-square rounded-lg text-caption font-medium flex items-center justify-center transition-colors ${
                 blocked
-                  ? "bg-red-500/15 text-red-400 line-through"
-                  : "text-[#A1A1AA] hover:bg-white/10 hover:text-white"
+                  ? "bg-red-50 text-red-500 line-through"
+                  : "text-[#6a6a6a] hover:bg-[#f7f7f7] hover:text-[#222222]"
               }`}
             >
               {d}
@@ -172,14 +172,14 @@ function CalendarWidget() {
           );
         })}
       </div>
-      <div className="flex items-center gap-4 mt-3 pt-3 border-t border-white/[0.06]">
+      <div className="flex items-center gap-4 mt-3 pt-3 border-t border-[#ebebeb]">
         <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-sm bg-red-500/15 border border-red-500/30" />
-          <span className="text-caption text-[#6B7280]">Blocked</span>
+          <div className="w-3 h-3 rounded-sm bg-red-50 border border-red-200" />
+          <span className="text-caption text-[#929292]">Blocked</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-sm bg-[#111827] border border-white/[0.06]" />
-          <span className="text-caption text-[#6B7280]">Available</span>
+          <div className="w-3 h-3 rounded-sm bg-[#f7f7f7] border border-[#ebebeb]" />
+          <span className="text-caption text-[#929292]">Available</span>
         </div>
       </div>
     </div>
@@ -189,10 +189,10 @@ function CalendarWidget() {
 function ExperienceForm({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-10 sm:pt-20 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-lg mx-4 rounded-2xl bg-[#0A101B] border border-white/[0.06] p-6 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+      <div className="w-full max-w-lg mx-4 rounded-2xl bg-white border border-[#ebebeb] p-6 max-h-[80vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-heading-md font-bold text-white">Add Experience</h2>
-          <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 text-[#A1A1AA]">
+          <h2 className="text-heading-md font-bold text-[#222222]">Add Experience</h2>
+          <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f7f7f7] text-[#6a6a6a]">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -207,17 +207,17 @@ function ExperienceForm({ onClose }: { onClose: () => void }) {
             { label: "Location", placeholder: "e.g. Lilongwe" },
           ].map((field) => (
             <div key={field.label}>
-              <label className="block text-body-sm font-medium text-white mb-1.5">{field.label}</label>
+              <label className="block text-body-sm font-medium text-[#222222] mb-1.5">{field.label}</label>
               {field.type === "textarea" ? (
-                <textarea rows={3} placeholder={field.placeholder} className="w-full px-4 py-2.5 rounded-xl bg-[#111827] border border-white/[0.06] text-white text-body-sm placeholder:text-[#6B7280] focus:outline-none focus:border-[#FF2D7A] focus:ring-1 focus:ring-[#FF2D7A]/50 transition-all resize-none" />
+                <textarea rows={3} placeholder={field.placeholder} className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#dddddd] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/40 transition-all resize-none" />
               ) : (
-                <input type={field.type || "text"} placeholder={field.placeholder} className="w-full px-4 py-2.5 rounded-xl bg-[#111827] border border-white/[0.06] text-white text-body-sm placeholder:text-[#6B7280] focus:outline-none focus:border-[#FF2D7A] focus:ring-1 focus:ring-[#FF2D7A]/50 transition-all" />
+                <input type={field.type || "text"} placeholder={field.placeholder} className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#dddddd] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/40 transition-all" />
               )}
             </div>
           ))}
           <div>
-            <label className="block text-body-sm font-medium text-white mb-1.5">Category</label>
-            <select className="w-full px-4 py-2.5 rounded-xl bg-[#111827] border border-white/[0.06] text-white text-body-sm focus:outline-none focus:border-[#FF2D7A] appearance-none cursor-pointer">
+            <label className="block text-body-sm font-medium text-[#222222] mb-1.5">Category</label>
+            <select className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#dddddd] text-[#222222] text-body-sm focus:outline-none focus:border-[#ff385c] appearance-none cursor-pointer">
               <option>Romantic</option>
               <option>Wellness</option>
               <option>Food & Drink</option>
@@ -228,22 +228,22 @@ function ExperienceForm({ onClose }: { onClose: () => void }) {
             </select>
           </div>
           <div>
-            <label className="block text-body-sm font-medium text-white mb-1.5">Moods</label>
+            <label className="block text-body-sm font-medium text-[#222222] mb-1.5">Moods</label>
             <div className="flex flex-wrap gap-1.5">
               {["Romantic", "Relax", "Celebrate", "Escape", "Indulge"].map((m) => (
-                <label key={m} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#111827] border border-white/[0.06] cursor-pointer hover:bg-[#1a2235] transition-colors">
-                  <input type="checkbox" className="accent-[#FF2D7A]" />
-                  <span className="text-caption text-[#A1A1AA]">{m}</span>
+                <label key={m} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#f7f7f7] border border-[#ebebeb] cursor-pointer hover:bg-[#f0f0f0] transition-colors">
+                  <input type="checkbox" className="accent-[#ff385c]" />
+                  <span className="text-caption text-[#6a6a6a]">{m}</span>
                 </label>
               ))}
             </div>
           </div>
         </div>
         <div className="flex gap-3 mt-6">
-          <button className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all">
+          <button className="flex-1 py-2.5 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all">
             Save Experience
           </button>
-          <button onClick={onClose} className="flex-1 py-2.5 rounded-xl bg-[#111827] text-[#A1A1AA] text-body-sm font-medium hover:bg-[#1a2235] transition-all">
+          <button onClick={onClose} className="flex-1 py-2.5 rounded-xl bg-white text-[#6a6a6a] text-body-sm font-medium border border-[#dddddd] hover:bg-[#f7f7f7] transition-all">
             Cancel
           </button>
         </div>
@@ -280,19 +280,19 @@ export default function PartnerDashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#05070B] flex">
+    <div className="min-h-screen bg-[#f7f7f7] flex">
       {/* ─── Sidebar ─── */}
-      <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#0A101B] border-r border-white/[0.06] transform transition-transform duration-300 lg:translate-x-0 ${
+      <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-[#ebebeb] transform transition-transform duration-300 lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}>
-        <div className="p-5 border-b border-white/[0.06]">
+        <div className="p-5 border-b border-[#ebebeb]">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] flex items-center justify-center shadow-[0_4px_12px_rgba(255,45,122,0.3)]">
+            <div className="w-9 h-9 rounded-xl bg-[#ff385c] flex items-center justify-center shadow-[0_4px_12px_rgba(255,56,92,0.2)]">
               <span className="text-white font-bold text-body">M</span>
             </div>
             <div>
-              <p className="text-body-sm font-bold text-white">Momento</p>
-              <p className="text-caption text-[#6B7280]">Partner Dashboard</p>
+              <p className="text-body-sm font-bold text-[#222222]">Momento</p>
+              <p className="text-caption text-[#929292]">Partner Dashboard</p>
             </div>
           </div>
         </div>
@@ -304,8 +304,8 @@ export default function PartnerDashboard() {
               onClick={() => { setSection(item.key); setSidebarOpen(false); }}
               className={`w-full px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all ${
                 section === item.key
-                  ? "bg-gradient-to-r from-[#FF2D7A]/15 to-[#FF7A18]/15 text-white border border-[#FF2D7A]/20"
-                  : "text-[#A1A1AA] hover:text-white hover:bg-white/[0.04]"
+                  ? "bg-[#ff385c] text-white"
+                  : "text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7]"
               }`}
             >
               {item.label}
@@ -313,14 +313,14 @@ export default function PartnerDashboard() {
           ))}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/[0.06]">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[#ebebeb]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] flex items-center justify-center text-white text-body-sm font-bold">
+            <div className="w-9 h-9 rounded-full bg-[#ff385c] flex items-center justify-center text-white text-body-sm font-bold">
               LC
             </div>
             <div>
-              <p className="text-body-sm font-medium text-white">Lilongwe Co.</p>
-              <p className="text-caption text-[#6B7280]">Premium Partner</p>
+              <p className="text-body-sm font-medium text-[#222222]">Lilongwe Co.</p>
+              <p className="text-caption text-[#929292]">Premium Partner</p>
             </div>
           </div>
         </div>
@@ -332,13 +332,13 @@ export default function PartnerDashboard() {
 
       {/* ─── Main Content ─── */}
       <main className="flex-1 lg:ml-64 min-h-screen">
-        <header className="sticky top-0 z-20 bg-[#05070B]/80 backdrop-blur-2xl border-b border-white/[0.06]">
+        <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-[#ebebeb]">
           <div className="flex items-center justify-between px-4 sm:px-6 h-14">
             <div className="flex items-center gap-3">
-              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/5 text-[#A1A1AA] font-bold text-heading">
+              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#f7f7f7] text-[#6a6a6a] font-bold text-heading">
                 ≡
               </button>
-              <h1 className="text-heading-md font-bold text-white hidden sm:block">
+              <h1 className="text-heading-md font-bold text-[#222222] hidden sm:block">
                 {nav.find((n) => n.key === section)?.label}
               </h1>
             </div>
@@ -346,7 +346,7 @@ export default function PartnerDashboard() {
               <select
                 value={partnerType}
                 onChange={(e) => setPartnerType(e.target.value)}
-                className="px-3 py-1.5 rounded-lg bg-[#111827] text-[#A1A1AA] text-caption border border-white/[0.06] focus:outline-none focus:border-[#FF2D7A]/50 appearance-none cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-white text-[#6a6a6a] text-caption border border-[#dddddd] focus:outline-none focus:border-[#ff385c]/50 appearance-none cursor-pointer"
               >
                 <option>All Types</option>
                 {partnerTypes.map((t) => (
@@ -354,10 +354,10 @@ export default function PartnerDashboard() {
                 ))}
               </select>
               <div className="relative">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] flex items-center justify-center text-white text-body-sm font-bold cursor-pointer">
+                <div className="w-8 h-8 rounded-full bg-[#ff385c] flex items-center justify-center text-white text-body-sm font-bold cursor-pointer">
                   LC
                 </div>
-                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#05070B]" />
+                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white" />
               </div>
             </div>
           </div>
@@ -375,31 +375,31 @@ export default function PartnerDashboard() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                <div className="lg:col-span-2 p-5 rounded-xl bg-[#0A101B] border border-white/[0.06]">
-                  <h3 className="text-body-sm font-semibold text-white mb-4">Weekly Revenue</h3>
+                <div className="lg:col-span-2 p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                  <h3 className="text-body-sm font-semibold text-[#222222] mb-4">Weekly Revenue</h3>
                   <MiniBar data={weeklyRevenue} height={120} />
                   <div className="flex justify-between mt-2">
                     {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
-                      <span key={d} className="text-caption text-[#6B7280]">{d}</span>
+                      <span key={d} className="text-caption text-[#929292]">{d}</span>
                     ))}
                   </div>
                 </div>
-                <div className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06]">
-                  <h3 className="text-body-sm font-semibold text-white mb-4">Popular Experiences</h3>
+                <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                  <h3 className="text-body-sm font-semibold text-[#222222] mb-4">Popular Experiences</h3>
                   <div className="space-y-3">
                     {popularExperiences.map((exp, i) => {
                       const bookingCount = mockBookings.filter((b) => b.experience === exp.title).length;
                       return (
                         <div key={exp.id} className="flex items-center gap-3">
-                          <span className="text-caption font-bold text-[#6B7280] w-4">{i + 1}</span>
-                          <div className="relative w-9 h-9 rounded-lg overflow-hidden flex-shrink-0 bg-[#111827]">
+                          <span className="text-caption font-bold text-[#929292] w-4">{i + 1}</span>
+                          <div className="relative w-9 h-9 rounded-lg overflow-hidden flex-shrink-0 bg-[#f7f7f7]">
                             <Image src={exp.image} alt={exp.title} fill className="object-cover" sizes="36px" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-body-sm font-medium text-white truncate">{exp.title}</p>
-                            <p className="text-caption text-[#6B7280]">{bookingCount} booking{bookingCount !== 1 ? "s" : ""}</p>
+                            <p className="text-body-sm font-medium text-[#222222] truncate">{exp.title}</p>
+                            <p className="text-caption text-[#929292]">{bookingCount} booking{bookingCount !== 1 ? "s" : ""}</p>
                           </div>
-                          <span className="text-caption font-medium text-emerald-400">MK {exp.price.toLocaleString()}</span>
+                          <span className="text-caption font-medium text-emerald-600">MK {exp.price.toLocaleString()}</span>
                         </div>
                       );
                     })}
@@ -407,14 +407,14 @@ export default function PartnerDashboard() {
                 </div>
               </div>
 
-              <div className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06]">
-                <h3 className="text-body-sm font-semibold text-white mb-4">Recent Bookings</h3>
+              <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                <h3 className="text-body-sm font-semibold text-[#222222] mb-4">Recent Bookings</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[600px]">
                     <thead>
-                      <tr className="border-b border-white/[0.04]">
+                      <tr className="border-b border-[#ebebeb]">
                         {["ID", "Customer", "Experience", "Date", "Guests", "Total", "Status"].map((h) => (
-                          <th key={h} className="py-2 px-2 text-left text-caption text-[#6B7280] font-medium">{h}</th>
+                          <th key={h} className="py-2 px-2 text-left text-caption text-[#929292] font-medium">{h}</th>
                         ))}
                       </tr>
                     </thead>
@@ -433,10 +433,10 @@ export default function PartnerDashboard() {
           {section === "experiences" && (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <p className="text-body-sm text-[#A1A1AA]">{partnerExperiences.length} experiences</p>
+                <p className="text-body-sm text-[#6a6a6a]">{partnerExperiences.length} experiences</p>
                 <button
                   onClick={() => setShowForm(true)}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white text-body-sm font-medium hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all"
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#ff385c] text-white text-body-sm font-medium hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                   Add Experience
@@ -448,26 +448,26 @@ export default function PartnerDashboard() {
                   const expBookings = mockBookings.filter((b) => b.experience === exp.title);
                   const revenue = expBookings.reduce((s, b) => s + b.total, 0);
                   return (
-                    <div key={exp.id} className="flex gap-4 p-4 rounded-xl bg-[#0A101B] border border-white/[0.06] group hover:border-white/[0.12] transition-all">
+                    <div key={exp.id} className="flex gap-4 p-4 rounded-xl bg-white border border-[#ebebeb] group hover:border-[#dddddd] transition-all shadow-sm">
                       <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden flex-shrink-0">
                         <Image src={exp.image} alt={exp.title} fill className="object-cover" sizes="96px" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
                           <div>
-                            <h3 className="text-body-sm font-semibold text-white truncate">{exp.title}</h3>
-                            <p className="text-caption text-[#6B7280] mt-0.5">{exp.category} · {exp.location}</p>
+                            <h3 className="text-body-sm font-semibold text-[#222222] truncate">{exp.title}</h3>
+                            <p className="text-caption text-[#929292] mt-0.5">{exp.category} · {exp.location}</p>
                           </div>
-                          <span className="text-caption font-medium text-white whitespace-nowrap">MK {exp.price.toLocaleString()}</span>
+                          <span className="text-caption font-medium text-[#222222] whitespace-nowrap">MK {exp.price.toLocaleString()}</span>
                         </div>
-                        <div className="flex items-center gap-3 mt-2 text-caption text-[#6B7280]">
+                        <div className="flex items-center gap-3 mt-2 text-caption text-[#929292]">
                           <span>⭐ {exp.rating}</span>
                           <span>📅 {expBookings.length} bookings</span>
                           <span>💰 MK {revenue.toLocaleString()}</span>
                         </div>
                         <div className="flex gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button className="px-3 py-1 rounded-lg bg-[#111827] text-[#A1A1AA] text-caption hover:bg-[#1a2235] transition-colors">Edit</button>
-                          <button className="px-3 py-1 rounded-lg bg-[#111827] text-[#A1A1AA] text-caption hover:bg-[#1a2235] transition-colors">Performance</button>
+                          <button className="px-3 py-1 rounded-lg bg-[#f7f7f7] text-[#6a6a6a] text-caption hover:bg-[#f0f0f0] transition-colors">Edit</button>
+                          <button className="px-3 py-1 rounded-lg bg-[#f7f7f7] text-[#6a6a6a] text-caption hover:bg-[#f0f0f0] transition-colors">Performance</button>
                         </div>
                       </div>
                     </div>
@@ -483,8 +483,8 @@ export default function PartnerDashboard() {
           {section === "availability" && (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <p className="text-body-sm text-[#A1A1AA]">Toggle dates to block availability</p>
-                <button className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white text-body-sm font-medium hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all">
+                <p className="text-body-sm text-[#6a6a6a]">Toggle dates to block availability</p>
+                <button className="px-4 py-2 rounded-xl bg-[#ff385c] text-white text-body-sm font-medium hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all">
                   Save Changes
                 </button>
               </div>
@@ -494,7 +494,7 @@ export default function PartnerDashboard() {
                   d.setMonth(d.getMonth() + offset);
                   return (
                     <div key={offset}>
-                      <p className="text-body-sm font-semibold text-white mb-3 text-center">
+                      <p className="text-body-sm font-semibold text-[#222222] mb-3 text-center">
                         {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][d.getMonth()]} {d.getFullYear()}
                       </p>
                       <CalendarWidget />
@@ -513,19 +513,19 @@ export default function PartnerDashboard() {
                   <button
                     key={f}
                     className={`px-3 py-1.5 rounded-full text-caption font-medium capitalize transition-all ${
-                      f === "all" ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white" : "bg-[#111827] text-[#A1A1AA] border border-white/[0.06] hover:bg-[#1a2235]"
+                      f === "all" ? "bg-[#ff385c] text-white" : "bg-white text-[#6a6a6a] border border-[#dddddd] hover:bg-[#f7f7f7]"
                     }`}
                   >
                     {f}
                   </button>
                 ))}
               </div>
-              <div className="overflow-x-auto rounded-xl bg-[#0A101B] border border-white/[0.06]">
+              <div className="overflow-x-auto rounded-xl bg-white border border-[#ebebeb] shadow-sm">
                 <table className="w-full min-w-[700px]">
                   <thead>
-                    <tr className="border-b border-white/[0.04]">
+                    <tr className="border-b border-[#ebebeb]">
                       {["ID", "Customer", "Experience", "Date", "Guests", "Total", "Status"].map((h) => (
-                        <th key={h} className="py-3 px-3 text-left text-caption text-[#6B7280] font-medium">{h}</th>
+                        <th key={h} className="py-3 px-3 text-left text-caption text-[#929292] font-medium">{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -549,29 +549,29 @@ export default function PartnerDashboard() {
                   { label: "Avg Booking Value", value: "MK 138,000", trend: "+8.2%", icon: "📊" },
                   { label: "Top Category", value: "Dining", trend: "42% of bookings", icon: "🏆" },
                 ].map((s) => (
-                  <div key={s.label} className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06]">
+                  <div key={s.label} className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-2xl">{s.icon}</span>
-                      <span className="text-caption font-medium text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">+{s.trend}</span>
+                      <span className="text-caption font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{s.trend}</span>
                     </div>
-                    <p className="text-heading-sm font-bold text-white mb-0.5">{s.value}</p>
-                    <p className="text-caption text-[#6B7280]">{s.label}</p>
+                    <p className="text-heading-sm font-bold text-[#222222] mb-0.5">{s.value}</p>
+                    <p className="text-caption text-[#929292]">{s.label}</p>
                   </div>
                 ))}
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <div className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06]">
-                  <h3 className="text-body-sm font-semibold text-white mb-4">Customer Growth</h3>
+                <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                  <h3 className="text-body-sm font-semibold text-[#222222] mb-4">Customer Growth</h3>
                   <MiniBar data={[45, 62, 58, 78, 91, 110, 95, 120, 145, 132, 158, 172]} height={120} />
                   <div className="flex justify-between mt-2">
                     {MONTHS_SHORT.map((m) => (
-                      <span key={m} className="text-caption text-[#6B7280]">{m}</span>
+                      <span key={m} className="text-caption text-[#929292]">{m}</span>
                     ))}
                   </div>
                 </div>
-                <div className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06]">
-                  <h3 className="text-body-sm font-semibold text-white mb-4">Customer Segments</h3>
+                <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                  <h3 className="text-body-sm font-semibold text-[#222222] mb-4">Customer Segments</h3>
                   <div className="space-y-4">
                     {[
                       { label: "Couples", pct: 42, desc: "Romantic dinners, spa days" },
@@ -582,13 +582,13 @@ export default function PartnerDashboard() {
                       <div key={seg.label}>
                         <div className="flex items-center justify-between mb-1">
                           <div>
-                            <span className="text-body-sm font-medium text-white">{seg.label}</span>
-                            <span className="text-caption text-[#6B7280] ml-2">{seg.desc}</span>
+                            <span className="text-body-sm font-medium text-[#222222]">{seg.label}</span>
+                            <span className="text-caption text-[#929292] ml-2">{seg.desc}</span>
                           </div>
-                          <span className="text-caption font-medium text-white">{seg.pct}%</span>
+                          <span className="text-caption font-medium text-[#222222]">{seg.pct}%</span>
                         </div>
-                        <div className="h-2 rounded-full bg-[#111827] overflow-hidden">
-                          <div className="h-full rounded-full bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18]" style={{ width: `${seg.pct}%` }} />
+                        <div className="h-2 rounded-full bg-[#ebebeb] overflow-hidden">
+                          <div className="h-full rounded-full bg-[#ff385c]" style={{ width: `${seg.pct}%` }} />
                         </div>
                       </div>
                     ))}
@@ -596,14 +596,14 @@ export default function PartnerDashboard() {
                 </div>
               </div>
 
-              <div className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06]">
-                <h3 className="text-body-sm font-semibold text-white mb-4">Top Customers</h3>
+              <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                <h3 className="text-body-sm font-semibold text-[#222222] mb-4">Top Customers</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[500px]">
                     <thead>
-                      <tr className="border-b border-white/[0.04]">
+                      <tr className="border-b border-[#ebebeb]">
                         {["Customer", "Bookings", "Total Spent", "Last Booking", "Status"].map((h) => (
-                          <th key={h} className="py-2 px-3 text-left text-caption text-[#6B7280] font-medium">{h}</th>
+                          <th key={h} className="py-2 px-3 text-left text-caption text-[#929292] font-medium">{h}</th>
                         ))}
                       </tr>
                     </thead>
@@ -615,12 +615,12 @@ export default function PartnerDashboard() {
                         { name: "Temwa Phiri", bookings: 2, spent: 215000, last: "Jun 25, 2026" },
                         { name: "Peter Banda", bookings: 2, spent: 320000, last: "Jun 30, 2026" },
                       ].map((c, i) => (
-                        <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
-                          <td className="py-3 px-3 text-body-sm text-white">{c.name}</td>
-                          <td className="py-3 px-3 text-body-sm text-[#A1A1AA]">{c.bookings}</td>
-                          <td className="py-3 px-3 text-body-sm text-white font-medium">MK {c.spent.toLocaleString()}</td>
-                          <td className="py-3 px-3 text-body-sm text-[#A1A1AA]">{c.last}</td>
-                          <td className="py-3 px-3"><span className="px-2 py-0.5 rounded-full text-caption font-medium bg-emerald-400/10 text-emerald-400 border border-emerald-400/20">VIP</span></td>
+                        <tr key={i} className="border-b border-[#ebebeb] hover:bg-[#fafafa] transition-colors">
+                          <td className="py-3 px-3 text-body-sm text-[#222222]">{c.name}</td>
+                          <td className="py-3 px-3 text-body-sm text-[#6a6a6a]">{c.bookings}</td>
+                          <td className="py-3 px-3 text-body-sm text-[#222222] font-medium">MK {c.spent.toLocaleString()}</td>
+                          <td className="py-3 px-3 text-body-sm text-[#6a6a6a]">{c.last}</td>
+                          <td className="py-3 px-3"><span className="px-2 py-0.5 rounded-full text-caption font-medium bg-emerald-50 text-emerald-600 border border-emerald-200">VIP</span></td>
                         </tr>
                       ))}
                     </tbody>
@@ -640,39 +640,39 @@ export default function PartnerDashboard() {
                   { label: "Pending", value: "MK 450,000" },
                   { label: "Next Payout", value: "Jul 5, 2026" },
                 ].map((s) => (
-                  <div key={s.label} className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06]">
-                    <p className="text-caption text-[#6B7280] mb-1">{s.label}</p>
-                    <p className="text-heading-sm font-bold text-white">{s.value}</p>
+                  <div key={s.label} className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                    <p className="text-caption text-[#929292] mb-1">{s.label}</p>
+                    <p className="text-heading-sm font-bold text-[#222222]">{s.value}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="overflow-x-auto rounded-xl bg-[#0A101B] border border-white/[0.06] mb-6">
+              <div className="overflow-x-auto rounded-xl bg-white border border-[#ebebeb] shadow-sm mb-6">
                 <table className="w-full min-w-[500px]">
                   <thead>
-                    <tr className="border-b border-white/[0.04]">
+                    <tr className="border-b border-[#ebebeb]">
                       {["ID", "Period", "Amount", "Status", "Paid Date"].map((h) => (
-                        <th key={h} className="py-3 px-4 text-left text-caption text-[#6B7280] font-medium">{h}</th>
+                        <th key={h} className="py-3 px-4 text-left text-caption text-[#929292] font-medium">{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {mockPayouts.map((p) => (
-                      <tr key={p.id} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
-                        <td className="py-3 px-4 text-body-sm text-white">{p.id}</td>
-                        <td className="py-3 px-4 text-body-sm text-[#A1A1AA]">{p.period}</td>
-                        <td className="py-3 px-4 text-body-sm text-white font-medium">MK {p.amount.toLocaleString()}</td>
+                      <tr key={p.id} className="border-b border-[#ebebeb] hover:bg-[#fafafa] transition-colors">
+                        <td className="py-3 px-4 text-body-sm text-[#222222]">{p.id}</td>
+                        <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{p.period}</td>
+                        <td className="py-3 px-4 text-body-sm text-[#222222] font-medium">MK {p.amount.toLocaleString()}</td>
                         <td className="py-3 px-4"><StatusBadge status={p.status} /></td>
-                        <td className="py-3 px-4 text-body-sm text-[#A1A1AA]">{p.date}</td>
+                        <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{p.date}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
 
-              <div className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06]">
-                <h3 className="text-body-sm font-semibold text-white mb-3">Payout Info</h3>
-                <p className="text-caption text-[#6B7280] mb-4">
+              <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                <h3 className="text-body-sm font-semibold text-[#222222] mb-3">Payout Info</h3>
+                <p className="text-caption text-[#929292] mb-4">
                   Payouts are processed bi-monthly on the 5th and 20th. Minimum payout threshold is MK 50,000.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -681,13 +681,13 @@ export default function PartnerDashboard() {
                     { label: "Account Holder", value: "Lilongwe Co. Ltd" },
                     { label: "Tax ID", value: "MW-123456-789" },
                   ].map((info) => (
-                    <div key={info.label} className="p-3 rounded-lg bg-[#111827]">
-                      <p className="text-caption text-[#6B7280] mb-0.5">{info.label}</p>
-                      <p className="text-body-sm text-white">{info.value}</p>
+                    <div key={info.label} className="p-3 rounded-lg bg-[#f7f7f7] border border-[#ebebeb]">
+                      <p className="text-caption text-[#929292] mb-0.5">{info.label}</p>
+                      <p className="text-body-sm text-[#222222]">{info.value}</p>
                     </div>
                   ))}
                 </div>
-                <div className="flex items-center gap-2 mt-4 text-caption text-emerald-400 bg-emerald-400/5 px-3 py-2 rounded-lg w-fit">
+                <div className="flex items-center gap-2 mt-4 text-caption text-emerald-600 bg-emerald-50 px-3 py-2 rounded-lg w-fit border border-emerald-200">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                   All required documents verified
                 </div>
@@ -700,18 +700,18 @@ export default function PartnerDashboard() {
             <div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 {[
-                  { label: "Revenue Report", desc: "Monthly revenue breakdown with trends and forecasts", icon: "💰", color: "from-[#FF2D7A] to-[#FF7A18]" },
-                  { label: "Bookings Report", desc: "Booking volumes, status distribution, and peak periods", icon: "📅", color: "from-purple-500 to-pink-500" },
-                  { label: "Customer Report", desc: "Customer acquisition, retention, and lifetime value", icon: "👥", color: "from-cyan-500 to-blue-500" },
-                  { label: "Performance Report", desc: "Experience ratings, reviews, and popularity scores", icon: "⭐", color: "from-amber-500 to-orange-500" },
+                  { label: "Revenue Report", desc: "Monthly revenue breakdown with trends and forecasts", icon: "💰", color: "bg-[#ff385c]" },
+                  { label: "Bookings Report", desc: "Booking volumes, status distribution, and peak periods", icon: "📅", color: "bg-purple-500" },
+                  { label: "Customer Report", desc: "Customer acquisition, retention, and lifetime value", icon: "👥", color: "bg-cyan-500" },
+                  { label: "Performance Report", desc: "Experience ratings, reviews, and popularity scores", icon: "⭐", color: "bg-amber-500" },
                 ].map((report) => (
-                  <div key={report.label} className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06] hover:border-white/[0.12] transition-all group">
-                    <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${report.color} flex items-center justify-center mb-3`}>
-                      <span className="text-lg">{report.icon.split(" ")[0]}</span>
+                  <div key={report.label} className="p-5 rounded-xl bg-white border border-[#ebebeb] hover:border-[#dddddd] transition-all group shadow-sm">
+                    <div className={`w-10 h-10 rounded-lg ${report.color} flex items-center justify-center mb-3`}>
+                      <span className="text-lg text-white">{report.icon.split(" ")[0]}</span>
                     </div>
-                    <h3 className="text-body-sm font-semibold text-white mb-1">{report.label}</h3>
-                    <p className="text-caption text-[#6B7280] mb-3 leading-relaxed">{report.desc}</p>
-                    <button className="text-caption font-medium text-[#FF2D7A] hover:text-[#FF7A18] transition-colors flex items-center gap-1 opacity-0 group-hover:opacity-100">
+                    <h3 className="text-body-sm font-semibold text-[#222222] mb-1">{report.label}</h3>
+                    <p className="text-caption text-[#929292] mb-3 leading-relaxed">{report.desc}</p>
+                    <button className="text-caption font-medium text-[#ff385c] hover:text-[#e0314f] transition-colors flex items-center gap-1 opacity-0 group-hover:opacity-100">
                       Download Report
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                     </button>
@@ -720,21 +720,21 @@ export default function PartnerDashboard() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06]">
-                  <h3 className="text-body-sm font-semibold text-white mb-4">Monthly Revenue Trend</h3>
+                <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                  <h3 className="text-body-sm font-semibold text-[#222222] mb-4">Monthly Revenue Trend</h3>
                   <MiniBar data={monthlyRevenue} height={120} />
                   <div className="flex justify-between mt-2">
                     {MONTHS_SHORT.map((m) => (
-                      <span key={m} className="text-caption text-[#6B7280]">{m}</span>
+                      <span key={m} className="text-caption text-[#929292]">{m}</span>
                     ))}
                   </div>
-                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/[0.06]">
-                    <span className="text-caption text-[#6B7280]">Total (6 months)</span>
-                    <span className="text-heading-sm font-bold text-white">MK 21,270,000</span>
+                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#ebebeb]">
+                    <span className="text-caption text-[#929292]">Total (6 months)</span>
+                    <span className="text-heading-sm font-bold text-[#222222]">MK 21,270,000</span>
                   </div>
                 </div>
-                <div className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06]">
-                  <h3 className="text-body-sm font-semibold text-white mb-4">Bookings Overview</h3>
+                <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                  <h3 className="text-body-sm font-semibold text-[#222222] mb-4">Bookings Overview</h3>
                   <div className="space-y-4">
                     {[
                       { label: "Confirmed", count: 4, pct: 40, color: "from-emerald-400 to-emerald-500" },
@@ -744,16 +744,16 @@ export default function PartnerDashboard() {
                     ].map((item) => (
                       <div key={item.label}>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-caption text-[#A1A1AA]">{item.label}</span>
-                          <span className="text-caption text-white font-medium">{item.count} ({item.pct}%)</span>
+                          <span className="text-caption text-[#6a6a6a]">{item.label}</span>
+                          <span className="text-caption text-[#222222] font-medium">{item.count} ({item.pct}%)</span>
                         </div>
-                        <div className="h-2 rounded-full bg-[#111827] overflow-hidden">
+                        <div className="h-2 rounded-full bg-[#ebebeb] overflow-hidden">
                           <div className={`h-full rounded-full bg-gradient-to-r ${item.color}`} style={{ width: `${item.pct}%` }} />
                         </div>
                       </div>
                     ))}
                   </div>
-                  <button className="w-full mt-4 py-2 rounded-lg bg-[#111827] text-[#A1A1AA] text-caption font-medium hover:bg-[#1a2235] transition-colors flex items-center justify-center gap-1.5">
+                  <button className="w-full mt-4 py-2 rounded-lg bg-[#f7f7f7] text-[#6a6a6a] text-caption font-medium hover:bg-[#f0f0f0] transition-colors flex items-center justify-center gap-1.5 border border-[#ebebeb]">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                     Export Full Report
                   </button>
@@ -766,8 +766,8 @@ export default function PartnerDashboard() {
           {section === "notifications" && (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <p className="text-body-sm text-[#A1A1AA]">{mockNotifications.filter((n) => !n.read).length} unread</p>
-                <button className="px-4 py-1.5 rounded-lg bg-[#111827] text-[#A1A1AA] text-caption font-medium hover:bg-[#1a2235] transition-colors border border-white/[0.06]">
+                <p className="text-body-sm text-[#6a6a6a]">{mockNotifications.filter((n) => !n.read).length} unread</p>
+                <button className="px-4 py-1.5 rounded-lg bg-white text-[#6a6a6a] text-caption font-medium hover:bg-[#f7f7f7] transition-colors border border-[#dddddd]">
                   Mark all as read
                 </button>
               </div>
@@ -776,28 +776,28 @@ export default function PartnerDashboard() {
                 {mockNotifications.map((n) => (
                   <div
                     key={n.id}
-                    className={`p-4 rounded-xl border transition-all ${
+                    className={`p-4 rounded-xl border transition-all shadow-sm ${
                       !n.read
-                        ? "bg-[#0A101B] border-[#FF2D7A]/20"
-                        : "bg-[#0A101B] border-white/[0.06]"
+                        ? "bg-white border-[#ff385c]/20"
+                        : "bg-white border-[#ebebeb]"
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${!n.read ? "bg-[#FF2D7A]" : "bg-transparent"}`} />
+                      <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${!n.read ? "bg-[#ff385c]" : "bg-transparent"}`} />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-4">
-                          <h3 className="text-body-sm font-medium text-white">{n.title}</h3>
-                          <span className="text-caption text-[#6B7280] flex-shrink-0">{n.time}</span>
+                          <h3 className="text-body-sm font-medium text-[#222222]">{n.title}</h3>
+                          <span className="text-caption text-[#929292] flex-shrink-0">{n.time}</span>
                         </div>
-                        <p className="text-caption text-[#A1A1AA] mt-0.5">{n.desc}</p>
+                        <p className="text-caption text-[#6a6a6a] mt-0.5">{n.desc}</p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="p-5 rounded-xl bg-[#0A101B] border border-white/[0.06]">
-                <h3 className="text-body-sm font-semibold text-white mb-4">Notification Preferences</h3>
+              <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                <h3 className="text-body-sm font-semibold text-[#222222] mb-4">Notification Preferences</h3>
                 <div className="space-y-3">
                   {[
                     { label: "New Bookings", desc: "When a customer books an experience" },
@@ -806,12 +806,12 @@ export default function PartnerDashboard() {
                     { label: "Payouts", desc: "When a payout is processed" },
                     { label: "Weekly Reports", desc: "Weekly performance summary" },
                   ].map((pref) => (
-                    <label key={pref.label} className="flex items-center justify-between py-2">
+                    <label key={pref.label} className="flex items-center justify-between py-2 border-b border-[#ebebeb] last:border-b-0">
                       <div>
-                        <p className="text-body-sm text-white">{pref.label}</p>
-                        <p className="text-caption text-[#6B7280]">{pref.desc}</p>
+                        <p className="text-body-sm text-[#222222]">{pref.label}</p>
+                        <p className="text-caption text-[#929292]">{pref.desc}</p>
                       </div>
-                      <div className="relative w-10 h-6 rounded-full bg-[#FF2D7A] cursor-pointer transition-colors">
+                      <div className="relative w-10 h-6 rounded-full bg-[#ff385c] cursor-pointer transition-colors">
                         <div className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white shadow-sm" />
                       </div>
                     </label>

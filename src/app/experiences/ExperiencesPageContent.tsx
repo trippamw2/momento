@@ -12,18 +12,18 @@ import { experiences as mockExperiences } from "@/lib/data";
 const ITEMS_PER_PAGE = 8;
 const LOAD_MORE = 4;
 
-const MOOD_LABELS: { label: Mood; description: string; accent: string }[] = [
-  { label: "Romantic", description: "Perfect for two", accent: "from-rose-500 to-pink-500" },
-  { label: "Relax", description: "Unwind and recharge", accent: "from-emerald-500 to-teal-500" },
-  { label: "Celebrate", description: "Make it special", accent: "from-amber-500 to-orange-500" },
-  { label: "Escape", description: "Get away from it all", accent: "from-cyan-500 to-sky-500" },
-  { label: "Indulge", description: "You deserve it", accent: "from-fuchsia-500 to-purple-500" },
-  { label: "Food & Drink", description: "Culinary delights", accent: "from-amber-600 to-orange-600" },
-  { label: "Family", description: "Fun for everyone", accent: "from-indigo-500 to-blue-500" },
-  { label: "Entertainment", description: "Live your vibe", accent: "from-violet-500 to-purple-500" },
-  { label: "Adventure", description: "Thrill & excitement", accent: "from-red-500 to-rose-500" },
-  { label: "Self Care", description: "Nurture yourself", accent: "from-green-500 to-emerald-500" },
-  { label: "Social", description: "Connect with others", accent: "from-pink-500 to-rose-500" },
+const MOOD_LABELS: { label: Mood; description: string; emoji: string; accent: string }[] = [
+  { label: "Romantic", description: "Perfect for two", emoji: "🌹", accent: "from-rose-500 to-pink-500" },
+  { label: "Relax", description: "Unwind and recharge", emoji: "🌊", accent: "from-emerald-500 to-teal-500" },
+  { label: "Celebrate", description: "Make it special", emoji: "🥂", accent: "from-amber-500 to-orange-500" },
+  { label: "Escape", description: "Get away from it all", emoji: "🌴", accent: "from-cyan-500 to-sky-500" },
+  { label: "Indulge", description: "You deserve it", emoji: "✨", accent: "from-fuchsia-500 to-purple-500" },
+  { label: "Food & Drink", description: "Culinary delights", emoji: "🍽️", accent: "from-amber-600 to-orange-600" },
+  { label: "Family", description: "Fun for everyone", emoji: "👨‍👩‍👧‍👦", accent: "from-indigo-500 to-blue-500" },
+  { label: "Entertainment", description: "Live your vibe", emoji: "🎭", accent: "from-violet-500 to-purple-500" },
+  { label: "Adventure", description: "Thrill & excitement", emoji: "🧗", accent: "from-red-500 to-rose-500" },
+  { label: "Self Care", description: "Nurture yourself", emoji: "🌿", accent: "from-green-500 to-emerald-500" },
+  { label: "Social", description: "Connect with others", emoji: "💬", accent: "from-pink-500 to-rose-500" },
 ];
 
 function parseMoodParam(value: string | null): Mood | null {
@@ -176,11 +176,13 @@ export default function ExperiencesPageContent() {
   }, [filters, router]);
 
   return (
-    <div className="pt-20 pb-16">
+    <div className="pt-20 pb-16 bg-ambient-warm min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="mb-8">
-          <h1 className="text-display-sm font-bold text-text-primary mb-1">All Experiences</h1>
-          <p className="text-text-secondary text-body-lg">{filtered.length} moments to discover</p>
+          <h1 className="text-display-sm font-bold text-[#222222] mb-1">
+            All <span className="bg-gradient-to-r from-[#ff385c] to-[#FF7A18] bg-clip-text text-transparent">Experiences</span>
+          </h1>
+          <p className="text-[#6a6a6a] text-body-lg">{filtered.length} moments to discover</p>
         </div>
 
         <div className="relative mb-6 max-w-xl">
@@ -213,8 +215,8 @@ export default function ExperiencesPageContent() {
               onClick={() => updateFilter("category", cat)}
               className={`px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all duration-200 ${
                 filters.category === cat
-                  ? "gradient-brand text-text-on-gradient"
-                  : "bg-surface-tertiary text-text-secondary border border-border-subtle hover:bg-surface-elevated hover:text-text-primary"
+                  ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
+                  : "bg-[#FFF8F0] text-[#6a6a6a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
               }`}
             >
               {cat}
@@ -227,13 +229,14 @@ export default function ExperiencesPageContent() {
             <button
               key={mood.label}
               onClick={() => updateFilter("mood", filters.mood === mood.label ? null : mood.label)}
-              className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 ${
+              className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 ${
                 filters.mood === mood.label
-                  ? "gradient-brand text-text-on-gradient"
-                  : "bg-surface-tertiary text-text-secondary border border-border-subtle hover:bg-surface-elevated hover:text-text-primary"
+                  ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
+                  : "bg-[#FFF8F0] text-[#6a6a6a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
               }`}
             >
-              {mood.label}
+              <span>{mood.emoji}</span>
+              <span>{mood.label}</span>
             </button>
           ))}
 
@@ -245,8 +248,8 @@ export default function ExperiencesPageContent() {
               onClick={() => updateFilter("price", pr.value)}
               className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 ${
                 filters.price === pr.value
-                  ? "gradient-brand text-text-on-gradient"
-                  : "bg-surface-tertiary text-text-secondary border border-border-subtle hover:bg-surface-elevated hover:text-text-primary"
+                  ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
+                  : "bg-[#FFF8F0] text-[#6a6a6a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
               }`}
             >
               {pr.label}
@@ -258,7 +261,7 @@ export default function ExperiencesPageContent() {
           <select
             value={filters.location}
             onChange={(e) => updateFilter("location", e.target.value)}
-            className="px-3 py-1.5 rounded-full text-caption font-medium bg-surface-primary text-text-secondary border border-border-default focus:outline-none focus:border-brand-pink/50 appearance-none cursor-pointer hover:bg-surface-hover transition-colors"
+            className="px-3 py-1.5 rounded-full text-caption font-medium bg-[#FFF8F0] text-[#6a6a6a] border border-[#ebebeb] focus:outline-none focus:border-[#ff385c]/50 appearance-none cursor-pointer hover:bg-[#FFF0F3] transition-colors"
           >
             {locations.map((loc) => (
               <option key={loc} value={loc}>
@@ -271,8 +274,8 @@ export default function ExperiencesPageContent() {
             onClick={() => updateFilter("nearby", !filters.nearby)}
             className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 ${
               filters.nearby
-                ? "gradient-brand text-text-on-gradient"
-                : "bg-surface-tertiary text-text-secondary border border-border-subtle hover:bg-surface-elevated hover:text-text-primary"
+                ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
+                : "bg-[#FFF8F0] text-[#6a6a6a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
             }`}
           >
             Nearby
@@ -323,9 +326,9 @@ export default function ExperiencesPageContent() {
                         <span className="text-yellow-400 text-[10px]">★</span>
                         <span className="text-caption text-white/80 font-medium">{exp.rating}</span>
                       </div>
-                      <h3 className="text-text-primary font-semibold text-body-sm leading-tight line-clamp-1">{exp.title}</h3>
+                      <h3 className="text-white font-semibold text-body-sm leading-tight line-clamp-1">{exp.title}</h3>
                       <p className="text-white/60 text-caption mt-0.5 line-clamp-1">{exp.subtitle}</p>
-                      <p className="text-text-primary font-semibold text-body-sm mt-1">
+                      <p className="text-white font-semibold text-body-sm mt-1">
                         MK {exp.price.toLocaleString()}
                       </p>
                     </div>

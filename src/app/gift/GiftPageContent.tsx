@@ -118,23 +118,23 @@ export default function GiftPageContent() {
             sizes="100vw"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-[#05070B]/60 to-[#05070B]/20" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#ff385c]/15 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-white/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#ff385c]/5 to-transparent" />
         </div>
 
         <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-[#A1A1AA] text-caption font-medium mb-5 backdrop-blur-md">
-            <span>🎁</span> Premium Gifting
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-[#dddddd] text-[#6a6a6a] text-caption font-medium mb-5 backdrop-blur-md">
+            <span className="text-sm">🎁</span> Premium Gifting
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3 tracking-tight leading-[1.08]">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#222222] mb-3 tracking-tight leading-[1.08]">
             Give More Than A Gift,
             <span className="block mt-1 bg-gradient-to-r from-[#ff385c] to-[#FF7A18] bg-clip-text text-transparent">
               Give A Memory.
             </span>
           </h1>
 
-          <p className="text-[#A1A1AA] text-body-lg sm:text-heading-md max-w-lg mx-auto mb-8 leading-relaxed">
+          <p className="text-[#6a6a6a] text-body-lg sm:text-heading-md max-w-lg mx-auto mb-8 leading-relaxed">
             Surprise someone with experiences they&apos;ll never forget.
           </p>
 
@@ -146,16 +146,16 @@ export default function GiftPageContent() {
             ].map((badge) => (
               <div
                 key={badge.label}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-md"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/80 border border-[#dddddd] backdrop-blur-md shadow-sm"
               >
                 <span className="text-sm">{badge.icon}</span>
-                <span className="text-white/80 text-body-sm font-medium">{badge.label}</span>
+                <span className="text-[#6a6a6a] text-body-sm font-medium">{badge.label}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#05070B] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-14">

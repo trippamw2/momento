@@ -1,14 +1,72 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 
 export default function ListExperiencePage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({
+    title: "",
+    subtitle: "",
+    category: "",
+    description: "",
+    price: "",
+    duration: "",
+    location: "",
+    contact: "",
+    capacity: "10",
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const updateField = useCallback((field: string, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setError("");
+    setSubmitting(true);
+
+    const token = localStorage.getItem("momento-auth-token");
+    if (!token) {
+      setError("Please sign in as a partner to list an experience.");
+      setSubmitting(false);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/experiences", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title: form.title,
+          subtitle: form.subtitle || `${form.title} — A Momento Experience`,
+          description: form.description,
+          price: parseInt(form.price),
+          duration: form.duration,
+          category: form.category,
+          location: form.location,
+          capacity: parseInt(form.capacity) || 10,
+          max_guests: parseInt(form.capacity) || 10,
+          status: "draft",
+        }),
+      });
+
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await res.json();
+        setError(data.error || "Failed to submit. Please try again.");
+      }
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -45,6 +103,12 @@ export default function ListExperiencePage() {
           </p>
         </div>
 
+        {error && (
+          <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-body-sm">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="title" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Experience Title</label>
@@ -52,7 +116,21 @@ export default function ListExperiencePage() {
               id="title"
               type="text"
               required
+              value={form.title}
+              onChange={(e) => updateField("title", e.target.value)}
               placeholder="e.g. Sunset Wine Tasting at Cape Maclear"
+              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="subtitle" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Subtitle (optional)</label>
+            <input
+              id="subtitle"
+              type="text"
+              value={form.subtitle}
+              onChange={(e) => updateField("subtitle", e.target.value)}
+              placeholder="e.g. Sun, Swim & Sip by the lake"
               className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
             />
           </div>
@@ -62,18 +140,19 @@ export default function ListExperiencePage() {
             <select
               id="category"
               required
-              defaultValue=""
+              value={form.category}
+              onChange={(e) => updateField("category", e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
             >
               <option value="" disabled>Select a category</option>
-              <option value="food-drink">Food & Drink</option>
-              <option value="adventure">Adventure</option>
-              <option value="wellness">Wellness & Self Care</option>
-              <option value="romantic">Romantic</option>
-              <option value="family">Family</option>
-              <option value="luxury">Luxury</option>
-              <option value="celebrations">Celebrations</option>
-              <option value="arts">Arts & Culture</option>
+              <option value="Romantic">Romantic</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Wellness">Wellness & Self Care</option>
+              <option value="Food & Drink">Food & Drink</option>
+              <option value="Family">Family</option>
+              <option value="Luxury">Luxury</option>
+              <option value="Celebrations">Celebrations</option>
+              <option value="Entertainment">Entertainment</option>
             </select>
           </div>
 
@@ -83,6 +162,8 @@ export default function ListExperiencePage() {
               id="description"
               required
               rows={4}
+              value={form.description}
+              onChange={(e) => updateField("description", e.target.value)}
               placeholder="Describe what guests will experience, what makes it unique, and what they should expect."
               className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all resize-y"
             />
@@ -96,6 +177,8 @@ export default function ListExperiencePage() {
                 type="number"
                 required
                 min={0}
+                value={form.price}
+                onChange={(e) => updateField("price", e.target.value)}
                 placeholder="50000"
                 className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
               />
@@ -106,21 +189,40 @@ export default function ListExperiencePage() {
                 id="duration"
                 type="text"
                 required
+                value={form.duration}
+                onChange={(e) => updateField("duration", e.target.value)}
                 placeholder="e.g. 2 hours, Full day"
                 className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
               />
             </div>
           </div>
 
-          <div>
-            <label htmlFor="location" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Location</label>
-            <input
-              id="location"
-              type="text"
-              required
-              placeholder="e.g. Lilongwe, Cape Maclear, Blantyre"
-              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="location" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Location</label>
+              <input
+                id="location"
+                type="text"
+                required
+                value={form.location}
+                onChange={(e) => updateField("location", e.target.value)}
+                placeholder="e.g. Lilongwe, Cape Maclear, Blantyre"
+                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
+              />
+            </div>
+            <div>
+              <label htmlFor="capacity" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Max Guests</label>
+              <input
+                id="capacity"
+                type="number"
+                required
+                min={1}
+                value={form.capacity}
+                onChange={(e) => updateField("capacity", e.target.value)}
+                placeholder="10"
+                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
+              />
+            </div>
           </div>
 
           <div>
@@ -129,6 +231,8 @@ export default function ListExperiencePage() {
               id="contact"
               type="email"
               required
+              value={form.contact}
+              onChange={(e) => updateField("contact", e.target.value)}
               placeholder="you@example.com"
               className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
             />
@@ -136,9 +240,17 @@ export default function ListExperiencePage() {
 
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+            disabled={submitting}
+            className="w-full py-3 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Submit for Review
+            {submitting ? (
+              <>
+                <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              "Submit for Review"
+            )}
           </button>
         </form>
 

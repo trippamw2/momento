@@ -40,6 +40,17 @@
   --color-gradient-secondary-start: #9F3BFF;
   --color-gradient-secondary-end: #ff385c;
 
+  /* ── Complementary Palette (pairs with brand-pink) ── */
+  --color-complement-teal: #14B8A6;
+  --color-complement-teal-light: #5EEAD4;
+  --color-complement-peach: #FFD4C4;
+  --color-complement-peach-dark: #FFB4A2;
+  --color-complement-cream: #FFF8F0;
+  --color-complement-lavender: #E8D5F5;
+  --color-complement-rose: #FFF0F3;
+  --color-complement-sage: #D4EDDA;
+  --color-complement-gold: #F59E0B;
+
   /* ── Status Colors ── */
   --color-success: #22c55e;
   --color-warning: #f59e0b;
@@ -244,9 +255,27 @@ body {
   background: radial-gradient(ellipse at 50% 0%, rgba(255, 56, 92, 0.04) 0%, transparent 60%);
 }
 
+.bg-lifestyle-warm { background: linear-gradient(135deg, #FFF8F0 0%, #FFF0F3 50%, #FFFFFF 100%); }
+.bg-lifestyle-cool { background: linear-gradient(135deg, #F0FDFA 0%, #FFF0F3 50%, #FFFFFF 100%); }
+.bg-lifestyle-social { background: linear-gradient(135deg, #FFF8F0 0%, #F3E8FF 50%, #FFF0F3 100%); }
+
+.ambient-glow-pink { box-shadow: 0 0 60px rgba(255, 56, 92, 0.08); }
+.ambient-glow-warm { box-shadow: 0 0 60px rgba(255, 122, 24, 0.08); }
+
+.text-balance { text-wrap: balance; }
+
+.heading-serif { font-family: var(--font-serif); font-weight: 700; letter-spacing: -0.02em; }
+
+.bg-ambient-warm {
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(255, 56, 92, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(255, 122, 24, 0.03) 0%, transparent 50%),
+    linear-gradient(180deg, #ffffff 0%, #FFF8F0 50%, #ffffff 100%);
+}
+
 /* ── Moody Hero Gradient ── */
 .moody-gradient {
-  background: linear-gradient(135deg, #f7f7f7 0%, #ffffff 30%, #fff5f7 60%, #f7f7f7 100%);
+  background: linear-gradient(135deg, #FFF8F0 0%, #ffffff 30%, #FFF0F3 60%, #F3E8FF 100%);
 }
 
 .mood-grid-item {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { experiences } from "@/lib/data";
@@ -19,6 +19,26 @@ interface Booking {
   status: "upcoming" | "completed" | "cancelled";
   price: number;
   bookingRef: string;
+}
+
+interface ApiBooking {
+  id: string;
+  experience_id: string;
+  guests_count: number;
+  total_price: number;
+  status: string;
+  experience_date: string;
+  experience_time: string;
+  created_at: string;
+  booking_ref: string;
+  experience: {
+    title: string;
+    slug: string;
+    location: string;
+    price: number;
+    currency: string;
+    images: { url: string; alt: string; is_primary: boolean }[];
+  } | null;
 }
 
 function addDays(d: Date, n: number): Date {
@@ -53,7 +73,7 @@ function computeCountdown(dateStr: string): { days: number; hours: number; mins:
 
 const now = new Date();
 
-const rawBookings: Booking[] = [
+const mockBookings: Booking[] = [
   {
     id: "b1", experienceId: "sunset-cruise", title: "Sunset Cruise", venue: "Cape Maclear Cruises",
     image: experiences.find((e) => e.id === "sunset-cruise")!.image,
@@ -110,6 +130,26 @@ const rawBookings: Booking[] = [
   },
 ];
 
+function mapApiBooking(api: ApiBooking): Booking {
+  const img = api.experience?.images?.find((i) => i.is_primary)?.url || api.experience?.images?.[0]?.url || "";
+  const exp = experiences.find((e) => e.id === api.experience_id);
+  const fallbackImg = exp?.image || "";
+  return {
+    id: api.id,
+    experienceId: api.experience_id,
+    title: api.experience?.title || exp?.title || "Experience",
+    venue: api.experience?.location || exp?.location || "",
+    image: img || fallbackImg,
+    date: api.experience_date,
+    dateLabel: formatDateLabel(new Date(api.experience_date)),
+    time: api.experience_time || "Flexible",
+    guests: api.guests_count,
+    status: (api.status === "pending" ? "upcoming" : api.status === "confirmed" ? "upcoming" : api.status) as Booking["status"],
+    price: api.total_price,
+    bookingRef: api.booking_ref || `MOMO-${api.id.slice(0, 6).toUpperCase()}`,
+  };
+}
+
 type SidebarTab = "all" | "upcoming" | "completed" | "cancelled" | "payments" | "gifted" | "refunds";
 
 const sidebarItems: { key: SidebarTab; label: string }[] = [
@@ -133,43 +173,78 @@ export default function BookingsPage() {
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>("all");
   const [authOpen, setAuthOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
+  const [bookings, setBookings] = useState<Booking[]>(mockBookings);
+  const [loadingApi, setLoadingApi] = useState(false);
   const [countdowns, setCountdowns] = useState<Record<string, ReturnType<typeof computeCountdown>>>({});
 
+  // Detect auth state and fetch real bookings
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("momento-auth-token") : null;
     setSignedIn(!!token);
+
+    if (token) {
+      setLoadingApi(true);
+      fetch("/api/bookings", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.ok ? res.json() : Promise.reject())
+        .then((data) => {
+          const api = (data.bookings || []).map(mapApiBooking);
+          if (api.length > 0) setBookings(api);
+        })
+        .catch(() => {
+          // Fall back to mock data on error
+        })
+        .finally(() => setLoadingApi(false));
+    }
   }, []);
 
+  // Re-fetch when auth modal closes and user became signed in
+  const handleAuthClose = useCallback(() => {
+    setAuthOpen(false);
+    const token = localStorage.getItem("momento-auth-token");
+    setSignedIn(!!token);
+    if (token) {
+      setLoadingApi(true);
+      fetch("/api/bookings", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.ok ? res.json() : Promise.reject())
+        .then((data) => {
+          const api = (data.bookings || []).map(mapApiBooking);
+          if (api.length > 0) setBookings(api);
+        })
+        .catch(() => {})
+        .finally(() => setLoadingApi(false));
+    }
+  }, []);
+
+  // Live countdowns for upcoming bookings
   useEffect(() => {
-    const interval = setInterval(() => {
+    const update = () => {
       const next: Record<string, ReturnType<typeof computeCountdown>> = {};
-      rawBookings.forEach((b) => {
+      bookings.forEach((b) => {
         if (b.status === "upcoming") {
           next[b.id] = computeCountdown(b.date);
         }
       });
       setCountdowns(next);
-    }, 60000);
-    const initial: Record<string, ReturnType<typeof computeCountdown>> = {};
-    rawBookings.forEach((b) => {
-      if (b.status === "upcoming") {
-        initial[b.id] = computeCountdown(b.date);
-      }
-    });
-    setCountdowns(initial);
+    };
+    update();
+    const interval = setInterval(update, 60000);
     return () => clearInterval(interval);
-  }, []);
+  }, [bookings]);
 
   const getFiltered = (): Booking[] => {
     switch (sidebarTab) {
-      case "all": return rawBookings;
-      case "upcoming": return rawBookings.filter((b) => b.status === "upcoming");
-      case "completed": return rawBookings.filter((b) => b.status === "completed");
-      case "cancelled": return rawBookings.filter((b) => b.status === "cancelled");
+      case "all": return bookings;
+      case "upcoming": return bookings.filter((b) => b.status === "upcoming");
+      case "completed": return bookings.filter((b) => b.status === "completed");
+      case "cancelled": return bookings.filter((b) => b.status === "cancelled");
       case "payments":
       case "gifted":
       case "refunds": return [];
-      default: return rawBookings;
+      default: return bookings;
     }
   };
 
@@ -189,14 +264,14 @@ export default function BookingsPage() {
             <div className="bg-white border border-[#ebebeb] rounded-2xl overflow-hidden shadow-sm">
               <div className="px-5 py-4 border-b border-[#ebebeb]">
                 <h2 className="text-heading-sm font-bold text-[#222222]">My Memories</h2>
-                <p className="text-caption text-[#929292] mt-0.5">{rawBookings.length} total</p>
+                <p className="text-caption text-[#929292] mt-0.5">{bookings.length} total</p>
               </div>
               <nav className="p-2 space-y-0.5">
                 {sidebarItems.map((item) => {
-                  const count = item.key === "all" ? rawBookings.length
-                    : item.key === "upcoming" ? rawBookings.filter((b) => b.status === "upcoming").length
-                    : item.key === "completed" ? rawBookings.filter((b) => b.status === "completed").length
-                    : item.key === "cancelled" ? rawBookings.filter((b) => b.status === "cancelled").length
+                  const count = item.key === "all" ? bookings.length
+                    : item.key === "upcoming" ? bookings.filter((b) => b.status === "upcoming").length
+                    : item.key === "completed" ? bookings.filter((b) => b.status === "completed").length
+                    : item.key === "cancelled" ? bookings.filter((b) => b.status === "cancelled").length
                     : 0;
                   return (
                     <button
@@ -252,7 +327,13 @@ export default function BookingsPage() {
                   {isSpecialTab ? "" : `${displayed.length} booking${displayed.length !== 1 ? "s" : ""}`}
                 </p>
               </div>
-              {!signedIn && !isSpecialTab && (
+              {loadingApi && signedIn && (
+                <div className="flex items-center gap-2 text-body-sm text-[#929292]">
+                  <div className="w-4 h-4 rounded-full border-2 border-[#ebebeb] border-t-[#ff385c] animate-spin" />
+                  Loading bookings...
+                </div>
+              )}
+              {!signedIn && !isSpecialTab && !loadingApi && (
                 <button
                   onClick={() => setAuthOpen(true)}
                   className="px-5 py-2 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.2)] transition-all"
@@ -267,8 +348,8 @@ export default function BookingsPage() {
               <div className="flex gap-1 p-1 rounded-xl bg-[#f0f0f0] border border-[#ebebeb] w-fit mb-6">
                 {["all", "upcoming", "completed", "cancelled"].map((t) => {
                   const label = t.charAt(0).toUpperCase() + t.slice(1);
-                  const count = t === "all" ? rawBookings.length
-                    : rawBookings.filter((b) => b.status === t).length;
+                  const count = t === "all" ? bookings.length
+                    : bookings.filter((b) => b.status === t).length;
                   return (
                     <button
                       key={t}
@@ -481,7 +562,7 @@ export default function BookingsPage() {
         </div>
       </div>
 
-      {authOpen && <AuthModal onClose={() => setAuthOpen(false)} />}
+      {authOpen && <AuthModal onClose={handleAuthClose} />}
     </>
   );
 }
