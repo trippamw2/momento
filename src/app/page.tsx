@@ -7,6 +7,7 @@ import Link from "next/link";
 import { getExperiences } from "@/lib/api-client";
 import { transformExperience } from "@/lib/transform";
 import { Experience } from "@/lib/types";
+import { experiences as mockExperiences } from "@/lib/data";
 
 const RAILS: { key: string; title: string; filter: (e: Experience) => boolean }[] = [
   { key: "trending", title: "Trending Right Now", filter: (e) => e.rating >= 4.7 },
@@ -48,7 +49,10 @@ export default function Home() {
     getExperiences({ limit: 50 })
       .then((res) => {
         const mapped = (res.experiences as Record<string, unknown>[]).map(transformExperience);
-        setExperiences(mapped);
+        setExperiences(mapped.length > 0 ? mapped : mockExperiences);
+      })
+      .catch(() => {
+        setExperiences(mockExperiences);
       })
       .finally(() => setLoading(false));
   }, []);

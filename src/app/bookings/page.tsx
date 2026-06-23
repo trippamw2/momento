@@ -186,10 +186,10 @@ export default function BookingsPage() {
         <div className="max-w-7xl mx-auto flex gap-0 sm:gap-6 px-0 sm:px-8">
           {/* ─── Sidebar ─── */}
           <aside className="hidden sm:flex flex-col w-56 flex-shrink-0 sticky top-24 self-start">
-            <div className="bg-[#0A101B] border border-white/[0.06] rounded-2xl overflow-hidden">
-              <div className="px-5 py-4 border-b border-white/[0.06]">
-                <h2 className="text-heading-sm font-bold text-white">My Memories</h2>
-                <p className="text-caption text-[#6B7280] mt-0.5">{rawBookings.length} total</p>
+            <div className="bg-white border border-[#ebebeb] rounded-2xl overflow-hidden shadow-sm">
+              <div className="px-5 py-4 border-b border-[#ebebeb]">
+                <h2 className="text-heading-sm font-bold text-[#222222]">My Memories</h2>
+                <p className="text-caption text-[#929292] mt-0.5">{rawBookings.length} total</p>
               </div>
               <nav className="p-2 space-y-0.5">
                 {sidebarItems.map((item) => {
@@ -202,16 +202,16 @@ export default function BookingsPage() {
                     <button
                       key={item.key}
                       onClick={() => setSidebarTab(item.key)}
-                      className={`w-full px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all duration-200 ${
+                      className={`w-full px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all duration-200 flex items-center justify-between ${
                         sidebarTab === item.key
-                          ? "bg-gradient-to-r from-[#FF2D7A]/15 to-[#FF7A18]/15 text-white border border-[#FF2D7A]/20"
-                          : "text-[#A1A1AA] hover:text-white hover:bg-white/[0.04]"
+                          ? "bg-[#f5f5f5] text-[#222222] border border-[#ebebeb]"
+                          : "text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7]"
                       }`}
                     >
                       <span className="flex-1 text-left">{item.label}</span>
                       {count > 0 && (
                         <span className={`text-caption px-1.5 py-0.5 rounded-md ${
-                          sidebarTab === item.key ? "bg-white/[0.1] text-white" : "bg-[#111827] text-[#6B7280]"
+                          sidebarTab === item.key ? "bg-[#ff385c] text-white" : "bg-[#f0f0f0] text-[#929292]"
                         }`}>
                           {count}
                         </span>
@@ -232,8 +232,8 @@ export default function BookingsPage() {
                   onClick={() => setSidebarTab(item.key)}
                   className={`px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all ${
                     sidebarTab === item.key
-                      ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white"
-                      : "bg-[#111827] text-[#A1A1AA] border border-white/[0.06]"
+                      ? "bg-[#ff385c] text-white"
+                      : "bg-white text-[#6a6a6a] border border-[#ebebeb] shadow-sm"
                   }`}
                 >
                   {item.label}
@@ -247,15 +247,15 @@ export default function BookingsPage() {
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h1 className="text-heading-xl font-bold text-white">{pageTitle}</h1>
-                <p className="text-[#A1A1AA] text-body-sm mt-0.5">
+                <h1 className="text-heading-xl font-bold text-[#222222]">{pageTitle}</h1>
+                <p className="text-[#6a6a6a] text-body-sm mt-0.5">
                   {isSpecialTab ? "" : `${displayed.length} booking${displayed.length !== 1 ? "s" : ""}`}
                 </p>
               </div>
               {!signedIn && !isSpecialTab && (
                 <button
                   onClick={() => setAuthOpen(true)}
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all"
+                  className="px-5 py-2 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.2)] transition-all"
                 >
                   Sign In
                 </button>
@@ -264,7 +264,7 @@ export default function BookingsPage() {
 
             {/* Tabs (for booking views) */}
             {!isSpecialTab && displayed.length > 0 && (
-              <div className="flex gap-1 p-1 rounded-xl bg-[#111827] border border-white/[0.06] w-fit mb-6">
+              <div className="flex gap-1 p-1 rounded-xl bg-[#f0f0f0] border border-[#ebebeb] w-fit mb-6">
                 {["all", "upcoming", "completed", "cancelled"].map((t) => {
                   const label = t.charAt(0).toUpperCase() + t.slice(1);
                   const count = t === "all" ? rawBookings.length
@@ -275,16 +275,16 @@ export default function BookingsPage() {
                       onClick={() => setSidebarTab(t as SidebarTab)}
                       className={`px-4 py-2 rounded-lg text-body-sm font-medium transition-all duration-200 ${
                         (sidebarTab === t || (sidebarTab === "all" && t === "all"))
-                          ? "bg-[#1a2235] text-white shadow-sm"
-                          : "text-[#6B7280] hover:text-[#A1A1AA]"
+                          ? "bg-white text-[#222222] shadow-sm"
+                          : "text-[#929292] hover:text-[#6a6a6a]"
                       }`}
                     >
                       {label}
                       {count > 0 && (
                         <span className={`ml-1.5 px-1.5 py-0.5 rounded text-[10px] ${
                           sidebarTab === t || (sidebarTab === "all" && t === "all")
-                            ? "bg-[#FF2D7A]/20 text-[#FF2D7A]"
-                            : "bg-[#0A101B] text-[#6B7280]"
+                            ? "bg-[#ff385c]/15 text-[#ff385c]"
+                            : "bg-[#f0f0f0] text-[#929292]"
                         }`}>
                           {count}
                         </span>
@@ -297,19 +297,19 @@ export default function BookingsPage() {
 
             {!signedIn && !isSpecialTab ? (
               /* ─── Empty / Sign-in State ─── */
-              <div className="rounded-2xl bg-[#0A101B] border border-white/[0.06] p-8 sm:p-12 text-center mb-10">
-                <div className="w-16 h-16 rounded-full bg-[#111827] flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-[#6B7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="rounded-2xl bg-white border border-[#ebebeb] p-8 sm:p-12 text-center mb-10">
+                <div className="w-16 h-16 rounded-full bg-[#f7f7f7] flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                   </svg>
                 </div>
-                <h2 className="text-heading-lg font-bold text-white mb-2">No bookings yet</h2>
-                <p className="text-[#A1A1AA] text-body mb-6 max-w-sm mx-auto">
+                <h2 className="text-heading-lg font-bold text-[#222222] mb-2">No bookings yet</h2>
+                <p className="text-[#6a6a6a] text-body mb-6 max-w-sm mx-auto">
                   Sign in to view your upcoming bookings, manage reservations, and track your experience history.
                 </p>
                 <button
                   onClick={() => setAuthOpen(true)}
-                  className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all"
+                  className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.2)] transition-all"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                   Sign In to View Bookings
@@ -317,27 +317,27 @@ export default function BookingsPage() {
               </div>
             ) : isSpecialTab ? (
               /* ─── Special Tab Placeholders ─── */
-              <div className="rounded-2xl bg-[#0A101B] border border-white/[0.06] p-8 sm:p-12 text-center mb-10">
-                <div className="w-16 h-16 rounded-full bg-[#111827] flex items-center justify-center mx-auto mb-4">
+              <div className="rounded-2xl bg-white border border-[#ebebeb] p-8 sm:p-12 text-center mb-10">
+                <div className="w-16 h-16 rounded-full bg-[#f7f7f7] flex items-center justify-center mx-auto mb-4">
                   {sidebarTab === "payments" ? (
-                    <svg className="w-8 h-8 text-[#6B7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
+                    <svg className="w-8 h-8 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
                   ) : sidebarTab === "gifted" ? (
-                    <svg className="w-8 h-8 text-[#6B7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
+                    <svg className="w-8 h-8 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
                   ) : (
-                    <svg className="w-8 h-8 text-[#6B7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" /></svg>
+                    <svg className="w-8 h-8 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" /></svg>
                   )}
                 </div>
-                <h2 className="text-heading-lg font-bold text-white mb-2">
+                <h2 className="text-heading-lg font-bold text-[#222222] mb-2">
                   {sidebarTab === "payments" ? "Payment History" : sidebarTab === "gifted" ? "Gifted Experiences" : "Refunds"}
                 </h2>
-                <p className="text-[#A1A1AA] text-body mb-6 max-w-sm mx-auto">
+                <p className="text-[#6a6a6a] text-body mb-6 max-w-sm mx-auto">
                   {sidebarTab === "payments" ? "View your payment history and transaction details."
                     : sidebarTab === "gifted" ? "Track all experiences you've gifted to friends and family."
                     : "Manage your refund requests and track their status."}
                 </p>
                 <Link
                   href={sidebarTab === "gifted" ? "/gift" : "/experiences"}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.2)] transition-all"
                 >
                   {sidebarTab === "gifted" ? "Send a Gift" : "Browse Experiences"}
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
@@ -352,7 +352,7 @@ export default function BookingsPage() {
                     return (
                       <div
                         key={booking.id}
-                        className="bg-[#0A101B] border border-white/[0.06] rounded-2xl overflow-hidden hover:border-white/[0.12] transition-all"
+                        className="bg-white border border-[#ebebeb] rounded-2xl overflow-hidden hover:border-[#dddddd] transition-all shadow-sm"
                       >
                         <div className="flex flex-col sm:flex-row">
                           {/* Image */}
@@ -379,39 +379,39 @@ export default function BookingsPage() {
                             <div className="flex items-start justify-between gap-4">
                               <div className="flex-1 min-w-0">
                                 <Link href={`/experiences/${booking.experienceId}`}>
-                                  <h3 className="text-heading-sm font-bold text-white hover:text-[#FF2D7A] transition-colors line-clamp-1">{booking.title}</h3>
+                                  <h3 className="text-heading-sm font-bold text-[#222222] hover:text-[#ff385c] transition-colors line-clamp-1">{booking.title}</h3>
                                 </Link>
-                                <p className="text-[#A1A1AA] text-body-sm mt-0.5">{booking.venue}</p>
+                                <p className="text-[#6a6a6a] text-body-sm mt-0.5">{booking.venue}</p>
 
                                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3 text-body-sm">
-                                  <div className="flex items-center gap-1.5 text-[#A1A1AA]">
+                                  <div className="flex items-center gap-1.5 text-[#6a6a6a]">
                                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
                                     <span>{new Date(booking.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
                                   </div>
-                                  <div className="flex items-center gap-1.5 text-[#A1A1AA]">
+                                  <div className="flex items-center gap-1.5 text-[#6a6a6a]">
                                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     <span>{booking.time}</span>
                                   </div>
-                                  <div className="flex items-center gap-1.5 text-[#A1A1AA]">
+                                  <div className="flex items-center gap-1.5 text-[#6a6a6a]">
                                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
                                     <span>{booking.guests} guest{booking.guests !== 1 ? "s" : ""}</span>
                                   </div>
                                 </div>
 
-                                <p className="text-caption text-[#6B7280] mt-2">Ref: {booking.bookingRef}</p>
+                                <p className="text-caption text-[#929292] mt-2">Ref: {booking.bookingRef}</p>
                               </div>
 
                               {/* Price + Countdown */}
                               <div className="flex flex-col items-end gap-3 flex-shrink-0">
-                                <p className="text-heading-md font-bold text-white whitespace-nowrap">MK {booking.price.toLocaleString()}</p>
+                                <p className="text-heading-md font-bold text-[#222222] whitespace-nowrap">MK {booking.price.toLocaleString()}</p>
                                 {booking.status === "upcoming" && cd && !cd.expired && (
                                   <div className="text-center">
-                                    <p className="text-caption text-[#6B7280] mb-1">Starts in</p>
-                                    <div className="flex items-center gap-2 bg-[#111827] rounded-xl px-3 py-2 border border-white/[0.06]">
+                                    <p className="text-caption text-[#929292] mb-1">Starts in</p>
+                                    <div className="flex items-center gap-2 bg-[#f7f7f7] rounded-xl px-3 py-2 border border-[#ebebeb]">
                                       <CountdownUnit value={cd.days} label="days" />
-                                      <span className="text-[#6B7280]">:</span>
+                                      <span className="text-[#929292]">:</span>
                                       <CountdownUnit value={cd.hours} label="hrs" />
-                                      <span className="text-[#6B7280]">:</span>
+                                      <span className="text-[#929292]">:</span>
                                       <CountdownUnit value={cd.mins} label="min" />
                                     </div>
                                   </div>
@@ -425,30 +425,30 @@ export default function BookingsPage() {
                             </div>
 
                             {/* Actions */}
-                            <div className="flex items-center gap-2.5 mt-4 pt-3 border-t border-white/[0.06]">
+                            <div className="flex items-center gap-2.5 mt-4 pt-3 border-t border-[#ebebeb]">
                               <Link
                                 href={`/experiences/${booking.experienceId}`}
-                                className="px-4 py-2 rounded-xl bg-white/[0.06] text-white text-body-sm font-medium hover:bg-white/[0.1] transition-all"
+                                className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-[#222222] text-body-sm font-medium hover:bg-[#f0f0f0] transition-all"
                               >
                                 View Details
                               </Link>
                               {booking.status === "upcoming" && (
                                 <>
-                                  <button className="px-4 py-2 rounded-xl bg-white/[0.04] text-[#A1A1AA] text-body-sm font-medium hover:bg-white/[0.08] hover:text-white transition-all border border-white/[0.06]">
+                                  <button className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-[#6a6a6a] text-body-sm font-medium hover:bg-[#f0f0f0] hover:text-[#222222] transition-all border border-[#ebebeb]">
                                     Reschedule
                                   </button>
-                                  <button className="px-4 py-2 rounded-xl bg-white/[0.04] text-red-400 text-body-sm font-medium hover:bg-red-500/10 hover:text-red-300 transition-all border border-red-500/10">
+                                  <button className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-red-500 text-body-sm font-medium hover:bg-red-50 hover:text-red-600 transition-all border border-red-200">
                                     Cancel
                                   </button>
                                 </>
                               )}
                               {booking.status === "completed" && (
-                                <button className="px-4 py-2 rounded-xl bg-white/[0.04] text-[#A1A1AA] text-body-sm font-medium hover:bg-white/[0.08] hover:text-white transition-all border border-white/[0.06]">
+                                <button className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-[#6a6a6a] text-body-sm font-medium hover:bg-[#f0f0f0] hover:text-[#222222] transition-all border border-[#ebebeb]">
                                   Book Again
                                 </button>
                               )}
                               {booking.status === "cancelled" && (
-                                <button className="px-4 py-2 rounded-xl bg-white/[0.04] text-[#A1A1AA] text-body-sm font-medium hover:bg-white/[0.08] hover:text-white transition-all border border-white/[0.06]">
+                                <button className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-[#6a6a6a] text-body-sm font-medium hover:bg-[#f0f0f0] hover:text-[#222222] transition-all border border-[#ebebeb]">
                                   Rebook
                                 </button>
                               )}
@@ -462,15 +462,15 @@ export default function BookingsPage() {
 
                 {/* ─── Bottom Features ─── */}
                 <section>
-                  <h2 className="text-heading-md font-bold text-white mb-5 text-center">Why Book With Momento?</h2>
+                  <h2 className="text-heading-md font-bold text-[#222222] mb-5 text-center">Why Book With Momento?</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {features.map((f) => (
-                      <div key={f.title} className="text-center p-5 rounded-2xl bg-[#0A101B] border border-white/[0.06] hover:border-white/[0.12] transition-all">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF2D7A]/20 to-[#FF7A18]/20 flex items-center justify-center mx-auto mb-3">
-                          <span className="text-xl font-bold text-white">M</span>
+                      <div key={f.title} className="text-center p-5 rounded-2xl bg-white border border-[#ebebeb] hover:border-[#dddddd] transition-all shadow-sm">
+                        <div className="w-12 h-12 rounded-full bg-[#ff385c]/10 flex items-center justify-center mx-auto mb-3">
+                          <span className="text-xl font-bold text-[#ff385c]">M</span>
                         </div>
-                        <h3 className="text-heading-sm font-bold text-white mb-1">{f.title}</h3>
-                        <p className="text-[#A1A1AA] text-body-sm leading-relaxed">{f.desc}</p>
+                        <h3 className="text-heading-sm font-bold text-[#222222] mb-1">{f.title}</h3>
+                        <p className="text-[#6a6a6a] text-body-sm leading-relaxed">{f.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -488,7 +488,7 @@ export default function BookingsPage() {
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
-    upcoming: "bg-[#FF2D7A]/10 text-[#FF2D7A] border-[#FF2D7A]/20",
+    upcoming: "bg-[#ff385c]/10 text-[#ff385c] border-[#ff385c]/20",
     completed: "bg-emerald-400/10 text-emerald-400 border-emerald-400/20",
     cancelled: "bg-red-400/10 text-red-400 border-red-400/20",
   };
@@ -502,8 +502,8 @@ function StatusBadge({ status }: { status: string }) {
 function CountdownUnit({ value, label }: { value: number; label: string }) {
   return (
     <div className="text-center">
-      <p className="text-heading-sm font-bold text-white leading-none">{value.toString().padStart(2, "0")}</p>
-      <p className="text-[10px] text-[#6B7280] uppercase tracking-wider mt-0.5">{label}</p>
+      <p className="text-heading-sm font-bold text-[#222222] leading-none">{value.toString().padStart(2, "0")}</p>
+      <p className="text-[10px] text-[#929292] uppercase tracking-wider mt-0.5">{label}</p>
     </div>
   );
 }

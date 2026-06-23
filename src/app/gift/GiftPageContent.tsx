@@ -119,7 +119,7 @@ export default function GiftPageContent() {
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-[#05070B]/60 to-[#05070B]/20" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FF2D7A]/15 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#ff385c]/15 to-transparent" />
         </div>
 
         <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
@@ -129,7 +129,7 @@ export default function GiftPageContent() {
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3 tracking-tight leading-[1.08]">
             Give More Than A Gift,
-            <span className="block mt-1 bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] bg-clip-text text-transparent">
+            <span className="block mt-1 bg-gradient-to-r from-[#ff385c] to-[#FF7A18] bg-clip-text text-transparent">
               Give A Memory.
             </span>
           </h1>
@@ -162,10 +162,10 @@ export default function GiftPageContent() {
         {/* ─── Experience Finder ─── */}
         <section>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-heading-xl font-bold text-white">Find the perfect gift</h2>
+            <h2 className="text-heading-xl font-bold text-[#222222]">Find the perfect gift</h2>
             <Link
               href="/experiences"
-              className="text-body-sm text-[#A1A1AA] hover:text-white transition-colors flex items-center gap-1"
+              className="text-body-sm text-[#6a6a6a] hover:text-[#222222] transition-colors flex items-center gap-1"
             >
               Browse all
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
@@ -174,15 +174,15 @@ export default function GiftPageContent() {
 
           {/* ─── Filters ─── */}
           <div className="flex flex-wrap items-center gap-2.5 mb-6">
-            <span className="text-caption font-medium text-[#6B7280] uppercase tracking-wider mr-1">Category</span>
+            <span className="text-caption font-medium text-[#929292] uppercase tracking-wider mr-1">Category</span>
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveFilter(cat)}
                 className={`px-4 py-2 rounded-full text-body-sm font-medium transition-all duration-200 ${
                   activeFilter === cat
-                    ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white"
-                    : "bg-white/[0.04] border border-white/[0.08] text-[#A1A1AA] hover:bg-white/[0.08] hover:text-white"
+                    ? "bg-[#ff385c] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
+                    : "bg-white border border-[#ebebeb] text-[#6a6a6a] hover:bg-[#f7f7f7] hover:text-[#222222]"
                 }`}
               >
                 {cat === "Day Out" ? "Day Out" : cat}
@@ -191,19 +191,19 @@ export default function GiftPageContent() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5 mb-8">
-            <span className="text-caption font-medium text-[#6B7280] uppercase tracking-wider mr-1">Location</span>
+            <span className="text-caption font-medium text-[#929292] uppercase tracking-wider mr-1">Location</span>
             {locations.slice(0, 5).map((loc) => (
               <Link
                 key={loc}
                 href={loc === "All" ? "/experiences" : `/experiences?location=${loc}`}
-                className="px-4 py-2 rounded-full text-body-sm font-medium bg-white/[0.04] border border-white/[0.08] text-[#A1A1AA] hover:bg-white/[0.08] hover:text-white transition-all"
+                className="px-4 py-2 rounded-full text-body-sm font-medium bg-white border border-[#ebebeb] text-[#6a6a6a] hover:bg-[#f7f7f7] hover:text-[#222222] transition-all shadow-sm"
               >
                 {loc}
               </Link>
             ))}
             <Link
               href="/experiences"
-              className="px-4 py-2 rounded-full text-body-sm font-medium text-[#6B7280] hover:text-[#A1A1AA] transition-all"
+              className="px-4 py-2 rounded-full text-body-sm font-medium text-[#929292] hover:text-[#6a6a6a] transition-all"
             >
               + More
             </Link>
@@ -211,7 +211,7 @@ export default function GiftPageContent() {
 
           {/* ─── Popular Gift Ideas Rail ─── */}
           <div className="mb-8">
-            <h3 className="text-heading-md font-bold text-white mb-4">Popular Gift Ideas</h3>
+            <h3 className="text-heading-md font-bold text-[#222222] mb-4">Popular Gift Ideas</h3>
             <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar snap-x snap-mandatory">
               {giftIdeas.map((exp) => (
                 exp ? (
@@ -220,7 +220,7 @@ export default function GiftPageContent() {
                     href={`/experiences/${exp.id}`}
                     className="w-60 flex-shrink-0 snap-start group"
                   >
-                    <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-[#111827] transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+                    <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-[#f7f7f7] transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
                       <Image
                         src={exp.image}
                         alt={exp.title}
@@ -251,7 +251,7 @@ export default function GiftPageContent() {
 
           {/* ─── Occasion Chips ─── */}
           <div className="pt-2">
-            <h3 className="text-heading-sm font-bold text-white mb-3 text-center">What&apos;s the occasion?</h3>
+            <h3 className="text-heading-sm font-bold text-[#222222] mb-3 text-center">What&apos;s the occasion?</h3>
             <div className="flex flex-wrap items-center justify-center gap-2.5">
               {occasions.map((o) => (
                 <button
@@ -259,8 +259,8 @@ export default function GiftPageContent() {
                   onClick={() => setOccasion(occasion === o.label ? null : o.label)}
                   className={`px-5 py-2.5 rounded-full text-body-sm font-medium transition-all duration-200 ${
                     occasion === o.label
-                      ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white shadow-[0_4px_24px_rgba(255,45,122,0.35)]"
-                      : "bg-white/[0.04] border border-white/[0.08] text-[#A1A1AA] hover:bg-white/[0.08] hover:text-white"
+                      ? "bg-[#ff385c] text-white shadow-[0_4px_16px_rgba(255,56,92,0.2)]"
+                      : "bg-white border border-[#ebebeb] text-[#6a6a6a] hover:bg-[#f7f7f7] hover:text-[#222222]"
                   }`}
                 >
                   {o.label}
@@ -273,8 +273,8 @@ export default function GiftPageContent() {
         {/* ─── Gift Cards ─── */}
         <section>
           <div className="text-center mb-8">
-            <h2 className="text-heading-xl font-bold text-white mb-2">Gift Cards</h2>
-            <p className="text-[#A1A1AA] text-body-lg">Choose an amount and surprise someone special</p>
+            <h2 className="text-heading-xl font-bold text-[#222222] mb-2">Gift Cards</h2>
+            <p className="text-[#6a6a6a] text-body-lg">Choose an amount and surprise someone special</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
@@ -289,7 +289,7 @@ export default function GiftPageContent() {
                 }`}
               >
                 {/* Gradient Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] opacity-90" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#ff385c] to-[#FF7A18] opacity-90" />
                 {/* Decorative Pattern */}
                 <div className="absolute top-0 right-0 w-40 h-40 bg-white/[0.06] rounded-full -translate-y-1/2 translate-x-1/2" />
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/[0.06] rounded-full translate-y-1/2 -translate-x-1/2" />
@@ -308,7 +308,7 @@ export default function GiftPageContent() {
 
                   <div className="flex items-center justify-between">
                     <div className="flex -space-x-2">
-                      <div className="w-8 h-8 rounded-full bg-white/20 border-2 border-[#FF2D7A] flex items-center justify-center text-[10px] text-white font-bold">M</div>
+                      <div className="w-8 h-8 rounded-full bg-white/20 border-2 border-[#ff385c] flex items-center justify-center text-[10px] text-white font-bold">M</div>
                     </div>
                     <span className="text-caption text-white/60">MOMENTO</span>
                   </div>
@@ -326,15 +326,15 @@ export default function GiftPageContent() {
 
         {/* ─── Gifting Process ─── */}
         <section>
-          <h2 className="text-heading-xl font-bold text-white mb-8 text-center">How It Works</h2>
+          <h2 className="text-heading-xl font-bold text-[#222222] mb-8 text-center">How It Works</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto">
             {processSteps.map((item) => (
-              <div key={item.step} className="text-center p-6 rounded-2xl bg-[#0A101B] border border-white/[0.06] relative">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_24px_rgba(255,45,122,0.35)]">
-                  <span className="text-2xl font-bold">{item.step}</span>
+              <div key={item.step} className="text-center p-6 rounded-2xl bg-white border border-[#ebebeb] relative shadow-sm">
+                <div className="w-14 h-14 rounded-full bg-[#ff385c] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(255,56,92,0.2)]">
+                  <span className="text-2xl font-bold text-white">{item.step}</span>
                 </div>
-                <h3 className="text-heading-sm font-bold text-white mb-1">{item.title}</h3>
-                <p className="text-[#A1A1AA] text-body-sm leading-relaxed">{item.desc}</p>
+                <h3 className="text-heading-sm font-bold text-[#222222] mb-1">{item.title}</h3>
+                <p className="text-[#6a6a6a] text-body-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -342,8 +342,8 @@ export default function GiftPageContent() {
 
         {/* ─── Interactive Gift Form ─── */}
         <section className="max-w-4xl mx-auto">
-          <div className="bg-[#0A101B] rounded-2xl border border-white/[0.06] p-6 sm:p-8">
-            <h2 className="text-heading-lg font-bold text-white mb-6 text-center">Send Your Gift</h2>
+          <div className="bg-white rounded-2xl border border-[#dddddd] p-6 sm:p-8 shadow-sm">
+            <h2 className="text-heading-lg font-bold text-[#222222] mb-6 text-center">Send Your Gift</h2>
 
             {/* Tab Switcher */}
             <div className="flex items-center justify-center gap-2 mb-8">
@@ -351,8 +351,8 @@ export default function GiftPageContent() {
                 onClick={() => { setTab("cards"); setSelectedExp(null); }}
                 className={`px-6 py-2.5 rounded-full text-body-sm font-semibold transition-all duration-200 ${
                   tab === "cards"
-                    ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white"
-                    : "bg-white/[0.04] border border-white/[0.08] text-[#A1A1AA] hover:bg-white/[0.08] hover:text-white"
+                    ? "bg-[#ff385c] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
+                    : "bg-white border border-[#ebebeb] text-[#6a6a6a] hover:bg-[#f7f7f7] hover:text-[#222222]"
                 }`}
               >
                 Gift Cards
@@ -361,8 +361,8 @@ export default function GiftPageContent() {
                 onClick={() => { setTab("experiences"); setSelectedCard(null); }}
                 className={`px-6 py-2.5 rounded-full text-body-sm font-semibold transition-all duration-200 ${
                   tab === "experiences"
-                    ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white"
-                    : "bg-white/[0.04] border border-white/[0.08] text-[#A1A1AA] hover:bg-white/[0.08] hover:text-white"
+                    ? "bg-[#ff385c] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
+                    : "bg-white border border-[#ebebeb] text-[#6a6a6a] hover:bg-[#f7f7f7] hover:text-[#222222]"
                 }`}
               >
                 Gift Experiences
@@ -380,8 +380,8 @@ export default function GiftPageContent() {
                         onClick={() => setSelectedCard(selectedCard === i ? null : i)}
                         className={`relative p-5 rounded-xl text-left transition-all duration-300 ${
                           selectedCard === i
-                            ? "bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] text-white shadow-[0_4px_24px_rgba(255,45,122,0.35)] ring-2 ring-white/20"
-                            : "bg-[#111827] border border-white/[0.08] text-white hover:border-[#FF2D7A]/30"
+                            ? "bg-[#ff385c] text-white shadow-[0_4px_16px_rgba(255,56,92,0.2)] ring-2 ring-[#ff385c]/20"
+                            : "bg-white border border-[#ebebeb] text-[#222222] hover:border-[#ff385c]/30"
                         }`}
                       >
                         {selectedCard === i && (
@@ -389,8 +389,8 @@ export default function GiftPageContent() {
                             <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                           </div>
                         )}
-                        <p className={`text-xl font-bold ${selectedCard === i ? "text-white" : "text-white"}`}>{card.label}</p>
-                        <p className={`text-caption mt-1 ${selectedCard === i ? "text-white/80" : "text-[#A1A1AA]"}`}>{card.desc}</p>
+                        <p className={`text-xl font-bold ${selectedCard === i ? "text-white" : "text-[#222222]"}`}>{card.label}</p>
+                        <p className={`text-caption mt-1 ${selectedCard === i ? "text-white/80" : "text-[#6a6a6a]"}`}>{card.desc}</p>
                       </button>
                     ))}
                   </div>
@@ -402,8 +402,8 @@ export default function GiftPageContent() {
                         onClick={() => setSelectedExp(selectedExp === exp.id ? null : exp.id)}
                         className="group relative text-left"
                       >
-                        <div className={`relative aspect-[4/3] rounded-xl overflow-hidden bg-[#111827] transition-all duration-200 ${
-                          selectedExp === exp.id ? "ring-2 ring-[#FF2D7A] shadow-[0_4px_24px_rgba(255,45,122,0.35)]" : ""
+                        <div className={`relative aspect-[4/3] rounded-xl overflow-hidden bg-[#f7f7f7] transition-all duration-200 ${
+                          selectedExp === exp.id ? "ring-2 ring-[#ff385c] shadow-[0_4px_16px_rgba(255,56,92,0.2)]" : ""
                         }`}>
                           <Image
                             src={exp.image}
@@ -414,11 +414,11 @@ export default function GiftPageContent() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                           {selectedExp === exp.id && (
-                            <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#FF2D7A] flex items-center justify-center z-10">
+                            <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#ff385c] flex items-center justify-center z-10">
                               <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                             </div>
                           )}
-                          <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white text-[10px] font-medium">
+                          <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#ff385c] text-white text-[10px] font-medium">
                             Gift
                           </div>
                           <div className="absolute bottom-0 left-0 right-0 p-2.5">
@@ -439,8 +439,8 @@ export default function GiftPageContent() {
                       onClick={() => setDelivery("email")}
                       className={`flex items-center gap-2 px-4 py-2 rounded-full text-body-sm font-medium transition-all ${
                         delivery === "email"
-                          ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white"
-                          : "bg-[#111827] border border-white/[0.08] text-[#A1A1AA] hover:bg-white/[0.08]"
+                          ? "bg-[#ff385c] text-white"
+                          : "bg-white border border-[#ebebeb] text-[#6a6a6a] hover:bg-[#f7f7f7]"
                       }`}
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
@@ -450,8 +450,8 @@ export default function GiftPageContent() {
                       onClick={() => setDelivery("whatsapp")}
                       className={`flex items-center gap-2 px-4 py-2 rounded-full text-body-sm font-medium transition-all ${
                         delivery === "whatsapp"
-                          ? "bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white"
-                          : "bg-[#111827] border border-white/[0.08] text-[#A1A1AA] hover:bg-white/[0.08]"
+                          ? "bg-[#ff385c] text-white"
+                          : "bg-white border border-[#ebebeb] text-[#6a6a6a] hover:bg-[#f7f7f7]"
                       }`}
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
@@ -465,58 +465,58 @@ export default function GiftPageContent() {
                       placeholder="Recipient's name"
                       value={recipientName}
                       onChange={(e) => setRecipientName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-[#111827] border border-white/[0.08] text-white text-body placeholder:text-[#6B7280] focus:outline-none focus:border-[#FF2D7A] focus:ring-1 focus:ring-[#FF2D7A]/50 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#929292] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/30 transition-all"
                     />
                     <input
                       type={delivery === "email" ? "email" : "tel"}
                       placeholder={delivery === "email" ? "Recipient's email address" : "Recipient's WhatsApp number"}
                       value={recipientContact}
                       onChange={(e) => setRecipientContact(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-[#111827] border border-white/[0.08] text-white text-body placeholder:text-[#6B7280] focus:outline-none focus:border-[#FF2D7A] focus:ring-1 focus:ring-[#FF2D7A]/50 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#929292] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/30 transition-all"
                     />
                     <input
                       type="text"
                       placeholder="Your name (sender)"
                       value={senderName}
                       onChange={(e) => setSenderName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-[#111827] border border-white/[0.08] text-white text-body placeholder:text-[#6B7280] focus:outline-none focus:border-[#FF2D7A] focus:ring-1 focus:ring-[#FF2D7A]/50 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#929292] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/30 transition-all"
                     />
                     <textarea
                       placeholder="Add a personal message (optional)"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       rows={3}
-                      className="w-full px-4 py-3 rounded-xl bg-[#111827] border border-white/[0.08] text-white text-body placeholder:text-[#6B7280] focus:outline-none focus:border-[#FF2D7A] focus:ring-1 focus:ring-[#FF2D7A]/50 transition-all resize-none"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#929292] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/30 transition-all resize-none"
                     />
                   </div>
 
                   {/* Summary */}
-                  <div className="p-4 rounded-xl bg-[#111827] border border-white/[0.06] mb-5">
-                    <p className="text-caption text-[#6B7280] mb-1">Gift summary</p>
+                  <div className="p-4 rounded-xl bg-[#f7f7f7] border border-[#ebebeb] mb-5">
+                    <p className="text-caption text-[#6a6a6a] mb-1">Gift summary</p>
                     <div className="flex items-center justify-between">
-                      <span className="text-body-sm text-[#A1A1AA]">
+                      <span className="text-body-sm text-[#6a6a6a]">
                         {tab === "cards" && selectedCard !== null
                           ? `Gift Card — ${giftCardValues[selectedCard].label}`
                           : tab === "experiences" && selectedExp
                             ? `Experience — ${experiences.find((e) => e.id === selectedExp)?.title}`
                             : "Select a gift above"}
                       </span>
-                      <span className="text-heading-sm font-bold text-white">
+                      <span className="text-heading-sm font-bold text-[#222222]">
                         {selectedValue > 0 ? `MK ${selectedValue.toLocaleString()}` : ""}
                       </span>
                     </div>
                     {occasion && (
-                      <p className="text-caption text-[#6B7280] mt-2">🎉 {occasion}</p>
+                      <p className="text-caption text-[#6a6a6a] mt-2">🎉 {occasion}</p>
                     )}
                     {message && (
-                      <p className="text-caption text-[#6B7280] mt-1 italic line-clamp-1">&ldquo;{message}&rdquo;</p>
+                      <p className="text-caption text-[#6a6a6a] mt-1 italic line-clamp-1">&ldquo;{message}&rdquo;</p>
                     )}
                   </div>
 
                   <button
                     onClick={handleSend}
                     disabled={!canSend || sending}
-                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full py-3.5 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {sending ? (
                       <>
@@ -532,23 +532,23 @@ export default function GiftPageContent() {
             ) : (
               /* ─── Success State ─── */
               <div className="max-w-lg mx-auto text-center py-6">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_24px_rgba(255,45,122,0.35)]">
+                <div className="w-16 h-16 rounded-full bg-[#ff385c] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(255,56,92,0.3)]">
                   <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 </div>
-                <h2 className="text-heading-lg font-bold text-white mb-2">Gift Sent! 🎉</h2>
-                <p className="text-[#A1A1AA] text-body-sm mb-4">
+                <h2 className="text-heading-lg font-bold text-[#222222] mb-2">Gift Sent! 🎉</h2>
+                <p className="text-[#6a6a6a] text-body-sm mb-4">
                   Your gift has been delivered to {recipientName} via {delivery === "email" ? "email" : "WhatsApp"}.
                 </p>
-                <div className="p-4 rounded-xl bg-[#111827] border border-white/[0.06] mb-6 inline-block">
-                  <p className="text-caption text-[#6B7280] mb-1">Redemption Code</p>
-                  <p className="text-heading-sm font-mono font-bold bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] bg-clip-text text-transparent tracking-wider">{redemptionCode}</p>
+                <div className="p-4 rounded-xl bg-[#f7f7f7] border border-[#ebebeb] mb-6 inline-block">
+                  <p className="text-caption text-[#6a6a6a] mb-1">Redemption Code</p>
+                  <p className="text-heading-sm font-mono font-bold text-[#ff385c] tracking-wider">{redemptionCode}</p>
                 </div>
-                <p className="text-caption text-[#A1A1AA] mb-6">
+                <p className="text-caption text-[#6a6a6a] mb-6">
                   Share this code with {recipientName} so they can redeem their gift.
                 </p>
                 <button
                   onClick={handleReset}
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all duration-300"
+                  className="px-6 py-2.5 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
                 >
                   Send Another Gift
                 </button>
@@ -560,22 +560,22 @@ export default function GiftPageContent() {
         {/* ─── Track Redemption ─── */}
         <section className="max-w-2xl mx-auto">
           <div className="text-center mb-6">
-            <h2 className="text-heading-lg font-bold text-white mb-2">Track Redemption</h2>
-            <p className="text-[#A1A1AA] text-body-sm">Enter a redemption code to check its status</p>
+            <h2 className="text-heading-lg font-bold text-[#222222] mb-2">Track Redemption</h2>
+            <p className="text-[#6a6a6a] text-body-sm">Enter a redemption code to check its status</p>
           </div>
 
-          <div className="bg-[#0A101B] rounded-2xl border border-white/[0.06] p-6 sm:p-8">
+          <div className="bg-white rounded-2xl border border-[#dddddd] p-6 sm:p-8 shadow-sm">
             <div className="flex gap-3 mb-6">
               <input
                 type="text"
                 placeholder="Enter code (e.g. MOMO-XXXXXX)"
                 value={trackCode}
                 onChange={(e) => setTrackCode(e.target.value.toUpperCase())}
-                className="flex-1 px-4 py-3 rounded-xl bg-[#111827] border border-white/[0.08] text-white text-body placeholder:text-[#6B7280] focus:outline-none focus:border-[#FF2D7A] focus:ring-1 focus:ring-[#FF2D7A]/50 transition-all font-mono uppercase"
+                className="flex-1 px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#929292] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/30 transition-all font-mono uppercase"
               />
               <button
                 onClick={handleTrackCode}
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all duration-300 whitespace-nowrap"
+                className="px-6 py-3 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300 whitespace-nowrap"
               >
                 {tracking ? (
                   <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
@@ -588,14 +588,14 @@ export default function GiftPageContent() {
             {trackResult && (
               <div className={`p-4 rounded-xl mb-4 border ${
                 trackResult.found
-                  ? "bg-emerald-400/5 border-emerald-400/20"
-                  : "bg-red-400/5 border-red-400/20"
+                  ? "bg-emerald-50 border-emerald-200"
+                  : "bg-red-50 border-red-200"
               }`}>
-                <p className={`text-body-sm font-medium ${trackResult.found ? "text-emerald-400" : "text-red-400"}`}>
+                <p className={`text-body-sm font-medium ${trackResult.found ? "text-emerald-700" : "text-red-700"}`}>
                   {trackResult.found ? "✓ Gift card found" : "✗ Code not found"}
                 </p>
                 {trackResult.found && (
-                  <p className="text-caption text-[#A1A1AA] mt-1">
+                  <p className="text-caption text-[#6a6a6a] mt-1">
                     Value: {trackResult.value} · Status: {trackResult.status}
                   </p>
                 )}
@@ -610,10 +610,10 @@ export default function GiftPageContent() {
                 { step: "Redeemed", icon: "✅", done: false },
               ].map((s) => (
                 <div key={s.step} className={`text-center p-3 rounded-xl transition-all ${
-                  s.done ? "bg-[#111827]" : "bg-[#111827]/50"
+                  s.done ? "bg-[#f7f7f7]" : "bg-[#f7f7f7]/50"
                 }`}>
                   <span className={`text-xl block mb-1 ${s.done ? "" : "opacity-30"}`}>{s.icon}</span>
-                  <p className={`text-caption font-medium ${s.done ? "text-white" : "text-[#6B7280]"}`}>{s.step}</p>
+                  <p className={`text-caption font-medium ${s.done ? "text-[#222222]" : "text-[#929292]"}`}>{s.step}</p>
                 </div>
               ))}
             </div>

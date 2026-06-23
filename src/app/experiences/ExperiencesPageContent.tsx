@@ -7,6 +7,7 @@ import Link from "next/link";
 import { getExperiences } from "@/lib/api-client";
 import { transformExperience } from "@/lib/transform";
 import { Mood, PRICE_RANGES, Experience } from "@/lib/types";
+import { experiences as mockExperiences } from "@/lib/data";
 
 const ITEMS_PER_PAGE = 8;
 const LOAD_MORE = 4;
@@ -98,7 +99,10 @@ export default function ExperiencesPageContent() {
     getExperiences({ limit: 50 })
       .then((res) => {
         const mapped = (res.experiences as Record<string, unknown>[]).map(transformExperience);
-        setAllExperiences(mapped);
+        setAllExperiences(mapped.length > 0 ? mapped : mockExperiences);
+      })
+      .catch(() => {
+        setAllExperiences(mockExperiences);
       })
       .finally(() => setFetching(false));
   }, []);
