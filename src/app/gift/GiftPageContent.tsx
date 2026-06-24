@@ -76,7 +76,7 @@ export default function GiftPageContent() {
     if (!trackCode.trim()) return;
     setTracking(true);
     try {
-      const token = localStorage.getItem("momento-auth-token");
+      const token = localStorage.getItem("experio-auth-token");
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
       const res = await fetch(`/api/gift-cards/check?code=${encodeURIComponent(trackCode)}`, { headers });
@@ -94,7 +94,7 @@ export default function GiftPageContent() {
   };
 
   const handleSend = async () => {
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     if (!token) {
       setGiftError("Please sign in to send a gift");
       return;
@@ -167,11 +167,11 @@ export default function GiftPageContent() {
       ctx.arc(-30, rect.height - 30, 80, 0, Math.PI * 2);
       ctx.fill();
 
-      // Momento logo text
+      // Experio logo text
       ctx.fillStyle = "rgba(255,255,255,0.15)";
       ctx.font = "bold 10px sans-serif";
       ctx.textAlign = "right";
-      ctx.fillText("MOMENTO", rect.width - 20, 30);
+      ctx.fillText("EXPERIO", rect.width - 20, 30);
 
       // Card chip
       ctx.fillStyle = "rgba(255, 200, 50, 0.7)";
@@ -222,7 +222,7 @@ export default function GiftPageContent() {
         qrImg.onload = () => {
           ctx.drawImage(qrImg, rect.width - 110, rect.height - 130, 90, 90);
           const link = document.createElement("a");
-          link.download = `momento-giftcard-${redemptionCode}.png`;
+          link.download = `experio-giftcard-${redemptionCode}.png`;
           link.href = canvas.toDataURL();
           link.click();
         };
@@ -231,7 +231,7 @@ export default function GiftPageContent() {
       }
 
       const link = document.createElement("a");
-      link.download = `momento-giftcard-${redemptionCode}.png`;
+      link.download = `experio-giftcard-${redemptionCode}.png`;
       link.href = canvas.toDataURL();
       link.click();
     } catch {}
@@ -273,9 +273,9 @@ export default function GiftPageContent() {
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-white/10" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#ff385c]/8 via-transparent to-[#9F3BFF]/8" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#DD2A7B]/8 via-transparent to-[#8134AF]/8" />
           {/* Ambient glow */}
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-r from-[#ff385c]/8 to-[#FF7A18]/8 rounded-full blur-3xl" />
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-r from-[#DD2A7B]/8 to-[#F58529]/8 rounded-full blur-3xl" />
         </div>
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto -mt-8">
@@ -285,7 +285,7 @@ export default function GiftPageContent() {
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#111] mb-4 tracking-tight leading-[1.06]">
             Give More Than A Gift,
-            <span className="block mt-1 bg-gradient-to-r from-[#ff385c] via-[#FF7A18] to-[#9F3BFF] bg-clip-text text-transparent">
+            <span className="block mt-1 bg-gradient-to-r from-[#DD2A7B] via-[#F58529] to-[#8134AF] bg-clip-text text-transparent">
               Give A Memory.
             </span>
           </h1>
@@ -337,7 +337,7 @@ export default function GiftPageContent() {
                 onClick={() => setActiveFilter(cat)}
                 className={`px-4 py-2 rounded-full text-body-sm font-medium transition-all duration-200 ${
                   activeFilter === cat
-                    ? "bg-[#ff385c] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
+                    ? "bg-[#DD2A7B] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
                     : "bg-white border border-[#ebebeb] text-[#4a4a4a] hover:bg-[#f7f7f7] hover:text-[#222222]"
                 }`}
               >
@@ -415,7 +415,7 @@ export default function GiftPageContent() {
                   onClick={() => setOccasion(occasion === o.label ? null : o.label)}
                   className={`px-5 py-2.5 rounded-full text-body-sm font-medium transition-all duration-200 ${
                     occasion === o.label
-                      ? "bg-[#ff385c] text-white shadow-[0_4px_16px_rgba(255,56,92,0.2)]"
+                      ? "bg-[#DD2A7B] text-white shadow-[0_4px_16px_rgba(255,56,92,0.2)]"
                       : "bg-white border border-[#ebebeb] text-[#4a4a4a] hover:bg-[#f7f7f7] hover:text-[#222222]"
                   }`}
                 >
@@ -456,7 +456,7 @@ export default function GiftPageContent() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto">
             {processSteps.map((item) => (
               <div key={item.step} className="text-center p-6 rounded-2xl bg-white border border-[#ebebeb] relative shadow-sm">
-                <div className="w-14 h-14 rounded-full bg-[#ff385c] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(255,56,92,0.2)]">
+                <div className="w-14 h-14 rounded-full bg-[#DD2A7B] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(255,56,92,0.2)]">
                   <span className="text-2xl font-bold text-white">{item.step}</span>
                 </div>
                 <h3 className="text-heading-sm font-bold text-[#222222] mb-1">{item.title}</h3>
@@ -477,7 +477,7 @@ export default function GiftPageContent() {
                 onClick={() => { setTab("cards"); setSelectedExp(null); }}
                 className={`px-6 py-2.5 rounded-full text-body-sm font-semibold transition-all duration-200 ${
                   tab === "cards"
-                    ? "bg-[#ff385c] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
+                    ? "bg-[#DD2A7B] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
                     : "bg-white border border-[#ebebeb] text-[#4a4a4a] hover:bg-[#f7f7f7] hover:text-[#222222]"
                 }`}
               >
@@ -487,7 +487,7 @@ export default function GiftPageContent() {
                 onClick={() => { setTab("experiences"); setSelectedCard(null); }}
                 className={`px-6 py-2.5 rounded-full text-body-sm font-semibold transition-all duration-200 ${
                   tab === "experiences"
-                    ? "bg-[#ff385c] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
+                    ? "bg-[#DD2A7B] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
                     : "bg-white border border-[#ebebeb] text-[#4a4a4a] hover:bg-[#f7f7f7] hover:text-[#222222]"
                 }`}
               >
@@ -524,7 +524,7 @@ export default function GiftPageContent() {
                         className="group relative text-left"
                       >
                         <div className={`relative aspect-[4/3] rounded-xl overflow-hidden bg-[#f7f7f7] transition-all duration-200 ${
-                          selectedExp === exp.id ? "ring-2 ring-[#ff385c] shadow-[0_4px_16px_rgba(255,56,92,0.2)]" : ""
+                          selectedExp === exp.id ? "ring-2 ring-[#DD2A7B] shadow-[0_4px_16px_rgba(255,56,92,0.2)]" : ""
                         }`}>
                           <Image
                             src={exp.image}
@@ -535,11 +535,11 @@ export default function GiftPageContent() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                           {selectedExp === exp.id && (
-                            <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#ff385c] flex items-center justify-center z-10">
+                            <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#DD2A7B] flex items-center justify-center z-10">
                               <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                             </div>
                           )}
-                          <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#ff385c] text-white text-[10px] font-medium">
+                          <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#DD2A7B] text-white text-[10px] font-medium">
                             Gift
                           </div>
                           <div className="absolute bottom-0 left-0 right-0 p-2.5">
@@ -560,7 +560,7 @@ export default function GiftPageContent() {
                       onClick={() => setDelivery("email")}
                       className={`flex items-center gap-2 px-4 py-2 rounded-full text-body-sm font-medium transition-all ${
                         delivery === "email"
-                          ? "bg-[#ff385c] text-white"
+                          ? "bg-[#DD2A7B] text-white"
                           : "bg-white border border-[#ebebeb] text-[#4a4a4a] hover:bg-[#f7f7f7]"
                       }`}
                     >
@@ -571,7 +571,7 @@ export default function GiftPageContent() {
                       onClick={() => setDelivery("whatsapp")}
                       className={`flex items-center gap-2 px-4 py-2 rounded-full text-body-sm font-medium transition-all ${
                         delivery === "whatsapp"
-                          ? "bg-[#ff385c] text-white"
+                          ? "bg-[#DD2A7B] text-white"
                           : "bg-white border border-[#ebebeb] text-[#4a4a4a] hover:bg-[#f7f7f7]"
                       }`}
                     >
@@ -586,28 +586,28 @@ export default function GiftPageContent() {
                       placeholder="Recipient's name"
                       value={recipientName}
                       onChange={(e) => setRecipientName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/30 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/30 transition-all"
                     />
                     <input
                       type={delivery === "email" ? "email" : "tel"}
                       placeholder={delivery === "email" ? "Recipient's email address" : "Recipient's WhatsApp number"}
                       value={recipientContact}
                       onChange={(e) => setRecipientContact(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/30 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/30 transition-all"
                     />
                     <input
                       type="text"
                       placeholder="Your name (sender)"
                       value={senderName}
                       onChange={(e) => setSenderName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/30 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/30 transition-all"
                     />
                     <textarea
                       placeholder="Add a personal message (optional)"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       rows={3}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/30 transition-all resize-none"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/30 transition-all resize-none"
                     />
                   </div>
 
@@ -644,7 +644,7 @@ export default function GiftPageContent() {
                   <button
                     onClick={handleSend}
                     disabled={!canSend || sending}
-                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,56,92,0.35)] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,56,92,0.35)] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {sending ? (
                       <>
@@ -675,8 +675,8 @@ export default function GiftPageContent() {
                 <div className="max-w-sm mx-auto mb-6" ref={cardRef}>
                   <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] border border-white/[0.08] shadow-2xl">
                     {/* Decorative elements */}
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-[#ff385c]/8 rounded-full -translate-y-1/2 translate-x-1/4 blur-xl" />
-                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#9F3BFF]/6 rounded-full translate-y-1/2 -translate-x-1/4 blur-xl" />
+                    <div className="absolute top-0 right-0 w-40 h-40 bg-[#DD2A7B]/8 rounded-full -translate-y-1/2 translate-x-1/4 blur-xl" />
+                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#8134AF]/6 rounded-full translate-y-1/2 -translate-x-1/4 blur-xl" />
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.05)_0%,transparent_60%)]" />
 
                     <div className="relative z-10 p-6">
@@ -690,7 +690,7 @@ export default function GiftPageContent() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.15em]">Momento</p>
+                          <p className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.15em]">Experio</p>
                           <p className="text-[8px] text-white/30">Gift Card</p>
                         </div>
                       </div>
@@ -735,7 +735,7 @@ export default function GiftPageContent() {
                   <button
                     onClick={handleDownloadCard}
                     disabled={!qrDataUrl}
-                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,56,92,0.35)] transition-all duration-300 disabled:opacity-40 flex items-center gap-2"
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,56,92,0.35)] transition-all duration-300 disabled:opacity-40 flex items-center gap-2"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     Download Card
@@ -765,7 +765,7 @@ export default function GiftPageContent() {
         {/* ─── Track & Redeem ─── */}
         <section className="max-w-3xl mx-auto" id="redeem">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#ff385c]/10 to-[#FF7A18]/10 border border-[#ff385c]/20 text-[#ff385c] text-caption font-semibold mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#DD2A7B]/10 to-[#F58529]/10 border border-[#DD2A7B]/20 text-[#DD2A7B] text-caption font-semibold mb-4">
               <span>🎯</span> Gift Cards
             </div>
             <h2 className="text-heading-xl font-bold text-[#222222] mb-2">Track &amp; Redeem</h2>
@@ -783,13 +783,13 @@ export default function GiftPageContent() {
                   placeholder="Enter gift card code (e.g. MOMO-XXXXXXXX)"
                   value={trackCode}
                   onChange={(e) => setTrackCode(e.target.value.toUpperCase())}
-                  className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/20 transition-all font-mono tracking-wider"
+                  className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/20 transition-all font-mono tracking-wider"
                 />
               </div>
               <button
                 onClick={handleTrackCode}
                 disabled={!trackCode.trim() || tracking}
-                className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,56,92,0.35)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shrink-0"
+                className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,56,92,0.35)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shrink-0"
               >
                 {tracking ? (
                   <>
@@ -858,9 +858,9 @@ export default function GiftPageContent() {
               </div>
             </div>
 
-            <div className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-[#ff385c]/5 to-[#9F3BFF]/5 border border-[#ebebeb]">
+            <div className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-[#DD2A7B]/5 to-[#8134AF]/5 border border-[#ebebeb]">
               <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-[#ff385c] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <svg className="w-5 h-5 text-[#DD2A7B] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <p className="text-caption text-[#4a4a4a] leading-relaxed">
                   <strong className="text-[#222222]">To redeem:</strong> When booking an experience, enter your gift card code at checkout to apply the value toward your purchase. Unused balance remains for future bookings.
                 </p>

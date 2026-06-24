@@ -44,7 +44,7 @@ export default function PartnerResourcesPage() {
         <div className="mb-12">
           <h1 className="text-display-sm font-bold text-[#222222] mb-3">Partner Resources</h1>
           <p className="text-[#6a6a6a] text-body-lg max-w-lg">
-            Everything you need to succeed as a Momento host — from getting started to growing your business.
+            Everything you need to succeed as an Experio host — from getting started to growing your business.
           </p>
         </div>
 
@@ -63,7 +63,7 @@ export default function PartnerResourcesPage() {
                   {item.link && (
                     <Link
                       href={item.link}
-                      className="inline-flex items-center gap-1 text-[#ff385c] text-body-sm font-medium hover:underline mt-2"
+                      className="inline-flex items-center gap-1 text-[#DD2A7B] text-body-sm font-medium hover:underline mt-2"
                     >
                       Go to Dashboard
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -84,8 +84,8 @@ export default function PartnerResourcesPage() {
             Our partner support team is here to help you every step of the way.
           </p>
           <a
-            href="mailto:partners@momento.mw"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+            href="mailto:partners@experio.life"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
           >
             Contact Partner Support
           </a>

@@ -59,7 +59,7 @@ export default function ListExperiencePage() {
     setError("");
     setSubmitting(true);
 
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     if (!token) {
       setError("Please sign in as a partner to list an experience.");
       setSubmitting(false);
@@ -75,7 +75,7 @@ export default function ListExperiencePage() {
         },
         body: JSON.stringify({
           title: form.title,
-          subtitle: form.subtitle || `${form.title} — A Momento Experience`,
+          subtitle: form.subtitle || `${form.title} — An Experio Experience`,
           description: form.description,
           price: parseInt(form.price),
           duration: form.duration,
@@ -104,8 +104,8 @@ export default function ListExperiencePage() {
     return (
       <div className="pt-24 pb-20">
         <div className="max-w-lg mx-auto px-4 sm:px-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#ff385c]/10 flex items-center justify-center mx-auto mb-5">
-            <svg className="w-8 h-8 text-[#ff385c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-16 h-16 rounded-full bg-[#DD2A7B]/10 flex items-center justify-center mx-auto mb-5">
+            <svg className="w-8 h-8 text-[#DD2A7B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
@@ -115,7 +115,7 @@ export default function ListExperiencePage() {
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
           >
             Back to Home
           </Link>
@@ -130,7 +130,7 @@ export default function ListExperiencePage() {
         <div className="mb-8">
           <h1 className="text-display-sm font-bold text-[#222222] mb-2">List Your Experience</h1>
           <p className="text-[#6a6a6a] text-body-lg">
-            Share your unique experience with the Momento community. Fill out the details below and our team will review your listing.
+            Share your unique experience with the Experio community. Fill out the details below and our team will review your listing.
           </p>
         </div>
 
@@ -150,7 +150,7 @@ export default function ListExperiencePage() {
               value={form.title}
               onChange={(e) => updateField("title", e.target.value)}
               placeholder="e.g. Sunset Wine Tasting at Cape Maclear"
-              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
             />
           </div>
 
@@ -162,7 +162,7 @@ export default function ListExperiencePage() {
               value={form.subtitle}
               onChange={(e) => updateField("subtitle", e.target.value)}
               placeholder="e.g. Sun, Swim & Sip by the lake"
-              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
             />
           </div>
 
@@ -173,7 +173,7 @@ export default function ListExperiencePage() {
               required
               value={form.category}
               onChange={(e) => updateField("category", e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
             >
               <option value="" disabled>Select a category</option>
               {V2_CATEGORIES.map((cat) => (
@@ -191,7 +191,7 @@ export default function ListExperiencePage() {
               value={form.description}
               onChange={(e) => updateField("description", e.target.value)}
               placeholder="Describe what guests will experience, what makes it unique, and what they should expect."
-              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all resize-y"
+              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all resize-y"
             />
           </div>
 
@@ -206,7 +206,7 @@ export default function ListExperiencePage() {
                 value={form.price}
                 onChange={(e) => updateField("price", e.target.value)}
                 placeholder="50000"
-                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
+                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
               />
             </div>
             <div>
@@ -218,7 +218,7 @@ export default function ListExperiencePage() {
                 value={form.duration}
                 onChange={(e) => updateField("duration", e.target.value)}
                 placeholder="e.g. 2 hours, Full day"
-                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
+                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
               />
             </div>
           </div>
@@ -231,7 +231,7 @@ export default function ListExperiencePage() {
                 required
                 value={form.location}
                 onChange={(e) => updateField("location", e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all appearance-none cursor-pointer"
+                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all appearance-none cursor-pointer"
               >
                 <option value="" disabled>
                   {geo.loading ? "Detecting location..." : "Select a city"}
@@ -243,7 +243,7 @@ export default function ListExperiencePage() {
                 <p className="text-caption text-text-tertiary mt-1 animate-pulse">Detecting your location via GPS...</p>
               )}
               {geo.position && form.location && (
-                <p className="text-caption text-[#ff385c] mt-1">📍 Auto-detected</p>
+                <p className="text-caption text-[#DD2A7B] mt-1">📍 Auto-detected</p>
               )}
             </div>
             <div>
@@ -256,7 +256,7 @@ export default function ListExperiencePage() {
                 value={form.capacity}
                 onChange={(e) => updateField("capacity", e.target.value)}
                 placeholder="10"
-                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
+                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
               />
             </div>
           </div>
@@ -270,14 +270,14 @@ export default function ListExperiencePage() {
               value={form.contact}
               onChange={(e) => updateField("contact", e.target.value)}
               placeholder="you@example.com"
-              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
             />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {submitting ? (
               <>
