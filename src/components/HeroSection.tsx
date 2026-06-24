@@ -51,19 +51,19 @@ export default function HeroSection() {
         </p>
 
         {/* Mood grid with colored emojis */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 max-w-4xl mx-auto">
+        <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 max-w-4xl mx-auto">
           {MOODS.map((mood) => (
             <Link
               key={mood.label}
               href={`/experiences?mood=${mood.label.toLowerCase().replace(" ", "-")}`}
-              className={`group relative overflow-hidden rounded-2xl p-5 sm:p-6 ${mood.bgColor} border ${mood.borderColor} hover:border-[#ff385c]/40 text-[#222222] transition-all duration-300 hover:shadow-lg ${mood.shadowColor} hover:-translate-y-1.5`}
+              className={`group relative overflow-hidden rounded-xl p-3 sm:p-4 ${mood.bgColor} border ${mood.borderColor} hover:border-[#ff385c]/40 text-[#222222] transition-all duration-300 hover:shadow-md ${mood.shadowColor} hover:-translate-y-1`}
             >
-              <div className="relative z-10 flex flex-col items-center gap-2 text-center">
-                <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full ${mood.bgColor} border-2 ${mood.borderColor} flex items-center justify-center mb-1 shadow-sm transition-transform duration-300 group-hover:scale-110`}>
-                  <span className="text-xl sm:text-2xl">{mood.emoji}</span>
+              <div className="relative z-10 flex flex-col items-center gap-1 text-center">
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${mood.bgColor} border-2 ${mood.borderColor} flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-110`}>
+                  <span className="text-lg sm:text-xl">{mood.emoji}</span>
                 </div>
-                <span className={`text-body-sm sm:text-body font-bold leading-tight ${mood.textColor}`}>{mood.label}</span>
-                <span className="text-caption text-[#4a4a4a] leading-snug">{mood.description}</span>
+                <span className={`text-caption sm:text-body-sm font-bold leading-tight ${mood.textColor}`}>{mood.label}</span>
+                <span className="text-[10px] sm:text-caption text-[#4a4a4a] leading-snug">{mood.description}</span>
               </div>
               {/* Hover accent */}
               <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-white/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

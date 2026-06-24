@@ -11,6 +11,7 @@ import { experiences as mockExperiences } from "@/lib/data";
 import { useGeolocation, getDistance, formatDist } from "@/lib/use-geolocation";
 import { findNearestCity } from "@/lib/geo";
 import { getPersonalizedRecommendations, getRecommendedCategories, hasUserInteractions, trackView } from "@/lib/recommendations";
+import AIConcierge from "@/components/AIConcierge";
 
 const RAILS: { key: string; title: string; filter: (e: Experience) => boolean }[] = [
   { key: "trending", title: "Trending Right Now", filter: (e: Experience) => e.rating >= 4.7 },
@@ -402,29 +403,9 @@ export default function Home() {
           <ContentRail title={railsMap.affordable.title} experiences={railsMap.affordable.experiences} viewAllHref="/experiences" />
         )}
 
-        {/* ─── AI Concierge Teaser ─── */}
+        {/* ─── AI Concierge ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-10">
-          <Link href="/experiences" className="relative rounded-2xl overflow-hidden block group border border-[#dddddd] bg-[#fafafa]">
-            <div className="relative z-10 p-8 sm:p-12">
-              <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-10">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#ff385c] to-[#9F3BFF] flex items-center justify-center flex-shrink-0 shadow-[0_4px_16px_rgba(255,56,92,0.2)]">
-                  <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
-                  </svg>
-                </div>
-                <div className="flex-1 text-center lg:text-left">
-                  <h2 className="text-heading-xl font-bold text-[#222222] mb-1">Not sure what you&apos;re in the mood for?</h2>
-                  <p className="text-[#4a4a4a] text-body-lg">Tell us how you feel, and we&apos;ll find the perfect experience.</p>
-                </div>
-                <div className="flex-shrink-0">
-                  <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white border border-[#dddddd] text-[#222222] font-semibold text-body-sm group-hover:border-[#222222] transition-all">
-                    Explore All
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </Link>
+          <AIConcierge />
         </section>
 
         {/* ─── Large CTA ─── */}

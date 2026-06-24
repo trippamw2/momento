@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Experience } from "@/lib/types";
 import { useState, useCallback } from "react";
+import { trackView, trackSaved } from "@/lib/recommendations";
 
 const MOOD_COLORS: Record<string, { bg: string; text: string; glow: string }> = {
   Romantic: { bg: "from-rose-500 to-pink-500", text: "text-rose-300", glow: "rgba(244,63,94,0.3)" },
@@ -54,6 +55,7 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
       state.savedIds = next;
       localStorage.setItem("momento-saved", JSON.stringify(state));
     } catch {}
+    trackSaved(exp.id, !saved);
     setSaved(!saved);
   }, [saved, exp.id]);
 
@@ -71,7 +73,7 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
   };
 
   return (
-    <Link href={`/experiences/${exp.id}`} className={`${width} flex-shrink-0 snap-start group relative cursor-pointer`}>
+    <Link href={`/experiences/${exp.id}`} onClick={() => trackView(exp.id)} className={`${width} flex-shrink-0 snap-start group relative cursor-pointer`}>
       <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#0a0a0a] transition-all duration-500 group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.12)] group-hover:scale-[1.02] group-hover:translate-y-[-2px] border border-white/[0.06]">
         {/* Cinematic image with grain overlay */}
         <Image

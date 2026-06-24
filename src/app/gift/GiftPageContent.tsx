@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import QRCode from "qrcode";
 import { experiences } from "@/lib/data";
 import ContentRail from "@/components/ContentRail";
 import GiftCard, { GIFT_CARD_VARIANTS } from "@/components/GiftCard";
@@ -51,10 +52,23 @@ export default function GiftPageContent() {
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [redemptionCode, setRedemptionCode] = useState("");
+  const [qrDataUrl, setQrDataUrl] = useState("");
   const [trackCode, setTrackCode] = useState("");
   const [tracking, setTracking] = useState(false);
   const [trackResult, setTrackResult] = useState<{ found: boolean; value?: string; status?: string } | null>(null);
   const [giftError, setGiftError] = useState("");
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Generate QR code when gift is sent
+  useEffect(() => {
+    if (sent && redemptionCode) {
+      QRCode.toDataURL(redemptionCode, {
+        width: 200,
+        margin: 1,
+        color: { dark: "#1a1a2e", light: "#ffffff" },
+      }).then(setQrDataUrl).catch(() => {});
+    }
+  }, [sent, redemptionCode]);
 
   const categoryExp = activeFilter === "All" ? experiences : experiences.filter((e) => e.category === activeFilter);
 
@@ -121,6 +135,107 @@ export default function GiftPageContent() {
       setSending(false);
     }
   };
+
+  const handleDownloadCard = useCallback(async () => {
+    if (!cardRef.current || !qrDataUrl) return;
+    try {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      canvas.width = rect.width * 2;
+      canvas.height = rect.height * 2;
+      ctx.scale(2, 2);
+
+      // Draw ATM-style card background
+      const gradient = ctx.createLinearGradient(0, 0, rect.width, rect.height);
+      gradient.addColorStop(0, "#1a1a2e");
+      gradient.addColorStop(0.5, "#16213e");
+      gradient.addColorStop(1, "#0f3460");
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.roundRect(0, 0, rect.width, rect.height, 16);
+      ctx.fill();
+
+      // Decorative elements
+      ctx.fillStyle = "rgba(255, 56, 92, 0.08)";
+      ctx.beginPath();
+      ctx.arc(rect.width - 40, -20, 100, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "rgba(159, 59, 255, 0.06)";
+      ctx.beginPath();
+      ctx.arc(-30, rect.height - 30, 80, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Momento logo text
+      ctx.fillStyle = "rgba(255,255,255,0.15)";
+      ctx.font = "bold 10px sans-serif";
+      ctx.textAlign = "right";
+      ctx.fillText("MOMENTO", rect.width - 20, 30);
+
+      // Card chip
+      ctx.fillStyle = "rgba(255, 200, 50, 0.7)";
+      ctx.beginPath();
+      ctx.roundRect(20, 40, 40, 30, 6);
+      ctx.fill();
+
+      // Gift Card label
+      ctx.fillStyle = "rgba(255,255,255,0.3)";
+      ctx.font = "9px sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("GIFT CARD", 20, 90);
+
+      // Value amount
+      const selectedGiftValue = tab === "cards" && selectedCard !== null ? giftCardValues[selectedCard].label : "Experience";
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 24px sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText(selectedGiftValue, 20, 125);
+
+      // Card number
+      ctx.fillStyle = "rgba(255,255,255,0.6)";
+      ctx.font = "bold 16px monospace";
+      ctx.textAlign = "left";
+      ctx.fillText(redemptionCode, 20, 160);
+
+      // Recipient
+      ctx.fillStyle = "rgba(255,255,255,0.3)";
+      ctx.font = "10px sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("TO", 20, 185);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 14px sans-serif";
+      ctx.fillText(recipientName, 20, 205);
+
+      // From
+      ctx.fillStyle = "rgba(255,255,255,0.3)";
+      ctx.font = "10px sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("FROM", 20, 230);
+      ctx.fillStyle = "rgba(255,255,255,0.7)";
+      ctx.font = "12px sans-serif";
+      ctx.fillText(senderName, 20, 248);
+
+      // QR Code
+      if (qrDataUrl) {
+        const qrImg = new window.Image();
+        qrImg.onload = () => {
+          ctx.drawImage(qrImg, rect.width - 110, rect.height - 130, 90, 90);
+          const link = document.createElement("a");
+          link.download = `momento-giftcard-${redemptionCode}.png`;
+          link.href = canvas.toDataURL();
+          link.click();
+        };
+        qrImg.src = qrDataUrl;
+        return;
+      }
+
+      const link = document.createElement("a");
+      link.download = `momento-giftcard-${redemptionCode}.png`;
+      link.href = canvas.toDataURL();
+      link.click();
+    } catch {}
+  }, [redemptionCode, qrDataUrl, recipientName, senderName, tab, selectedCard]);
 
   const selectedValue = tab === "cards" && selectedCard !== null
     ? giftCardValues[selectedCard].value
@@ -546,25 +661,99 @@ export default function GiftPageContent() {
                 </div>
               </>
             ) : (
-              /* ─── Success State ─── */
+              /* ─── Success State with ATM-style Card ─── */
               <div className="max-w-lg mx-auto text-center py-6">
-                <div className="w-16 h-16 rounded-full bg-[#ff385c] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(255,56,92,0.3)]">
+                <div className="w-16 h-16 rounded-full bg-emerald-500 flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(16,185,129,0.3)]">
                   <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 </div>
-                <h2 className="text-heading-lg font-bold text-[#222222] mb-2">Gift Sent! 🎉</h2>
-                <p className="text-[#4a4a4a] text-body-sm mb-4">
+                <h2 className="text-heading-lg font-bold text-[#222222] mb-1">Gift Sent! 🎉</h2>
+                <p className="text-[#4a4a4a] text-body-sm mb-6">
                   Your gift has been delivered to {recipientName} via {delivery === "email" ? "email" : "WhatsApp"}.
                 </p>
-                <div className="p-4 rounded-xl bg-[#f7f7f7] border border-[#ebebeb] mb-6 inline-block">
-                  <p className="text-caption text-[#4a4a4a] mb-1">Redemption Code</p>
-                  <p className="text-heading-sm font-mono font-bold text-[#ff385c] tracking-wider">{redemptionCode}</p>
+
+                {/* ATM-style Gift Card */}
+                <div className="max-w-sm mx-auto mb-6" ref={cardRef}>
+                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] border border-white/[0.08] shadow-2xl">
+                    {/* Decorative elements */}
+                    <div className="absolute top-0 right-0 w-40 h-40 bg-[#ff385c]/8 rounded-full -translate-y-1/2 translate-x-1/4 blur-xl" />
+                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#9F3BFF]/6 rounded-full translate-y-1/2 -translate-x-1/4 blur-xl" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.05)_0%,transparent_60%)]" />
+
+                    <div className="relative z-10 p-6">
+                      {/* Top: Chip + Brand */}
+                      <div className="flex items-start justify-between mb-6">
+                        <div className="flex flex-col gap-2">
+                          <div className="w-10 h-7 rounded bg-gradient-to-br from-yellow-300 to-yellow-500 shadow-inner" />
+                          <div className="flex -space-x-1.5">
+                            <div className="w-6 h-4 rounded border border-white/20" />
+                            <div className="w-6 h-4 rounded border border-white/20" />
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.15em]">Momento</p>
+                          <p className="text-[8px] text-white/30">Gift Card</p>
+                        </div>
+                      </div>
+
+                      {/* Value */}
+                      <p className="text-2xl font-bold text-white mb-4">
+                        {tab === "cards" && selectedCard !== null ? giftCardValues[selectedCard].label : "Gift Experience"}
+                      </p>
+
+                      {/* Redemption Code + QR Row */}
+                      <div className="flex items-center gap-4 mb-5">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[9px] text-white/30 uppercase tracking-wider mb-1">Redemption Code</p>
+                          <p className="text-sm font-mono font-bold text-white/90 tracking-wider break-all">{redemptionCode}</p>
+                          <div className="flex items-center gap-1 mt-2">
+                            <p className="text-[10px] text-white/30">TO:</p>
+                            <p className="text-xs font-medium text-white/70">{recipientName}</p>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <p className="text-[10px] text-white/30">FROM:</p>
+                            <p className="text-xs font-medium text-white/50">{senderName}</p>
+                          </div>
+                        </div>
+                        {qrDataUrl && (
+                          <div className="flex-shrink-0">
+                            <Image src={qrDataUrl} alt="QR Code" width={90} height={90} className="rounded-lg bg-white p-1.5 shadow-lg" />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Card number at bottom */}
+                      <div className="flex items-center justify-between pt-4 border-t border-white/[0.06]">
+                        <p className="text-xs font-mono text-white/40">{redemptionCode}</p>
+                        <p className="text-[9px] text-white/20">Valid: 12 months</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-caption text-[#4a4a4a] mb-6">
-                  Share this code with {recipientName} so they can redeem their gift.
+
+                {/* Actions Row */}
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <button
+                    onClick={handleDownloadCard}
+                    disabled={!qrDataUrl}
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,56,92,0.35)] transition-all duration-300 disabled:opacity-40 flex items-center gap-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    Download Card
+                  </button>
+                  <button
+                    onClick={() => { navigator.clipboard.writeText(redemptionCode); }}
+                    className="px-6 py-2.5 rounded-xl bg-white border border-[#ebebeb] text-[#4a4a4a] font-semibold text-body-sm hover:bg-[#f7f7f7] transition-all flex items-center gap-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                    Copy Code
+                  </button>
+                </div>
+                <p className="text-caption text-[#4a4a4a] mb-6 max-w-xs mx-auto">
+                  Share the card or code with {recipientName}. They can scan the QR or enter the code at checkout.
                 </p>
                 <button
                   onClick={handleReset}
-                  className="px-6 py-2.5 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+                  className="px-6 py-2.5 rounded-xl bg-gray-100 text-[#4a4a4a] font-semibold text-body-sm hover:bg-gray-200 transition-all"
                 >
                   Send Another Gift
                 </button>

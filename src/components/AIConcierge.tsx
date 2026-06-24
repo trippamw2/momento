@@ -31,10 +31,16 @@ export default function AIConcierge() {
   const [thinking, setThinking] = useState(false);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     setSavedIds(loadSaved());
   }, []);
+
+  const handleSuggestion = (s: string) => {
+    setQuery(s);
+    setTimeout(() => formRef.current?.requestSubmit(), 100);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +82,7 @@ export default function AIConcierge() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="mb-3">
+        <form ref={formRef} onSubmit={handleSubmit} className="mb-3">
           <div className="relative">
             <input
               ref={inputRef}
@@ -105,7 +111,7 @@ export default function AIConcierge() {
             {suggestions.map((s) => (
               <button
                 key={s}
-                onClick={() => { setQuery(s); }}
+                onClick={() => handleSuggestion(s)}
                 className="px-3 py-1.5 rounded-full bg-[#111827] border border-white/[0.06] text-caption text-[#A1A1AA] hover:bg-[#1a2235] hover:text-white transition-all"
               >
                 {s}

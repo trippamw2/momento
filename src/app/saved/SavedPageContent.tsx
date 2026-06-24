@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { experiences, defaultCollections, defaultSavedIds, recentlyViewedMock } from "@/lib/data";
 import { Experience } from "@/lib/types";
+import { trackSaved } from "@/lib/recommendations";
 
 interface Collection {
   id: string;
@@ -70,6 +71,8 @@ export default function SavedPageContent() {
   const toggleSave = useCallback((id: string) => {
     setState((prev) => {
       const exists = prev.savedIds.includes(id);
+      // Track the save/unsave
+      trackSaved(id, !exists);
       return {
         ...prev,
         savedIds: exists ? prev.savedIds.filter((s) => s !== id) : [...prev.savedIds, id],

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Experience } from "@/lib/types";
+import { trackView, trackBooked, trackSaved } from "@/lib/recommendations";
 
 import ContentRail from "./ContentRail";
 import AuthModal from "./AuthModal";
@@ -170,6 +171,9 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
   const [giftChecking, setGiftChecking] = useState(false);
   const [giftError, setGiftError] = useState("");
 
+  // Track view on mount
+  useEffect(() => { trackView(exp.id); }, [exp.id]);
+
   const handleShare = useCallback(() => {
     if (navigator.share) {
       navigator.share({ title: exp.title, url: window.location.href }).catch(() => {});
@@ -199,6 +203,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
       });
       const data = await res.json();
       if (res.ok) {
+        trackBooked(exp.id);
         setBookedDate(selectedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }));
         setBookingDone(true);
       }
@@ -313,7 +318,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
             </Link>
             <div className="flex items-center gap-2">
               <button
-                onClick={() => setSaved(!saved)}
+                onClick={() => { trackSaved(exp.id, !saved); setSaved(!saved); }}
                 className={`w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md border transition-all shadow-sm ${
                   saved
                     ? "bg-[#ff385c] text-white border-[#ff385c]"
@@ -371,7 +376,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
       {/* ════════════════════════════════════════════ */}
       {/* MAIN LAYOUT: Content + Sidebar              */}
       {/* ════════════════════════════════════════════ */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:grid lg:grid-cols-3 lg:gap-10 relative -mt-16 z-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:grid lg:grid-cols-3 lg:gap-10 relative -mt-8 sm:-mt-12 lg:-mt-16 z-20">
 
         {/* ─── LEFT COLUMN: Content ─── */}
         <div className="lg:col-span-2">
@@ -544,7 +549,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
             <div className="lg:hidden flex flex-col gap-3 pt-2">
               <div className="grid grid-cols-3 gap-2">
                 <button
-                  onClick={() => setSaved(!saved)}
+                  onClick={() => { trackSaved(exp.id, !saved); setSaved(!saved); }}
                   className={`px-4 py-3 rounded-xl border transition-all text-body-sm font-medium ${
                     saved
                       ? "border-[#ff385c] text-[#ff385c] bg-[#ff385c]/10"
@@ -667,7 +672,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 {/* Action Buttons */}
                 <div className="grid grid-cols-3 gap-2">
                   <button
-                    onClick={() => setSaved(!saved)}
+                onClick={() => { trackSaved(exp.id, !saved); setSaved(!saved); }}
                     className={`py-2.5 rounded-xl border transition-all text-caption font-medium flex items-center justify-center gap-1 ${
                       saved
                         ? "border-[#ff385c] text-[#ff385c] bg-[#ff385c]/10"

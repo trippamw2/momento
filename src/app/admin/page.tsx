@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-type Section = "overview" | "users" | "experiences" | "reviews" | "bookings" | "settings";
+type Section = "overview" | "users" | "experiences" | "reviews" | "bookings" | "settings" | "gift-cards" | "partners" | "financials";
 
 interface OverviewData {
   totalUsers: number;
@@ -60,6 +60,9 @@ const NAV: { key: Section; label: string; icon: string }[] = [
   { key: "experiences", label: "Experiences", icon: "🎯" },
   { key: "reviews", label: "Reviews", icon: "⭐" },
   { key: "bookings", label: "Bookings", icon: "📅" },
+  { key: "gift-cards", label: "Gift Cards", icon: "🎁" },
+  { key: "partners", label: "Partners", icon: "🤝" },
+  { key: "financials", label: "Financials", icon: "💰" },
   { key: "settings", label: "Settings", icon: "⚙️" },
 ];
 
@@ -96,6 +99,32 @@ export default function AdminPage() {
   const [experiences, setExperiences] = useState<ExpRow[]>([]);
   const [reviews, setReviews] = useState<ReviewRow[]>([]);
   const [bookings, setBookings] = useState<BookingRow[]>([]);
+
+  // Mock data for new sections (will be replaced with API data)
+  const [giftCards] = useState([
+    { code: "MOMO-GC-001", amount: 100000, balance: 100000, status: "active", buyer: "John D.", recipient: "Jane D.", created: "2026-06-01" },
+    { code: "MOMO-GC-002", amount: 250000, balance: 125000, status: "partially_redeemed", buyer: "Mary K.", recipient: "Peter K.", created: "2026-05-28" },
+    { code: "MOMO-GC-003", amount: 300000, balance: 0, status: "redeemed", buyer: "Alice M.", recipient: "Bob M.", created: "2026-05-15" },
+    { code: "MOMO-GC-004", amount: 100000, balance: 100000, status: "expired", buyer: "Sam W.", recipient: "Sarah W.", created: "2025-12-01" },
+    { code: "MOMO-GC-005", amount: 50000, balance: 50000, status: "active", buyer: "Tom B.", recipient: "Harry B.", created: "2026-06-10" },
+  ]);
+
+  const [partners] = useState([
+    { id: "p1", name: "Lake Malawi Tours", owner: "Mike C.", experiences: 3, revenue: 450000, status: "active", joined: "2026-01-15" },
+    { id: "p2", name: "Blantyre Kitchen Co.", owner: "Grace M.", experiences: 2, revenue: 320000, status: "active", joined: "2026-02-20" },
+    { id: "p3", name: "Vintage Lounge", owner: "Chimwemwe B.", experiences: 1, revenue: 185000, status: "pending", joined: "2026-06-05" },
+    { id: "p4", name: "Lilongwe Adventures", owner: "Andrew K.", experiences: 4, revenue: 580000, status: "active", joined: "2026-01-10" },
+    { id: "p5", name: "Safari Nights", owner: "Fiona L.", experiences: 2, revenue: 0, status: "suspended", joined: "2026-03-01" },
+  ]);
+
+  const [financials] = useState({
+    totalRevenue: 2850000,
+    monthlyRevenue: [{ month: "Jan", amount: 320000 }, { month: "Feb", amount: 410000 }, { month: "Mar", amount: 380000 }, { month: "Apr", amount: 520000 }, { month: "May", amount: 680000 }, { month: "Jun", amount: 540000 }],
+    pendingPayouts: 425000,
+    completedPayouts: 2100000,
+    platformFee: 285000,
+    refundedAmount: 45000,
+  });
 
   const getToken = useCallback(() => localStorage.getItem("momento-auth-token"), []);
 
@@ -437,6 +466,167 @@ export default function AdminPage() {
                       )}
                     </tbody>
                   </table>
+                </div>
+              )}
+
+              {/* Gift Cards */}
+              {section === "gift-cards" && (
+                <div className="space-y-6">
+                  {/* Stats */}
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[
+                      { label: "Total Cards", value: giftCards.length, icon: "🎁" },
+                      { label: "Active", value: giftCards.filter(g => g.status === "active").length, icon: "✅" },
+                      { label: "Partially Redeemed", value: giftCards.filter(g => g.status === "partially_redeemed").length, icon: "🔄" },
+                      { label: "Redeemed", value: giftCards.filter(g => g.status === "redeemed").length, icon: "✔️" },
+                    ].map((stat) => (
+                      <div key={stat.label} className="p-4 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-2xl">{stat.icon}</span>
+                        </div>
+                        <p className="text-heading-sm font-bold text-[#222222]">{stat.value}</p>
+                        <p className="text-caption text-[#929292]">{stat.label}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Table */}
+                  <div className="overflow-x-auto rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                    <table className="w-full min-w-[800px]">
+                      <thead>
+                        <tr className="border-b border-[#ebebeb]">
+                          {["Code", "Amount", "Balance", "Status", "Buyer", "Recipient", "Created"].map((h) => (
+                            <th key={h} className="py-3 px-4 text-left text-caption text-[#929292] font-medium">{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {giftCards.map((gc) => (
+                          <tr key={gc.code} className="border-b border-[#ebebeb] hover:bg-[#fafafa] transition-colors">
+                            <td className="py-3 px-4 text-body-sm font-mono text-[#222222] font-medium">{gc.code}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#222222]">MK {gc.amount.toLocaleString()}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#222222]">MK {gc.balance.toLocaleString()}</td>
+                            <td className="py-3 px-4"><StatusBadge status={gc.status} /></td>
+                            <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{gc.buyer}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{gc.recipient}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{gc.created}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Partners */}
+              {section === "partners" && (
+                <div className="space-y-6">
+                  {/* Stats */}
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[
+                      { label: "Total Partners", value: partners.length, icon: "🤝" },
+                      { label: "Active", value: partners.filter(p => p.status === "active").length, icon: "✅" },
+                      { label: "Pending", value: partners.filter(p => p.status === "pending").length, icon: "⏳" },
+                      { label: "Suspended", value: partners.filter(p => p.status === "suspended").length, icon: "⛔" },
+                    ].map((stat) => (
+                      <div key={stat.label} className="p-4 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-2xl">{stat.icon}</span>
+                        </div>
+                        <p className="text-heading-sm font-bold text-[#222222]">{stat.value}</p>
+                        <p className="text-caption text-[#929292]">{stat.label}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Table */}
+                  <div className="overflow-x-auto rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                    <table className="w-full min-w-[800px]">
+                      <thead>
+                        <tr className="border-b border-[#ebebeb]">
+                          {["Partner", "Owner", "Experiences", "Revenue", "Status", "Joined", "Actions"].map((h) => (
+                            <th key={h} className="py-3 px-4 text-left text-caption text-[#929292] font-medium">{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {partners.map((p) => (
+                          <tr key={p.id} className="border-b border-[#ebebeb] hover:bg-[#fafafa] transition-colors">
+                            <td className="py-3 px-4 text-body-sm text-[#222222] font-medium">{p.name}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{p.owner}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{p.experiences}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#222222]">MK {p.revenue.toLocaleString()}</td>
+                            <td className="py-3 px-4"><StatusBadge status={p.status} /></td>
+                            <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{p.joined}</td>
+                            <td className="py-3 px-4">
+                              <div className="flex gap-1">
+                                <button className="px-2 py-1 rounded-lg bg-emerald-50 text-emerald-600 text-caption hover:bg-emerald-100">View</button>
+                                <button className="px-2 py-1 rounded-lg bg-amber-50 text-amber-600 text-caption hover:bg-amber-100">Contact</button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Financials */}
+              {section === "financials" && (
+                <div className="space-y-6">
+                  {/* Summary Cards */}
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[
+                      { label: "Total Revenue", value: `MK ${financials.totalRevenue.toLocaleString()}`, icon: "💰", accent: "text-emerald-600" },
+                      { label: "Pending Payouts", value: `MK ${financials.pendingPayouts.toLocaleString()}`, icon: "⏳", accent: "text-amber-600" },
+                      { label: "Completed Payouts", value: `MK ${financials.completedPayouts.toLocaleString()}`, icon: "✅", accent: "text-blue-600" },
+                      { label: "Platform Fees", value: `MK ${financials.platformFee.toLocaleString()}`, icon: "📊", accent: "text-purple-600" },
+                    ].map((stat) => (
+                      <div key={stat.label} className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-2xl">{stat.icon}</span>
+                        </div>
+                        <p className={`text-heading-sm font-bold ${stat.accent}`}>{stat.value}</p>
+                        <p className="text-caption text-[#929292]">{stat.label}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Monthly Revenue Chart */}
+                  <div className="rounded-xl bg-white border border-[#ebebeb] shadow-sm p-5">
+                    <h3 className="text-body-sm font-semibold text-[#222222] mb-4">Monthly Revenue (2026)</h3>
+                    <div className="flex items-end gap-3 h-40">
+                      {financials.monthlyRevenue.map((m) => {
+                        const maxRevenue = Math.max(...financials.monthlyRevenue.map(r => r.amount));
+                        const height = (m.amount / maxRevenue) * 100;
+                        return (
+                          <div key={m.month} className="flex-1 flex flex-col items-center gap-1">
+                            <span className="text-[10px] text-[#6a6a6a] font-medium">MK {(m.amount / 1000).toFixed(0)}k</span>
+                            <div
+                              className="w-full rounded-lg bg-gradient-to-t from-[#ff385c] to-[#FF7A18] transition-all duration-500 hover:opacity-80"
+                              style={{ height: `${height}%` }}
+                            />
+                            <span className="text-[10px] text-[#929292]">{m.month}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Additional Metrics */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                      <h3 className="text-body-sm font-semibold text-[#222222] mb-2">Refunds</h3>
+                      <p className="text-heading-sm font-bold text-red-600">MK {financials.refundedAmount.toLocaleString()}</p>
+                      <p className="text-caption text-[#929292]">Total refunded amount</p>
+                    </div>
+                    <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                      <h3 className="text-body-sm font-semibold text-[#222222] mb-2">Net Revenue</h3>
+                      <p className="text-heading-sm font-bold text-[#222222]">MK {(financials.totalRevenue - financials.refundedAmount).toLocaleString()}</p>
+                      <p className="text-caption text-[#929292]">After refunds</p>
+                    </div>
+                  </div>
                 </div>
               )}
 

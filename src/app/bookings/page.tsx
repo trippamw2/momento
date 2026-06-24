@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { experiences } from "@/lib/data";
 import AuthModal from "@/components/AuthModal";
+import BookingCard from "@/components/BookingCard";
 
 interface Booking {
   id: string;
@@ -432,119 +433,27 @@ export default function BookingsPage() {
               </div>
             ) : (
               <>
-                {/* ─── Booking Cards ─── */}
-                <div className="space-y-4 mb-10">
-                  {displayed.map((booking) => {
-                    const cd = countdowns[booking.id];
-                    return (
-                      <div
-                        key={booking.id}
-                        className="bg-white border border-[#ebebeb] rounded-2xl overflow-hidden hover:border-[#dddddd] transition-all shadow-sm"
-                      >
-                        <div className="flex flex-col sm:flex-row">
-                          {/* Image */}
-                          <div className="relative w-full sm:w-56 h-48 sm:h-auto flex-shrink-0">
-                            <Image
-                              src={booking.image}
-                              alt={booking.title}
-                              fill
-                              className="object-cover"
-                              sizes="(max-width: 640px) 100vw, 224px"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent sm:bg-gradient-to-r" />
-                            <div className="absolute top-3 left-3 sm:hidden">
-                              <StatusBadge status={booking.status} />
-                            </div>
-                          </div>
-
-                          {/* Details */}
-                          <div className="flex-1 p-4 sm:p-5">
-                            <div className="hidden sm:flex items-start justify-between mb-3">
-                              <StatusBadge status={booking.status} />
-                            </div>
-
-                            <div className="flex items-start justify-between gap-4">
-                              <div className="flex-1 min-w-0">
-                                <Link href={`/experiences/${booking.experienceId}`}>
-                                  <h3 className="text-heading-sm font-bold text-[#222222] hover:text-[#ff385c] transition-colors line-clamp-1">{booking.title}</h3>
-                                </Link>
-                                <p className="text-[#6a6a6a] text-body-sm mt-0.5">{booking.venue}</p>
-
-                                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3 text-body-sm">
-                                  <div className="flex items-center gap-1.5 text-[#6a6a6a]">
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
-                                    <span>{new Date(booking.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
-                                  </div>
-                                  <div className="flex items-center gap-1.5 text-[#6a6a6a]">
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    <span>{booking.time}</span>
-                                  </div>
-                                  <div className="flex items-center gap-1.5 text-[#6a6a6a]">
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-                                    <span>{booking.guests} guest{booking.guests !== 1 ? "s" : ""}</span>
-                                  </div>
-                                </div>
-
-                                <p className="text-caption text-[#929292] mt-2">Ref: {booking.bookingRef}</p>
-                              </div>
-
-                              {/* Price + Countdown */}
-                              <div className="flex flex-col items-end gap-3 flex-shrink-0">
-                                <p className="text-heading-md font-bold text-[#222222] whitespace-nowrap">MK {booking.price.toLocaleString()}</p>
-                                {booking.status === "upcoming" && cd && !cd.expired && (
-                                  <div className="text-center">
-                                    <p className="text-caption text-[#929292] mb-1">Starts in</p>
-                                    <div className="flex items-center gap-2 bg-[#f7f7f7] rounded-xl px-3 py-2 border border-[#ebebeb]">
-                                      <CountdownUnit value={cd.days} label="days" />
-                                      <span className="text-[#929292]">:</span>
-                                      <CountdownUnit value={cd.hours} label="hrs" />
-                                      <span className="text-[#929292]">:</span>
-                                      <CountdownUnit value={cd.mins} label="min" />
-                                    </div>
-                                  </div>
-                                )}
-                                {booking.status === "upcoming" && cd && cd.expired && (
-                                  <span className="px-3 py-1 rounded-full text-caption font-medium bg-yellow-400/10 text-yellow-400 border border-yellow-400/20">
-                                    Starting soon
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Actions */}
-                            <div className="flex items-center gap-2.5 mt-4 pt-3 border-t border-[#ebebeb]">
-                              <Link
-                                href={`/experiences/${booking.experienceId}`}
-                                className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-[#222222] text-body-sm font-medium hover:bg-[#f0f0f0] transition-all"
-                              >
-                                View Details
-                              </Link>
-                              {booking.status === "upcoming" && (
-                                <>
-                                  <button className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-[#6a6a6a] text-body-sm font-medium hover:bg-[#f0f0f0] hover:text-[#222222] transition-all border border-[#ebebeb]">
-                                    Reschedule
-                                  </button>
-                                  <button className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-red-500 text-body-sm font-medium hover:bg-red-50 hover:text-red-600 transition-all border border-red-200">
-                                    Cancel
-                                  </button>
-                                </>
-                              )}
-                              {booking.status === "completed" && (
-                                <button className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-[#6a6a6a] text-body-sm font-medium hover:bg-[#f0f0f0] hover:text-[#222222] transition-all border border-[#ebebeb]">
-                                  Book Again
-                                </button>
-                              )}
-                              {booking.status === "cancelled" && (
-                                <button className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-[#6a6a6a] text-body-sm font-medium hover:bg-[#f0f0f0] hover:text-[#222222] transition-all border border-[#ebebeb]">
-                                  Rebook
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                {/* ─── Booking Cards with QR ─── */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                  {displayed.map((booking) => (
+                    <BookingCard
+                      key={booking.id}
+                      booking={{
+                        id: booking.experienceId,
+                        title: booking.title,
+                        date: booking.date,
+                        dateLabel: booking.dateLabel,
+                        time: booking.time,
+                        guests: booking.guests,
+                        status: booking.status,
+                        price: booking.price,
+                        location: booking.venue,
+                        image: booking.image,
+                        bookingRef: booking.bookingRef,
+                      }}
+                      showActions
+                    />
+                  ))}
                 </div>
 
                 {/* ─── Bottom Features ─── */}
