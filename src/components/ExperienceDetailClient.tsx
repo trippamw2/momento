@@ -88,7 +88,7 @@ function Calendar({ selectedDate, onSelect }: { selectedDate: Date | null; onSel
               onClick={() => onSelect(new Date(year, month, d))}
               className={`w-full aspect-square rounded-lg text-caption font-medium flex items-center justify-center transition-all ${
                 selected
-                  ? "bg-[#ff385c] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
+                  ? "bg-[#DD2A7B] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
                   : disabled
                     ? "text-[#929292]/30 line-through cursor-not-allowed"
                     : "text-[#6a6a6a] hover:bg-[#FFF8F0] hover:text-[#222222]"
@@ -187,7 +187,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
 
   const handleBookNow = async () => {
     if (!selectedDate) return;
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     if (!token) { setAuthOpen(true); return; }
     setBooking(true);
     try {
@@ -219,7 +219,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
     setGiftChecking(true);
     setGiftError("");
     try {
-      const token = localStorage.getItem("momento-auth-token");
+      const token = localStorage.getItem("experio-auth-token");
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
       const res = await fetch(`/api/gift-cards/check?code=${encodeURIComponent(giftCode)}`, { headers });
@@ -246,7 +246,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
     return (
       <div className="pt-24 pb-16 min-h-screen flex items-center justify-center bg-ambient-warm">
         <div className="text-center max-w-md mx-auto px-4">
-          <div className="w-20 h-20 rounded-full bg-[#ff385c] flex items-center justify-center mx-auto mb-6 shadow-[0_4px_16px_rgba(255,56,92,0.2)]">
+          <div className="w-20 h-20 rounded-full bg-[#DD2A7B] flex items-center justify-center mx-auto mb-6 shadow-[0_4px_16px_rgba(255,56,92,0.2)]">
             <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
           </div>
           <h1 className="text-display-sm font-bold text-[#222222] mb-3">Booking Confirmed!</h1>
@@ -255,7 +255,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
           <p className="text-heading-md font-bold text-[#222222] mb-8">MK {(exp.price * guests).toLocaleString()}</p>
           <p className="text-caption text-[#929292] mb-8">Check your email for the full confirmation and receipt.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/bookings" className="px-8 py-3 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all">
+            <Link href="/bookings" className="px-8 py-3 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all">
               View My Bookings
             </Link>
             <Link href="/" className="px-8 py-3 rounded-xl bg-white text-[#222222] font-semibold text-body-sm border border-[#ebebeb] hover:bg-[#FFF8F0] transition-all">
@@ -321,7 +321,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 onClick={() => { trackSaved(exp.id, !saved); setSaved(!saved); }}
                 className={`w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md border transition-all shadow-sm ${
                   saved
-                    ? "bg-[#ff385c] text-white border-[#ff385c]"
+                    ? "bg-[#DD2A7B] text-white border-[#DD2A7B]"
                     : "bg-white/90 text-[#222222] border-[#ebebeb] hover:bg-white"
                 }`}
                 aria-label={saved ? "Unsave" : "Save"}
@@ -432,7 +432,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 <button
                   onClick={handleBookNow}
                   disabled={!selectedDate || booking}
-                  className="px-6 py-2.5 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-2.5 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {booking ? "Booking..." : selectedDate ? "Book Now" : "Select Date"}
                 </button>
@@ -442,7 +442,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
             {/* Host Section */}
             <div className="flex items-center justify-between p-4 rounded-xl bg-white border border-[#ebebeb] mb-6 shadow-sm hover:bg-[#FFF8F0] transition-all">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#ff385c] to-[#FF7A18] flex items-center justify-center text-white font-bold text-body-sm flex-shrink-0 shadow-sm">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#DD2A7B] to-[#F58529] flex items-center justify-center text-white font-bold text-body-sm flex-shrink-0 shadow-sm">
                   {exp.partner.split(" ").map((w) => w[0]).slice(0, 2).join("")}
                 </div>
                 <div>
@@ -467,7 +467,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               <div className="grid sm:grid-cols-2 gap-3">
                 {exp.includes.map((item, i) => (
                   <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
-                    <div className="w-5 h-5 rounded-full bg-[#ff385c] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+                    <div className="w-5 h-5 rounded-full bg-[#DD2A7B] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                     </div>
                     <span className="text-body-sm text-[#6a6a6a]">{item}</span>
@@ -496,7 +496,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                     </svg>
                     <div className="flex-1 h-2 rounded-full bg-[#ebebeb] overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-[#ff385c] transition-all duration-500"
+                        className="h-full rounded-full bg-[#DD2A7B] transition-all duration-500"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -528,7 +528,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
             <div className="mb-6 pt-4 border-t border-[#ebebeb]">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-heading-md font-bold text-[#222222]">Location</h2>
-                <button onClick={gotoNearby} className="text-body-sm text-[#ff385c] font-medium hover:text-[#e00b41] transition-colors">
+                <button onClick={gotoNearby} className="text-body-sm text-[#DD2A7B] font-medium hover:text-[#e00b41] transition-colors">
                   Find nearby
                 </button>
               </div>
@@ -552,7 +552,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   onClick={() => { trackSaved(exp.id, !saved); setSaved(!saved); }}
                   className={`px-4 py-3 rounded-xl border transition-all text-body-sm font-medium ${
                     saved
-                      ? "border-[#ff385c] text-[#ff385c] bg-[#ff385c]/10"
+                      ? "border-[#DD2A7B] text-[#DD2A7B] bg-[#DD2A7B]/10"
                       : "border-[#ebebeb] text-[#6a6a6a] hover:bg-[#FFF8F0] hover:text-[#222222]"
                   }`}
                 >
@@ -606,7 +606,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                       placeholder="MOMO-XXXXXXXX"
                       value={giftCode}
                       onChange={(e) => { setGiftCode(e.target.value.toUpperCase()); setGiftApplied(false); setGiftError(""); }}
-                      className="flex-1 px-3 py-2 rounded-lg bg-white border border-[#ebebeb] text-[#222222] text-caption font-mono placeholder:text-[#929292] focus:outline-none focus:border-[#ff385c] transition-all"
+                      className="flex-1 px-3 py-2 rounded-lg bg-white border border-[#ebebeb] text-[#222222] text-caption font-mono placeholder:text-[#929292] focus:outline-none focus:border-[#DD2A7B] transition-all"
                       disabled={giftApplied}
                     />
                     {giftApplied ? (
@@ -620,7 +620,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                       <button
                         onClick={handleApplyGiftCard}
                         disabled={!giftCode.trim() || giftChecking}
-                        className="px-3 py-2 rounded-lg bg-[#ff385c] text-white text-caption font-semibold hover:bg-[#e00b41] transition-all disabled:opacity-50 whitespace-nowrap"
+                        className="px-3 py-2 rounded-lg bg-[#DD2A7B] text-white text-caption font-semibold hover:bg-[#e00b41] transition-all disabled:opacity-50 whitespace-nowrap"
                       >
                         {giftChecking ? (
                           <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
@@ -653,7 +653,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 <button
                   onClick={handleBookNow}
                   disabled={!selectedDate || booking}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {booking ? (
                     <>
@@ -675,7 +675,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 onClick={() => { trackSaved(exp.id, !saved); setSaved(!saved); }}
                     className={`py-2.5 rounded-xl border transition-all text-caption font-medium flex items-center justify-center gap-1 ${
                       saved
-                        ? "border-[#ff385c] text-[#ff385c] bg-[#ff385c]/10"
+                        ? "border-[#DD2A7B] text-[#DD2A7B] bg-[#DD2A7B]/10"
                         : "border-[#ebebeb] text-[#6a6a6a] hover:bg-[#FFF8F0] hover:text-[#222222]"
                     }`}
                   >

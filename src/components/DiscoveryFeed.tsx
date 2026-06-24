@@ -9,7 +9,7 @@ import { Experience } from "@/lib/types";
 function loadSaved(): string[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem("momento-saved");
+    const raw = localStorage.getItem("experio-saved");
     if (!raw) return [];
     const state = JSON.parse(raw);
     return state.savedIds || [];
@@ -21,10 +21,10 @@ function toggleSave(id: string, currentSaved: string[]): string[] {
     ? currentSaved.filter((s) => s !== id)
     : [...currentSaved, id];
   try {
-    const raw = localStorage.getItem("momento-saved");
+    const raw = localStorage.getItem("experio-saved");
     const state = raw ? JSON.parse(raw) : { savedIds: [], collections: [] };
     state.savedIds = next;
-    localStorage.setItem("momento-saved", JSON.stringify(state));
+    localStorage.setItem("experio-saved", JSON.stringify(state));
   } catch {}
   return next;
 }
@@ -101,7 +101,7 @@ export default function DiscoveryFeed() {
                 <div className="flex items-center gap-3">
                   <Link
                     href={`/experiences/${exp.id}`}
-                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all"
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all"
                   >
                     View Experience
                   </Link>
@@ -109,7 +109,7 @@ export default function DiscoveryFeed() {
                     onClick={() => setSavedIds(toggleSave(exp.id, savedIds))}
                     className={`px-4 py-2.5 rounded-xl border transition-all text-body-sm font-medium ${
                       saved
-                        ? "border-[#FF2D7A] text-[#FF2D7A] bg-[#FF2D7A]/10"
+                        ? "border-[#DD2A7B] text-[#DD2A7B] bg-[#DD2A7B]/10"
                         : "border-white/[0.15] text-white/80 hover:bg-white/[0.06]"
                     }`}
                   >
