@@ -125,10 +125,7 @@ export async function POST(request: Request) {
 
     if (error) return json({ error: error.message }, 400);
 
-    await admin
-      .from("experiences")
-      .update({ booking_count: supabase.rpc("increment", { x: 1 }) })
-      .eq("id", body.experience_id);
+    await admin.rpc("increment_experience_booking_count", { exp_id: body.experience_id });
 
     await admin.from("notifications").insert({
       user_id: user.id,

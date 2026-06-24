@@ -54,7 +54,6 @@ export async function POST(request: Request) {
     if (newBalance === 0) {
       updates.status = "redeemed";
       updates.redeemed_at = now;
-      updates.redeemed_by = user.id;
     }
 
     const { error: updateError } = await admin
