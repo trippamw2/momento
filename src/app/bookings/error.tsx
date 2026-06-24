@@ -13,7 +13,7 @@ export default function BookingsError({
     <div className="pt-24 pb-16 min-h-screen flex items-center justify-center bg-ambient-warm">
       <div className="text-center max-w-md mx-auto px-4">
         <div className="w-20 h-20 rounded-full bg-[#FFF0F3] flex items-center justify-center mx-auto mb-6">
-          <svg className="w-10 h-10 text-[#ff385c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-10 h-10 text-[#DD2A7B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
           </svg>
         </div>
@@ -24,7 +24,7 @@ export default function BookingsError({
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <button
             onClick={reset}
-            className="px-8 py-3 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all"
+            className="px-8 py-3 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all"
           >
             Try Again
           </button>
