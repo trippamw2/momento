@@ -126,6 +126,11 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
   const [bookingDone, setBookingDone] = useState(false);
   const [bookedDate, setBookedDate] = useState("");
   const [authOpen, setAuthOpen] = useState(false);
+  const [giftCode, setGiftCode] = useState("");
+  const [giftApplied, setGiftApplied] = useState(false);
+  const [giftAmount, setGiftAmount] = useState(0);
+  const [giftChecking, setGiftChecking] = useState(false);
+  const [giftError, setGiftError] = useState("");
 
   const handleShare = useCallback(() => {
     if (navigator.share) {
@@ -171,6 +176,34 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
       console.error("Booking failed", e);
     } finally {
       setBooking(false);
+    }
+  };
+
+  const handleApplyGiftCard = async () => {
+    if (!giftCode.trim()) return;
+    setGiftChecking(true);
+    setGiftError("");
+    try {
+      const token = localStorage.getItem("momento-auth-token");
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const res = await fetch(`/api/gift-cards/check?code=${encodeURIComponent(giftCode)}`, { headers });
+      const data = await res.json();
+      if (res.ok && data) {
+        const balance = data.balance || data.amount || 0;
+        if (balance <= 0) {
+          setGiftError("This gift card has no remaining balance");
+          return;
+        }
+        setGiftAmount(Math.min(balance, exp.price * guests));
+        setGiftApplied(true);
+      } else {
+        setGiftError(data?.error || "Invalid gift card code");
+      }
+    } catch {
+      setGiftError("Could not verify gift card. Please try again.");
+    } finally {
+      setGiftChecking(false);
     }
   };
 
@@ -444,17 +477,66 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   <GuestSelector value={guests} onChange={setGuests} maxGuests={exp.capacity} />
                 </div>
 
-                <div className="flex items-center justify-between mb-5 p-3 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
-                  <span className="text-body-sm text-[#6a6a6a]">Total</span>
-                  <span className="text-heading-sm font-bold text-[#222222]">
-                    MK {(exp.price * guests).toLocaleString()}
-                  </span>
+                {/* ── Gift Card Input ── */}
+                <div className="mb-5 p-3 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
+                  <p className="text-caption font-semibold text-[#4a4a4a] mb-2 uppercase tracking-wider">Gift Card</p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="MOMO-XXXXXXXX"
+                      value={giftCode}
+                      onChange={(e) => { setGiftCode(e.target.value.toUpperCase()); setGiftApplied(false); setGiftError(""); }}
+                      className="flex-1 px-3 py-2 rounded-lg bg-white border border-[#ebebeb] text-[#222222] text-caption font-mono placeholder:text-[#929292] focus:outline-none focus:border-[#ff385c] transition-all"
+                      disabled={giftApplied}
+                    />
+                    {giftApplied ? (
+                      <button
+                        onClick={() => { setGiftApplied(false); setGiftCode(""); setGiftAmount(0); setGiftError(""); }}
+                        className="px-3 py-2 rounded-lg bg-emerald-50 text-emerald-600 text-caption font-semibold border border-emerald-200 hover:bg-emerald-100 transition-all whitespace-nowrap"
+                      >
+                        ✓ Applied
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleApplyGiftCard}
+                        disabled={!giftCode.trim() || giftChecking}
+                        className="px-3 py-2 rounded-lg bg-[#ff385c] text-white text-caption font-semibold hover:bg-[#e00b41] transition-all disabled:opacity-50 whitespace-nowrap"
+                      >
+                        {giftChecking ? (
+                          <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                        ) : "Apply"}
+                      </button>
+                    )}
+                  </div>
+                  {giftError && (
+                    <p className="text-caption text-red-500 mt-1.5">{giftError}</p>
+                  )}
+                </div>
+
+                {/* ── Total Breakdown ── */}
+                <div className="space-y-2 mb-5">
+                  <div className="flex items-center justify-between text-body-sm text-[#6a6a6a]">
+                    <span>MK {exp.price.toLocaleString()} × {guests} {guests === 1 ? "guest" : "guests"}</span>
+                    <span>MK {(exp.price * guests).toLocaleString()}</span>
+                  </div>
+                  {giftApplied && giftAmount > 0 && (
+                    <div className="flex items-center justify-between text-body-sm text-emerald-600">
+                      <span>Gift card discount</span>
+                      <span>-MK {giftAmount.toLocaleString()}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
+                    <span className="text-body-sm font-semibold text-[#222222]">Total</span>
+                    <span className="text-heading-sm font-bold text-[#222222]">
+                      MK {Math.max(0, exp.price * guests - giftAmount).toLocaleString()}
+                    </span>
+                  </div>
                 </div>
 
                 <button
                   onClick={handleBookNow}
                   disabled={!selectedDate || booking}
-                  className="w-full py-3 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {booking ? (
                     <>

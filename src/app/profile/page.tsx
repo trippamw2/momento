@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import PartnerDashboard from "./PartnerDashboard";
+import LoyaltyBadge from "@/components/LoyaltyBadge";
 
 type UserData = {
   id: string;
@@ -68,6 +69,11 @@ function UserProfile({ user }: { user: UserData }) {
               <span className="text-[#222222]">2026</span>
             </div>
           </div>
+        </div>
+
+        {/* Loyalty Program */}
+        <div className="mb-6">
+          <LoyaltyBadge />
         </div>
 
         <div className="rounded-2xl bg-white border border-[#ebebeb] p-6 shadow-sm">

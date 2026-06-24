@@ -2,12 +2,12 @@
 
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { getExperiences } from "@/lib/api-client";
 import { transformExperience } from "@/lib/transform";
 import { Mood, PRICE_RANGES, Experience } from "@/lib/types";
 import { experiences as mockExperiences } from "@/lib/data";
+import ExperienceCard from "@/components/ExperienceCard";
 
 const ITEMS_PER_PAGE = 8;
 const LOAD_MORE = 4;
@@ -284,66 +284,32 @@ export default function ExperiencesPageContent() {
 
         {visibleExperiences.length > 0 ? (
           <>
-            <p className="text-caption text-text-tertiary mb-4">
-              Showing {visibleExperiences.length} of {filtered.length} experience{filtered.length !== 1 ? "s" : ""}
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-caption text-[#4a4a4a]">
+                Showing {visibleExperiences.length} of {filtered.length} experience{filtered.length !== 1 ? "s" : ""}
+              </p>
+              {filters.search && (
+                <p className="text-caption text-[#ff385c] font-medium">
+                  Results for &ldquo;{filters.search}&rdquo;
+                </p>
+              )}
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {visibleExperiences.map((exp) => (
-                <Link key={exp.id} href={`/experiences/${exp.id}`} className="group relative">
-                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-surface-tertiary card-hover">
-                    <Image
-                      src={exp.image}
-                      alt={exp.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                    />
-                    <div className="gradient-overlay-bottom absolute inset-0" />
-                    <div className="absolute top-2 left-2">
-                      <span className="px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-white/10 backdrop-blur-md text-white/90 border border-white/10">
-                        {exp.distance ? exp.distance : exp.city}
-                      </span>
-                    </div>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const savedIds = JSON.parse(localStorage.getItem("momento-saved") || '{"savedIds":[],"collections":[]}').savedIds || [];
-                        const next = savedIds.includes(exp.id) ? savedIds.filter((id: string) => id !== exp.id) : [...savedIds, exp.id];
-                        const state = JSON.parse(localStorage.getItem("momento-saved") || '{"savedIds":[],"collections":[]}');
-                        state.savedIds = next;
-                        localStorage.setItem("momento-saved", JSON.stringify(state));
-                        window.dispatchEvent(new Event("storage"));
-                      }}
-                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-brand-pink/80"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                      </svg>
-                    </button>
-                    <div className="absolute bottom-0 left-0 right-0 p-2.5">
-                      <div className="flex items-center gap-1 mb-1">
-                        <span className="text-yellow-400 text-[10px]">★</span>
-                        <span className="text-caption text-white/80 font-medium">{exp.rating}</span>
-                      </div>
-                      <h3 className="text-white font-semibold text-body-sm leading-tight line-clamp-1">{exp.title}</h3>
-                      <p className="text-white/60 text-caption mt-0.5 line-clamp-1">{exp.subtitle}</p>
-                      <p className="text-white font-semibold text-body-sm mt-1">
-                        MK {exp.price.toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
+                <ExperienceCard key={exp.id} experience={exp} size="sm" />
               ))}
             </div>
           </>
         ) : (
           <div className="text-center py-20">
-            <p className="text-heading-md text-text-tertiary mb-2">No experiences found</p>
-            <p className="text-body text-text-secondary">Try adjusting your filters or search term</p>
+            <div className="w-16 h-16 rounded-full bg-[#FFF0F3] flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-[#ff385c]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <p className="text-heading-md font-bold text-[#222222] mb-2">No experiences found</p>
+            <p className="text-body text-[#4a4a4a] mb-6">Try adjusting your filters or search term</p>
             <button
               onClick={clearFilters}
-              className="mt-6 px-6 py-2.5 rounded-full gradient-brand text-text-on-gradient text-body-sm font-medium hover:shadow-brand-glow transition-all duration-300"
+              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white text-body-sm font-semibold shadow-[0_4px_16px_rgba(255,56,92,0.2)] hover:shadow-[0_4px_24px_rgba(255,56,92,0.35)] transition-all duration-300"
             >
               Clear all filters
             </button>

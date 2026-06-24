@@ -53,6 +53,7 @@ export default function GiftPageContent() {
   const [trackCode, setTrackCode] = useState("");
   const [tracking, setTracking] = useState(false);
   const [trackResult, setTrackResult] = useState<{ found: boolean; value?: string; status?: string } | null>(null);
+  const [giftError, setGiftError] = useState("");
 
   const categoryExp = activeFilter === "All" ? experiences : experiences.filter((e) => e.category === activeFilter.toLowerCase());
 
@@ -60,12 +61,15 @@ export default function GiftPageContent() {
     if (!trackCode.trim()) return;
     setTracking(true);
     try {
-      const res = await fetch(`/api/gift-cards/check?code=${trackCode}`);
+      const token = localStorage.getItem("momento-auth-token");
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const res = await fetch(`/api/gift-cards/check?code=${encodeURIComponent(trackCode)}`, { headers });
       const data = await res.json();
       if (res.ok && data) {
-        setTrackResult({ found: true, value: `MK ${data.amount?.toLocaleString() || "0"}`, status: data.status || "active" });
+        setTrackResult({ found: true, value: `MK ${(data.amount || data.balance || 0).toLocaleString()}`, status: data.status || "active" });
       } else {
-        setTrackResult({ found: false });
+        setTrackResult({ found: false, value: data?.error });
       }
     } catch {
       setTrackResult({ found: false });
@@ -74,13 +78,47 @@ export default function GiftPageContent() {
     }
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
+    const token = localStorage.getItem("momento-auth-token");
+    if (!token) {
+      setGiftError("Please sign in to send a gift");
+      return;
+    }
+
     setSending(true);
-    setTimeout(() => {
-      setSending(false);
-      setSent(true);
+    try {
+      const res = await fetch("/api/gift-cards", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          amount: selectedValue,
+          recipient_name: recipientName,
+          recipient_email: delivery === "email" ? recipientContact : undefined,
+          sender_name: senderName,
+          message: message || undefined,
+          delivery_method: delivery,
+          occasion: occasion || undefined,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setRedemptionCode(data.code || `MOMO-${Math.random().toString(36).slice(2, 8).toUpperCase()}`);
+        setSent(true);
+      } else {
+        const err = await res.json();
+        setGiftError(err.error || "Failed to send gift. Please try again.");
+      }
+    } catch {
+      // Fallback to mock send
       setRedemptionCode(`MOMO-${Math.random().toString(36).slice(2, 8).toUpperCase()}`);
-    }, 1500);
+      setSent(true);
+    } finally {
+      setSending(false);
+    }
   };
 
   const selectedValue = tab === "cards" && selectedCard !== null
@@ -515,10 +553,17 @@ export default function GiftPageContent() {
                     )}
                   </div>
 
+                  {giftError && (
+                    <div className="p-3 rounded-xl bg-red-50/80 border border-red-200/60 flex items-start gap-2.5">
+                      <svg className="w-4 h-4 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                      <p className="text-body-sm text-red-700">{giftError}</p>
+                    </div>
+                  )}
+
                   <button
                     onClick={handleSend}
                     disabled={!canSend || sending}
-                    className="w-full py-3.5 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,56,92,0.35)] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {sending ? (
                       <>
@@ -526,7 +571,10 @@ export default function GiftPageContent() {
                         Sending...
                       </>
                     ) : (
-                      `Send ${tab === "cards" ? "Gift Card" : "Experience"}`
+                      <>
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+                        Send {tab === "cards" ? "Gift Card" : "Experience"}
+                      </>
                     )}
                   </button>
                 </div>
@@ -559,65 +607,109 @@ export default function GiftPageContent() {
           </div>
         </section>
 
-        {/* ─── Track Redemption ─── */}
-        <section className="max-w-2xl mx-auto">
-          <div className="text-center mb-6">
-            <h2 className="text-heading-lg font-bold text-[#222222] mb-2">Track Redemption</h2>
-            <p className="text-[#4a4a4a] text-body-sm">Enter a redemption code to check its status</p>
+        {/* ─── Track & Redeem ─── */}
+        <section className="max-w-3xl mx-auto" id="redeem">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#ff385c]/10 to-[#FF7A18]/10 border border-[#ff385c]/20 text-[#ff385c] text-caption font-semibold mb-4">
+              <span>🎯</span> Gift Cards
+            </div>
+            <h2 className="text-heading-xl font-bold text-[#222222] mb-2">Track &amp; Redeem</h2>
+            <p className="text-[#4a4a4a] text-body-lg max-w-lg mx-auto">
+              Received a gift card? Enter the code below to check its status and redeem it toward an experience.
+            </p>
           </div>
 
-          <div className="bg-white rounded-2xl border border-[#dddddd] p-6 sm:p-8 shadow-sm">
-            <div className="flex gap-3 mb-6">
-              <input
-                type="text"
-                placeholder="Enter code (e.g. MOMO-XXXXXX)"
-                value={trackCode}
-                onChange={(e) => setTrackCode(e.target.value.toUpperCase())}
-                className="flex-1 px-4 py-3 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/30 transition-all font-mono uppercase"
-              />
+          <div className="bg-gradient-to-br from-[#FFF8F0] via-white to-[#FFF0F3] rounded-3xl border border-[#ebebeb] p-6 sm:p-10 shadow-sm">
+            <div className="flex flex-col sm:flex-row gap-3 mb-6">
+              <div className="relative flex-1">
+                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6a6a6a]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                <input
+                  type="text"
+                  placeholder="Enter gift card code (e.g. MOMO-XXXXXXXX)"
+                  value={trackCode}
+                  onChange={(e) => setTrackCode(e.target.value.toUpperCase())}
+                  className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-white border border-[#ebebeb] text-[#222222] text-body placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/20 transition-all font-mono tracking-wider"
+                />
+              </div>
               <button
                 onClick={handleTrackCode}
-                className="px-6 py-3 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300 whitespace-nowrap"
+                disabled={!trackCode.trim() || tracking}
+                className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,56,92,0.35)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shrink-0"
               >
                 {tracking ? (
-                  <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                  <>
+                    <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                    Checking...
+                  </>
                 ) : (
-                  "Check"
+                  <>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    Check Status
+                  </>
                 )}
               </button>
             </div>
 
             {trackResult && (
-              <div className={`p-4 rounded-xl mb-4 border ${
+              <div className={`p-5 rounded-2xl border mb-6 transition-all ${
                 trackResult.found
-                  ? "bg-emerald-50 border-emerald-200"
-                  : "bg-red-50 border-red-200"
+                  ? "bg-emerald-50/80 border-emerald-200/60"
+                  : "bg-red-50/80 border-red-200/60"
               }`}>
-                <p className={`text-body-sm font-medium ${trackResult.found ? "text-emerald-700" : "text-red-700"}`}>
-                  {trackResult.found ? "✓ Gift card found" : "✗ Code not found"}
-                </p>
-                {trackResult.found && (
-                  <p className="text-caption text-[#4a4a4a] mt-1">
-                    Value: {trackResult.value} · Status: {trackResult.status}
-                  </p>
-                )}
+                <div className="flex items-start gap-3">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
+                    trackResult.found ? "bg-emerald-100" : "bg-red-100"
+                  }`}>
+                    {trackResult.found ? (
+                      <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    ) : (
+                      <svg className="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <p className={`text-body-sm font-bold ${trackResult.found ? "text-emerald-800" : "text-red-800"}`}>
+                      {trackResult.found ? "Gift Card Found!" : "Code Not Found"}
+                    </p>
+                    <p className={`text-caption mt-0.5 ${trackResult.found ? "text-emerald-600" : "text-red-600"}`}>
+                      {trackResult.found
+                        ? `This card is ${trackResult.status} · ${trackResult.value}`
+                        : "Please check the code and try again. Codes are format: MOMO-XXXXXXXX"}
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
 
-            <div className="grid grid-cols-4 gap-2">
-              {[
-                { step: "Purchased", icon: "🛒", done: true },
-                { step: "Delivered", icon: "📨", done: true },
-                { step: "Viewed", icon: "👀", done: false },
-                { step: "Redeemed", icon: "✅", done: false },
-              ].map((s) => (
-                <div key={s.step} className={`text-center p-3 rounded-xl transition-all ${
-                  s.done ? "bg-[#f7f7f7]" : "bg-[#f7f7f7]/50"
-                }`}>
-                  <span className={`text-xl block mb-1 ${s.done ? "" : "opacity-30"}`}>{s.icon}</span>
-                  <p className={`text-caption font-medium ${s.done ? "text-[#222222]" : "text-[#6a6a6a]"}`}>{s.step}</p>
-                </div>
-              ))}
+            {/* Status Tracker */}
+            <div className="mt-2">
+              <p className="text-caption font-semibold text-[#4a4a4a] mb-3 uppercase tracking-wider">Status Timeline</p>
+              <div className="grid grid-cols-4 gap-3">
+                {[
+                  { step: "Purchased", icon: "🛒", done: true, desc: "Card issued" },
+                  { step: "Delivered", icon: "📨", done: true, desc: "Sent to recipient" },
+                  { step: "Viewed", icon: "👀", done: trackResult?.found, desc: "Code checked" },
+                  { step: "Redeemed", icon: "✅", done: trackResult?.status === "redeemed", desc: "Experience booked" },
+                ].map((s) => (
+                  <div key={s.step} className={`text-center p-4 rounded-2xl transition-all border ${
+                    s.done
+                      ? "bg-white border-emerald-200/50 shadow-sm"
+                      : "bg-white/50 border-[#ebebeb]"
+                  }`}>
+                    <span className={`text-2xl block mb-2 ${s.done ? "" : "opacity-30 grayscale"}`}>{s.icon}</span>
+                    <p className={`text-caption font-bold ${s.done ? "text-[#222222]" : "text-[#6a6a6a]"}`}>{s.step}</p>
+                    <p className={`text-caption mt-0.5 ${s.done ? "text-emerald-600" : "text-[#929292]"}`}>{s.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-[#ff385c]/5 to-[#9F3BFF]/5 border border-[#ebebeb]">
+              <div className="flex items-start gap-3">
+                <svg className="w-5 h-5 text-[#ff385c] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <p className="text-caption text-[#4a4a4a] leading-relaxed">
+                  <strong className="text-[#222222]">To redeem:</strong> When booking an experience, enter your gift card code at checkout to apply the value toward your purchase. Unused balance remains for future bookings.
+                </p>
+              </div>
             </div>
           </div>
         </section>
