@@ -1,14 +1,20 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* ── Brand Colors (Airbnb-inspired coral) ── */
-  --color-brand-pink: #ff385c;
-  --color-brand-pink-light: #ff6b81;
-  --color-brand-pink-dark: #e00b41;
-  --color-brand-sunset-orange: #FF7A18;
-  --color-brand-sunset-orange-light: #ff9055;
-  --color-brand-sunset-orange-dark: #e04400;
-  --color-brand-purple: #9F3BFF;
+  /* ── Brand Colors (Instagram-inspired vibrant palette) ── */
+  --color-brand-pink: #DD2A7B;
+  --color-brand-pink-light: #f5608a;
+  --color-brand-pink-dark: #b81d6a;
+  --color-brand-purple: #8134AF;
+  --color-brand-purple-light: #a855d0;
+  --color-brand-purple-dark: #6b21a8;
+  --color-brand-orange: #F58529;
+  --color-brand-orange-light: #ffa552;
+  --color-brand-orange-dark: #d96c0f;
+  --color-brand-yellow: #FEDA77;
+  --color-brand-yellow-light: #fee8a8;
+  --color-brand-blue: #515BD4;
+  --color-brand-blue-light: #7780e0;
   --color-brand-soft-white: #FFFFFF;
 
   /* ── Surface Colors (Social Lifestyle — warm, vibrant canvases) ── */
@@ -17,7 +23,7 @@
   --color-surface-tertiary: #ffffff;
   --color-surface-elevated: #ffffff;
   --color-surface-hover: #f0ece8;
-  --color-surface-glass: rgba(255, 56, 92, 0.03);
+  --color-surface-glass: rgba(221, 42, 123, 0.03);
   --color-surface-warm: #FFF8F0;
   --color-surface-rose: #FFF0F3;
   --color-surface-lavender: #F8F0FF;
@@ -33,17 +39,22 @@
   --color-border-subtle: #ebebeb;
   --color-border-default: #dddddd;
   --color-border-strong: #b0b0b0;
-  --color-border-brand: #ff385c;
+  --color-border-brand: #DD2A7B;
 
-  /* ── Gradient Tokens ── */
-  --color-gradient-brand-start: #ff385c;
-  --color-gradient-brand-end: #FF7A18;
-  --color-gradient-warm-start: #FF7A18;
-  --color-gradient-warm-end: #ff385c;
-  --color-gradient-secondary-start: #9F3BFF;
-  --color-gradient-secondary-end: #ff385c;
+  /* ── Instagram-Inspired Gradient Tokens ── */
+  --color-gradient-brand-start: #DD2A7B;
+  --color-gradient-brand-mid: #8134AF;
+  --color-gradient-brand-end: #515BD4;
+  --color-gradient-warm-start: #F58529;
+  --color-gradient-warm-mid: #DD2A7B;
+  --color-gradient-warm-end: #8134AF;
+  --color-gradient-sunset-start: #FEDA77;
+  --color-gradient-sunset-mid: #F58529;
+  --color-gradient-sunset-end: #DD2A7B;
+  --color-gradient-secondary-start: #8134AF;
+  --color-gradient-secondary-end: #515BD4;
 
-  /* ── Complementary Palette (pairs with brand-pink) ── */
+  /* ── Complementary Palette ── */
   --color-complement-teal: #14B8A6;
   --color-complement-teal-light: #5EEAD4;
   --color-complement-peach: #FFD4C4;
@@ -190,14 +201,21 @@ body {
 
 /* ── Utility: Gradient Text ── */
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-brand-pink), var(--color-brand-sunset-orange));
+  background: linear-gradient(135deg, var(--color-brand-pink), var(--color-brand-purple), var(--color-brand-blue));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-warm {
-  background: linear-gradient(135deg, var(--color-brand-sunset-orange), var(--color-brand-pink));
+  background: linear-gradient(135deg, var(--color-brand-orange), var(--color-brand-pink), var(--color-brand-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-sunset {
+  background: linear-gradient(135deg, var(--color-brand-yellow), var(--color-brand-orange), var(--color-brand-pink));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -213,7 +231,7 @@ body {
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, var(--color-brand-pink), var(--color-brand-sunset-orange));
+  background: linear-gradient(135deg, var(--color-brand-pink), var(--color-brand-purple), var(--color-brand-blue));
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -221,24 +239,28 @@ body {
 }
 
 .gradient-border-warm::after {
-  background: linear-gradient(135deg, var(--color-brand-sunset-orange), var(--color-brand-pink));
+  background: linear-gradient(135deg, var(--color-brand-orange), var(--color-brand-pink), var(--color-brand-purple));
 }
 
 /* ── Utility: Gradient Backgrounds ── */
 .gradient-brand {
-  background: linear-gradient(135deg, var(--color-brand-pink), var(--color-brand-sunset-orange));
+  background: linear-gradient(135deg, var(--color-brand-pink), var(--color-brand-purple), var(--color-brand-blue));
 }
 
 .gradient-brand-vertical {
-  background: linear-gradient(180deg, var(--color-brand-pink), var(--color-brand-sunset-orange));
+  background: linear-gradient(180deg, var(--color-brand-pink), var(--color-brand-purple), var(--color-brand-blue));
 }
 
 .gradient-warm {
-  background: linear-gradient(135deg, var(--color-brand-sunset-orange), var(--color-brand-pink));
+  background: linear-gradient(135deg, var(--color-brand-orange), var(--color-brand-pink), var(--color-brand-purple));
+}
+
+.gradient-sunset {
+  background: linear-gradient(135deg, var(--color-brand-yellow), var(--color-brand-orange), var(--color-brand-pink));
 }
 
 .gradient-secondary {
-  background: linear-gradient(135deg, var(--color-brand-purple), var(--color-brand-pink));
+  background: linear-gradient(135deg, var(--color-brand-purple), var(--color-brand-blue));
 }
 
 /* Gradient overlays for dark images on light background */
@@ -255,15 +277,26 @@ body {
 }
 
 .gradient-ambient {
-  background: radial-gradient(ellipse at 50% 0%, rgba(255, 56, 92, 0.04) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 50% 0%, rgba(221, 42, 123, 0.04) 0%, transparent 60%);
+}
+
+.gradient-ambient-purple {
+  background: radial-gradient(ellipse at 50% 0%, rgba(129, 52, 175, 0.04) 0%, transparent 60%);
+}
+
+.gradient-ambient-sunset {
+  background: radial-gradient(ellipse at 50% 100%, rgba(245, 133, 41, 0.04) 0%, transparent 60%);
 }
 
 .bg-lifestyle-warm { background: linear-gradient(135deg, #FFF8F0 0%, #FFF0F3 50%, #FFFFFF 100%); }
-.bg-lifestyle-cool { background: linear-gradient(135deg, #F0FDFA 0%, #FFF0F3 50%, #FFFFFF 100%); }
+.bg-lifestyle-cool { background: linear-gradient(135deg, #F0FDFA 0%, #F8F0FF 50%, #FFFFFF 100%); }
 .bg-lifestyle-social { background: linear-gradient(135deg, #FFF8F0 0%, #F3E8FF 50%, #FFF0F3 100%); }
+.bg-lifestyle-instagram { background: linear-gradient(135deg, #F8F0FF 0%, #FFF0F3 50%, #FFF8F0 100%); }
 
-.ambient-glow-pink { box-shadow: 0 0 60px rgba(255, 56, 92, 0.08); }
-.ambient-glow-warm { box-shadow: 0 0 60px rgba(255, 122, 24, 0.08); }
+.ambient-glow-pink { box-shadow: 0 0 60px rgba(221, 42, 123, 0.08); }
+.ambient-glow-warm { box-shadow: 0 0 60px rgba(245, 133, 41, 0.08); }
+.ambient-glow-purple { box-shadow: 0 0 60px rgba(129, 52, 175, 0.08); }
+.ambient-glow-blue { box-shadow: 0 0 60px rgba(81, 91, 212, 0.08); }
 
 .text-balance { text-wrap: balance; }
 
@@ -271,14 +304,27 @@ body {
 
 .bg-ambient-warm {
   background: 
-    radial-gradient(ellipse at 20% 20%, rgba(255, 56, 92, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(255, 122, 24, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 20%, rgba(221, 42, 123, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(129, 52, 175, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(245, 133, 41, 0.03) 0%, transparent 50%),
     linear-gradient(180deg, #ffffff 0%, #FFF8F0 50%, #ffffff 100%);
+}
+
+.bg-ambient-instagram {
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(129, 52, 175, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(221, 42, 123, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(254, 218, 119, 0.04) 0%, transparent 50%),
+    linear-gradient(180deg, #ffffff 0%, #F8F0FF 30%, #FFF0F3 70%, #ffffff 100%);
 }
 
 /* ── Moody Hero Gradient ── */
 .moody-gradient {
   background: linear-gradient(135deg, #FFF8F0 0%, #ffffff 30%, #FFF0F3 60%, #F3E8FF 100%);
+}
+
+.moody-gradient-instagram {
+  background: linear-gradient(135deg, #F8F0FF 0%, #ffffff 30%, #FFF0F3 60%, #FFF8F0 100%);
 }
 
 .mood-grid-item {
