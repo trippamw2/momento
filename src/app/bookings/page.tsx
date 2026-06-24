@@ -73,58 +73,64 @@ function computeCountdown(dateStr: string): { days: number; hours: number; mins:
 
 const now = new Date();
 
+function findMockImage(id: string): string {
+  return experiences.find((e) => e.id === id)?.image || "";
+}
+
+const FALLBACK_IMG = "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80";
+
 const mockBookings: Booking[] = [
   {
     id: "b1", experienceId: "sunset-cruise", title: "Sunset Cruise", venue: "Cape Maclear Cruises",
-    image: experiences.find((e) => e.id === "sunset-cruise")!.image,
+    image: findMockImage("sunset-cruise") || FALLBACK_IMG,
     date: addDays(now, 3).toISOString(), dateLabel: formatDateLabel(addDays(now, 3)),
     time: "4:00 PM", guests: 2, status: "upcoming", price: 55000, bookingRef: "MOMO-BK-001",
   },
   {
     id: "b2", experienceId: "pool-lunch", title: "Pool & Lunch", venue: "Lilongwe Club & Spa",
-    image: experiences.find((e) => e.id === "pool-lunch")!.image,
+    image: findMockImage("pool-lunch") || FALLBACK_IMG,
     date: addDays(now, 7).toISOString(), dateLabel: formatDateLabel(addDays(now, 7)),
     time: "10:00 AM", guests: 4, status: "upcoming", price: 45000, bookingRef: "MOMO-BK-002",
   },
   {
     id: "b3", experienceId: "spa-day", title: "Spa Day", venue: "Blantyre Wellness Collective",
-    image: experiences.find((e) => e.id === "spa-day")!.image,
+    image: findMockImage("spa-day") || FALLBACK_IMG,
     date: addDays(now, -5).toISOString(), dateLabel: formatDateLabel(addDays(now, -5)),
     time: "9:00 AM", guests: 1, status: "completed", price: 85000, bookingRef: "MOMO-BK-003",
   },
   {
     id: "b4", experienceId: "date-night", title: "Date Night", venue: "Lake Malawi Private Dining",
-    image: experiences.find((e) => e.id === "date-night")!.image,
+    image: findMockImage("date-night") || FALLBACK_IMG,
     date: addDays(now, -14).toISOString(), dateLabel: formatDateLabel(addDays(now, -14)),
     time: "6:30 PM", guests: 2, status: "completed", price: 65000, bookingRef: "MOMO-BK-004",
   },
   {
     id: "b5", experienceId: "rooftop-dining", title: "Rooftop Dining", venue: "Skyline Dining Co.",
-    image: experiences.find((e) => e.id === "rooftop-dining")!.image,
+    image: findMockImage("rooftop-dining") || FALLBACK_IMG,
     date: addDays(now, 14).toISOString(), dateLabel: formatDateLabel(addDays(now, 14)),
     time: "7:00 PM", guests: 2, status: "upcoming", price: 75000, bookingRef: "MOMO-BK-005",
   },
   {
     id: "b6", experienceId: "glamping-weekend", title: "Glamping Weekend", venue: "Bush & Lakeside Co.",
-    image: experiences.find((e) => e.id === "glamping-weekend")!.image,
+    image: findMockImage("glamping-weekend") || FALLBACK_IMG,
     date: addDays(now, -30).toISOString(), dateLabel: formatDateLabel(addDays(now, -30)),
     time: "2:00 PM", guests: 2, status: "cancelled", price: 200000, bookingRef: "MOMO-BK-006",
   },
   {
     id: "b7", experienceId: "brunch-experience", title: "Brunch Experience", venue: "The Velvet Fork",
-    image: experiences.find((e) => e.id === "brunch-experience")!.image,
+    image: findMockImage("brunch-experience") || FALLBACK_IMG,
     date: addDays(now, -60).toISOString(), dateLabel: formatDateLabel(addDays(now, -60)),
     time: "11:00 AM", guests: 3, status: "completed", price: 35000, bookingRef: "MOMO-BK-007",
   },
   {
     id: "b8", experienceId: "private-beach-dinner", title: "Private Beach Dinner", venue: "Beachside Elegance",
-    image: experiences.find((e) => e.id === "private-beach-dinner")!.image,
+    image: findMockImage("private-beach-dinner") || FALLBACK_IMG,
     date: addDays(now, 21).toISOString(), dateLabel: formatDateLabel(addDays(now, 21)),
     time: "6:00 PM", guests: 2, status: "upcoming", price: 130000, bookingRef: "MOMO-BK-008",
   },
   {
     id: "b9", experienceId: "wellness-retreat", title: "Wellness Retreat", venue: "Salima Sanctuary",
-    image: experiences.find((e) => e.id === "wellness-retreat")!.image,
+    image: findMockImage("wellness-retreat") || FALLBACK_IMG,
     date: addDays(now, -20).toISOString(), dateLabel: formatDateLabel(addDays(now, -20)),
     time: "8:00 AM", guests: 1, status: "cancelled", price: 150000, bookingRef: "MOMO-BK-009",
   },
