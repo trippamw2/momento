@@ -42,7 +42,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         setTimeout(() => { setMode("login"); setSuccess(false); }, 2000);
       } else {
         if (data.session?.access_token) {
-          localStorage.setItem("momento-auth-token", data.session.access_token);
+          localStorage.setItem("experio-auth-token", data.session.access_token);
         }
         onClose();
         window.location.reload();
@@ -61,12 +61,12 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Brand accent bar */}
-        <div className="h-1.5 bg-gradient-to-r from-[#ff385c] via-[#FF7A18] to-[#9F3BFF]" />
+        <div className="h-1.5 bg-gradient-to-r from-[#DD2A7B] via-[#F58529] to-[#8134AF]" />
 
         <div className="p-7">
           {success ? (
             <div className="text-center py-6">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#ff385c] to-[#FF7A18] flex items-center justify-center mx-auto mb-5 shadow-[0_4px_16px_rgba(255,56,92,0.2)]">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#DD2A7B] to-[#F58529] flex items-center justify-center mx-auto mb-5 shadow-[0_4px_16px_rgba(255,56,92,0.2)]">
                 <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
               </div>
               <h2 className="text-heading-md font-bold text-[#222222] mb-2">Account created!</h2>
@@ -77,7 +77,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-heading-lg font-bold text-[#222222]">
-                    {mode === "login" ? "Welcome back" : "Join Momento"}
+                    {mode === "login" ? "Welcome back" : "Join Experio"}
                   </h2>
                   <p className="text-caption text-[#6a6a6a] mt-0.5">
                     {mode === "login" ? "Sign in to continue discovering" : "Create your account to get started"}
@@ -97,7 +97,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                       placeholder="Full name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#f5f2ef] border border-[#ebebeb] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/20 transition-all"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#f5f2ef] border border-[#ebebeb] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/20 transition-all"
                       required
                     />
                   </div>
@@ -109,7 +109,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                     placeholder="Email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#f5f2ef] border border-[#ebebeb] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/20 transition-all"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#f5f2ef] border border-[#ebebeb] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/20 transition-all"
                     required
                   />
                 </div>
@@ -120,7 +120,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#f5f2ef] border border-[#ebebeb] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#ff385c] focus:ring-1 focus:ring-[#ff385c]/20 transition-all"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#f5f2ef] border border-[#ebebeb] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/20 transition-all"
                     required
                     minLength={6}
                   />
@@ -136,7 +136,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,56,92,0.35)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,56,92,0.35)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
@@ -153,7 +153,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                   {mode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
                   <button
                     onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(""); }}
-                    className="text-[#ff385c] hover:text-[#e00b41] font-semibold transition-colors"
+                    className="text-[#DD2A7B] hover:text-[#e00b41] font-semibold transition-colors"
                   >
                     {mode === "login" ? "Sign up" : "Sign in"}
                   </button>

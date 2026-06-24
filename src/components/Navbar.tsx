@@ -20,8 +20,8 @@ export default function Navbar() {
   const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("momento-auth-token") : null;
-    const role = typeof window !== "undefined" ? localStorage.getItem("momento-user-role") : null;
+    const token = typeof window !== "undefined" ? localStorage.getItem("experio-auth-token") : null;
+    const role = typeof window !== "undefined" ? localStorage.getItem("experio-user-role") : null;
     setSignedIn(!!token);
     setUserRole(role);
   }, []);
@@ -46,7 +46,7 @@ export default function Navbar() {
   ];
 
   const handleSignOut = () => {
-    localStorage.removeItem("momento-auth-token");
+    localStorage.removeItem("experio-auth-token");
     setSignedIn(false);
     setProfileOpen(false);
     window.location.reload();
@@ -70,7 +70,7 @@ export default function Navbar() {
                       href={item.href}
                       className={`relative px-3.5 py-2 rounded-xl text-body-sm font-semibold transition-all duration-200 ${
                         isActive
-                          ? "text-[#111111] after:absolute after:bottom-0 after:left-1/4 after:w-1/2 after:h-0.5 after:bg-[#ff385c] after:rounded-full"
+                          ? "text-[#111111] after:absolute after:bottom-0 after:left-1/4 after:w-1/2 after:h-0.5 after:bg-[#DD2A7B] after:rounded-full"
                           : "text-[#4a4a4a] hover:text-[#111111] hover:bg-[#f0ece8]"
                       }`}
                     >
@@ -96,7 +96,7 @@ export default function Navbar() {
                 className="relative px-3 py-2 rounded-xl text-[#4a4a4a] hover:text-[#111111] hover:bg-[#f0ece8] transition-all font-semibold"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#ff385c] ring-2 ring-[#faf8f6]" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#DD2A7B] ring-2 ring-[#faf8f6]" />
               </button>
 
               {/* Profile / Auth Button */}
@@ -109,7 +109,7 @@ export default function Navbar() {
                       setAuthOpen(true);
                     }
                   }}
-                  className="ml-1 w-9 h-9 rounded-full bg-gradient-to-br from-[#ff385c] to-[#FF7A18] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)] hover:shadow-[0_4px_12px_rgba(255,56,92,0.35)] transition-all duration-300 hover:scale-105"
+                  className="ml-1 w-9 h-9 rounded-full bg-gradient-to-br from-[#DD2A7B] to-[#F58529] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)] hover:shadow-[0_4px_12px_rgba(255,56,92,0.35)] transition-all duration-300 hover:scale-105"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                 </button>
@@ -252,7 +252,7 @@ export default function Navbar() {
                     setMenuOpen(false);
                     setAuthOpen(true);
                   }}
-                  className="flex items-center gap-3 w-full px-4 py-3.5 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.4)] transition-all"
+                  className="flex items-center gap-3 w-full px-4 py-3.5 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.4)] transition-all"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
                   Sign In / Register
