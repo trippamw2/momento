@@ -69,7 +69,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-heading-sm font-bold text-[#222222] mb-3">9. Contact</h2>
             <p>
-              For privacy-related inquiries, contact us at <a href="mailto:privacy@momento.mw" className="text-[#ff385c] hover:underline">privacy@momento.mw</a>.
+              For privacy-related inquiries, contact us at <a href="mailto:privacy@experio.life" className="text-[#DD2A7B] hover:underline">privacy@experio.life</a>.
             </p>
           </section>
         </div>

@@ -21,7 +21,7 @@ export default function Error({
         </p>
         <button
           onClick={reset}
-          className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all"
+          className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all"
         >
           Try Again
         </button>
