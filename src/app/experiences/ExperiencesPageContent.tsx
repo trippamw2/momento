@@ -221,11 +221,11 @@ export default function ExperiencesPageContent() {
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="mb-8">
           <h1 className="text-display-sm font-bold text-[#222222] mb-1">
-            All <span className="bg-gradient-to-r from-[#ff385c] to-[#FF7A18] bg-clip-text text-transparent">Experiences</span>
+            All <span className="bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] bg-clip-text text-transparent">Experiences</span>
           </h1>
           <p className="text-[#4a4a4a] text-body-lg">{filtered.length} moments to discover</p>
           {geo.position && filters.location !== "All" && (
-            <p className="text-caption text-[#ff385c] mt-1">
+            <p className="text-caption text-[#DD2A7B] mt-1">
               📍 Showing experiences near <strong>{filters.location}</strong>
               {geo.loading && <span className="text-text-tertiary ml-1">(detecting location...)</span>}
             </p>
@@ -268,8 +268,8 @@ export default function ExperiencesPageContent() {
               onClick={() => updateFilter("category", cat)}
               className={`px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all duration-200 ${
                 filters.category === cat
-                  ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
-                  : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
+                  ? "bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] text-white shadow-sm shadow-[#DD2A7B]/20"
+                  : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#DD2A7B]/30"
               }`}
             >
               {cat}
@@ -284,8 +284,8 @@ export default function ExperiencesPageContent() {
               onClick={() => updateFilter("mood", filters.mood === mood.label ? null : mood.label)}
               className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 ${
                 filters.mood === mood.label
-                  ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
-                  : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
+                  ? "bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] text-white shadow-sm shadow-[#DD2A7B]/20"
+                  : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#DD2A7B]/30"
               }`}
             >
               <span>{mood.emoji}</span>
@@ -301,8 +301,8 @@ export default function ExperiencesPageContent() {
               onClick={() => updateFilter("price", pr.value)}
               className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 ${
                 filters.price === pr.value
-                  ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
-                  : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
+                  ? "bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] text-white shadow-sm shadow-[#DD2A7B]/20"
+                  : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#DD2A7B]/30"
               }`}
             >
               {pr.label}
@@ -314,7 +314,7 @@ export default function ExperiencesPageContent() {
           <select
             value={filters.location}
             onChange={(e) => updateFilter("location", e.target.value)}
-            className="px-3 py-1.5 rounded-full text-caption font-medium bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] focus:outline-none focus:border-[#ff385c]/50 appearance-none cursor-pointer hover:bg-[#FFF0F3] transition-colors"
+            className="px-3 py-1.5 rounded-full text-caption font-medium bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] focus:outline-none focus:border-[#DD2A7B]/50 appearance-none cursor-pointer hover:bg-[#FFF0F3] transition-colors"
           >
             {locations.map((loc) => (
               <option key={loc} value={loc}>
@@ -332,8 +332,8 @@ export default function ExperiencesPageContent() {
             }}
             className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 ${
               filters.nearby
-                ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
-                : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
+                ? "bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] text-white shadow-sm shadow-[#DD2A7B]/20"
+                : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#DD2A7B]/30"
             }`}
           >
             <svg className={`w-3.5 h-3.5 ${geo.loading ? "animate-pulse" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
@@ -348,7 +348,7 @@ export default function ExperiencesPageContent() {
                 Showing {visibleExperiences.length} of {filtered.length} experience{filtered.length !== 1 ? "s" : ""}
               </p>
               {filters.search && (
-                <p className="text-caption text-[#ff385c] font-medium">
+                <p className="text-caption text-[#DD2A7B] font-medium">
                   Results for &ldquo;{filters.search}&rdquo;
                 </p>
               )}
@@ -362,13 +362,13 @@ export default function ExperiencesPageContent() {
         ) : (
           <div className="text-center py-20">
             <div className="w-16 h-16 rounded-full bg-[#FFF0F3] flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-[#ff385c]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <svg className="w-8 h-8 text-[#DD2A7B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
             <p className="text-heading-md font-bold text-[#222222] mb-2">No experiences found</p>
             <p className="text-body text-[#4a4a4a] mb-6">Try adjusting your filters or search term</p>
             <button
               onClick={clearFilters}
-              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white text-body-sm font-semibold shadow-[0_4px_16px_rgba(255,56,92,0.2)] hover:shadow-[0_4px_24px_rgba(255,56,92,0.35)] transition-all duration-300"
+              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] text-white text-body-sm font-semibold shadow-[0_4px_16px_rgba(255,56,92,0.2)] hover:shadow-[0_4px_24px_rgba(255,56,92,0.35)] transition-all duration-300"
             >
               Clear all filters
             </button>
