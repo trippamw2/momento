@@ -5,9 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { experiences } from "@/lib/data";
 import ContentRail from "@/components/ContentRail";
+import GiftCard, { GIFT_CARD_VARIANTS } from "@/components/GiftCard";
 
-const categories = ["All", "Romantic", "Wellness", "Luxury", "Adventure", "Family"];
-const locations = ["All", "Lilongwe", "Blantyre", "Lusaka", "Harare", "Johannesburg", "Dar es Salaam", "Nairobi", "Cape Maclear", "Salima"];
+const categories = ["All", "Date Night", "Pool & Chill", "Spa & Wellness", "Brunch & Dining", "Staycation", "Celebrations"];
+const locations = ["All", "Lilongwe", "Blantyre"];
 
 const giftIdeas = experiences.slice(0, 5);
 
@@ -55,7 +56,7 @@ export default function GiftPageContent() {
   const [trackResult, setTrackResult] = useState<{ found: boolean; value?: string; status?: string } | null>(null);
   const [giftError, setGiftError] = useState("");
 
-  const categoryExp = activeFilter === "All" ? experiences : experiences.filter((e) => e.category === activeFilter.toLowerCase());
+  const categoryExp = activeFilter === "All" ? experiences : experiences.filter((e) => e.category === activeFilter);
 
   const handleTrackCode = async () => {
     if (!trackCode.trim()) return;
@@ -310,7 +311,7 @@ export default function GiftPageContent() {
           </div>
         </section>
 
-        {/* ─── Gift Cards ─── */}
+        {/* ─── Gift Cards (Physical ATM/Credit Card Style) ─── */}
         <section>
           <div className="text-center mb-8">
             <h2 className="text-heading-xl font-bold text-[#222222] mb-2">Gift Cards</h2>
@@ -319,47 +320,17 @@ export default function GiftPageContent() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
             {giftCardValues.map((card, i) => (
-              <button
+              <GiftCard
                 key={i}
-                onClick={() => setSelectedCard(selectedCard === i ? null : i)}
-                className={`relative p-6 sm:p-8 rounded-2xl text-left transition-all duration-300 overflow-hidden ${
-                  selectedCard === i
-                    ? "ring-2 ring-white/30 scale-[1.02]"
-                    : "hover:scale-[1.02]"
-                }`}
-              >
-                {/* Gradient Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#ff385c] to-[#FF7A18] opacity-90" />
-                {/* Decorative Pattern */}
-                <div className="absolute top-0 right-0 w-40 h-40 bg-white/[0.06] rounded-full -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/[0.06] rounded-full translate-y-1/2 -translate-x-1/2" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.1)_0%,transparent_60%)]" />
-
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-6">
-                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                    <span className="text-lg font-bold">G</span>
-                  </div>
-                    <span className="text-caption font-medium text-white/70 uppercase tracking-wider">Gift Card</span>
-                  </div>
-
-                  <p className="text-3xl sm:text-4xl font-bold text-white mb-1">{card.label}</p>
-                  <p className="text-white/80 text-body-sm mb-6">{card.desc}</p>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex -space-x-2">
-                      <div className="w-8 h-8 rounded-full bg-white/20 border-2 border-[#ff385c] flex items-center justify-center text-[10px] text-white font-bold">M</div>
-                    </div>
-                    <span className="text-caption text-white/60">MOMENTO</span>
-                  </div>
-                </div>
-
-                {selectedCard === i && (
-                  <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/25 flex items-center justify-center z-10 backdrop-blur-sm">
-                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                  </div>
-                )}
-              </button>
+                valueLabel={card.label}
+                description={card.desc}
+                variantId={GIFT_CARD_VARIANTS[i].id}
+                selected={selectedCard === i}
+                onSelect={() => setSelectedCard(selectedCard === i ? null : i)}
+                cardNumber={`•••• •••• •••• ${4829 + i * 100}`}
+                expiry={`12/${27 + i}`}
+                holderName="Your Gift"
+              />
             ))}
           </div>
         </section>
@@ -415,23 +386,18 @@ export default function GiftPageContent() {
                 {tab === "cards" ? (
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
                     {giftCardValues.map((card, i) => (
-                      <button
+                      <GiftCard
                         key={i}
-                        onClick={() => setSelectedCard(selectedCard === i ? null : i)}
-                        className={`relative p-5 rounded-xl text-left transition-all duration-300 ${
-                          selectedCard === i
-                            ? "bg-[#ff385c] text-white shadow-[0_4px_16px_rgba(255,56,92,0.2)] ring-2 ring-[#ff385c]/20"
-                            : "bg-white border border-[#ebebeb] text-[#222222] hover:border-[#ff385c]/30"
-                        }`}
-                      >
-                        {selectedCard === i && (
-                          <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
-                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                          </div>
-                        )}
-                        <p className={`text-xl font-bold ${selectedCard === i ? "text-white" : "text-[#222222]"}`}>{card.label}</p>
-                        <p className={`text-caption mt-1 ${selectedCard === i ? "text-white/80" : "text-[#4a4a4a]"}`}>{card.desc}</p>
-                      </button>
+                        valueLabel={card.label}
+                        description={card.desc}
+                        variantId={GIFT_CARD_VARIANTS[i].id}
+                        selected={selectedCard === i}
+                        onSelect={() => setSelectedCard(selectedCard === i ? null : i)}
+                        cardNumber={`•••• •••• •••• ${4829 + i * 100}`}
+                        expiry={`12/${27 + i}`}
+                        holderName="Your Gift"
+                        isCompact
+                      />
                     ))}
                   </div>
                 ) : (

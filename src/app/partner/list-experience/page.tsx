@@ -1,7 +1,18 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
+import { findNearestCity } from "@/lib/geo";
+import { useGeolocation } from "@/lib/use-geolocation";
+
+const V2_CATEGORIES = [
+  "Date Night",
+  "Pool & Chill",
+  "Spa & Wellness",
+  "Brunch & Dining",
+  "Staycation",
+  "Celebrations",
+] as const;
 
 export default function ListExperiencePage() {
   const [submitted, setSubmitted] = useState(false);
@@ -18,6 +29,26 @@ export default function ListExperiencePage() {
     contact: "",
     capacity: "10",
   });
+
+  const geo = useGeolocation();
+
+  // Auto-detect city to pre-fill location
+  useEffect(() => {
+    if (geo.position && !form.location) {
+      const city = findNearestCity(geo.position.lat, geo.position.lng);
+      if (city) {
+        setForm((prev) => ({ ...prev, location: city }));
+      }
+    }
+  }, [geo.position, form.location]);
+
+  // Auto-request GPS on mount
+  useEffect(() => {
+    if (!geo.position && !geo.loading && !geo.error && geo.permission === "prompt") {
+      const t = setTimeout(() => geo.requestPosition(), 1500);
+      return () => clearTimeout(t);
+    }
+  }, []);
 
   const updateField = useCallback((field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -145,14 +176,9 @@ export default function ListExperiencePage() {
               className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
             >
               <option value="" disabled>Select a category</option>
-              <option value="Romantic">Romantic</option>
-              <option value="Adventure">Adventure</option>
-              <option value="Wellness">Wellness & Self Care</option>
-              <option value="Food & Drink">Food & Drink</option>
-              <option value="Family">Family</option>
-              <option value="Luxury">Luxury</option>
-              <option value="Celebrations">Celebrations</option>
-              <option value="Entertainment">Entertainment</option>
+              {V2_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
             </select>
           </div>
 
@@ -200,15 +226,25 @@ export default function ListExperiencePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="location" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Location</label>
-              <input
+              <select
                 id="location"
-                type="text"
                 required
                 value={form.location}
                 onChange={(e) => updateField("location", e.target.value)}
-                placeholder="e.g. Lilongwe, Cape Maclear, Blantyre"
-                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all"
-              />
+                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#ff385c]/30 focus:border-[#ff385c] transition-all appearance-none cursor-pointer"
+              >
+                <option value="" disabled>
+                  {geo.loading ? "Detecting location..." : "Select a city"}
+                </option>
+                <option value="Lilongwe">Lilongwe</option>
+                <option value="Blantyre">Blantyre</option>
+              </select>
+              {geo.loading && !form.location && (
+                <p className="text-caption text-text-tertiary mt-1 animate-pulse">Detecting your location via GPS...</p>
+              )}
+              {geo.position && form.location && (
+                <p className="text-caption text-[#ff385c] mt-1">📍 Auto-detected</p>
+              )}
             </div>
             <div>
               <label htmlFor="capacity" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Max Guests</label>

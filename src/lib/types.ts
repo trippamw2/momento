@@ -1,28 +1,20 @@
 export type Mood =
   | "Romantic"
-  | "Relax"
-  | "Celebrate"
-  | "Escape"
-  | "Indulge"
-  | "Food & Drink"
-  | "Family"
-  | "Entertainment"
-  | "Adventure"
-  | "Self Care"
-  | "Social";
+  | "Relaxed"
+  | "Social"
+  | "Culinary"
+  | "Active"
+  | "Luxurious"
+  | "Celebratory"
+  | "Creative";
 
 export type V2Category =
-  | "Romantic"
-  | "Wellness"
-  | "Food & Drink"
-  | "Luxury"
-  | "Celebrations"
-  | "Entertainment"
-  | "Family"
-  | "Adventure"
-  | "Escape"
-  | "Self Care"
-  | "Social";
+  | "Date Night"
+  | "Pool & Chill"
+  | "Spa & Wellness"
+  | "Brunch & Dining"
+  | "Staycation"
+  | "Celebrations";
 
 export interface Review {
   id: string;
@@ -67,19 +59,18 @@ export interface NavItem {
 export type DiscoveryRailKey =
   | "trending"
   | "recommended"
+  | "nearby"
   | "weekend"
   | "most-saved"
-  | "new"
-  | "date-ideas"
-  | "wellness"
-  | "food-drink"
-  | "luxury"
+  | "date-night"
+  | "pool-chill"
+  | "spa-wellness"
+  | "brunch-dining"
+  | "staycation"
   | "celebrations"
-  | "hidden-gems"
   | "staff-picks"
   | "affordable"
-  | "adventure"
-  | "family";
+  | "personalized";
 
 export interface DiscoveryRail {
   key: DiscoveryRailKey;

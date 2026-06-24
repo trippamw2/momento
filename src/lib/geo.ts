@@ -29,17 +29,24 @@ export function formatDistance(km: number): string {
 export const AFRICAN_CITY_COORDS: Record<string, Coordinates> = {
   Lilongwe: { lat: -13.9626, lng: 33.7741 },
   Blantyre: { lat: -15.7861, lng: 35.0058 },
-  Lusaka: { lat: -15.4167, lng: 28.2833 },
-  Harare: { lat: -17.8252, lng: 31.0335 },
-  Johannesburg: { lat: -26.2041, lng: 28.0473 },
-  "Dar es Salaam": { lat: -6.7924, lng: 39.2083 },
-  Nairobi: { lat: -1.2921, lng: 36.8219 },
-  "Cape Maclear": { lat: -14.0167, lng: 34.85 },
-  Salima: { lat: -13.7833, lng: 34.4333 },
-  Mangochi: { lat: -14.4667, lng: 35.2667 },
-  Zomba: { lat: -15.3867, lng: 35.3188 },
-  Dedza: { lat: -14.3667, lng: 34.3333 },
-  Liwonde: { lat: -15.0667, lng: 35.2167 },
 };
 
 export const AFRICAN_CITIES = Object.keys(AFRICAN_CITY_COORDS);
+
+/**
+ * Returns the nearest African city name for a given GPS coordinate.
+ * Useful for auto-selecting "Lilongwe" or "Blantyre" from the user's location.
+ */
+export function findNearestCity(lat: number, lng: number): string | null {
+  const user: Coordinates = { lat, lng };
+  let best: string | null = null;
+  let bestDist = Infinity;
+  for (const [city, coords] of Object.entries(AFRICAN_CITY_COORDS)) {
+    const d = haversineDistance(user, coords);
+    if (d < bestDist) {
+      bestDist = d;
+      best = city;
+    }
+  }
+  return best;
+}

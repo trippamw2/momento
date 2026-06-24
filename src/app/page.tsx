@@ -8,28 +8,30 @@ import { getExperiences } from "@/lib/api-client";
 import { transformExperience } from "@/lib/transform";
 import { Experience } from "@/lib/types";
 import { experiences as mockExperiences } from "@/lib/data";
+import { useGeolocation, getDistance, formatDist } from "@/lib/use-geolocation";
+import { findNearestCity } from "@/lib/geo";
+import { getPersonalizedRecommendations, getRecommendedCategories, hasUserInteractions, trackView } from "@/lib/recommendations";
 
 const RAILS: { key: string; title: string; filter: (e: Experience) => boolean }[] = [
-  { key: "trending", title: "Trending Right Now", filter: (e) => e.rating >= 4.7 },
-  { key: "recommended", title: "Recommended For You", filter: (e) => e.mood.some((m) => ["Relax", "Indulge", "Self Care"].includes(m as any)) },
-  { key: "weekend", title: "Perfect For This Weekend", filter: (e) => parseInt(e.duration) > 0 && parseInt(e.duration) <= 4 },
+  { key: "trending", title: "Trending Right Now", filter: (e: Experience) => e.rating >= 4.7 },
+  { key: "nearby", title: "Near You", filter: (_e: Experience) => true },
+  { key: "weekend", title: "Perfect For This Weekend", filter: (e: Experience) => parseInt(e.duration) > 0 && parseInt(e.duration) <= 4 },
   { key: "most-saved", title: "Most Saved", filter: () => true },
-  { key: "date-ideas", title: "Date Night Ideas", filter: (e) => e.mood.includes("Romantic" as any) },
-  { key: "wellness", title: "Wellness & Self Care", filter: (e) => e.mood.some((m) => ["Self Care", "Relax"].includes(m as any)) },
-  { key: "food-drink", title: "Food & Drink", filter: (e) => e.mood.includes("Food & Drink" as any) },
-  { key: "luxury", title: "Luxury Experiences", filter: (e) => e.price >= 100000 },
-  { key: "celebrations", title: "Celebrations", filter: (e) => e.mood.includes("Celebrate" as any) },
-  { key: "hidden-gems", title: "Hidden Gems", filter: (e) => e.rating >= 4.5 && e.reviewCount < 60 },
-  { key: "staff-picks", title: "Staff Picks", filter: (e) => e.rating >= 4.8 },
-  { key: "affordable", title: "Affordable Experiences", filter: (e) => e.price <= 50000 },
-  { key: "adventure", title: "Adventure Awaits", filter: (e) => e.mood.includes("Adventure" as any) },
-  { key: "family", title: "Family Fun", filter: (e) => e.mood.includes("Family" as any) },
+  { key: "date-night", title: "Date Night", filter: (e: Experience) => e.category === "Date Night" },
+  { key: "pool-chill", title: "Pool & Chill", filter: (e: Experience) => e.category === "Pool & Chill" },
+  { key: "spa-wellness", title: "Spa & Wellness", filter: (e: Experience) => e.category === "Spa & Wellness" },
+  { key: "brunch-dining", title: "Brunch & Dining", filter: (e: Experience) => e.category === "Brunch & Dining" },
+  { key: "staycation", title: "Staycations", filter: (e: Experience) => e.category === "Staycation" },
+  { key: "celebrations", title: "Celebrations", filter: (e: Experience) => e.category === "Celebrations" },
+  { key: "staff-picks", title: "Staff Picks", filter: (e: Experience) => e.rating >= 4.8 },
+  { key: "affordable", title: "Affordable Experiences", filter: (e: Experience) => e.price <= 50000 },
+  { key: "personalized", title: "Just For You", filter: () => true },
 ];
 
 const RAIL_ORDER = [
-  "trending", "recommended", "weekend", "most-saved", "date-ideas",
-  "wellness", "food-drink", "luxury", "celebrations", "hidden-gems",
-  "staff-picks", "affordable", "adventure", "family",
+  "trending", "personalized", "nearby", "weekend", "most-saved",
+  "date-night", "pool-chill", "spa-wellness", "brunch-dining",
+  "staycation", "celebrations", "staff-picks", "affordable",
 ];
 
 function shuffle<T>(arr: T[]): T[] {
@@ -44,6 +46,24 @@ function shuffle<T>(arr: T[]): T[] {
 export default function Home() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
+  const geo = useGeolocation();
+  const [detectedCity, setDetectedCity] = useState<string | null>(null);
+
+  // Auto-detect city from GPS
+  useEffect(() => {
+    if (geo.position && !detectedCity) {
+      const city = findNearestCity(geo.position.lat, geo.position.lng);
+      if (city) setDetectedCity(city);
+    }
+  }, [geo.position, detectedCity]);
+
+  // Auto-request GPS on mount
+  useEffect(() => {
+    if (!geo.position && !geo.loading && !geo.error && geo.permission === "prompt") {
+      const t = setTimeout(() => geo.requestPosition(), 2000);
+      return () => clearTimeout(t);
+    }
+  }, []);
 
   useEffect(() => {
     getExperiences({ limit: 50 })
@@ -65,15 +85,36 @@ export default function Home() {
         if (!cfg) return null;
         let filtered = experiences.filter(cfg.filter);
         if (key === "most-saved") filtered = [...filtered].sort((a, b) => b.reviewCount - a.reviewCount);
+        if (key === "nearby") {
+          // Filter by detected city if we know it
+          if (detectedCity) {
+            filtered = filtered.filter((e) => e.location === detectedCity);
+          }
+          if (geo.position) {
+            filtered = [...filtered]
+              .map((e) => ({
+                ...e,
+                distance: formatDist(getDistance(geo.position!, e.coordinates)),
+              }))
+              .sort((a, b) => {
+                const dA = getDistance(geo.position!, a.coordinates);
+                const dB = getDistance(geo.position!, b.coordinates);
+                return dA - dB;
+              });
+          }
+        }
+        if (key === "personalized") {
+          filtered = getPersonalizedRecommendations(filtered, geo.position ?? undefined);
+        }
         return { key, title: cfg.title, experiences: shuffle(filtered).slice(0, 8) };
       })
       .filter((r) => r && r.experiences.length > 0) as { key: string; title: string; experiences: Experience[] }[];
-  }, [experiences]);
+  }, [experiences, geo.position, detectedCity]);
 
   const giftIdeas = useMemo(() => {
     if (experiences.length === 0) return [];
     const all = [
-      ...experiences.filter((e) => e.mood.includes("Indulge" as any)),
+      ...experiences.filter((e) => e.mood.includes("Luxurious" as any)),
       ...experiences.filter((e) => e.mood.includes("Romantic" as any)),
     ];
     return shuffle(all).slice(0, 4);
@@ -185,42 +226,67 @@ export default function Home() {
 
       <div className="relative z-10 -mt-12 sm:-mt-16 pb-16 space-y-1">
         
+        {/* ─── City Detection Banner ─── */}
+        {detectedCity && (
+          <div className="px-4 sm:px-8 pt-4 pb-0">
+            <div className="flex items-center gap-2 text-body-sm text-[#4a4a4a]">
+              <svg className="w-4 h-4 text-[#ff385c]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              <span>Showing experiences near <strong>{detectedCity}</strong></span>
+            </div>
+          </div>
+        )}
+        {geo.loading && !detectedCity && (
+          <div className="px-4 sm:px-8 pt-4 pb-0">
+            <p className="text-caption text-text-tertiary animate-pulse">Detecting your location...</p>
+          </div>
+        )}
+        {geo.error && !detectedCity && (
+          <div className="px-4 sm:px-8 pt-4 pb-0">
+            <p className="text-caption text-amber-600">Enable location to see experiences near you</p>
+          </div>
+        )}
+        
         {/* ─── Trending ─── */}
         {railsMap.trending && (
           <ContentRail title={railsMap.trending.title} experiences={railsMap.trending.experiences} viewAllHref="/experiences" />
+        )}
+        
+        {/* ─── Personalized ─── */}
+        {railsMap.personalized && (
+          <GridCards title={railsMap.personalized.title} items={railsMap.personalized.experiences} />
+        )}
+
+        {/* ─── GPS: Near You ─── */}
+        {railsMap.nearby && (
+          <ContentRail
+            title={railsMap.nearby.title}
+            experiences={railsMap.nearby.experiences}
+            viewAllHref="/experiences"
+            subtitle={geo.position ? "Sorted by distance" : "Enable location for nearby picks"}
+          />
+        )}
+
+        {/* ─── Weekend & Most Saved ─── */}
+        {railsMap.weekend && (
+          <ContentRail title={railsMap.weekend.title} experiences={railsMap.weekend.experiences} viewAllHref="/experiences" />
         )}
         
         {railsMap['most-saved'] && (
           <GridCards2 title={railsMap['most-saved'].title} items={railsMap['most-saved'].experiences} />
         )}
 
-        {/* ─── Curated For You ─── */}
-        <SectionDivider title="Curated For You" />
-        
-        {railsMap.recommended && (
-          <GridCards title={railsMap.recommended.title} items={railsMap.recommended.experiences} />
-        )}
-        
-        {railsMap.weekend && (
-          <ContentRail title={railsMap.weekend.title} experiences={railsMap.weekend.experiences} viewAllHref="/experiences" />
-        )}
-        
-        {railsMap['staff-picks'] && (
-          <ContentRail title={railsMap['staff-picks'].title} experiences={railsMap['staff-picks'].experiences} viewAllHref="/experiences" />
-        )}
-
         {/* ─── Featured Experience ─── */}
         {featured && <FeaturedCard exp={featured} />}
 
-        {/* ─── Date Night & Celebrations ─── */}
-        <SectionDivider title="Date Night & Celebrations" />
+        {/* ─── Date Night & Pool Chill ─── */}
+        <SectionDivider title="Date Night & Pool & Chill" />
         
-        {railsMap['date-ideas'] && (
-          <ContentRail title={railsMap['date-ideas'].title} experiences={railsMap['date-ideas'].experiences} viewAllHref="/experiences" />
+        {railsMap['date-night'] && (
+          <ContentRail title={railsMap['date-night'].title} experiences={railsMap['date-night'].experiences} viewAllHref="/experiences" />
         )}
         
-        {railsMap.celebrations && (
-          <GridCards title={railsMap.celebrations.title} items={railsMap.celebrations.experiences} />
+        {railsMap['pool-chill'] && (
+          <GridCards title={railsMap['pool-chill'].title} items={railsMap['pool-chill'].experiences} />
         )}
 
         {/* ─── Social Proof ─── */}
@@ -251,19 +317,19 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ─── Wellness & Luxury ─── */}
-        <SectionDivider title="Wellness & Luxury" />
+        {/* ─── Spa, Brunch & Staycation ─── */}
+        <SectionDivider title="Spa, Brunch & Staycations" />
         
-        {railsMap.wellness && (
-          <ContentRail title={railsMap.wellness.title} experiences={railsMap.wellness.experiences} viewAllHref="/experiences" />
+        {railsMap['spa-wellness'] && (
+          <ContentRail title={railsMap['spa-wellness'].title} experiences={railsMap['spa-wellness'].experiences} viewAllHref="/experiences" />
         )}
         
-        {railsMap['food-drink'] && (
-          <ContentRail title={railsMap['food-drink'].title} experiences={railsMap['food-drink'].experiences} viewAllHref="/experiences" />
+        {railsMap['brunch-dining'] && (
+          <ContentRail title={railsMap['brunch-dining'].title} experiences={railsMap['brunch-dining'].experiences} viewAllHref="/experiences" />
         )}
         
-        {railsMap.luxury && (
-          <ContentRail title={railsMap.luxury.title} experiences={railsMap.luxury.experiences} viewAllHref="/experiences" />
+        {railsMap.staycation && (
+          <ContentRail title={railsMap.staycation.title} experiences={railsMap.staycation.experiences} viewAllHref="/experiences" />
         )}
 
         {/* ─── Gift A Moment ─── */}
@@ -321,23 +387,19 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ─── Hidden Gems & Adventure ─── */}
-        <SectionDivider title="Hidden Gems & Adventure" />
+        {/* ─── Celebrations ─── */}
+        <SectionDivider title="Celebrations & Staff Picks" />
         
-        {railsMap['hidden-gems'] && (
-          <ContentRail title={railsMap['hidden-gems'].title} experiences={railsMap['hidden-gems'].experiences} viewAllHref="/experiences" />
+        {railsMap.celebrations && (
+          <ContentRail title={railsMap.celebrations.title} experiences={railsMap.celebrations.experiences} viewAllHref="/experiences" />
+        )}
+        
+        {railsMap['staff-picks'] && (
+          <GridCards title={railsMap['staff-picks'].title} items={railsMap['staff-picks'].experiences} />
         )}
         
         {railsMap.affordable && (
-          <GridCards title={railsMap.affordable.title} items={railsMap.affordable.experiences} />
-        )}
-        
-        {railsMap.adventure && (
-          <ContentRail title={railsMap.adventure.title} experiences={railsMap.adventure.experiences} viewAllHref="/experiences" />
-        )}
-        
-        {railsMap.family && (
-          <ContentRail title={railsMap.family.title} experiences={railsMap.family.experiences} viewAllHref="/experiences" />
+          <ContentRail title={railsMap.affordable.title} experiences={railsMap.affordable.experiences} viewAllHref="/experiences" />
         )}
 
         {/* ─── AI Concierge Teaser ─── */}

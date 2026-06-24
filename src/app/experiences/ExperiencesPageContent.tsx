@@ -6,6 +6,8 @@ import Link from "next/link";
 import { getExperiences } from "@/lib/api-client";
 import { transformExperience } from "@/lib/transform";
 import { Mood, PRICE_RANGES, Experience } from "@/lib/types";
+import { useGeolocation, getDistance, formatDist } from "@/lib/use-geolocation";
+import { AFRICAN_CITY_COORDS, findNearestCity } from "@/lib/geo";
 import { experiences as mockExperiences } from "@/lib/data";
 import ExperienceCard from "@/components/ExperienceCard";
 
@@ -14,16 +16,13 @@ const LOAD_MORE = 4;
 
 const MOOD_LABELS: { label: Mood; description: string; emoji: string; accent: string }[] = [
   { label: "Romantic", description: "Perfect for two", emoji: "🌹", accent: "from-rose-500 to-pink-500" },
-  { label: "Relax", description: "Unwind and recharge", emoji: "🌊", accent: "from-emerald-500 to-teal-500" },
-  { label: "Celebrate", description: "Make it special", emoji: "🥂", accent: "from-amber-500 to-orange-500" },
-  { label: "Escape", description: "Get away from it all", emoji: "🌴", accent: "from-cyan-500 to-sky-500" },
-  { label: "Indulge", description: "You deserve it", emoji: "✨", accent: "from-fuchsia-500 to-purple-500" },
-  { label: "Food & Drink", description: "Culinary delights", emoji: "🍽️", accent: "from-amber-600 to-orange-600" },
-  { label: "Family", description: "Fun for everyone", emoji: "👨‍👩‍👧‍👦", accent: "from-indigo-500 to-blue-500" },
-  { label: "Entertainment", description: "Live your vibe", emoji: "🎭", accent: "from-violet-500 to-purple-500" },
-  { label: "Adventure", description: "Thrill & excitement", emoji: "🧗", accent: "from-red-500 to-rose-500" },
-  { label: "Self Care", description: "Nurture yourself", emoji: "🌿", accent: "from-green-500 to-emerald-500" },
+  { label: "Relaxed", description: "Unwind and recharge", emoji: "🌊", accent: "from-emerald-500 to-teal-500" },
   { label: "Social", description: "Connect with others", emoji: "💬", accent: "from-pink-500 to-rose-500" },
+  { label: "Culinary", description: "Food lovers", emoji: "🍽️", accent: "from-amber-600 to-orange-600" },
+  { label: "Active", description: "Get moving", emoji: "🧗", accent: "from-red-500 to-rose-500" },
+  { label: "Luxurious", description: "You deserve it", emoji: "✨", accent: "from-fuchsia-500 to-purple-500" },
+  { label: "Celebratory", description: "Make it special", emoji: "🥂", accent: "from-amber-500 to-orange-500" },
+  { label: "Creative", description: "Artsy fun", emoji: "🎨", accent: "from-violet-500 to-purple-500" },
 ];
 
 function parseMoodParam(value: string | null): Mood | null {
@@ -38,6 +37,8 @@ function filterExperiences(exps: Experience[], opts: {
   mood?: Mood | null;
   priceRange?: string;
   location?: string;
+  nearby?: boolean;
+  userLocation?: { lat: number; lng: number };
 }): Experience[] {
   let result = [...exps];
   if (opts.search) {
@@ -61,6 +62,18 @@ function filterExperiences(exps: Experience[], opts: {
   }
   if (opts.location && opts.location !== "All") {
     result = result.filter((e) => e.location === opts.location);
+  }
+  if (opts.nearby && opts.userLocation) {
+    result = result
+      .map((e) => ({
+        ...e,
+        distance: formatDist(getDistance(opts.userLocation!, e.coordinates)),
+      }))
+      .sort((a, b) => {
+        const dA = getDistance(opts.userLocation!, a.coordinates);
+        const dB = getDistance(opts.userLocation!, b.coordinates);
+        return dA - dB;
+      });
   }
   return result;
 }
@@ -94,6 +107,29 @@ export default function ExperiencesPageContent() {
   const [allExperiences, setAllExperiences] = useState<Experience[]>([]);
   const [fetching, setFetching] = useState(true);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const geo = useGeolocation();
+
+  // Tracks whether the user manually chose a location (vs auto-detect)
+  const manualLocationOverride = useRef(false);
+
+  // ─── Auto-detect city from GPS ───
+  // When GPS position arrives and location is still "All", auto-set nearest city
+  useEffect(() => {
+    if (geo.position && filters.location === "All" && !manualLocationOverride.current) {
+      const city = findNearestCity(geo.position.lat, geo.position.lng);
+      if (city) {
+        setFilters((prev) => ({ ...prev, location: city }));
+      }
+    }
+  }, [geo.position, filters.location]);
+
+  // Request GPS on mount (non-blocking, small delay so page renders first)
+  useEffect(() => {
+    if (!geo.position && !geo.loading && !geo.error && geo.permission === "prompt") {
+      const t = setTimeout(() => geo.requestPosition(), 1000);
+      return () => clearTimeout(t);
+    }
+  }, []);
 
   useEffect(() => {
     getExperiences({ limit: 50 })
@@ -108,6 +144,9 @@ export default function ExperiencesPageContent() {
   }, []);
 
   const updateFilter = useCallback(<K extends keyof FilterState>(key: K, value: FilterState[K]) => {
+    if (key === "location") {
+      manualLocationOverride.current = true;
+    }
     setFilters((prev) => ({ ...prev, [key]: value }));
     setVisibleCount(ITEMS_PER_PAGE);
   }, []);
@@ -133,8 +172,10 @@ export default function ExperiencesPageContent() {
         mood: filters.mood,
         priceRange: filters.price,
         location: filters.location,
+        nearby: filters.nearby,
+        userLocation: filters.nearby ? geo.position ?? undefined : undefined,
       }),
-    [allExperiences, filters]
+    [allExperiences, filters, geo.position]
   );
 
   const visibleExperiences = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
@@ -183,6 +224,18 @@ export default function ExperiencesPageContent() {
             All <span className="bg-gradient-to-r from-[#ff385c] to-[#FF7A18] bg-clip-text text-transparent">Experiences</span>
           </h1>
           <p className="text-[#4a4a4a] text-body-lg">{filtered.length} moments to discover</p>
+          {geo.position && filters.location !== "All" && (
+            <p className="text-caption text-[#ff385c] mt-1">
+              📍 Showing experiences near <strong>{filters.location}</strong>
+              {geo.loading && <span className="text-text-tertiary ml-1">(detecting location...)</span>}
+            </p>
+          )}
+          {geo.loading && !geo.position && (
+            <p className="text-caption text-text-tertiary mt-1 animate-pulse">Detecting your location...</p>
+          )}
+          {geo.error && filters.location === "All" && (
+            <p className="text-caption text-amber-600 mt-1">Enable location to see experiences near you</p>
+          )}
         </div>
 
         <div className="relative mb-6 max-w-xl">
@@ -271,14 +324,20 @@ export default function ExperiencesPageContent() {
           </select>
 
           <button
-            onClick={() => updateFilter("nearby", !filters.nearby)}
-            className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 ${
+            onClick={() => {
+              if (!filters.nearby && !geo.position && !geo.loading) {
+                geo.requestPosition();
+              }
+              updateFilter("nearby", !filters.nearby);
+            }}
+            className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 ${
               filters.nearby
                 ? "bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white shadow-sm shadow-[#ff385c]/20"
                 : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#ff385c]/30"
             }`}
           >
-            Nearby
+            <svg className={`w-3.5 h-3.5 ${geo.loading ? "animate-pulse" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            {geo.loading ? "Locating..." : geo.position && filters.nearby ? "📍 Near You" : "Nearby"}
           </button>
         </div>
 

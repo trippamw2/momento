@@ -8,9 +8,25 @@ import { Experience } from "@/lib/types";
 import ContentRail from "./ContentRail";
 import AuthModal from "./AuthModal";
 
+// ─── Constants ───
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+// ─── Star Rating Display ───
+function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "md" }) {
+  const cls = size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4";
+  return (
+    <div className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <svg key={star} className={`${cls} ${star <= Math.round(rating) ? "text-yellow-400" : "text-[#e0e0e0]"}`} fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+      ))}
+    </div>
+  );
+}
+
+// ─── Calendar ───
 function Calendar({ selectedDate, onSelect }: { selectedDate: Date | null; onSelect: (d: Date) => void }) {
   const today = useMemo(() => new Date(), []);
   const [month, setMonth] = useState(today.getMonth());
@@ -71,7 +87,7 @@ function Calendar({ selectedDate, onSelect }: { selectedDate: Date | null; onSel
               onClick={() => onSelect(new Date(year, month, d))}
               className={`w-full aspect-square rounded-lg text-caption font-medium flex items-center justify-center transition-all ${
                 selected
-                  ? "bg-[#ff385c] text-white"
+                  ? "bg-[#ff385c] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
                   : disabled
                     ? "text-[#929292]/30 line-through cursor-not-allowed"
                     : "text-[#6a6a6a] hover:bg-[#FFF8F0] hover:text-[#222222]"
@@ -86,6 +102,7 @@ function Calendar({ selectedDate, onSelect }: { selectedDate: Date | null; onSel
   );
 }
 
+// ─── GuestSelector ───
 function GuestSelector({ value, onChange, maxGuests }: { value: number; onChange: (v: number) => void; maxGuests: number }) {
   return (
     <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-[#ebebeb]">
@@ -111,11 +128,32 @@ function GuestSelector({ value, onChange, maxGuests }: { value: number; onChange
   );
 }
 
+// ─── Review Card ───
+function ReviewCard({ review }: { review: Experience["reviews"][number] }) {
+  return (
+    <div className="p-5 rounded-2xl bg-white border border-[#ebebeb] shadow-sm hover:shadow-md transition-all duration-300">
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <Image src={review.avatar} alt={review.author} width={40} height={40} className="rounded-full bg-[#ebebeb] ring-2 ring-white" />
+          <div>
+            <p className="text-body-sm font-semibold text-[#222222]">{review.author}</p>
+            <p className="text-caption text-[#929292]">{review.date}</p>
+          </div>
+        </div>
+        <StarRating rating={review.rating} size="sm" />
+      </div>
+      <p className="text-body-sm text-[#6a6a6a] leading-relaxed">{review.text}</p>
+    </div>
+  );
+}
+
+// ─── Props ───
 interface Props {
   experience: Experience;
   similarExperiences: Experience[];
 }
 
+// ─── Main Component ───
 export default function ExperienceDetailClient({ experience: exp, similarExperiences }: Props) {
   const [activeImage, setActiveImage] = useState(0);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -145,21 +183,13 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
 
   const handleBookNow = async () => {
     if (!selectedDate) return;
-
     const token = localStorage.getItem("momento-auth-token");
-    if (!token) {
-      setAuthOpen(true);
-      return;
-    }
-
+    if (!token) { setAuthOpen(true); return; }
     setBooking(true);
     try {
       const res = await fetch("/api/bookings", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           experience_id: exp.id,
           guests_count: guests,
@@ -191,10 +221,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
       const data = await res.json();
       if (res.ok && data) {
         const balance = data.balance || data.amount || 0;
-        if (balance <= 0) {
-          setGiftError("This gift card has no remaining balance");
-          return;
-        }
+        if (balance <= 0) { setGiftError("This gift card has no remaining balance"); return; }
         setGiftAmount(Math.min(balance, exp.price * guests));
         setGiftApplied(true);
       } else {
@@ -207,10 +234,9 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
     }
   };
 
-  const gotoNearby = () => {
-    window.location.href = "/experiences?nearby=true";
-  };
+  const gotoNearby = () => { window.location.href = "/experiences?nearby=true"; };
 
+  // ─── Booking Confirmed State ───
   if (bookingDone) {
     return (
       <div className="pt-24 pb-16 min-h-screen flex items-center justify-center bg-ambient-warm">
@@ -236,42 +262,103 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
     );
   }
 
+  // ─── Ratings Breakdown ───
+  const ratingBreakdown = useMemo(() => {
+    const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+    exp.reviews.forEach((r) => {
+      const k = Math.round(r.rating) as keyof typeof counts;
+      if (k >= 1 && k <= 5) counts[k]++;
+    });
+    const total = exp.reviews.length || 1;
+    return Object.entries(counts)
+      .reverse()
+      .map(([star, count]) => ({ star: Number(star), count, pct: (count / total) * 100 }));
+  }, [exp.reviews]);
+
+  const totalPrice = exp.price * guests;
+  const finalPrice = Math.max(0, totalPrice - giftAmount);
+
+  // ─── Render ───
   return (
-    <div className="pt-16 bg-ambient-warm min-h-screen">
+    <div className="bg-ambient-warm min-h-screen">
       {authOpen && <AuthModal onClose={() => setAuthOpen(false)} />}
-      {/* ─── Hero Image Gallery ─── */}
+
+      {/* ════════════════════════════════════════════ */}
+      {/* HERO GALLERY                                */}
+      {/* ════════════════════════════════════════════ */}
       <section className="relative">
-        <div className="relative h-[50vh] sm:h-[65vh] md:h-[75vh]">
+        <div className="relative h-[55vh] sm:h-[70vh] md:h-[80vh] overflow-hidden">
           {exp.images.map((img, i) => (
             <Image
               key={i}
               src={img}
               alt={`${exp.title} - Image ${i + 1}`}
               fill
-              className={`object-cover transition-opacity duration-500 ${i === activeImage ? "opacity-100" : "opacity-0"}`}
+              className={`object-cover transition-all duration-700 ease-out ${i === activeImage ? "opacity-100 scale-100" : "opacity-0 scale-105"}`}
               sizes="100vw"
               priority={i === 0}
             />
           ))}
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/5 to-transparent" />
+          {/* Overlay gradients */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#05070B]/70 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent" />
 
-          <Link
-            href="/experiences"
-            className="absolute top-20 left-4 sm:left-8 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md text-[#222222] text-body-sm border border-[#ebebeb] hover:bg-white transition-colors z-10"
-          >
-            ← Back
-          </Link>
+          {/* Top bar: Back + Save + Share */}
+          <div className="absolute top-20 left-4 sm:left-8 right-4 sm:right-8 flex items-start justify-between z-10">
+            <Link
+              href="/experiences"
+              className="px-4 py-2 rounded-full bg-white/90 backdrop-blur-md text-[#222222] text-body-sm font-medium border border-[#ebebeb] hover:bg-white transition-all shadow-sm"
+            >
+              ← Back
+            </Link>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setSaved(!saved)}
+                className={`w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md border transition-all shadow-sm ${
+                  saved
+                    ? "bg-[#ff385c] text-white border-[#ff385c]"
+                    : "bg-white/90 text-[#222222] border-[#ebebeb] hover:bg-white"
+                }`}
+                aria-label={saved ? "Unsave" : "Save"}
+              >
+                <svg className="w-4 h-4" fill={saved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </button>
+              <button
+                onClick={handleShare}
+                className="w-9 h-9 rounded-full bg-white/90 backdrop-blur-md text-[#222222] border border-[#ebebeb] hover:bg-white transition-all flex items-center justify-center shadow-sm"
+                aria-label="Share"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* "Show all photos" button */}
+          {exp.images.length > 5 && (
+            <button
+              onClick={() => setActiveImage(0)}
+              className="absolute bottom-24 right-4 sm:right-8 z-10 px-4 py-2 rounded-lg bg-white/90 backdrop-blur-md text-[#222222] text-caption font-medium border border-[#ebebeb] hover:bg-white transition-all shadow-sm"
+            >
+              Show all {exp.images.length} photos
+            </button>
+          )}
         </div>
 
+        {/* Thumbnail strip */}
         <div className="absolute bottom-4 left-4 sm:left-8 right-4 sm:right-8 z-10">
-          <div className="flex gap-2 overflow-x-auto hide-scrollbar">
+          <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
             {exp.images.map((img, i) => (
               <button
                 key={i}
                 onClick={() => setActiveImage(i)}
-                className={`relative w-16 h-12 sm:w-20 sm:h-14 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all duration-200 ${
-                  i === activeImage ? "border-[#ff385c] ring-1 ring-[#ff385c]/40" : "border-[#ebebeb] hover:border-[#ebebeb]"
+                className={`relative w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all duration-200 ${
+                  i === activeImage
+                    ? "border-white ring-2 ring-white/60 shadow-lg"
+                    : "border-white/50 hover:border-white"
                 }`}
               >
                 <Image src={img} alt="" fill className="object-cover" sizes="80px" />
@@ -281,37 +368,34 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
         </div>
       </section>
 
-      {/* ─── Desktop Layout ─── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:grid lg:grid-cols-3 lg:gap-10 relative -mt-24 z-20">
-        {/* Main Content */}
+      {/* ════════════════════════════════════════════ */}
+      {/* MAIN LAYOUT: Content + Sidebar              */}
+      {/* ════════════════════════════════════════════ */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:grid lg:grid-cols-3 lg:gap-10 relative -mt-16 z-20">
+
+        {/* ─── LEFT COLUMN: Content ─── */}
         <div className="lg:col-span-2">
           <div className="bg-white rounded-2xl border border-[#ebebeb] p-5 sm:p-8 mb-6 shadow-sm">
             {/* Mood Tags */}
             <div className="flex flex-wrap items-center gap-2 mb-4">
-              {exp.mood.map((m) => {
-                return (
-                  <span key={m} className="px-3 py-1 rounded-full bg-[#FFF0F3] text-caption text-[#6a6a6a] border border-[#ebebeb]">
-                    {m}
-                  </span>
-                );
-              })}
+              {exp.mood.map((m) => (
+                <span key={m} className="px-3 py-1 rounded-full bg-[#FFF0F3] text-caption text-[#6a6a6a] border border-[#ebebeb] font-medium">
+                  {m}
+                </span>
+              ))}
             </div>
 
-            <h1 className="text-display-sm font-bold text-[#222222] mb-1">{exp.title}</h1>
+            {/* Title + Subtitle */}
+            <h1 className="text-display-sm font-bold text-[#222222] mb-1 leading-tight">{exp.title}</h1>
             <p className="text-[#6a6a6a] text-heading-md mb-5">{exp.subtitle}</p>
 
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-6">
+            {/* Stats Bar */}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-6 pb-6 border-b border-[#ebebeb]">
               <div className="flex items-center gap-1.5 text-body-sm text-[#6a6a6a]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                 {exp.location}
-                <span className="text-[#929292]">·</span>
-                <span className="text-[#929292]">{exp.city}</span>
-                {exp.distance && (
-                  <>
-                    <span className="text-[#929292]">·</span>
-                    <span className="text-[#929292]">{exp.distance}</span>
-                  </>
-                )}
+                {exp.city && <><span className="text-[#929292]">·</span><span className="text-[#929292]">{exp.city}</span></>}
+                {exp.distance && <><span className="text-[#929292]">·</span><span className="text-[#929292]">{exp.distance}</span></>}
               </div>
               <div className="flex items-center gap-1.5 text-body-sm text-[#6a6a6a]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -319,11 +403,12 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               </div>
               <div className="flex items-center gap-1.5 text-body-sm">
                 <span className="text-yellow-400">★</span>
-                <span className="text-[#222222] font-medium">{exp.rating}</span>
+                <span className="text-[#222222] font-semibold">{exp.rating}</span>
                 <span className="text-[#929292]">({exp.reviewCount} reviews)</span>
               </div>
             </div>
 
+            {/* Mobile: Quick Booking Summary */}
             <div className="lg:hidden flex items-center justify-between p-4 rounded-xl bg-white border border-[#ebebeb] mb-6 shadow-sm">
               <div>
                 <p className="text-caption text-[#929292]">From</p>
@@ -349,27 +434,35 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               </div>
             </div>
 
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-white border border-[#ebebeb] mb-8">
-              <div className="w-12 h-12 rounded-full bg-[#ff385c] flex items-center justify-center text-white font-bold text-body-sm flex-shrink-0">
-                {exp.partner.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+            {/* Host Section */}
+            <div className="flex items-center justify-between p-4 rounded-xl bg-white border border-[#ebebeb] mb-6 shadow-sm hover:bg-[#FFF8F0] transition-all">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#ff385c] to-[#FF7A18] flex items-center justify-center text-white font-bold text-body-sm flex-shrink-0 shadow-sm">
+                  {exp.partner.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                </div>
+                <div>
+                  <p className="text-caption text-[#929292]">Hosted by</p>
+                  <p className="text-body-sm font-semibold text-[#222222]">{exp.partner}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-caption text-[#929292]">Hosted by</p>
-                <p className="text-body-sm font-semibold text-[#222222]">{exp.partner}</p>
-              </div>
+              <button className="px-4 py-2 rounded-xl border border-[#ebebeb] text-body-sm font-medium text-[#222222] hover:bg-white hover:border-[#dddddd] transition-all">
+                Message
+              </button>
             </div>
 
-            <div className="mb-8">
+            {/* About */}
+            <div className="mb-6">
               <h2 className="text-heading-md font-bold text-[#222222] mb-3">About this experience</h2>
               <p className="text-[#6a6a6a] text-body leading-relaxed">{exp.description}</p>
             </div>
 
-            <div className="mb-8">
+            {/* What's Included */}
+            <div className="mb-6">
               <h2 className="text-heading-md font-bold text-[#222222] mb-4">What&apos;s included</h2>
               <div className="grid sm:grid-cols-2 gap-3">
                 {exp.includes.map((item, i) => (
                   <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
-                    <div className="w-5 h-5 rounded-full bg-[#ff385c] flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-5 h-5 rounded-full bg-[#ff385c] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                     </div>
                     <span className="text-body-sm text-[#6a6a6a]">{item}</span>
@@ -378,54 +471,77 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               </div>
             </div>
 
-            {/* Reviews */}
-            <div className="mb-8">
-              <h2 className="text-heading-md font-bold text-[#222222] mb-4">
-                Reviews <span className="text-[#929292]">({exp.reviews.length})</span>
-              </h2>
-              <div className="space-y-4">
-                {exp.reviews.map((review) => (
-                  <div key={review.id} className="p-4 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <Image src={review.avatar} alt={review.author} width={36} height={36} className="rounded-full bg-[#ebebeb]" />
-                        <div>
-                          <p className="text-body-sm font-semibold text-[#222222]">{review.author}</p>
-                          <p className="text-caption text-[#929292]">{review.date}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-0.5">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <svg key={star} className={`w-4 h-4 ${star <= Math.round(review.rating) ? "text-yellow-400" : "text-[#929292]/30"}`} fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        ))}
-                      </div>
+            {/* ═══ Reviews Section ═══ */}
+            <div className="mb-6 pt-4 border-t border-[#ebebeb]">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-heading-md font-bold text-[#222222] flex items-center gap-2">
+                  <span className="text-yellow-400 text-heading">★</span>
+                  <span>{exp.rating}</span>
+                  <span className="text-[#929292] font-normal text-body-sm">· {exp.reviews.length} reviews</span>
+                </h2>
+              </div>
+
+              {/* Star Breakdown Bars */}
+              <div className="space-y-2 mb-6 p-4 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
+                {ratingBreakdown.map(({ star, count, pct }) => (
+                  <div key={star} className="flex items-center gap-3">
+                    <span className="text-caption font-medium text-[#6a6a6a] w-6 text-right">{star}</span>
+                    <svg className="w-3.5 h-3.5 text-yellow-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    <div className="flex-1 h-2 rounded-full bg-[#ebebeb] overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-[#ff385c] transition-all duration-500"
+                        style={{ width: `${pct}%` }}
+                      />
                     </div>
-                    <p className="text-body-sm text-[#6a6a6a] leading-relaxed">{review.text}</p>
+                    <span className="text-caption text-[#929292] w-8">{count}</span>
                   </div>
                 ))}
               </div>
+
+              {/* Review Cards */}
+              <div className="space-y-4">
+                {exp.reviews.map((review) => (
+                  <ReviewCard key={review.id} review={review} />
+                ))}
+              </div>
+
+              {exp.reviews.length === 0 && (
+                <div className="text-center py-8 text-[#929292] text-body-sm">
+                  No reviews yet. Be the first to share your experience!
+                </div>
+              )}
+
+              <button className="mt-4 px-6 py-2.5 rounded-xl border border-[#ebebeb] text-body-sm font-medium text-[#222222] hover:bg-[#FFF8F0] hover:border-[#dddddd] transition-all flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                Write a Review
+              </button>
             </div>
 
             {/* Map */}
-            <div className="mb-8">
-              <h2 className="text-heading-md font-bold text-[#222222] mb-4">Location</h2>
-              <div className="rounded-xl overflow-hidden border border-[#ebebeb] h-64 relative">
+            <div className="mb-6 pt-4 border-t border-[#ebebeb]">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-heading-md font-bold text-[#222222]">Location</h2>
+                <button onClick={gotoNearby} className="text-body-sm text-[#ff385c] font-medium hover:text-[#e00b41] transition-colors">
+                  Find nearby
+                </button>
+              </div>
+              <div className="rounded-xl overflow-hidden border border-[#ebebeb] h-64 relative shadow-sm">
                 <iframe
                   src={`https://www.openstreetmap.org/export/embed.html?bbox=${exp.coordinates.lng - 0.05}%2C${exp.coordinates.lat - 0.05}%2C${exp.coordinates.lng + 0.05}%2C${exp.coordinates.lat + 0.05}&layer=mapnik&marker=${exp.coordinates.lat}%2C${exp.coordinates.lng}`}
                   className="w-full h-full border-0"
                   title="Location map"
                   loading="lazy"
                 />
-                <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-lg bg-white/90 backdrop-blur-md text-caption text-[#6a6a6a] border border-[#ebebeb]">
+                <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-lg bg-white/90 backdrop-blur-md text-caption text-[#6a6a6a] border border-[#ebebeb] shadow-sm">
                   📍 {exp.location} · {exp.city}
                 </div>
               </div>
             </div>
 
             {/* Mobile Actions */}
-            <div className="lg:hidden flex flex-col gap-3">
+            <div className="lg:hidden flex flex-col gap-3 pt-2">
               <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => setSaved(!saved)}
@@ -450,35 +566,34 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   {shareFeedback ? "✓ Copied" : "↗ Share"}
                 </button>
               </div>
-              <button onClick={gotoNearby} className="text-body-sm text-[#929292] hover:text-[#6a6a6a] transition-colors text-center py-2">
-                Find experiences near {exp.location}
-              </button>
             </div>
           </div>
         </div>
 
-        {/* ─── Sticky Booking Sidebar ─── */}
-          <div className="hidden lg:block">
-            <div className="sticky top-24">
-              <div className="bg-white rounded-2xl border border-[#ebebeb] p-6 shadow-sm">
-                <div className="mb-5">
-                  <p className="text-heading-lg font-bold text-[#222222]">
-                    MK {exp.price.toLocaleString()}
-                  </p>
-                  <p className="text-caption text-[#929292]">per person</p>
+        {/* ─── RIGHT COLUMN: Sticky Booking Sidebar ─── */}
+        <div className="hidden lg:block">
+          <div className="sticky top-24">
+            <div className="bg-white rounded-2xl border border-[#ebebeb] shadow-sm hover:shadow-md transition-shadow duration-300">
+              {/* Price Header */}
+              <div className="p-6 pb-4 border-b border-[#ebebeb]">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-heading-lg font-bold text-[#222222]">MK {exp.price.toLocaleString()}</span>
+                  <span className="text-caption text-[#929292]">/ person</span>
                 </div>
+              </div>
 
-                <div className="mb-4">
-                  <p className="text-body-sm font-semibold text-[#222222] mb-3">Select date</p>
+              <div className="p-6 pt-4 space-y-4">
+                {/* Calendar */}
+                <div>
+                  <p className="text-body-sm font-semibold text-[#222222] mb-2">Select date</p>
                   <Calendar selectedDate={selectedDate} onSelect={setSelectedDate} />
                 </div>
 
-                <div className="mb-6">
-                  <GuestSelector value={guests} onChange={setGuests} maxGuests={exp.capacity} />
-                </div>
+                {/* Guest Selector */}
+                <GuestSelector value={guests} onChange={setGuests} maxGuests={exp.capacity} />
 
-                {/* ── Gift Card Input ── */}
-                <div className="mb-5 p-3 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
+                {/* Gift Card */}
+                <div className="p-3 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
                   <p className="text-caption font-semibold text-[#4a4a4a] mb-2 uppercase tracking-wider">Gift Card</p>
                   <div className="flex gap-2">
                     <input
@@ -508,16 +623,14 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                       </button>
                     )}
                   </div>
-                  {giftError && (
-                    <p className="text-caption text-red-500 mt-1.5">{giftError}</p>
-                  )}
+                  {giftError && <p className="text-caption text-red-500 mt-1.5">{giftError}</p>}
                 </div>
 
-                {/* ── Total Breakdown ── */}
-                <div className="space-y-2 mb-5">
+                {/* Price Breakdown */}
+                <div className="space-y-2">
                   <div className="flex items-center justify-between text-body-sm text-[#6a6a6a]">
                     <span>MK {exp.price.toLocaleString()} × {guests} {guests === 1 ? "guest" : "guests"}</span>
-                    <span>MK {(exp.price * guests).toLocaleString()}</span>
+                    <span>MK {totalPrice.toLocaleString()}</span>
                   </div>
                   {giftApplied && giftAmount > 0 && (
                     <div className="flex items-center justify-between text-body-sm text-emerald-600">
@@ -527,16 +640,15 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   )}
                   <div className="flex items-center justify-between p-3 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
                     <span className="text-body-sm font-semibold text-[#222222]">Total</span>
-                    <span className="text-heading-sm font-bold text-[#222222]">
-                      MK {Math.max(0, exp.price * guests - giftAmount).toLocaleString()}
-                    </span>
+                    <span className="text-heading-sm font-bold text-[#222222]">MK {finalPrice.toLocaleString()}</span>
                   </div>
                 </div>
 
+                {/* Book Now */}
                 <button
                   onClick={handleBookNow}
                   disabled={!selectedDate || booking}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {booking ? (
                     <>
@@ -550,38 +662,54 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   )}
                 </button>
 
-                <div className="grid grid-cols-3 gap-2 mt-3">
+                <p className="text-caption text-[#929292] text-center">You won&apos;t be charged yet</p>
+
+                {/* Action Buttons */}
+                <div className="grid grid-cols-3 gap-2">
                   <button
                     onClick={() => setSaved(!saved)}
-                    className={`py-2.5 rounded-xl border transition-all text-caption font-medium ${
+                    className={`py-2.5 rounded-xl border transition-all text-caption font-medium flex items-center justify-center gap-1 ${
                       saved
                         ? "border-[#ff385c] text-[#ff385c] bg-[#ff385c]/10"
                         : "border-[#ebebeb] text-[#6a6a6a] hover:bg-[#FFF8F0] hover:text-[#222222]"
                     }`}
                   >
-                    {saved ? "♥" : "♡"}
+                    <svg className="w-3.5 h-3.5" fill={saved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    Save
                   </button>
                   <Link
                     href={`/gift?exp=${exp.id}`}
-                    className="py-2.5 rounded-xl border border-[#ebebeb] text-[#6a6a6a] text-caption font-medium text-center hover:bg-[#FFF8F0] hover:text-[#222222] transition-all"
+                    className="py-2.5 rounded-xl border border-[#ebebeb] text-[#6a6a6a] text-caption font-medium text-center hover:bg-[#FFF8F0] hover:text-[#222222] transition-all flex items-center justify-center gap-1"
                   >
-                    🎁
+                    🎁 Gift
                   </Link>
                   <button
                     onClick={handleShare}
-                    className="py-2.5 rounded-xl border border-[#ebebeb] text-[#6a6a6a] text-caption font-medium hover:bg-[#FFF8F0] hover:text-[#222222] transition-all"
+                    className="py-2.5 rounded-xl border border-[#ebebeb] text-[#6a6a6a] text-caption font-medium hover:bg-[#FFF8F0] hover:text-[#222222] transition-all flex items-center justify-center gap-1"
                   >
-                    {shareFeedback ? "✓" : "↗"}
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                    Share
                   </button>
                 </div>
               </div>
             </div>
           </div>
+        </div>
       </div>
 
-      {/* ─── Similar Experiences ─── */}
-      <div className="mt-8">
-        <ContentRail title="Similar Experiences" experiences={similarExperiences} viewAllHref="/experiences" />
+      {/* ════════════════════════════════════════════ */}
+      {/* SIMILAR EXPERIENCES                          */}
+      {/* ════════════════════════════════════════════ */}
+      <div className="mt-8 pb-12">
+        <ContentRail
+          title="Similar Experiences"
+          experiences={similarExperiences}
+          viewAllHref="/experiences"
+        />
       </div>
     </div>
   );
