@@ -2,10 +2,12 @@ import { notFound } from "next/navigation";
 import { createServerClient } from "@/lib/supabase-server";
 import ExperienceDetailClient from "@/components/ExperienceDetailClient";
 import { transformExperience } from "@/lib/transform";
+import { experiences as mockExperiences } from "@/lib/data";
 
 export default async function ExperienceDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
+  // Try Supabase first
   const supabase = createServerClient();
   const { data: raw, error } = await supabase
     .from("experiences")
@@ -13,7 +15,12 @@ export default async function ExperienceDetail({ params }: { params: Promise<{ i
     .eq("id", id)
     .single();
 
-  if (error || !raw) notFound();
+  // Fall back to mock data if Supabase fails
+  if (error || !raw) {
+    const mock = mockExperiences.find((e) => e.id === id);
+    if (!mock) notFound();
+    return <ExperienceDetailClient experience={mock} similarExperiences={mockExperiences.filter((e) => e.id !== id).slice(0, 8)} />;
+  }
 
   const { data: reviews } = await supabase
     .from("reviews")

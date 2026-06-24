@@ -11,13 +11,16 @@
   --color-brand-purple: #9F3BFF;
   --color-brand-soft-white: #FFFFFF;
 
-  /* ── Surface Colors (Light theme — Airbnb white canvases) ── */
-  --color-surface-primary: #ffffff;
-  --color-surface-secondary: #f7f7f7;
+  /* ── Surface Colors (Social Lifestyle — warm, vibrant canvases) ── */
+  --color-surface-primary: #faf8f6;
+  --color-surface-secondary: #f5f2ef;
   --color-surface-tertiary: #ffffff;
   --color-surface-elevated: #ffffff;
-  --color-surface-hover: #f7f7f7;
-  --color-surface-glass: rgba(0, 0, 0, 0.02);
+  --color-surface-hover: #f0ece8;
+  --color-surface-glass: rgba(255, 56, 92, 0.03);
+  --color-surface-warm: #FFF8F0;
+  --color-surface-rose: #FFF0F3;
+  --color-surface-lavender: #F8F0FF;
 
   /* ── Text Colors ── */
   --color-text-primary: #111111;
