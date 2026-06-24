@@ -21,7 +21,7 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     if (!token) { setLoading(false); return; }
 
     fetch("/api/loyalty/points", {
@@ -75,7 +75,7 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
           </div>
           <div className="w-full h-2 rounded-full bg-[#f0f0f0] overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#ff385c] to-[#FF7A18] transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-[#DD2A7B] to-[#F58529] transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>

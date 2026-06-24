@@ -121,7 +121,7 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
       }
 
       // Price
-      ctx.fillStyle = "#ff385c";
+      ctx.fillStyle = "#DD2A7B";
       ctx.font = "bold 22px sans-serif";
       ctx.textAlign = "right";
       ctx.fillText(`MK ${booking.price.toLocaleString()}`, rect.width - 20, 88);
@@ -138,7 +138,7 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
       ctx.fillStyle = "rgba(255,255,255,0.2)";
       ctx.font = "8px sans-serif";
       ctx.textAlign = "left";
-      ctx.fillText("MOMENTO — Curated Experiences", 20, rect.height - 10);
+      ctx.fillText("EXPERIO — Live The Experience", 20, rect.height - 10);
 
       const link = document.createElement("a");
       link.download = `booking-${booking.bookingRef}.png`;
@@ -155,8 +155,8 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
         className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0f0f1a] via-[#1a1a2e] to-[#16213e] border border-white/[0.08] shadow-xl transition-all duration-500 hover:shadow-2xl hover:scale-[1.01]"
       >
         {/* Decorative background elements */}
-        <div className="absolute top-0 right-0 w-48 h-48 bg-[#ff385c]/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-40 h-40 bg-[#9F3BFF]/5 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl" />
+        <div className="absolute top-0 right-0 w-48 h-48 bg-[#DD2A7B]/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-2xl" />
+        <div className="absolute bottom-0 left-0 w-40 h-40 bg-[#8134AF]/5 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.03)_0%,transparent_60%)]" />
 
         {/* Perforation line (left side ticket stub effect) */}
@@ -171,7 +171,7 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
               <span className="text-caption font-semibold text-white/60 uppercase tracking-wider">{booking.status}</span>
             </div>
             <div className="text-right">
-              <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.15em]">Momento</p>
+              <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.15em]">Experio</p>
               <p className="text-[8px] text-white/10">EXPERIENCE PASS</p>
             </div>
           </div>
@@ -220,7 +220,7 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
 
             {/* Right: Price + QR (desktop) */}
             <div className="hidden sm:flex flex-col items-end gap-3">
-              <p className="text-heading-lg font-bold text-[#ff385c]">MK {booking.price.toLocaleString()}</p>
+              <p className="text-heading-lg font-bold text-[#DD2A7B]">MK {booking.price.toLocaleString()}</p>
               {qrDataUrl && (
                 <div className="flex flex-col items-center gap-1">
                   <Image src={qrDataUrl} alt="QR Code" width={80} height={80} className="rounded-lg bg-white p-1.5 shadow-lg" />
@@ -233,7 +233,7 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
           {/* Mobile price */}
           <div className="sm:hidden mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between">
             <p className="text-caption text-white/40">Total</p>
-            <p className="text-heading-sm font-bold text-[#ff385c]">MK {booking.price.toLocaleString()}</p>
+            <p className="text-heading-sm font-bold text-[#DD2A7B]">MK {booking.price.toLocaleString()}</p>
           </div>
         </div>
       </div>
@@ -245,7 +245,7 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
             <>
               <Link
                 href={`/experiences/${booking.id}`}
-                className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white text-body-sm font-semibold text-center hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+                className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white text-body-sm font-semibold text-center hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
               >
                 View Details
               </Link>

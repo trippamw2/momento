@@ -28,7 +28,7 @@ interface ExperienceCardProps {
 function loadSaved(): string[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem("momento-saved");
+    const raw = localStorage.getItem("experio-saved");
     if (!raw) return [];
     const state = JSON.parse(raw);
     return state.savedIds || [];
@@ -50,10 +50,10 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
     const current = loadSaved();
     const next = saved ? current.filter((id: string) => id !== exp.id) : [...current, exp.id];
     try {
-      const raw = localStorage.getItem("momento-saved");
+      const raw = localStorage.getItem("experio-saved");
       const state = raw ? JSON.parse(raw) : { savedIds: [], collections: [] };
       state.savedIds = next;
-      localStorage.setItem("momento-saved", JSON.stringify(state));
+      localStorage.setItem("experio-saved", JSON.stringify(state));
     } catch {}
     trackSaved(exp.id, !saved);
     setSaved(!saved);
@@ -111,9 +111,9 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
           </span>
           <button
             onClick={toggleSave}
-            className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-[#ff385c]/80 hover:scale-110 active:scale-90"
+            className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-[#DD2A7B]/80 hover:scale-110 active:scale-90"
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill={saved ? "#ff385c" : "none"} stroke={saved ? "#ff385c" : "white"} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill={saved ? "#DD2A7B" : "none"} stroke={saved ? "#DD2A7B" : "white"} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
           </button>
@@ -146,7 +146,7 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
             <Link
               href={`/experiences/${exp.id}`}
               onClick={(e) => e.stopPropagation()}
-              className="flex-1 py-2 rounded-lg bg-gradient-to-r from-[#ff385c] to-[#FF7A18] text-white text-caption font-bold tracking-wide shadow-[0_2px_12px_rgba(255,56,92,0.3)] hover:shadow-[0_4px_20px_rgba(255,56,92,0.45)] transition-all duration-300 text-center active:scale-[0.97]"
+              className="flex-1 py-2 rounded-lg bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white text-caption font-bold tracking-wide shadow-[0_2px_12px_rgba(255,56,92,0.3)] hover:shadow-[0_4px_20px_rgba(255,56,92,0.45)] transition-all duration-300 text-center active:scale-[0.97]"
             >
               Book Now
             </Link>
