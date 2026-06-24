@@ -13,20 +13,29 @@ const protectedPaths = [
   "/api/collections",
   "/api/notifications",
   "/api/reviews",
+  "/api/loyalty",
+  "/api/users",
 ];
 
 const partnerPaths = [
-  "/api/experiences",
+  "/api/experiences/partner",
+  "/api/bookings/partner",
   "/api/analytics",
+  "/api/partners",
 ];
 
 const adminPaths = [
-  "/api/users",
+  "/api/admin",
+];
+
+const adminPagePaths = [
+  "/admin",
 ];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Allow auth routes
   if (pathname.startsWith("/api/auth")) {
     return NextResponse.next();
   }
@@ -34,12 +43,24 @@ export async function proxy(request: NextRequest) {
   const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
   const isPartnerRoute = partnerPaths.some((p) => pathname.startsWith(p));
   const isAdminRoute = adminPaths.some((p) => pathname.startsWith(p));
+  const isAdminPage = adminPagePaths.some((p) => pathname.startsWith(p));
+
+  // Admin page routes — redirect to home if not admin
+  if (isAdminPage) {
+    const authCookie = request.cookies.get("momento-auth-token");
+    const roleCookie = request.cookies.get("momento-user-role");
+    if (!authCookie?.value || roleCookie?.value !== "admin") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
 
   if (!isProtected && !isPartnerRoute && !isAdminRoute) {
     return NextResponse.next();
   }
 
-  const token = request.headers.get("Authorization")?.replace("Bearer ", "");
+  const token = request.headers.get("Authorization")?.replace("Bearer ", "") 
+    || request.cookies.get("momento-auth-token")?.value;
+    
   if (!token) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -53,14 +74,14 @@ export async function proxy(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  if (isAdminRoute || isPartnerRoute) {
+  if (isAdminRoute || isAdminPage || isPartnerRoute) {
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")
       .eq("id", user.id)
       .single();
 
-    if (isAdminRoute && profile?.role !== "admin") {
+    if ((isAdminRoute || isAdminPage) && profile?.role !== "admin") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -69,9 +90,16 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+
+  // Security headers
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+
+  return response;
 }
 
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|images).*)"],
 };
