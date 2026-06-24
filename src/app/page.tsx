@@ -79,21 +79,151 @@ export default function Home() {
     return shuffle(all).slice(0, 4);
   }, [experiences]);
 
+  // ─── Helper components ───
+
+  const GridCards = ({ title, items }: { title: string; items: Experience[] }) => (
+    <section className="mb-10 px-4 sm:px-8">
+      <div className="flex items-end justify-between mb-4">
+        <h2 className="text-heading-lg sm:text-heading-xl font-bold text-[#222222]">{title}</h2>
+        <Link href="/experiences" className="text-body-sm text-[#4a4a4a] hover:text-[#ff385c] transition-colors duration-200 flex items-center gap-1 flex-shrink-0">
+          See all
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+        </Link>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {items.map((exp) => (
+          <Link key={exp.id} href={`/experiences/${exp.id}`} className="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#f0f0f0]">
+            <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+              <p className="text-white text-body-sm font-bold line-clamp-1">{exp.title}</p>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-yellow-400 text-xs">★ {exp.rating}</span>
+                <span className="text-white/50 text-caption">MK {exp.price.toLocaleString()}</span>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+
+  const GridCards2 = ({ title, items }: { title: string; items: Experience[] }) => (
+    <section className="mb-10 px-4 sm:px-8">
+      <div className="flex items-end justify-between mb-4">
+        <h2 className="text-heading-lg sm:text-heading-xl font-bold text-[#222222]">{title}</h2>
+        <Link href="/experiences" className="text-body-sm text-[#4a4a4a] hover:text-[#ff385c] transition-colors duration-200 flex items-center gap-1 flex-shrink-0">
+          See all
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+        </Link>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {items.map((exp) => (
+          <Link key={exp.id} href={`/experiences/${exp.id}`} className="group relative aspect-[16/10] rounded-2xl overflow-hidden bg-[#f0f0f0]">
+            <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4">
+              <p className="text-white text-body font-bold line-clamp-1">{exp.title}</p>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-yellow-400 text-xs">★ {exp.rating}</span>
+                <span className="text-white/50 text-caption">MK {exp.price.toLocaleString()}</span>
+                <span className="text-white/40 text-caption">{exp.location}</span>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+
+  const SectionDivider = ({ title }: { title: string }) => (
+    <div className="px-4 sm:px-8 my-6 sm:my-8">
+      <div className="flex items-center gap-4">
+        <span className="w-1 h-6 rounded-full bg-[#ff385c]" />
+        <h3 className="text-heading-md sm:text-heading-lg font-bold text-[#222222] tracking-tight">{title}</h3>
+        <div className="flex-1 h-px bg-gradient-to-r from-[#ebebeb] to-transparent" />
+      </div>
+    </div>
+  );
+
+  const FeaturedCard = ({ exp }: { exp: Experience }) => (
+    <Link href={`/experiences/${exp.id}`} className="block mx-4 sm:mx-8 mb-10 group">
+      <div className="relative aspect-[21/9] max-h-[420px] rounded-2xl overflow-hidden bg-[#0a0a0a]">
+        <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-caption text-white/90 font-semibold mb-3">
+            Editor&apos;s Pick
+          </div>
+          <h2 className="text-heading-xl sm:text-display-sm font-bold text-white mb-2 leading-tight">{exp.title}</h2>
+          <p className="text-white/70 text-body-sm sm:text-body max-w-xl line-clamp-2">{exp.subtitle}</p>
+          <div className="flex items-center gap-4 mt-3 text-white/60 text-caption">
+            <span className="flex items-center gap-1">★ {exp.rating}</span>
+            <span>MK {exp.price.toLocaleString()}</span>
+            <span>{exp.duration}</span>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+
+  // Build rails map for easy lookup
+  const railsMap = useMemo(() => {
+    const map: Record<string, { key: string; title: string; experiences: Experience[] }> = {};
+    rails.forEach(r => { map[r.key] = r; });
+    return map;
+  }, [rails]);
+
+  // Featured experience (highest rated)
+  const featured = useMemo(() => {
+    return experiences.find(e => e.rating >= 4.9) || experiences[0] || null;
+  }, [experiences]);
+
   return (
     <div className="overflow-x-hidden">
       <HeroSection />
 
       <div className="relative z-10 -mt-12 sm:-mt-16 pb-16 space-y-1">
-        {rails.map((rail) => (
-          <ContentRail
-            key={rail.key}
-            title={rail.title}
-            experiences={rail.experiences}
-            viewAllHref="/experiences"
-          />
-        ))}
+        
+        {/* ─── Trending ─── */}
+        {railsMap.trending && (
+          <ContentRail title={railsMap.trending.title} experiences={railsMap.trending.experiences} viewAllHref="/experiences" />
+        )}
+        
+        {railsMap['most-saved'] && (
+          <GridCards2 title={railsMap['most-saved'].title} items={railsMap['most-saved'].experiences} />
+        )}
 
-        {/* ─── Social Proof Bar ─── */}
+        {/* ─── Curated For You ─── */}
+        <SectionDivider title="Curated For You" />
+        
+        {railsMap.recommended && (
+          <GridCards title={railsMap.recommended.title} items={railsMap.recommended.experiences} />
+        )}
+        
+        {railsMap.weekend && (
+          <ContentRail title={railsMap.weekend.title} experiences={railsMap.weekend.experiences} viewAllHref="/experiences" />
+        )}
+        
+        {railsMap['staff-picks'] && (
+          <ContentRail title={railsMap['staff-picks'].title} experiences={railsMap['staff-picks'].experiences} viewAllHref="/experiences" />
+        )}
+
+        {/* ─── Featured Experience ─── */}
+        {featured && <FeaturedCard exp={featured} />}
+
+        {/* ─── Date Night & Celebrations ─── */}
+        <SectionDivider title="Date Night & Celebrations" />
+        
+        {railsMap['date-ideas'] && (
+          <ContentRail title={railsMap['date-ideas'].title} experiences={railsMap['date-ideas'].experiences} viewAllHref="/experiences" />
+        )}
+        
+        {railsMap.celebrations && (
+          <GridCards title={railsMap.celebrations.title} items={railsMap.celebrations.experiences} />
+        )}
+
+        {/* ─── Social Proof ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-6 sm:my-8">
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 py-4 sm:py-5 px-4 sm:px-8 rounded-2xl bg-[#FFF8F0] border border-[#ebebeb]">
             <div className="flex items-center gap-2">
@@ -120,6 +250,21 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* ─── Wellness & Luxury ─── */}
+        <SectionDivider title="Wellness & Luxury" />
+        
+        {railsMap.wellness && (
+          <ContentRail title={railsMap.wellness.title} experiences={railsMap.wellness.experiences} viewAllHref="/experiences" />
+        )}
+        
+        {railsMap['food-drink'] && (
+          <ContentRail title={railsMap['food-drink'].title} experiences={railsMap['food-drink'].experiences} viewAllHref="/experiences" />
+        )}
+        
+        {railsMap.luxury && (
+          <ContentRail title={railsMap.luxury.title} experiences={railsMap.luxury.experiences} viewAllHref="/experiences" />
+        )}
 
         {/* ─── Gift A Moment ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-10">
@@ -175,6 +320,25 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* ─── Hidden Gems & Adventure ─── */}
+        <SectionDivider title="Hidden Gems & Adventure" />
+        
+        {railsMap['hidden-gems'] && (
+          <ContentRail title={railsMap['hidden-gems'].title} experiences={railsMap['hidden-gems'].experiences} viewAllHref="/experiences" />
+        )}
+        
+        {railsMap.affordable && (
+          <GridCards title={railsMap.affordable.title} items={railsMap.affordable.experiences} />
+        )}
+        
+        {railsMap.adventure && (
+          <ContentRail title={railsMap.adventure.title} experiences={railsMap.adventure.experiences} viewAllHref="/experiences" />
+        )}
+        
+        {railsMap.family && (
+          <ContentRail title={railsMap.family.title} experiences={railsMap.family.experiences} viewAllHref="/experiences" />
+        )}
 
         {/* ─── AI Concierge Teaser ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-10">
