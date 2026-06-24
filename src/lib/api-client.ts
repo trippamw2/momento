@@ -11,7 +11,7 @@ type RequestOptions = {
 
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem("momento-auth-token");
+  return localStorage.getItem("experio-auth-token");
 }
 
 async function request<T>(path: string, opts: RequestOptions = {}): Promise<T> {

@@ -3,11 +3,11 @@
 import { Experience } from "./types";
 
 const STORAGE_KEYS = {
-  VIEWED: "momento-recs-viewed",
-  BOOKED: "momento-recs-booked",
-  SAVED: "momento-recs-saved",
-  CATEGORY_SCORES: "momento-recs-category-scores",
-  LAST_PROMPT: "momento-recs-last-prompt",
+  VIEWED: "experio-recs-viewed",
+  BOOKED: "experio-recs-booked",
+  SAVED: "experio-recs-saved",
+  CATEGORY_SCORES: "experio-recs-category-scores",
+  LAST_PROMPT: "experio-recs-last-prompt",
 } as const;
 
 // ─── Tracking ───

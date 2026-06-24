@@ -165,7 +165,7 @@ function getGalleryImages(category: string): string[] {
 }
 
 function getPartner(title: string): string {
-  return partners[title] || `${title} by Momento`;
+  return partners[title] || `${title} by Experio`;
 }
 
 function getIncludes(category: string): string[] {
