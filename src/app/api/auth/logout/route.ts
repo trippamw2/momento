@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 import { json, handleRouteError } from "@/lib/api-helpers";
 
 export async function POST(request: Request) {
   try {
     const token = request.headers.get("Authorization")?.replace("Bearer ", "");
     if (token) {
-      const supabase = createServerClient();
-      await supabase.auth.admin.signOut(token);
+      const admin = createAdminClient();
+      await admin.auth.admin.signOut(token);
     }
 
     const response = NextResponse.json({ message: "Logged out successfully" });

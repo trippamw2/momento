@@ -1,6 +1,6 @@
-import { createServerClient } from "@/lib/supabase-server";
+import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase-admin";
-import { json, badRequest, serverError, handleRouteError } from "@/lib/api-helpers";
+import { badRequest, serverError, handleRouteError } from "@/lib/api-helpers";
 
 export async function POST(request: Request) {
   try {
@@ -9,8 +9,8 @@ export async function POST(request: Request) {
     if (!email || !password) return badRequest("Email and password are required");
     if (password.length < 6) return badRequest("Password must be at least 6 characters");
 
-    const supabase = createServerClient();
-    const { data: authData, error: signUpError } = await supabase.auth.signUp({
+    const admin = createAdminClient();
+    const { data: authData, error: signUpError } = await admin.auth.signUp({
       email,
       password,
       options: { data: { full_name: fullName } },
@@ -19,7 +19,6 @@ export async function POST(request: Request) {
     if (signUpError) return badRequest(signUpError.message);
     if (!authData.user) return serverError("Failed to create user");
 
-    const admin = createAdminClient();
     const { error: profileError } = await admin.from("profiles").insert({
       id: authData.user.id,
       full_name: fullName ?? null,
@@ -28,13 +27,32 @@ export async function POST(request: Request) {
     });
 
     if (profileError) {
-      await supabase.auth.admin.deleteUser(authData.user.id);
+      await admin.auth.admin.deleteUser(authData.user.id);
       return badRequest(profileError.message);
     }
 
     await admin.from("notification_preferences").insert({ user_id: authData.user.id });
 
-    return json({ user: authData.user, session: authData.session }, 201);
+    const response = NextResponse.json({ user: authData.user, session: authData.session }, { status: 201 });
+
+    if (authData.session?.access_token) {
+      response.cookies.set("momento-auth-token", authData.session.access_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+      response.cookies.set("momento-user-role", "user", {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
+
+    return response;
   } catch (error) {
     return handleRouteError(error);
   }
