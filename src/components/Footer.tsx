@@ -13,7 +13,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-3 mt-5">
               <a
-                href="https://instagram.com/momento"
+                href="https://instagram.com/experio"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-xl bg-[#f7f7f7] border border-[#dddddd] flex items-center justify-center text-[#4a4a4a] hover:text-[#222222] hover:border-[#222222] transition-all"
@@ -22,7 +22,7 @@ export default function Footer() {
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.5 2.25h-9A5.25 5.25 0 002.25 7.5v9a5.25 5.25 0 005.25 5.25h9a5.25 5.25 0 005.25-5.25v-9A5.25 5.25 0 0016.5 2.25zM12 8.25a3.75 3.75 0 110 7.5 3.75 3.75 0 010-7.5z" /></svg>
               </a>
               <a
-                href="https://twitter.com/momento"
+                href="https://twitter.com/experio"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-xl bg-[#f7f7f7] border border-[#dddddd] flex items-center justify-center text-[#4a4a4a] hover:text-[#222222] hover:border-[#222222] transition-all"
@@ -31,7 +31,7 @@ export default function Footer() {
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" /></svg>
               </a>
               <a
-                href="https://facebook.com/momento"
+                href="https://facebook.com/experio"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-xl bg-[#f7f7f7] border border-[#dddddd] flex items-center justify-center text-[#4a4a4a] hover:text-[#222222] hover:border-[#222222] transition-all"
@@ -73,9 +73,9 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-6 border-t border-[#dddddd] flex flex-col sm:flex-row items-center justify-between gap-4 text-caption text-[#929292]">
-          <p>&copy; {new Date().getFullYear()} Momento. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Experio. All rights reserved.</p>
           <p className="flex items-center gap-1">
-            Made with <span className="text-[#ff385c]">♥</span> in Malawi
+            Made with <span className="text-[#DD2A7B]">♥</span> in Malawi
           </p>
         </div>
       </div>

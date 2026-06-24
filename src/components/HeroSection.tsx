@@ -26,22 +26,22 @@ export default function HeroSection() {
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-white/30" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#ff385c]/8 via-transparent to-[#9F3BFF]/8" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#DD2A7B]/8 via-transparent to-[#8134AF]/8" />
         {/* Subtle radial glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-[#ff385c]/5 via-[#FF7A18]/5 to-[#9F3BFF]/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-[#DD2A7B]/5 via-[#F58529]/5 to-[#8134AF]/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 text-center px-4 max-w-5xl mx-auto -mt-16 sm:-mt-20">
         {/* Premium badge */}
         <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/90 border border-[#ebebeb] text-[#4a4a4a] text-caption font-semibold mb-6 sm:mb-8 backdrop-blur-md shadow-sm tracking-wide uppercase">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ff385c] animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#DD2A7B] animate-pulse" />
           Curated Experiences Across Africa
         </div>
 
         {/* Hero heading */}
         <h1 className="text-display-sm sm:text-display-lg md:text-display-xl font-bold text-[#222222] mb-4 sm:mb-5 tracking-tight leading-[1.06] text-balance">
           What do you feel
-          <span className="block mt-1 bg-gradient-to-r from-[#ff385c] via-[#FF7A18] to-[#9F3BFF] bg-clip-text text-transparent">
+          <span className="block mt-1 bg-gradient-to-r from-[#DD2A7B] via-[#F58529] to-[#8134AF] bg-clip-text text-transparent">
             like doing?
           </span>
         </h1>
@@ -56,7 +56,7 @@ export default function HeroSection() {
             <Link
               key={mood.label}
               href={`/experiences?mood=${mood.label.toLowerCase().replace(" ", "-")}`}
-              className={`group relative overflow-hidden rounded-xl p-3 sm:p-4 ${mood.bgColor} border ${mood.borderColor} hover:border-[#ff385c]/40 text-[#222222] transition-all duration-300 hover:shadow-md ${mood.shadowColor} hover:-translate-y-1`}
+              className={`group relative overflow-hidden rounded-xl p-3 sm:p-4 ${mood.bgColor} border ${mood.borderColor} hover:border-[#DD2A7B]/40 text-[#222222] transition-all duration-300 hover:shadow-md ${mood.shadowColor} hover:-translate-y-1`}
             >
               <div className="relative z-10 flex flex-col items-center gap-1 text-center">
                 <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${mood.bgColor} border-2 ${mood.borderColor} flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-110`}>

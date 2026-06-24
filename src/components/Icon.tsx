@@ -32,7 +32,7 @@ export type IconName =
   | "home"
   | "compass";
 
-const DEFAULT_COLOR = "#ff385c";
+const DEFAULT_COLOR = "#DD2A7B";
 const DEFAULT_SIZE = 20;
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, "name"> {
