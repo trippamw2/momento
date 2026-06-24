@@ -47,8 +47,8 @@ export async function proxy(request: NextRequest) {
 
   // Admin page routes — redirect to home if not admin
   if (isAdminPage) {
-    const authCookie = request.cookies.get("momento-auth-token");
-    const roleCookie = request.cookies.get("momento-user-role");
+    const authCookie = request.cookies.get("experio-auth-token");
+    const roleCookie = request.cookies.get("experio-user-role");
     if (!authCookie?.value || roleCookie?.value !== "admin") {
       return NextResponse.redirect(new URL("/", request.url));
     }
@@ -59,7 +59,7 @@ export async function proxy(request: NextRequest) {
   }
 
   const token = request.headers.get("Authorization")?.replace("Bearer ", "") 
-    || request.cookies.get("momento-auth-token")?.value;
+    || request.cookies.get("experio-auth-token")?.value;
     
   if (!token) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

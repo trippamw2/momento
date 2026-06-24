@@ -11,8 +11,8 @@ export async function POST(request: Request) {
     }
 
     const response = NextResponse.json({ message: "Logged out successfully" });
-    response.cookies.set("momento-auth-token", "", { path: "/", maxAge: 0 });
-    response.cookies.set("momento-user-role", "", { path: "/", maxAge: 0 });
+    response.cookies.set("experio-auth-token", "", { path: "/", maxAge: 0 });
+    response.cookies.set("experio-user-role", "", { path: "/", maxAge: 0 });
     return response;
   } catch (error) {
     return handleRouteError(error);

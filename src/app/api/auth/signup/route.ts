@@ -36,14 +36,14 @@ export async function POST(request: Request) {
     const response = NextResponse.json({ user: authData.user, session: authData.session }, { status: 201 });
 
     if (authData.session?.access_token) {
-      response.cookies.set("momento-auth-token", authData.session.access_token, {
+      response.cookies.set("experio-auth-token", authData.session.access_token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
         maxAge: 60 * 60 * 24 * 7,
       });
-      response.cookies.set("momento-user-role", "user", {
+      response.cookies.set("experio-user-role", "user", {
         httpOnly: false,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
