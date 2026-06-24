@@ -127,7 +127,7 @@ export default function Home() {
     <section className="mb-10 px-4 sm:px-8">
       <div className="flex items-end justify-between mb-4">
         <h2 className="text-heading-lg sm:text-heading-xl font-bold text-[#222222]">{title}</h2>
-        <Link href="/experiences" className="text-body-sm text-[#4a4a4a] hover:text-[#ff385c] transition-colors duration-200 flex items-center gap-1 flex-shrink-0">
+        <Link href="/experiences" className="text-body-sm text-[#4a4a4a] hover:text-[#DD2A7B] transition-colors duration-200 flex items-center gap-1 flex-shrink-0">
           See all
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
         </Link>
@@ -154,7 +154,7 @@ export default function Home() {
     <section className="mb-10 px-4 sm:px-8">
       <div className="flex items-end justify-between mb-4">
         <h2 className="text-heading-lg sm:text-heading-xl font-bold text-[#222222]">{title}</h2>
-        <Link href="/experiences" className="text-body-sm text-[#4a4a4a] hover:text-[#ff385c] transition-colors duration-200 flex items-center gap-1 flex-shrink-0">
+        <Link href="/experiences" className="text-body-sm text-[#4a4a4a] hover:text-[#DD2A7B] transition-colors duration-200 flex items-center gap-1 flex-shrink-0">
           See all
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
         </Link>
@@ -181,7 +181,7 @@ export default function Home() {
   const SectionDivider = ({ title }: { title: string }) => (
     <div className="px-4 sm:px-8 my-6 sm:my-8">
       <div className="flex items-center gap-4">
-        <span className="w-1 h-6 rounded-full bg-[#ff385c]" />
+        <span className="w-1 h-6 rounded-full bg-[#DD2A7B]" />
         <h3 className="text-heading-md sm:text-heading-lg font-bold text-[#222222] tracking-tight">{title}</h3>
         <div className="flex-1 h-px bg-gradient-to-r from-[#ebebeb] to-transparent" />
       </div>
@@ -231,7 +231,7 @@ export default function Home() {
         {detectedCity && (
           <div className="px-4 sm:px-8 pt-4 pb-0">
             <div className="flex items-center gap-2 text-body-sm text-[#4a4a4a]">
-              <svg className="w-4 h-4 text-[#ff385c]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              <svg className="w-4 h-4 text-[#DD2A7B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               <span>Showing experiences near <strong>{detectedCity}</strong></span>
             </div>
           </div>
@@ -296,7 +296,7 @@ export default function Home() {
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">
                 {["/avatar1.jpg", "/avatar2.jpg", "/avatar3.jpg"].map((src, i) => (
-                  <div key={i} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#ff385c] to-[#FF7A18] flex items-center justify-center text-white text-[10px] font-bold border-2 border-white">
+                  <div key={i} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#DD2A7B] to-[#F58529] flex items-center justify-center text-white text-[10px] font-bold border-2 border-white">
                     {["A", "M", "K"][i]}
                   </div>
                 ))}
@@ -336,8 +336,8 @@ export default function Home() {
         {/* ─── Gift A Moment ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-10">
           <div className="relative rounded-2xl overflow-hidden border border-[#dddddd] bg-[#fafafa]">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#ff385c]/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#9F3BFF]/5 rounded-full blur-3xl" />
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[#DD2A7B]/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#8134AF]/5 rounded-full blur-3xl" />
             <div className="relative z-10 p-8 sm:p-12">
               <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
                 <div className="flex-1 text-center lg:text-left">
@@ -346,7 +346,7 @@ export default function Home() {
                   </div>
                   <h2 className="text-heading-xl sm:text-display-sm font-bold text-[#222222] mb-3 leading-tight">
                     Give More Than A Gift.
-                    <span className="block bg-gradient-to-r from-[#ff385c] to-[#FF7A18] bg-clip-text text-transparent">
+                    <span className="block bg-gradient-to-r from-[#DD2A7B] to-[#F58529] bg-clip-text text-transparent">
                       Give A Memory.
                     </span>
                   </h2>
@@ -355,7 +355,7 @@ export default function Home() {
                   </p>
                   <Link
                     href="/gift"
-                    className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-[#ff385c] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+                    className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
                   >
                     Send a Gift Card
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
@@ -411,7 +411,7 @@ export default function Home() {
         {/* ─── Large CTA ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-12">
           <div className="relative rounded-2xl overflow-hidden bg-[#f7f7f7] border border-[#dddddd] p-10 sm:p-16 text-center">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#ff385c]/5 via-[#9F3BFF]/5 to-[#FF7A18]/5 rounded-full blur-3xl" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#DD2A7B]/5 via-[#8134AF]/5 to-[#F58529]/5 rounded-full blur-3xl" />
             <div className="relative z-10">
               <h2 className="text-heading-xl sm:text-display-sm md:text-display-md font-bold text-[#222222] mb-4 leading-tight">
                 Life is made of moments.
@@ -421,7 +421,7 @@ export default function Home() {
               </p>
               <Link
                 href="/experiences"
-                className="inline-flex items-center gap-2.5 px-10 py-4 rounded-xl bg-[#ff385c] text-white font-semibold text-body hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+                className="inline-flex items-center gap-2.5 px-10 py-4 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
               >
                 Discover Experiences
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>

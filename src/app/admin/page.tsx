@@ -126,7 +126,7 @@ export default function AdminPage() {
     refundedAmount: 45000,
   });
 
-  const getToken = useCallback(() => localStorage.getItem("momento-auth-token"), []);
+  const getToken = useCallback(() => localStorage.getItem("experio-auth-token"), []);
 
   const apiFetch = useCallback(async (url: string) => {
     const token = getToken();
@@ -137,7 +137,7 @@ export default function AdminPage() {
   }, [getToken]);
 
   useEffect(() => {
-    const role = localStorage.getItem("momento-user-role");
+    const role = localStorage.getItem("experio-user-role");
     if (role !== "admin") { router.push("/"); return; }
     setIsAdmin(true);
     loadSection("overview");
@@ -233,7 +233,7 @@ export default function AdminPage() {
       <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-[#ebebeb] transform transition-transform duration-300 lg:translate-x-0 pt-18 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="p-5 border-b border-[#ebebeb]">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#ff385c] to-purple-500 flex items-center justify-center shadow-md">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#DD2A7B] to-purple-500 flex items-center justify-center shadow-md">
               <span className="text-white font-bold text-body">A</span>
             </div>
             <div>
@@ -248,7 +248,7 @@ export default function AdminPage() {
               key={item.key}
               onClick={() => switchSection(item.key)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all ${
-                section === item.key ? "bg-[#ff385c] text-white" : "text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7]"
+                section === item.key ? "bg-[#DD2A7B] text-white" : "text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7]"
               }`}
             >
               <span>{item.icon}</span>
@@ -281,7 +281,7 @@ export default function AdminPage() {
         <div className="p-4 sm:p-6">
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <div className="w-8 h-8 rounded-full border-2 border-[#ff385c]/30 border-t-[#ff385c] animate-spin" />
+              <div className="w-8 h-8 rounded-full border-2 border-[#DD2A7B]/30 border-t-[#DD2A7B] animate-spin" />
             </div>
           ) : (
             <>
@@ -310,7 +310,7 @@ export default function AdminPage() {
                     <p className="text-caption text-[#929292] mb-2">Quick Actions</p>
                     <div className="flex flex-wrap gap-2">
                       {NAV.slice(1).map((item) => (
-                        <button key={item.key} onClick={() => switchSection(item.key)} className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-body-sm text-[#6a6a6a] hover:bg-[#ff385c] hover:text-white transition-all">
+                        <button key={item.key} onClick={() => switchSection(item.key)} className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-body-sm text-[#6a6a6a] hover:bg-[#DD2A7B] hover:text-white transition-all">
                           {item.icon} {item.label}
                         </button>
                       ))}
@@ -340,7 +340,7 @@ export default function AdminPage() {
                             <select
                               value={u.role}
                               onChange={(e) => handleRoleChange(u.id, e.target.value)}
-                              className="px-2 py-1 rounded-lg text-caption border border-[#dddddd] focus:outline-none focus:border-[#ff385c]"
+                              className="px-2 py-1 rounded-lg text-caption border border-[#dddddd] focus:outline-none focus:border-[#DD2A7B]"
                             >
                               {["user", "partner", "admin"].map((r) => (
                                 <option key={r} value={r}>{r}</option>
@@ -604,7 +604,7 @@ export default function AdminPage() {
                           <div key={m.month} className="flex-1 flex flex-col items-center gap-1">
                             <span className="text-[10px] text-[#6a6a6a] font-medium">MK {(m.amount / 1000).toFixed(0)}k</span>
                             <div
-                              className="w-full rounded-lg bg-gradient-to-t from-[#ff385c] to-[#FF7A18] transition-all duration-500 hover:opacity-80"
+                              className="w-full rounded-lg bg-gradient-to-t from-[#DD2A7B] via-[#8134AF] to-[#515BD4] transition-all duration-500 hover:opacity-80"
                               style={{ height: `${height}%` }}
                             />
                             <span className="text-[10px] text-[#929292]">{m.month}</span>
