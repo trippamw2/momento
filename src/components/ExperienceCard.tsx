@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Experience } from "@/lib/types";
 import { useState, useCallback } from "react";
 import { trackView, trackSaved } from "@/lib/recommendations";
+import { trackBooked } from "@/lib/recommendation-engine";
 
 const MOOD_COLORS: Record<string, { bg: string; text: string; glow: string }> = {
   Romantic: { bg: "from-rose-500 to-pink-500", text: "text-rose-300", glow: "rgba(244,63,94,0.3)" },
@@ -111,9 +112,9 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
           </span>
           <button
             onClick={toggleSave}
-            className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-[#DD2A7B]/80 hover:scale-110 active:scale-90"
+            className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-[#FF2D7A]/80 hover:scale-110 active:scale-90"
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill={saved ? "#DD2A7B" : "none"} stroke={saved ? "#DD2A7B" : "white"} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill={saved ? "#FF2D7A" : "none"} stroke={saved ? "#FF2D7A" : "white"} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
           </button>
@@ -145,8 +146,8 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
           <div className="flex items-center gap-1.5 mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-3 group-hover:translate-y-0">
             <Link
               href={`/experiences/${exp.id}`}
-              onClick={(e) => e.stopPropagation()}
-              className="flex-1 py-2 rounded-lg bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white text-caption font-bold tracking-wide shadow-[0_2px_12px_rgba(255,56,92,0.3)] hover:shadow-[0_4px_20px_rgba(255,56,92,0.45)] transition-all duration-300 text-center active:scale-[0.97]"
+              onClick={(e) => { e.stopPropagation(); trackBooked(exp.id); }}
+              className="flex-1 py-2 rounded-lg bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white text-caption font-bold tracking-wide shadow-[0_2px_12px_rgba(255,45,122,0.3)] hover:shadow-[0_4px_20px_rgba(255,45,122,0.45)] transition-all duration-300 text-center active:scale-[0.97]"
             >
               Book Now
             </Link>
