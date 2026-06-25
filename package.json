@@ -11,6 +11,7 @@
   "dependencies": {
     "@fontsource/playfair-display": "^5.2.8",
     "@supabase/supabase-js": "^2.108.2",
+    "jspdf": "^4.2.1",
     "next": "16.2.9",
     "qrcode": "^1.5.4",
     "react": "19.2.4",

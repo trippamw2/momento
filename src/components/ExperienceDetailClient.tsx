@@ -61,19 +61,19 @@ function Calendar({ selectedDate, onSelect }: { selectedDate: Date | null; onSel
   for (let d = 1; d <= daysInMonth; d++) cells.push(d);
 
   return (
-    <div className="bg-white rounded-xl p-4 border border-[#ebebeb] shadow-sm">
+    <div className="bg-[#111827] rounded-xl p-4 border border-white/[0.1]">
       <div className="flex items-center justify-between mb-4">
-        <button onClick={prevMonth} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#FFF8F0] transition-colors text-[#6a6a6a]">
+        <button onClick={prevMonth} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors text-[#94A3B8]">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
         </button>
-        <span className="text-body-sm font-semibold text-[#222222]">{MONTHS[month]} {year}</span>
-        <button onClick={nextMonth} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#FFF8F0] transition-colors text-[#6a6a6a]">
+        <span className="text-body-sm font-semibold text-white">{MONTHS[month]} {year}</span>
+        <button onClick={nextMonth} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors text-[#94A3B8]">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
         </button>
       </div>
       <div className="grid grid-cols-7 gap-1 mb-2">
         {DAYS.map((d) => (
-          <div key={d} className="text-center text-caption text-[#929292] font-medium py-1">{d}</div>
+          <div key={d} className="text-center text-caption text-[#94A3B8] font-medium py-1">{d}</div>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-1">
@@ -88,10 +88,10 @@ function Calendar({ selectedDate, onSelect }: { selectedDate: Date | null; onSel
               onClick={() => onSelect(new Date(year, month, d))}
               className={`w-full aspect-square rounded-lg text-caption font-medium flex items-center justify-center transition-all ${
                 selected
-                  ? "bg-[#DD2A7B] text-white shadow-[0_2px_8px_rgba(255,56,92,0.25)]"
+                  ? "bg-[#FF2D7A] text-white shadow-[0_2px_8px_rgba(255,45,122,0.25)]"
                   : disabled
-                    ? "text-[#929292]/30 line-through cursor-not-allowed"
-                    : "text-[#6a6a6a] hover:bg-[#FFF8F0] hover:text-[#222222]"
+                    ? "text-white/20 line-through cursor-not-allowed"
+                    : "text-[#CBD5E1] hover:bg-white/5 hover:text-white"
               }`}
             >
               {d}
@@ -106,21 +106,21 @@ function Calendar({ selectedDate, onSelect }: { selectedDate: Date | null; onSel
 // ─── GuestSelector ───
 function GuestSelector({ value, onChange, maxGuests }: { value: number; onChange: (v: number) => void; maxGuests: number }) {
   return (
-    <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-[#ebebeb]">
-      <span className="text-body-sm text-[#222222] font-medium">Guests</span>
+    <div className="flex items-center justify-between p-3 rounded-xl bg-[#111827] border border-white/[0.1]">
+      <span className="text-body-sm text-white font-medium">Guests</span>
       <div className="flex items-center gap-3">
         <button
           onClick={() => onChange(Math.max(1, value - 1))}
           disabled={value <= 1}
-          className="w-8 h-8 rounded-full flex items-center justify-center bg-[#FFF8F0] text-[#222222] hover:bg-[#FFF0F3] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          className="w-8 h-8 rounded-full flex items-center justify-center bg-white/5 text-white hover:bg-white/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>
         </button>
-        <span className="w-6 text-center text-body font-semibold text-[#222222]">{value}</span>
+        <span className="w-6 text-center text-body font-semibold text-white">{value}</span>
         <button
           onClick={() => onChange(value + 1)}
           disabled={value >= maxGuests}
-          className="w-8 h-8 rounded-full flex items-center justify-center bg-[#FFF8F0] text-[#222222] hover:bg-[#FFF0F3] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          className="w-8 h-8 rounded-full flex items-center justify-center bg-white/5 text-white hover:bg-white/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
         </button>
@@ -132,18 +132,18 @@ function GuestSelector({ value, onChange, maxGuests }: { value: number; onChange
 // ─── Review Card ───
 function ReviewCard({ review }: { review: Experience["reviews"][number] }) {
   return (
-    <div className="p-5 rounded-2xl bg-white border border-[#ebebeb] shadow-sm hover:shadow-md transition-all duration-300">
+    <div className="p-5 rounded-2xl bg-[#111827] border border-white/[0.1]">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
-          <Image src={review.avatar} alt={review.author} width={40} height={40} className="rounded-full bg-[#ebebeb] ring-2 ring-white" />
+          <Image src={review.avatar} alt={review.author} width={40} height={40} className="rounded-full bg-white/10 ring-2 ring-[#111827]" />
           <div>
-            <p className="text-body-sm font-semibold text-[#222222]">{review.author}</p>
-            <p className="text-caption text-[#929292]">{review.date}</p>
+            <p className="text-body-sm font-semibold text-white">{review.author}</p>
+            <p className="text-caption text-[#94A3B8]">{review.date}</p>
           </div>
         </div>
         <StarRating rating={review.rating} size="sm" />
       </div>
-      <p className="text-body-sm text-[#6a6a6a] leading-relaxed">{review.text}</p>
+      <p className="text-body-sm text-[#CBD5E1] leading-relaxed">{review.text}</p>
     </div>
   );
 }
@@ -170,6 +170,9 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
   const [giftAmount, setGiftAmount] = useState(0);
   const [giftChecking, setGiftChecking] = useState(false);
   const [giftError, setGiftError] = useState("");
+  const [specialRequests, setSpecialRequests] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
 
   // Track view on mount
   useEffect(() => { trackView(exp.id); }, [exp.id]);
@@ -199,6 +202,9 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
           guests_count: guests,
           total_price: exp.price * guests,
           experience_date: selectedDate.toISOString().split("T")[0],
+          special_requests: specialRequests || undefined,
+          contact_phone: contactPhone || undefined,
+          contact_email: contactEmail || undefined,
         }),
       });
       const data = await res.json();
@@ -244,21 +250,21 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
   // ─── Booking Confirmed State ───
   if (bookingDone) {
     return (
-      <div className="pt-24 pb-16 min-h-screen flex items-center justify-center bg-ambient-warm">
+      <div className="pt-24 pb-16 min-h-screen flex items-center justify-center bg-[#05070B]">
         <div className="text-center max-w-md mx-auto px-4">
-          <div className="w-20 h-20 rounded-full bg-[#DD2A7B] flex items-center justify-center mx-auto mb-6 shadow-[0_4px_16px_rgba(255,56,92,0.2)]">
+          <div className="w-20 h-20 rounded-full bg-[#FF2D7A] flex items-center justify-center mx-auto mb-6 shadow-[0_4px_16px_rgba(255,45,122,0.2)]">
             <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
           </div>
-          <h1 className="text-display-sm font-bold text-[#222222] mb-3">Booking Confirmed!</h1>
-          <p className="text-[#6a6a6a] text-body-lg mb-2">{exp.title}</p>
-          <p className="text-body-sm text-[#929292] mb-1">{bookedDate} · {guests} guest{guests > 1 ? "s" : ""}</p>
-          <p className="text-heading-md font-bold text-[#222222] mb-8">MK {(exp.price * guests).toLocaleString()}</p>
-          <p className="text-caption text-[#929292] mb-8">Check your email for the full confirmation and receipt.</p>
+          <h1 className="text-display-sm font-bold text-white mb-3">Booking Confirmed!</h1>
+          <p className="text-[#CBD5E1] text-body-lg mb-2">{exp.title}</p>
+          <p className="text-body-sm text-[#94A3B8] mb-1">{bookedDate} · {guests} guest{guests > 1 ? "s" : ""}</p>
+          <p className="text-heading-md font-bold text-white mb-8">MK {(exp.price * guests).toLocaleString()}</p>
+          <p className="text-caption text-[#94A3B8] mb-8">Check your email for the full confirmation and receipt.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/bookings" className="px-8 py-3 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all">
+            <Link href="/bookings" className="px-8 py-3 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.25)] transition-all">
               View My Bookings
             </Link>
-            <Link href="/" className="px-8 py-3 rounded-xl bg-white text-[#222222] font-semibold text-body-sm border border-[#ebebeb] hover:bg-[#FFF8F0] transition-all">
+            <Link href="/" className="px-8 py-3 rounded-xl bg-[#111827] text-white font-semibold text-body-sm border border-white/[0.1] hover:bg-white/5 transition-all">
               Discover More
             </Link>
           </div>
@@ -312,17 +318,17 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
           <div className="absolute top-20 left-4 sm:left-8 right-4 sm:right-8 flex items-start justify-between z-10">
             <Link
               href="/experiences"
-              className="px-4 py-2 rounded-full bg-white/90 backdrop-blur-md text-[#222222] text-body-sm font-medium border border-[#ebebeb] hover:bg-white transition-all shadow-sm"
+              className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white text-body-sm font-medium border border-white/[0.15] hover:bg-white/20 transition-all"
             >
               ← Back
             </Link>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => { trackSaved(exp.id, !saved); setSaved(!saved); }}
-                className={`w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md border transition-all shadow-sm ${
+                className={`w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md border transition-all ${
                   saved
-                    ? "bg-[#DD2A7B] text-white border-[#DD2A7B]"
-                    : "bg-white/90 text-[#222222] border-[#ebebeb] hover:bg-white"
+                    ? "bg-[#FF2D7A] text-white border-[#FF2D7A]"
+                    : "bg-white/10 text-white border-white/[0.15] hover:bg-white/20"
                 }`}
                 aria-label={saved ? "Unsave" : "Save"}
               >
@@ -332,7 +338,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               </button>
               <button
                 onClick={handleShare}
-                className="w-9 h-9 rounded-full bg-white/90 backdrop-blur-md text-[#222222] border border-[#ebebeb] hover:bg-white transition-all flex items-center justify-center shadow-sm"
+                className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/[0.15] hover:bg-white/20 transition-all flex items-center justify-center"
                 aria-label="Share"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -346,7 +352,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
           {exp.images.length > 5 && (
             <button
               onClick={() => setActiveImage(0)}
-              className="absolute bottom-24 right-4 sm:right-8 z-10 px-4 py-2 rounded-lg bg-white/90 backdrop-blur-md text-[#222222] text-caption font-medium border border-[#ebebeb] hover:bg-white transition-all shadow-sm"
+              className="absolute bottom-24 right-4 sm:right-8 z-10 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md text-white text-caption font-medium border border-white/[0.15] hover:bg-white/20 transition-all"
             >
               Show all {exp.images.length} photos
             </button>
@@ -380,59 +386,59 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
 
         {/* ─── LEFT COLUMN: Content ─── */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl border border-[#ebebeb] p-5 sm:p-8 mb-6 shadow-sm">
+          <div className="rounded-2xl border border-white/[0.1] p-5 sm:p-8 mb-6">
             {/* Mood Tags */}
             <div className="flex flex-wrap items-center gap-2 mb-4">
               {exp.mood.map((m) => (
-                <span key={m} className="px-3 py-1 rounded-full bg-[#FFF0F3] text-caption text-[#6a6a6a] border border-[#ebebeb] font-medium">
+                <span key={m} className="px-3 py-1 rounded-full bg-white/[0.06] text-caption text-[#CBD5E1] border border-white/[0.1] font-medium">
                   {m}
                 </span>
               ))}
             </div>
 
             {/* Title + Subtitle */}
-            <h1 className="text-display-sm font-bold text-[#222222] mb-1 leading-tight">{exp.title}</h1>
-            <p className="text-[#6a6a6a] text-heading-md mb-5">{exp.subtitle}</p>
+            <h1 className="text-display-sm font-bold text-white mb-1 leading-tight">{exp.title}</h1>
+            <p className="text-[#CBD5E1] text-heading-md mb-5">{exp.subtitle}</p>
 
             {/* Stats Bar */}
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-6 pb-6 border-b border-[#ebebeb]">
-              <div className="flex items-center gap-1.5 text-body-sm text-[#6a6a6a]">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-6 pb-6 border-b border-white/[0.1]">
+              <div className="flex items-center gap-1.5 text-body-sm text-[#CBD5E1]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                 {exp.location}
-                {exp.city && <><span className="text-[#929292]">·</span><span className="text-[#929292]">{exp.city}</span></>}
-                {exp.distance && <><span className="text-[#929292]">·</span><span className="text-[#929292]">{exp.distance}</span></>}
+                {exp.city && <><span className="text-[#94A3B8]">·</span><span className="text-[#94A3B8]">{exp.city}</span></>}
+                {exp.distance && <><span className="text-[#94A3B8]">·</span><span className="text-[#94A3B8]">{exp.distance}</span></>}
               </div>
-              <div className="flex items-center gap-1.5 text-body-sm text-[#6a6a6a]">
+              <div className="flex items-center gap-1.5 text-body-sm text-[#CBD5E1]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 {exp.duration}
               </div>
               <div className="flex items-center gap-1.5 text-body-sm">
                 <span className="text-yellow-400">★</span>
-                <span className="text-[#222222] font-semibold">{exp.rating}</span>
-                <span className="text-[#929292]">({exp.reviewCount} reviews)</span>
+                <span className="text-white font-semibold">{exp.rating}</span>
+                <span className="text-[#94A3B8]">({exp.reviewCount} reviews)</span>
               </div>
             </div>
 
             {/* Mobile: Quick Booking Summary */}
-            <div className="lg:hidden flex items-center justify-between p-4 rounded-xl bg-white border border-[#ebebeb] mb-6 shadow-sm">
+            <div className="lg:hidden flex items-center justify-between p-4 rounded-xl border border-white/[0.1] mb-6">
               <div>
-                <p className="text-caption text-[#929292]">From</p>
-                <p className="text-heading-lg font-bold text-[#222222]">MK {exp.price.toLocaleString()}</p>
-                <p className="text-caption text-[#929292]">per person</p>
+                <p className="text-caption text-[#94A3B8]">From</p>
+                <p className="text-heading-lg font-bold text-white">MK {exp.price.toLocaleString()}</p>
+                <p className="text-caption text-[#94A3B8]">per person</p>
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-caption text-[#929292]">Guests:</span>
+                  <span className="text-caption text-[#94A3B8]">Guests:</span>
                   <div className="flex items-center gap-2">
-                    <button onClick={() => setGuests(Math.max(1, guests - 1))} disabled={guests <= 1} className="w-7 h-7 rounded-full bg-[#FFF8F0] flex items-center justify-center text-[#222222] text-sm disabled:opacity-30 hover:bg-[#FFF0F3]">−</button>
-                    <span className="w-5 text-center text-body-sm text-[#222222] font-medium">{guests}</span>
-                    <button onClick={() => setGuests(Math.min(exp.capacity, guests + 1))} disabled={guests >= exp.capacity} className="w-7 h-7 rounded-full bg-[#FFF8F0] flex items-center justify-center text-[#222222] text-sm disabled:opacity-30 hover:bg-[#FFF0F3]">+</button>
+                    <button onClick={() => setGuests(Math.max(1, guests - 1))} disabled={guests <= 1} className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-white text-sm disabled:opacity-30 hover:bg-white/10">−</button>
+                    <span className="w-5 text-center text-body-sm text-white font-medium">{guests}</span>
+                    <button onClick={() => setGuests(Math.min(exp.capacity, guests + 1))} disabled={guests >= exp.capacity} className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-white text-sm disabled:opacity-30 hover:bg-white/10">+</button>
                   </div>
                 </div>
                 <button
                   onClick={handleBookNow}
                   disabled={!selectedDate || booking}
-                  className="px-6 py-2.5 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.25)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {booking ? "Booking..." : selectedDate ? "Book Now" : "Select Date"}
                 </button>
@@ -440,67 +446,67 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
             </div>
 
             {/* Host Section */}
-            <div className="flex items-center justify-between p-4 rounded-xl bg-white border border-[#ebebeb] mb-6 shadow-sm hover:bg-[#FFF8F0] transition-all">
+            <div className="flex items-center justify-between p-4 rounded-xl border border-white/[0.1] mb-6 hover:bg-white/[0.03] transition-all">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#DD2A7B] to-[#F58529] flex items-center justify-center text-white font-bold text-body-sm flex-shrink-0 shadow-sm">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] flex items-center justify-center text-white font-bold text-body-sm flex-shrink-0">
                   {exp.partner.split(" ").map((w) => w[0]).slice(0, 2).join("")}
                 </div>
                 <div>
-                  <p className="text-caption text-[#929292]">Hosted by</p>
-                  <p className="text-body-sm font-semibold text-[#222222]">{exp.partner}</p>
+                  <p className="text-caption text-[#94A3B8]">Hosted by</p>
+                  <p className="text-body-sm font-semibold text-white">{exp.partner}</p>
                 </div>
               </div>
-              <button className="px-4 py-2 rounded-xl border border-[#ebebeb] text-body-sm font-medium text-[#222222] hover:bg-white hover:border-[#dddddd] transition-all">
+              <button className="px-4 py-2 rounded-xl border border-white/[0.1] text-body-sm font-medium text-white hover:bg-white/5 transition-all">
                 Message
               </button>
             </div>
 
             {/* About */}
             <div className="mb-6">
-              <h2 className="text-heading-md font-bold text-[#222222] mb-3">About this experience</h2>
-              <p className="text-[#6a6a6a] text-body leading-relaxed">{exp.description}</p>
+              <h2 className="text-heading-md font-bold text-white mb-3">About this experience</h2>
+              <p className="text-[#CBD5E1] text-body leading-relaxed">{exp.description}</p>
             </div>
 
             {/* What's Included */}
             <div className="mb-6">
-              <h2 className="text-heading-md font-bold text-[#222222] mb-4">What&apos;s included</h2>
+              <h2 className="text-heading-md font-bold text-white mb-4">What&apos;s included</h2>
               <div className="grid sm:grid-cols-2 gap-3">
                 {exp.includes.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
-                    <div className="w-5 h-5 rounded-full bg-[#DD2A7B] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+                  <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.1]">
+                    <div className="w-5 h-5 rounded-full bg-[#FF2D7A] flex items-center justify-center flex-shrink-0 mt-0.5">
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                     </div>
-                    <span className="text-body-sm text-[#6a6a6a]">{item}</span>
+                    <span className="text-body-sm text-[#CBD5E1]">{item}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* ═══ Reviews Section ═══ */}
-            <div className="mb-6 pt-4 border-t border-[#ebebeb]">
+            <div className="mb-6 pt-4 border-t border-white/[0.1]">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-heading-md font-bold text-[#222222] flex items-center gap-2">
+                <h2 className="text-heading-md font-bold text-white flex items-center gap-2">
                   <span className="text-yellow-400 text-heading">★</span>
                   <span>{exp.rating}</span>
-                  <span className="text-[#929292] font-normal text-body-sm">· {exp.reviews.length} reviews</span>
+                  <span className="text-[#94A3B8] font-normal text-body-sm">· {exp.reviews.length} reviews</span>
                 </h2>
               </div>
 
               {/* Star Breakdown Bars */}
-              <div className="space-y-2 mb-6 p-4 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
+              <div className="space-y-2 mb-6 p-4 rounded-xl bg-white/[0.03] border border-white/[0.1]">
                 {ratingBreakdown.map(({ star, count, pct }) => (
                   <div key={star} className="flex items-center gap-3">
-                    <span className="text-caption font-medium text-[#6a6a6a] w-6 text-right">{star}</span>
+                    <span className="text-caption font-medium text-[#94A3B8] w-6 text-right">{star}</span>
                     <svg className="w-3.5 h-3.5 text-yellow-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
-                    <div className="flex-1 h-2 rounded-full bg-[#ebebeb] overflow-hidden">
+                    <div className="flex-1 h-2 rounded-full bg-white/[0.06] overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-[#DD2A7B] transition-all duration-500"
+                        className="h-full rounded-full bg-[#FF2D7A] transition-all duration-500"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span className="text-caption text-[#929292] w-8">{count}</span>
+                    <span className="text-caption text-[#94A3B8] w-8">{count}</span>
                   </div>
                 ))}
               </div>
@@ -513,33 +519,33 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               </div>
 
               {exp.reviews.length === 0 && (
-                <div className="text-center py-8 text-[#929292] text-body-sm">
+                <div className="text-center py-8 text-[#94A3B8] text-body-sm">
                   No reviews yet. Be the first to share your experience!
                 </div>
               )}
 
-              <button className="mt-4 px-6 py-2.5 rounded-xl border border-[#ebebeb] text-body-sm font-medium text-[#222222] hover:bg-[#FFF8F0] hover:border-[#dddddd] transition-all flex items-center gap-2">
+              <button className="mt-4 px-6 py-2.5 rounded-xl border border-white/[0.1] text-body-sm font-medium text-white hover:bg-white/5 transition-all flex items-center gap-2">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                 Write a Review
               </button>
             </div>
 
             {/* Map */}
-            <div className="mb-6 pt-4 border-t border-[#ebebeb]">
+            <div className="mb-6 pt-4 border-t border-white/[0.1]">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-heading-md font-bold text-[#222222]">Location</h2>
-                <button onClick={gotoNearby} className="text-body-sm text-[#DD2A7B] font-medium hover:text-[#e00b41] transition-colors">
+                <h2 className="text-heading-md font-bold text-white">Location</h2>
+                <button onClick={gotoNearby} className="text-body-sm text-[#FF2D7A] font-medium hover:text-[#FF7A18] transition-colors">
                   Find nearby
                 </button>
               </div>
-              <div className="rounded-xl overflow-hidden border border-[#ebebeb] h-64 relative shadow-sm">
+              <div className="rounded-xl overflow-hidden border border-white/[0.1] h-64 relative">
                 <iframe
                   src={`https://www.openstreetmap.org/export/embed.html?bbox=${exp.coordinates.lng - 0.05}%2C${exp.coordinates.lat - 0.05}%2C${exp.coordinates.lng + 0.05}%2C${exp.coordinates.lat + 0.05}&layer=mapnik&marker=${exp.coordinates.lat}%2C${exp.coordinates.lng}`}
                   className="w-full h-full border-0"
                   title="Location map"
                   loading="lazy"
                 />
-                <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-lg bg-white/90 backdrop-blur-md text-caption text-[#6a6a6a] border border-[#ebebeb] shadow-sm">
+                <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-md text-caption text-[#CBD5E1] border border-white/[0.1]">
                   📍 {exp.location} · {exp.city}
                 </div>
               </div>
@@ -552,21 +558,21 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   onClick={() => { trackSaved(exp.id, !saved); setSaved(!saved); }}
                   className={`px-4 py-3 rounded-xl border transition-all text-body-sm font-medium ${
                     saved
-                      ? "border-[#DD2A7B] text-[#DD2A7B] bg-[#DD2A7B]/10"
-                      : "border-[#ebebeb] text-[#6a6a6a] hover:bg-[#FFF8F0] hover:text-[#222222]"
+                      ? "border-[#FF2D7A] text-[#FF2D7A] bg-[#FF2D7A]/10"
+                      : "border-white/[0.1] text-[#CBD5E1] hover:bg-white/5 hover:text-white"
                   }`}
                 >
                   {saved ? "♥ Saved" : "♡ Save"}
                 </button>
                 <Link
                   href={`/gift?exp=${exp.id}`}
-                  className="px-4 py-3 rounded-xl border border-[#ebebeb] text-[#6a6a6a] text-body-sm font-medium text-center hover:bg-[#FFF8F0] hover:text-[#222222] transition-all"
+                  className="px-4 py-3 rounded-xl border border-white/[0.1] text-[#CBD5E1] text-body-sm font-medium text-center hover:bg-white/5 hover:text-white transition-all"
                 >
                   🎁 Gift
                 </Link>
                 <button
                   onClick={handleShare}
-                  className="px-4 py-3 rounded-xl border border-[#ebebeb] text-[#6a6a6a] text-body-sm font-medium hover:bg-[#FFF8F0] hover:text-[#222222] transition-all"
+                  className="px-4 py-3 rounded-xl border border-white/[0.1] text-[#CBD5E1] text-body-sm font-medium hover:bg-white/5 hover:text-white transition-all"
                 >
                   {shareFeedback ? "✓ Copied" : "↗ Share"}
                 </button>
@@ -578,41 +584,73 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
         {/* ─── RIGHT COLUMN: Sticky Booking Sidebar ─── */}
         <div className="hidden lg:block">
           <div className="sticky top-24">
-            <div className="bg-white rounded-2xl border border-[#ebebeb] shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div className="bg-[#111827] rounded-2xl border border-white/[0.1]">
               {/* Price Header */}
-              <div className="p-6 pb-4 border-b border-[#ebebeb]">
+              <div className="p-6 pb-4 border-b border-white/[0.1]">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-heading-lg font-bold text-[#222222]">MK {exp.price.toLocaleString()}</span>
-                  <span className="text-caption text-[#929292]">/ person</span>
+                  <span className="text-heading-lg font-bold text-white">MK {exp.price.toLocaleString()}</span>
+                  <span className="text-caption text-[#94A3B8]">/ person</span>
                 </div>
               </div>
 
               <div className="p-6 pt-4 space-y-4">
                 {/* Calendar */}
                 <div>
-                  <p className="text-body-sm font-semibold text-[#222222] mb-2">Select date</p>
+                  <p className="text-body-sm font-semibold text-white mb-2">Select date</p>
                   <Calendar selectedDate={selectedDate} onSelect={setSelectedDate} />
                 </div>
 
                 {/* Guest Selector */}
                 <GuestSelector value={guests} onChange={setGuests} maxGuests={exp.capacity} />
 
+                {/* Special Requests */}
+                <div>
+                  <p className="text-body-sm font-semibold text-white mb-2">Special Requests</p>
+                  <textarea
+                    value={specialRequests}
+                    onChange={(e) => setSpecialRequests(e.target.value)}
+                    maxLength={200}
+                    placeholder="Any special requests?"
+                    className="w-full px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF2D7A] transition-all resize-none h-16"
+                  />
+                  <p className="text-caption text-[#94A3B8] mt-1 text-right">{specialRequests.length}/200</p>
+                </div>
+
+                {/* Contact Fields */}
+                <div className="space-y-2">
+                  <p className="text-body-sm font-semibold text-white mb-1">Contact (optional)</p>
+                  <input
+                    type="tel"
+                    value={contactPhone}
+                    onChange={(e) => setContactPhone(e.target.value)}
+                    placeholder="Phone number"
+                    className="w-full px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF2D7A] transition-all"
+                  />
+                  <input
+                    type="email"
+                    value={contactEmail}
+                    onChange={(e) => setContactEmail(e.target.value)}
+                    placeholder="Email address"
+                    className="w-full px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF2D7A] transition-all"
+                  />
+                </div>
+
                 {/* Gift Card */}
-                <div className="p-3 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
-                  <p className="text-caption font-semibold text-[#4a4a4a] mb-2 uppercase tracking-wider">Gift Card</p>
+                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.1]">
+                  <p className="text-caption font-semibold text-[#94A3B8] mb-2 uppercase tracking-wider">Gift Card</p>
                   <div className="flex gap-2">
                     <input
                       type="text"
                       placeholder="MOMO-XXXXXXXX"
                       value={giftCode}
                       onChange={(e) => { setGiftCode(e.target.value.toUpperCase()); setGiftApplied(false); setGiftError(""); }}
-                      className="flex-1 px-3 py-2 rounded-lg bg-white border border-[#ebebeb] text-[#222222] text-caption font-mono placeholder:text-[#929292] focus:outline-none focus:border-[#DD2A7B] transition-all"
+                      className="flex-1 px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption font-mono placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF2D7A] transition-all"
                       disabled={giftApplied}
                     />
                     {giftApplied ? (
                       <button
                         onClick={() => { setGiftApplied(false); setGiftCode(""); setGiftAmount(0); setGiftError(""); }}
-                        className="px-3 py-2 rounded-lg bg-emerald-50 text-emerald-600 text-caption font-semibold border border-emerald-200 hover:bg-emerald-100 transition-all whitespace-nowrap"
+                        className="px-3 py-2 rounded-lg bg-emerald-500/20 text-emerald-400 text-caption font-semibold border border-emerald-500/30 hover:bg-emerald-500/30 transition-all whitespace-nowrap"
                       >
                         ✓ Applied
                       </button>
@@ -620,7 +658,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                       <button
                         onClick={handleApplyGiftCard}
                         disabled={!giftCode.trim() || giftChecking}
-                        className="px-3 py-2 rounded-lg bg-[#DD2A7B] text-white text-caption font-semibold hover:bg-[#e00b41] transition-all disabled:opacity-50 whitespace-nowrap"
+                        className="px-3 py-2 rounded-lg bg-[#FF2D7A] text-white text-caption font-semibold hover:bg-[#FF2D7A]/80 transition-all disabled:opacity-50 whitespace-nowrap"
                       >
                         {giftChecking ? (
                           <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
@@ -633,19 +671,19 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
 
                 {/* Price Breakdown */}
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between text-body-sm text-[#6a6a6a]">
+                  <div className="flex items-center justify-between text-body-sm text-[#CBD5E1]">
                     <span>MK {exp.price.toLocaleString()} × {guests} {guests === 1 ? "guest" : "guests"}</span>
                     <span>MK {totalPrice.toLocaleString()}</span>
                   </div>
                   {giftApplied && giftAmount > 0 && (
-                    <div className="flex items-center justify-between text-body-sm text-emerald-600">
+                    <div className="flex items-center justify-between text-body-sm text-emerald-400">
                       <span>Gift card discount</span>
                       <span>-MK {giftAmount.toLocaleString()}</span>
                     </div>
                   )}
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-[#FFF8F0] border border-[#ebebeb]">
-                    <span className="text-body-sm font-semibold text-[#222222]">Total</span>
-                    <span className="text-heading-sm font-bold text-[#222222]">MK {finalPrice.toLocaleString()}</span>
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.1]">
+                    <span className="text-body-sm font-semibold text-white">Total</span>
+                    <span className="text-heading-sm font-bold text-white">MK {finalPrice.toLocaleString()}</span>
                   </div>
                 </div>
 
@@ -653,7 +691,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 <button
                   onClick={handleBookNow}
                   disabled={!selectedDate || booking}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {booking ? (
                     <>
@@ -667,7 +705,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   )}
                 </button>
 
-                <p className="text-caption text-[#929292] text-center">You won&apos;t be charged yet</p>
+                <p className="text-caption text-[#94A3B8] text-center">You won&apos;t be charged yet</p>
 
                 {/* Action Buttons */}
                 <div className="grid grid-cols-3 gap-2">
@@ -675,8 +713,8 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 onClick={() => { trackSaved(exp.id, !saved); setSaved(!saved); }}
                     className={`py-2.5 rounded-xl border transition-all text-caption font-medium flex items-center justify-center gap-1 ${
                       saved
-                        ? "border-[#DD2A7B] text-[#DD2A7B] bg-[#DD2A7B]/10"
-                        : "border-[#ebebeb] text-[#6a6a6a] hover:bg-[#FFF8F0] hover:text-[#222222]"
+                        ? "border-[#FF2D7A] text-[#FF2D7A] bg-[#FF2D7A]/10"
+                        : "border-white/[0.1] text-[#CBD5E1] hover:bg-white/5 hover:text-white"
                     }`}
                   >
                     <svg className="w-3.5 h-3.5" fill={saved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -686,13 +724,13 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   </button>
                   <Link
                     href={`/gift?exp=${exp.id}`}
-                    className="py-2.5 rounded-xl border border-[#ebebeb] text-[#6a6a6a] text-caption font-medium text-center hover:bg-[#FFF8F0] hover:text-[#222222] transition-all flex items-center justify-center gap-1"
+                    className="py-2.5 rounded-xl border border-white/[0.1] text-[#CBD5E1] text-caption font-medium text-center hover:bg-white/5 hover:text-white transition-all flex items-center justify-center gap-1"
                   >
                     🎁 Gift
                   </Link>
                   <button
                     onClick={handleShare}
-                    className="py-2.5 rounded-xl border border-[#ebebeb] text-[#6a6a6a] text-caption font-medium hover:bg-[#FFF8F0] hover:text-[#222222] transition-all flex items-center justify-center gap-1"
+                    className="py-2.5 rounded-xl border border-white/[0.1] text-[#CBD5E1] text-caption font-medium hover:bg-white/5 hover:text-white transition-all flex items-center justify-center gap-1"
                   >
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />

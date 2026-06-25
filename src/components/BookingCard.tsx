@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import QRCode from "qrcode";
+import { getBookingCountdown } from "@/lib/booking-engine";
+import { downloadBookingPDF } from "@/lib/booking-card-pdf";
 
 interface BookingData {
   id: string;
@@ -22,10 +24,14 @@ interface BookingData {
 interface BookingCardProps {
   booking: BookingData;
   showActions?: boolean;
+  onCancel?: () => void;
 }
 
-export default function BookingCard({ booking, showActions = true }: BookingCardProps) {
+export default function BookingCard({ booking, showActions = true, onCancel }: BookingCardProps) {
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [cancelled, setCancelled] = useState(false);
+  const [countdown, setCountdown] = useState<ReturnType<typeof getBookingCountdown> | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,13 +42,22 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
     }).then(setQrDataUrl).catch(() => {});
   }, [booking.bookingRef]);
 
+  // Live countdown for upcoming bookings
+  useEffect(() => {
+    if (booking.status !== "upcoming") return;
+    const update = () => setCountdown(getBookingCountdown(booking.date));
+    update();
+    const interval = setInterval(update, 60000);
+    return () => clearInterval(interval);
+  }, [booking.status, booking.date]);
+
   const statusColors: Record<string, string> = {
     upcoming: "bg-emerald-500",
     completed: "bg-blue-500",
     cancelled: "bg-red-500",
   };
 
-  const handleDownload = useCallback(async () => {
+  const handleDownloadPNG = useCallback(async () => {
     if (!cardRef.current) return;
     try {
       const canvas = document.createElement("canvas");
@@ -64,7 +79,7 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
       ctx.fill();
 
       // Draw decorative circles
-      ctx.fillStyle = "rgba(255, 56, 92, 0.08)";
+      ctx.fillStyle = "rgba(255, 45, 122, 0.08)";
       ctx.beginPath();
       ctx.arc(rect.width - 60, -30, 120, 0, Math.PI * 2);
       ctx.fill();
@@ -111,7 +126,6 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
         const qrImg = new window.Image();
         qrImg.onload = () => {
           ctx.drawImage(qrImg, rect.width - 160, 20, 80, 80);
-          // Draw reference below QR
           ctx.fillStyle = "rgba(255,255,255,0.3)";
           ctx.font = "8px monospace";
           ctx.textAlign = "center";
@@ -121,7 +135,7 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
       }
 
       // Price
-      ctx.fillStyle = "#DD2A7B";
+      ctx.fillStyle = "#FF2D7A";
       ctx.font = "bold 22px sans-serif";
       ctx.textAlign = "right";
       ctx.fillText(`MK ${booking.price.toLocaleString()}`, rect.width - 20, 88);
@@ -147,16 +161,61 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
     } catch {}
   }, [booking, qrDataUrl]);
 
+  const handleDownloadPDF = useCallback(() => {
+    downloadBookingPDF({
+      bookingRef: booking.bookingRef,
+      title: booking.title,
+      venue: booking.location,
+      location: booking.location,
+      dateLabel: booking.dateLabel,
+      time: booking.time,
+      guests: booking.guests,
+      price: booking.price,
+      status: booking.status,
+      qrDataUrl,
+    }, `booking-${booking.bookingRef}.pdf`);
+  }, [booking, qrDataUrl]);
+
+  const handleCancelConfirm = useCallback(() => {
+    setCancelled(true);
+    setShowCancelConfirm(false);
+    booking.status = "cancelled";
+    onCancel?.();
+  }, [onCancel]);
+
+  const actualStatus = cancelled ? "cancelled" : booking.status;
+
   return (
     <div className="group">
+      {/* Cancel Confirmation Modal */}
+      {showCancelConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setShowCancelConfirm(false)}>
+          <div className="bg-[#111827] rounded-2xl border border-white/[0.1] p-6 max-w-sm mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+            </div>
+            <h3 className="text-heading-md font-bold text-white text-center mb-2">Cancel Booking?</h3>
+            <p className="text-[#CBD5E1] text-body-sm text-center mb-6">This action cannot be undone. Your booking will be permanently cancelled.</p>
+            <div className="flex gap-3">
+              <button onClick={() => setShowCancelConfirm(false)} className="flex-1 px-4 py-2.5 rounded-xl border border-white/[0.1] text-white text-body-sm font-medium hover:bg-white/5 transition-all">
+                Keep Booking
+              </button>
+              <button onClick={handleCancelConfirm} className="flex-1 px-4 py-2.5 rounded-xl bg-red-500 text-white text-body-sm font-semibold hover:bg-red-600 transition-all">
+                Yes, Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Luxury Ticket Card */}
       <div
         ref={cardRef}
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0f0f1a] via-[#1a1a2e] to-[#16213e] border border-white/[0.08] shadow-xl transition-all duration-500 hover:shadow-2xl hover:scale-[1.01]"
+        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0f0f1a] via-[#1a1a2e] to-[#16213e] border border-white/[0.08] shadow-xl transition-all duration-500 hover:shadow-2xl hover:scale-[1.01] ${actualStatus === "cancelled" ? "opacity-70" : ""}`}
       >
         {/* Decorative background elements */}
-        <div className="absolute top-0 right-0 w-48 h-48 bg-[#DD2A7B]/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-40 h-40 bg-[#8134AF]/5 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl" />
+        <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF2D7A]/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-2xl" />
+        <div className="absolute bottom-0 left-0 w-40 h-40 bg-[#FF2D7A]/5 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.03)_0%,transparent_60%)]" />
 
         {/* Perforation line (left side ticket stub effect) */}
@@ -167,14 +226,26 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
           {/* Top row: status + brand */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full ${statusColors[booking.status] || "bg-gray-500"} animate-pulse`} />
-              <span className="text-caption font-semibold text-white/60 uppercase tracking-wider">{booking.status}</span>
+              <span className={`w-2 h-2 rounded-full ${statusColors[actualStatus] || "bg-gray-500"} animate-pulse`} />
+              <span className="text-caption font-semibold text-white/60 uppercase tracking-wider">{actualStatus}</span>
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.15em]">Experio</p>
               <p className="text-[8px] text-white/10">EXPERIENCE PASS</p>
             </div>
           </div>
+
+          {/* Countdown for upcoming */}
+          {actualStatus === "upcoming" && countdown && !countdown.expired && (
+            <div className="mb-3 flex items-center gap-3 text-caption">
+              <span className="text-white/40 uppercase tracking-wider text-[10px]">Starts in</span>
+              <div className="flex gap-2">
+                {countdown.days > 0 && <CountdownUnit value={countdown.days} label="d" />}
+                <CountdownUnit value={countdown.hours} label="h" />
+                <CountdownUnit value={countdown.minutes} label="m" />
+              </div>
+            </div>
+          )}
 
           <div className="flex flex-col sm:flex-row sm:items-start gap-4">
             {/* Left: Main content */}
@@ -220,7 +291,7 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
 
             {/* Right: Price + QR (desktop) */}
             <div className="hidden sm:flex flex-col items-end gap-3">
-              <p className="text-heading-lg font-bold text-[#DD2A7B]">MK {booking.price.toLocaleString()}</p>
+              <p className="text-heading-lg font-bold text-[#FF2D7A]">MK {booking.price.toLocaleString()}</p>
               {qrDataUrl && (
                 <div className="flex flex-col items-center gap-1">
                   <Image src={qrDataUrl} alt="QR Code" width={80} height={80} className="rounded-lg bg-white p-1.5 shadow-lg" />
@@ -233,42 +304,71 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
           {/* Mobile price */}
           <div className="sm:hidden mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between">
             <p className="text-caption text-white/40">Total</p>
-            <p className="text-heading-sm font-bold text-[#DD2A7B]">MK {booking.price.toLocaleString()}</p>
+            <p className="text-heading-sm font-bold text-[#FF2D7A]">MK {booking.price.toLocaleString()}</p>
           </div>
         </div>
       </div>
 
       {/* Actions */}
-      {showActions && (
+      {showActions && !cancelled && (
         <div className="flex items-center gap-2 mt-3">
           {booking.status === "upcoming" && (
             <>
               <Link
                 href={`/experiences/${booking.id}`}
-                className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white text-body-sm font-semibold text-center hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+                className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white text-body-sm font-semibold text-center hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all duration-300"
               >
                 View Details
               </Link>
               <button
-                onClick={handleDownload}
+                onClick={handleDownloadPNG}
                 className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all"
+                title="Download PNG"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+              </button>
+              <button
+                onClick={handleDownloadPDF}
+                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all"
+                title="Download PDF"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+              </button>
+              <button
+                onClick={() => setShowCancelConfirm(true)}
+                className="px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-body-sm font-medium hover:bg-red-500/20 transition-all"
+              >
+                Cancel
               </button>
             </>
           )}
           {booking.status === "completed" && (
-            <button
-              onClick={handleDownload}
-              className="flex-1 px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all flex items-center justify-center gap-2"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-              Download Pass
-            </button>
+            <>
+              <button
+                onClick={handleDownloadPNG}
+                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                Download Pass (PNG)
+              </button>
+              <button
+                onClick={handleDownloadPDF}
+                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                Download Pass (PDF)
+              </button>
+              <Link
+                href={`/experiences/${booking.id}`}
+                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all text-center"
+              >
+                Rebook
+              </Link>
+            </>
           )}
           {booking.status === "cancelled" && (
             <Link
-              href="/experiences"
+              href={`/experiences/${booking.id}`}
               className="flex-1 px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium text-center hover:bg-white/20 transition-all"
             >
               Book Again
@@ -276,6 +376,22 @@ export default function BookingCard({ booking, showActions = true }: BookingCard
           )}
         </div>
       )}
+
+      {/* Cancelled confirmation message */}
+      {cancelled && (
+        <div className="mt-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-body-sm text-center">
+          Booking cancelled. <Link href={`/experiences/${booking.id}`} className="underline font-medium">Book again?</Link>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CountdownUnit({ value, label }: { value: number; label: string }) {
+  return (
+    <div className="flex items-center gap-0.5">
+      <span className="text-white font-bold text-body-sm">{value.toString().padStart(2, "0")}</span>
+      <span className="text-white/40 text-[10px] uppercase">{label}</span>
     </div>
   );
 }
