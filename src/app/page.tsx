@@ -126,15 +126,15 @@ export default function Home() {
   const GridCards = ({ title, items }: { title: string; items: Experience[] }) => (
     <section className="mb-10 px-4 sm:px-8">
       <div className="flex items-end justify-between mb-4">
-        <h2 className="text-heading-lg sm:text-heading-xl font-bold text-[#222222]">{title}</h2>
-        <Link href="/experiences" className="text-body-sm text-[#4a4a4a] hover:text-[#DD2A7B] transition-colors duration-200 flex items-center gap-1 flex-shrink-0">
+        <h2 className="text-heading-lg sm:text-heading-xl font-bold text-white">{title}</h2>
+        <Link href="/experiences" className="text-body-sm text-[#CBD5E1] hover:text-[#FF2D7A] transition-colors duration-200 flex items-center gap-1 flex-shrink-0">
           See all
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
         </Link>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {items.map((exp) => (
-          <Link key={exp.id} href={`/experiences/${exp.id}`} className="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#f0f0f0]">
+          <Link key={exp.id} href={`/experiences/${exp.id}`} className="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#1A2332]">
             <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
@@ -153,15 +153,15 @@ export default function Home() {
   const GridCards2 = ({ title, items }: { title: string; items: Experience[] }) => (
     <section className="mb-10 px-4 sm:px-8">
       <div className="flex items-end justify-between mb-4">
-        <h2 className="text-heading-lg sm:text-heading-xl font-bold text-[#222222]">{title}</h2>
-        <Link href="/experiences" className="text-body-sm text-[#4a4a4a] hover:text-[#DD2A7B] transition-colors duration-200 flex items-center gap-1 flex-shrink-0">
+        <h2 className="text-heading-lg sm:text-heading-xl font-bold text-white">{title}</h2>
+        <Link href="/experiences" className="text-body-sm text-[#CBD5E1] hover:text-[#FF2D7A] transition-colors duration-200 flex items-center gap-1 flex-shrink-0">
           See all
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
         </Link>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {items.map((exp) => (
-          <Link key={exp.id} href={`/experiences/${exp.id}`} className="group relative aspect-[16/10] rounded-2xl overflow-hidden bg-[#f0f0f0]">
+          <Link key={exp.id} href={`/experiences/${exp.id}`} className="group relative aspect-[16/10] rounded-2xl overflow-hidden bg-[#1A2332]">
             <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -181,9 +181,9 @@ export default function Home() {
   const SectionDivider = ({ title }: { title: string }) => (
     <div className="px-4 sm:px-8 my-6 sm:my-8">
       <div className="flex items-center gap-4">
-        <span className="w-1 h-6 rounded-full bg-[#DD2A7B]" />
-        <h3 className="text-heading-md sm:text-heading-lg font-bold text-[#222222] tracking-tight">{title}</h3>
-        <div className="flex-1 h-px bg-gradient-to-r from-[#ebebeb] to-transparent" />
+        <span className="w-1 h-6 rounded-full bg-[#FF2D7A]" />
+        <h3 className="text-heading-md sm:text-heading-lg font-bold text-white tracking-tight">{title}</h3>
+        <div className="flex-1 h-px bg-gradient-to-r from-white/[0.06] to-transparent" />
       </div>
     </div>
   );
@@ -230,8 +230,8 @@ export default function Home() {
         {/* ─── City Detection Banner ─── */}
         {detectedCity && (
           <div className="px-4 sm:px-8 pt-4 pb-0">
-            <div className="flex items-center gap-2 text-body-sm text-[#4a4a4a]">
-              <svg className="w-4 h-4 text-[#DD2A7B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            <div className="flex items-center gap-2 text-body-sm text-[#CBD5E1]">
+              <svg className="w-4 h-4 text-[#FF2D7A]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               <span>Showing experiences near <strong>{detectedCity}</strong></span>
             </div>
           </div>
@@ -292,11 +292,11 @@ export default function Home() {
 
         {/* ─── Social Proof ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-6 sm:my-8">
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 py-4 sm:py-5 px-4 sm:px-8 rounded-2xl bg-[#FFF8F0] border border-[#ebebeb]">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 py-4 sm:py-5 px-4 sm:px-8 rounded-2xl bg-[#111827] border border-white/[0.06]">
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">
                 {["/avatar1.jpg", "/avatar2.jpg", "/avatar3.jpg"].map((src, i) => (
-                  <div key={i} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#DD2A7B] to-[#F58529] flex items-center justify-center text-white text-[10px] font-bold border-2 border-white">
+                  <div key={i} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] flex items-center justify-center text-white text-[10px] font-bold border-2 border-white">
                     {["A", "M", "K"][i]}
                   </div>
                 ))}
@@ -307,10 +307,10 @@ export default function Home() {
                     <svg key={s} className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
                   ))}
                 </div>
-                <p className="text-caption text-[#4a4a4a] font-medium">Trusted by 10,000+ explorers</p>
+                <p className="text-caption text-[#CBD5E1] font-medium">Trusted by 10,000+ explorers</p>
               </div>
             </div>
-            <div className="flex items-center gap-4 sm:gap-6 text-caption text-[#4a4a4a]">
+            <div className="flex items-center gap-4 sm:gap-6 text-caption text-[#CBD5E1]">
               <span className="flex items-center gap-1">✓ Curated experiences</span>
               <span className="hidden xs:inline flex items-center gap-1">✓ Instant booking</span>
               <span className="flex items-center gap-1">✓ Free cancellation</span>
@@ -335,27 +335,27 @@ export default function Home() {
 
         {/* ─── Gift A Moment ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-10">
-          <div className="relative rounded-2xl overflow-hidden border border-[#dddddd] bg-[#fafafa]">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#DD2A7B]/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#8134AF]/5 rounded-full blur-3xl" />
+          <div className="relative rounded-2xl overflow-hidden border border-white/[0.1] bg-[#05070B]">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF2D7A]/10 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#FF7A18]/10 rounded-full blur-3xl" />
             <div className="relative z-10 p-8 sm:p-12">
               <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
                 <div className="flex-1 text-center lg:text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#dddddd] text-caption text-[#4a4a4a] mb-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1A2332] border border-white/[0.1] text-caption text-[#CBD5E1] mb-4">
                     Gift A Moment
                   </div>
-                  <h2 className="text-heading-xl sm:text-display-sm font-bold text-[#222222] mb-3 leading-tight">
+                  <h2 className="text-heading-xl sm:text-display-sm font-bold text-white mb-3 leading-tight">
                     Give More Than A Gift.
-                    <span className="block bg-gradient-to-r from-[#DD2A7B] to-[#F58529] bg-clip-text text-transparent">
+                    <span className="block bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] bg-clip-text text-transparent">
                       Give A Memory.
                     </span>
                   </h2>
-                  <p className="text-[#4a4a4a] text-body-lg max-w-md mx-auto lg:mx-0 mb-6">
+                  <p className="text-[#CBD5E1] text-body-lg max-w-md mx-auto lg:mx-0 mb-6">
                     Surprise someone special with an unforgettable experience, delivered straight to their phone.
                   </p>
                   <Link
                     href="/gift"
-                    className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+                    className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all duration-300"
                   >
                     Send a Gift Card
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
@@ -367,7 +367,7 @@ export default function Home() {
                       <Link
                         key={exp.id}
                         href={`/experiences/${exp.id}`}
-                        className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-[#f0f0f0]"
+                        className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-[#1A2332]"
                       >
                         <img
                           src={exp.image}
@@ -410,18 +410,18 @@ export default function Home() {
 
         {/* ─── Large CTA ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-12">
-          <div className="relative rounded-2xl overflow-hidden bg-[#f7f7f7] border border-[#dddddd] p-10 sm:p-16 text-center">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#DD2A7B]/5 via-[#8134AF]/5 to-[#F58529]/5 rounded-full blur-3xl" />
+          <div className="relative rounded-2xl overflow-hidden bg-[#111827] border border-white/[0.1] p-10 sm:p-16 text-center">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#FF2D7A]/8 via-[#FF7A18]/8 to-[#FF2D7A]/8 rounded-full blur-3xl" />
             <div className="relative z-10">
-              <h2 className="text-heading-xl sm:text-display-sm md:text-display-md font-bold text-[#222222] mb-4 leading-tight">
+              <h2 className="text-heading-xl sm:text-display-sm md:text-display-md font-bold text-white mb-4 leading-tight">
                 Life is made of moments.
               </h2>
-              <p className="text-[#4a4a4a] text-body-lg sm:text-heading-md max-w-lg mx-auto mb-8 leading-relaxed">
+              <p className="text-[#CBD5E1] text-body-lg sm:text-heading-md max-w-lg mx-auto mb-8 leading-relaxed">
                 Don&apos;t spend another weekend wondering what to do.
               </p>
               <Link
                 href="/experiences"
-                className="inline-flex items-center gap-2.5 px-10 py-4 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+                className="inline-flex items-center gap-2.5 px-10 py-4 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all duration-300"
               >
                 Discover Experiences
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>

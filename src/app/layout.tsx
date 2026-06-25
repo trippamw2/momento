@@ -15,13 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Experio — Experiences worth living",
+  title: "Experio — What do you feel like doing today?",
   description:
-    "Discover unforgettable experiences curated for every mood. Romantic dinners, wellness retreats, adventures, and more — live the experience.",
+    "Discover unforgettable experiences curated for every mood. Romantic dinners, wellness retreats, adventures, and more — live the moment.",
   openGraph: {
-    title: "Experio — Experiences worth living",
+    title: "Experio — What do you feel like doing today?",
     description:
-      "Discover unforgettable experiences curated for every mood. Romantic dinners, wellness retreats, adventures, and more — live the experience.",
+      "Discover unforgettable experiences curated for every mood. Romantic dinners, wellness retreats, adventures, and more — live the moment.",
     siteName: "Experio",
     type: "website",
   },
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="bg-[#faf8f6] text-[#222222] antialiased min-h-screen flex flex-col">
+      <body className="bg-[#05070B] text-white antialiased min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-1 pt-18">{children}</main>
         <Footer />

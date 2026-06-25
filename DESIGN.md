@@ -1,37 +1,37 @@
 # Experio Design System
 
-> Inspired by Instagram — vibrant gradients, bold typography, and social-first UI. A B2C marketplace for booking experiences in Malawi.
+> Dark mode, premium feel, spec-driven. #FF2D7A → #FF7A18 gradient anchors the brand identity. Near-black backgrounds with glassmorphism and ambient glow create depth. Photography takes center stage with full-bleed hero images. The signature Experio gradient flows from pink (#FF2D7A) to orange (#FF7A18).
 
 ## 1. Visual Theme
 
-Vibrant, energetic, bold. Instagram-inspired gradient palette anchors the brand identity. White canvases with ambient gradient glows create depth. Photography takes center stage with full-bleed hero images. The signature Experio gradient flows from pink (#DD2A7B) → purple (#8134AF) → blue (#515BD4), with warm variations using yellow (#FEDA77) → orange (#F58529) → pink.
+Dark, moody, premium. Spec calls for nocturnal elegance — deep near-black backgrounds (#05070B) with subtle glass overlays and vibrant accent gradients. The experience is cinematic: dark canvases let photography and the brand gradient pop. 20px radius is the default corner rounding.
 
 ## 2. Color Palette
 
 ### Brand Colors
 | Token | Value | Usage |
 |---|---|---|
-| `--color-brand-pink` | `#DD2A7B` | Primary CTA, active tab, wishlist heart, pricing emphasis |
-| `--color-brand-pink-dark` | `#b81d6a` | Pressed/active button states |
-| `--color-brand-purple` | `#8134AF` | Secondary actions, accent badges |
-| `--color-brand-orange` | `#F58529` | Warm accents, seasonal campaigns |
-| `--color-brand-yellow` | `#FEDA77` | Highlight, star ratings warmth |
-| `--color-brand-blue` | `#515BD4` | Tertiary accent, links, info |
-| `--color-bg-canvas` | `#ffffff` | Page background |
-| `--color-bg-soft` | `#f7f7f7` | Footer, secondary sections |
-| `--color-border` | `#dddddd` | All 1px borders and dividers |
-| `--color-text-primary` | `#222222` (→ `#111111`) | All headings and body text |
-| `--color-text-secondary` | `#4a4a4a` | Secondary labels, metadata |
-| `--color-text-tertiary` | `#929292` | Disabled, low-priority copy |
-| `--color-error` | `#c13515` | Form errors |
+| `--color-brand-primary` | `#FF2D7A` | Primary CTA, active tab, pricing emphasis |
+| `--color-brand-secondary` | `#FF7A18` | Secondary actions, warm accents |
+| `--color-brand-pink` | `#FF2D7A` | Legacy alias for primary |
+| `--color-brand-orange` | `#FF7A18` | Legacy alias for secondary |
+| `--color-brand-pink-dark` | `#cc2461` | Pressed/active button states |
+| `--color-brand-orange-dark` | `#cc6213` | Pressed warm button states |
+| `--color-surface-primary` | `#05070B` | Page background |
+| `--color-surface-secondary` | `#0A0E17` | Elevated panels, hero fallback |
+| `--color-surface-tertiary` | `#111827` | Cards, inputs, secondary sections |
+| `--color-surface-elevated` | `#1A2332` | Hover states, active cards |
+| `--color-border-default` | `rgba(255,255,255,0.1)` | All 1px borders and dividers |
+| `--color-border-subtle` | `rgba(255,255,255,0.06)` | Very subtle borders |
+| `--color-text-primary` | `#FFFFFF` | All headings and body text |
+| `--color-text-secondary` | `#CBD5E1` | Secondary labels, metadata |
+| `--color-text-tertiary` | `#94A3B8` | Disabled, low-priority copy |
 
 ### Gradient Palette
 | Name | Colors | Usage |
 |---|---|---|
-| Brand | #DD2A7B → #8134AF → #515BD4 | Primary buttons, hero sections, brand banners |
-| Sunset | #FEDA77 → #F58529 → #DD2A7B | Warm CTAs, seasonal, gift sections |
-| Warm | #F58529 → #DD2A7B → #8134AF | Secondary gradients, mood badges |
-| Secondary | #8134AF → #515BD4 | Subtle accents, info cards |
+| Brand | #FF2D7A → #FF7A18 | Primary buttons, hero text, brand banners |
+| Warm (reversed) | #FF7A18 → #FF2D7A | Warm CTAs, seasonal sections |
 
 ## 3. Typography
 
@@ -51,25 +51,33 @@ Headings use `Playfair Display` (serif) for luxury/editorial sections.
 
 ## 4. Spacing & Radius
 
-Base unit: 4px. Corner radius scale: 8px (buttons), 12px (cards), 16px (modals), 20px (large containers), 9999px (pills, avatars).
+Base unit: 4px. Corner radius scale: 8px (pill variant), 12px (buttons), 16px (modals), 20px (default, cards, large containers), 28px (featured), 9999px (full pill).
+
+**20px radius is the default** — applied to cards, buttons, inputs, and containers.
 
 ## 5. Component Patterns
 
-**Cards**: White background, 12px image radius, 3:4 aspect ratio for experience cards, gradient overlays on images. Logo badge top-right corner on cards. Bottom content with mood tag, rating, title, price.
+**Cards**: Dark background (#111827), 20px radius, optional glass variant (rgba(17,24,39,0.8) backdrop-blur), gradient overlays on images. Bottom content with title, rating, price in white/slate text.
 
-**Primary button**: Instagram gradient (#DD2A7B → #8134AF → #515BD4) background, white text, 12px radius, glow shadow on hover.
+**Primary button**: #FF2D7A background, white text, 20px radius, glow shadow (`0 4px 16px rgba(255,45,122,0.25)`) on hover.
 
-**Secondary button**: White bg, 1px #dddddd border, #222222 text, 20px pill radius.
+**Secondary button**: #111827 bg, 1px white/[0.1] border, white text, 20px radius.
 
-**Navbar**: Glass background (bg-white/90 backdrop-blur), 1px #ebebeb bottom border, gradient brand accent on active states.
+**Navbar**: Glass-nav background (rgba(5,7,11,0.9) backdrop-blur), 1px rgba(255,255,255,0.06) bottom border, #FF2D7A accent on active states.
 
-**Search bar**: White bg, 1px #dddddd border, 12px radius, subtle shadow.
+**Search bar/Input**: #111827 bg, 1px white/[0.1] border, 20px radius, subtle shadow. Focus ring: #FF2D7A with glow.
 
-**Image Gallery (Detail Page)**: Full-screen swipeable carousel with thumbnail strip. Instagram Stories-style progress indicators. Tap/drag to navigate between images.
+**Image Gallery (Detail Page)**: Full-screen swipeable carousel with thumbnail strip. Dark backgrounds let images pop. Tap/drag to navigate between images.
+
+**Glass Card**: `rgba(17, 24, 39, 0.8)` background, `backdrop-filter: blur(20px)`, 1px `rgba(255,255,255,0.06)` border, 20px radius.
+
+**Hero Section**: Full-viewport background image at 25-35% opacity, gradient overlays from #05070B, subtle #FF2D7A/#FF7A18 ambient glow. Mood grid with dark pill cards (#111827 bg, white/[0.1] border).
+
+**Mood Pills**: 6 moods with emojis — Romantic ❤️, Relax 😌, Celebrate 🎉, Escape 🌴, Treat Myself ✨, Food & Drink 🍽. Each pill: #111827 background, white/[0.1] border, white emoji + label, hover glow effect.
 
 ## 6. Elevation
 
-Subtle shadows on cards: `0 1px 3px rgba(0,0,0,0.06)`. Elevated cards (hover): `0 8px 32px rgba(0,0,0,0.08)`. Brand glow on primary buttons: `0 4px 16px rgba(221,42,123,0.25)`. Modals: layered shadow with `0 8px 32px rgba(0,0,0,0.12)`.
+Dark-mode shadows: `0 2px 8px rgba(0,0,0,0.4)` on cards. Elevated cards (hover): `0 4px 16px rgba(0,0,0,0.5)`. Brand glow on primary buttons: `0 4px 16px rgba(255,45,122,0.25)`. Modals: `0 8px 32px rgba(0,0,0,0.5)`. Glass effect with backdrop-blur replaces heavy shadows.
 
 ## 7. Responsive
 
