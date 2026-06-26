@@ -3,7 +3,9 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { experiences } from "@/lib/data";
+import { getExperiences } from "@/lib/api-client";
+import { transformExperience } from "@/lib/transform";
+import { experiences as mockExperiences } from "@/lib/data";
 import { Experience } from "@/lib/types";
 
 function loadSaved(): string[] {
@@ -30,13 +32,24 @@ function toggleSave(id: string, currentSaved: string[]): string[] {
 }
 
 export default function DiscoveryFeed() {
-  const [items] = useState(() => [...experiences].sort(() => Math.random() - 0.5));
+  const [items, setItems] = useState<Experience[]>([]);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setSavedIds(loadSaved());
+  }, []);
+
+  useEffect(() => {
+    getExperiences({ limit: 20 })
+      .then((res) => {
+        const mapped = (res.experiences as Record<string, unknown>[]).map(transformExperience);
+        setItems(mapped.length > 0 ? mapped.sort(() => Math.random() - 0.5) : [...mockExperiences].sort(() => Math.random() - 0.5));
+      })
+      .catch(() => {
+        setItems([...mockExperiences].sort(() => Math.random() - 0.5));
+      });
   }, []);
 
   const handleScroll = useCallback(() => {

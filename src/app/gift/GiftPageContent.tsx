@@ -12,7 +12,7 @@ import { sendGiftViaWhatsApp } from "@/lib/delivery-whatsapp";
 import { sendGiftViaEmail } from "@/lib/delivery-email";
 import { downloadGiftPDF } from "@/lib/gift-card-pdf";
 
-const categories = ["All", "Date Night", "Pool & Chill", "Spa & Wellness", "Brunch & Dining", "Staycation", "Celebrations"];
+const categories = ["All", "Date Night", "Pool & Chill", "Spa & Wellness", "Brunch & Dining", "Staycation"];
 const locations = ["All", "Lilongwe", "Blantyre"];
 
 const giftIdeas = experiences.slice(0, 5);
@@ -27,9 +27,11 @@ const occasions = [
 ];
 
 const giftCardValues = [
-  { value: 100000, label: "MK 100,000", desc: "Perfect for a brunch date or a relaxing afternoon" },
-  { value: 250000, label: "MK 250,000", desc: "Ideal for a spa day or romantic dinner" },
-  { value: 300000, label: "MK 300,000", desc: "The ultimate gift for a weekend escape" },
+  { value: 50000, label: "MK 50,000", desc: "Perfect for a coffee date or a small treat" },
+  { value: 100000, label: "MK 100,000", desc: "Great for a brunch date or relaxing afternoon" },
+  { value: 200000, label: "MK 200,000", desc: "Ideal for a spa day or romantic dinner" },
+  { value: 300000, label: "MK 300,000", desc: "Perfect for a weekend escape" },
+  { value: 500000, label: "MK 500,000", desc: "The ultimate premium gift experience" },
 ];
 
 const processSteps = [
@@ -214,11 +216,11 @@ export default function GiftPageContent() {
       ctx.arc(-30, rect.height - 30, 80, 0, Math.PI * 2);
       ctx.fill();
 
-      // Experio logo text
-      ctx.fillStyle = "rgba(255,255,255,0.15)";
-      ctx.font = "bold 10px sans-serif";
+      // Experio brand mark
+      ctx.fillStyle = "#FF2D7A";
+      ctx.font = "bold 12px sans-serif";
       ctx.textAlign = "right";
-      ctx.fillText("EXPERIO", rect.width - 20, 30);
+      ctx.fillText("✦ EXPERIO", rect.width - 20, 30);
 
       // Card chip
       ctx.fillStyle = "rgba(255, 200, 50, 0.7)";
@@ -333,8 +335,8 @@ export default function GiftPageContent() {
       <section className="relative min-h-[60vh] sm:min-h-[65vh] flex items-center justify-center overflow-hidden mb-12">
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=90"
-            alt="Couple gifting a luxury experience"
+            src="https://images.unsplash.com/photo-1512909006721-3d6018887383?w=1920&q=90"
+            alt="Luxury gift box with experiences"
             fill
             className="object-cover scale-105"
             sizes="100vw"
@@ -501,7 +503,7 @@ export default function GiftPageContent() {
             <p className="text-[#CBD5E1] text-body-lg">Choose an amount and surprise someone special</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-5 max-w-5xl mx-auto">
             {giftCardValues.map((card, i) => (
               <GiftCard
                 key={i}
@@ -605,7 +607,7 @@ export default function GiftPageContent() {
               <>
                 {/* Selection Grid */}
                 {tab === "cards" ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-8">
                     {giftCardValues.map((card, i) => (
                       <GiftCard
                         key={i}

@@ -24,6 +24,11 @@ export const metadata: Metadata = {
       "Discover unforgettable experiences curated for every mood. Romantic dinners, wellness retreats, adventures, and more — live the moment.",
     siteName: "Experio",
     type: "website",
+    images: [{ url: "/experio-icon.png", width: 512, height: 512 }],
+  },
+  icons: {
+    icon: "/experio-icon.png",
+    apple: "/experio-icon.png",
   },
 };
 

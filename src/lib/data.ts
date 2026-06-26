@@ -122,13 +122,6 @@ const includesMap: Record<string, string[]> = {
     "Sunset or sunrise experience",
     "Concierge service",
   ],
-  Celebrations: [
-    "Full event planning",
-    "Venue decoration",
-    "Catering and cake",
-    "Entertainment",
-    "Photography package",
-  ],
 };
 
 const capacityMap: Record<string, number> = {
@@ -137,7 +130,6 @@ const capacityMap: Record<string, number> = {
   "Spa & Wellness": 4,
   "Brunch & Dining": 8,
   Staycation: 4,
-  Celebrations: 20,
 };
 
 const reviewAuthors = [
@@ -334,9 +326,9 @@ const rawExperiences: RawExperience[] = [
     mood: ["Social", "Celebratory"],
     rating: 4.7,
     reviewCount: 112,
-    category: "Celebrations",
+    category: "Spa & Wellness",
     featured: true,
-    galleryCategory: "Celebrations",
+    galleryCategory: "Spa & Wellness",
   },
   {
     id: "birthday-experience",
@@ -351,9 +343,9 @@ const rawExperiences: RawExperience[] = [
     mood: ["Celebratory", "Social"],
     rating: 4.8,
     reviewCount: 91,
-    category: "Celebrations",
+    category: "Date Night",
     featured: true,
-    galleryCategory: "Celebrations",
+    galleryCategory: "Date Night",
   },
   {
     id: "wellness-retreat",
@@ -436,9 +428,9 @@ const rawExperiences: RawExperience[] = [
     mood: ["Celebratory", "Creative"],
     rating: 4.7,
     reviewCount: 99,
-    category: "Celebrations",
+    category: "Date Night",
     featured: false,
-    galleryCategory: "Celebrations",
+    galleryCategory: "Date Night",
   },
   {
     id: "lake-kayaking",
@@ -555,9 +547,9 @@ const rawExperiences: RawExperience[] = [
     mood: ["Creative", "Social"],
     rating: 4.6,
     reviewCount: 73,
-    category: "Celebrations",
+    category: "Date Night",
     featured: false,
-    galleryCategory: "Celebrations",
+    galleryCategory: "Date Night",
   },
   {
     id: "live-music-night",
@@ -572,9 +564,9 @@ const rawExperiences: RawExperience[] = [
     mood: ["Social", "Romantic"],
     rating: 4.5,
     reviewCount: 68,
-    category: "Celebrations",
+    category: "Date Night",
     featured: false,
-    galleryCategory: "Celebrations",
+    galleryCategory: "Date Night",
   },
   {
     id: "cooking-class",
@@ -640,9 +632,9 @@ const rawExperiences: RawExperience[] = [
     mood: ["Creative", "Social", "Celebratory"],
     rating: 4.6,
     reviewCount: 55,
-    category: "Celebrations",
+    category: "Brunch & Dining",
     featured: false,
-    galleryCategory: "Celebrations",
+    galleryCategory: "Brunch & Dining",
   },
   {
     id: "horse-riding",
@@ -743,10 +735,6 @@ export const discoveryRails: Record<DiscoveryRailKey, { title: string; getExperi
     title: "Staycations",
     getExperiences: () => shuffle(experiences.filter((e) => e.category === "Staycation")).slice(0, 8),
   },
-  celebrations: {
-    title: "Celebrations",
-    getExperiences: () => shuffle(experiences.filter((e) => e.category === "Celebrations")).slice(0, 8),
-  },
   "staff-picks": {
     title: "Staff Picks",
     getExperiences: () => shuffle(experiences.filter((e) => e.rating >= 4.8)).slice(0, 8),
@@ -772,7 +760,6 @@ export const railOrder: DiscoveryRailKey[] = [
   "spa-wellness",
   "brunch-dining",
   "staycation",
-  "celebrations",
   "staff-picks",
   "affordable",
   "personalized",
@@ -914,7 +901,6 @@ export const defaultCollections = [
   { id: "date-ideas", name: "Date Ideas", experienceIds: [] },
   { id: "weekend-plans", name: "Weekend Plans", experienceIds: [] },
   { id: "spa-breaks", name: "Spa & Wellness", experienceIds: [] },
-  { id: "celebrations", name: "Celebrations", experienceIds: [] },
 ];
 
 export const defaultSavedIds = [

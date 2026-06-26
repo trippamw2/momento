@@ -27,7 +27,6 @@ const RAILS: { key: string; title: string; filter: (e: Experience) => boolean }[
   { key: "spa-wellness", title: "Spa & Wellness", filter: (e: Experience) => e.category === "Spa & Wellness" },
   { key: "brunch-dining", title: "Brunch & Dining", filter: (e: Experience) => e.category === "Brunch & Dining" },
   { key: "staycation", title: "Staycations", filter: (e: Experience) => e.category === "Staycation" },
-  { key: "celebrations", title: "Celebrations", filter: (e: Experience) => e.category === "Celebrations" },
   { key: "staff-picks", title: "Staff Picks", filter: (e: Experience) => e.rating >= 4.8 },
   { key: "affordable", title: "Affordable Experiences", filter: (e: Experience) => e.price <= 50000 },
   { key: "personalized", title: "Just For You", filter: () => true },
@@ -36,7 +35,7 @@ const RAILS: { key: string; title: string; filter: (e: Experience) => boolean }[
 const RAIL_ORDER = [
   "trending", "personalized", "nearby", "popular", "weekend", "most-saved",
   "date-night", "pool-chill", "spa-wellness", "brunch-dining",
-  "staycation", "celebrations", "staff-picks", "affordable",
+  "staycation", "staff-picks", "affordable",
 ];
 
 function shuffle<T>(arr: T[]): T[] {
@@ -497,13 +496,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ─── Celebrations ─── */}
-        <SectionDivider title="Celebrations & Staff Picks" />
-        
-        {railsMap.celebrations && (
-          <ContentRail title={railsMap.celebrations.title} experiences={railsMap.celebrations.experiences} viewAllHref="/experiences" />
-        )}
-        
         {railsMap['staff-picks'] && (
           <GridCards title={railsMap['staff-picks'].title} items={railsMap['staff-picks'].experiences} />
         )}

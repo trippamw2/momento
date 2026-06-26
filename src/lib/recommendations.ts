@@ -99,8 +99,8 @@ function getTimeOfDayBonus(): Record<string, number> {
   if (hour >= 6 && hour < 12) return { "Brunch & Dining": 3, "Pool & Chill": 1 };
   // Afternoon (12-16): pool, spa
   if (hour >= 12 && hour < 17) return { "Pool & Chill": 2, "Spa & Wellness": 2, "Brunch & Dining": 1 };
-  // Evening (17-21): date night, celebrations
-  if (hour >= 17 && hour < 22) return { "Date Night": 3, "Celebrations": 2, "Brunch & Dining": 1 };
+  // Evening (17-21): date night, staycation
+  if (hour >= 17 && hour < 22) return { "Date Night": 3, "Staycation": 2, "Brunch & Dining": 1 };
   // Late night (22-5): staycation
   return { "Staycation": 2, "Date Night": 1 };
 }
@@ -108,7 +108,7 @@ function getTimeOfDayBonus(): Record<string, number> {
 function getDayOfWeekBonus(): Record<string, number> {
   const day = new Date().getDay();
   // Weekend (Fri-Sat evening, Sun midday)
-  if (day === 5 || day === 6) return { "Date Night": 2, "Celebrations": 2, "Staycation": 1 };
+  if (day === 5 || day === 6) return { "Date Night": 2, "Staycation": 2, "Pool & Chill": 1 };
   if (day === 0) return { "Brunch & Dining": 3, "Pool & Chill": 2 };
   // Weekday: midweek chill
   return { "Spa & Wellness": 1, "Pool & Chill": 1 };

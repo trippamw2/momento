@@ -69,7 +69,7 @@ export function transformExperience(raw: Record<string, unknown>): Experience {
     mood: moods.map((m) => m.moods?.label).filter(Boolean) as Experience["mood"],
     rating: (raw.rating as number) ?? 0,
     reviewCount: (raw.review_count as number) ?? reviews.length,
-    category: (raw.category as Experience["category"]) ?? "Wellness",
+    category: (raw.category as Experience["category"]) ?? "Date Night",
     featured: (raw.featured as boolean) ?? false,
     includes: (raw.includes as string[]) ?? [],
     capacity: (raw.capacity as number) ?? 8,

@@ -13,8 +13,7 @@ export type V2Category =
   | "Pool & Chill"
   | "Spa & Wellness"
   | "Brunch & Dining"
-  | "Staycation"
-  | "Celebrations";
+  | "Staycation";
 
 export interface Review {
   id: string;
@@ -67,7 +66,6 @@ export type DiscoveryRailKey =
   | "spa-wellness"
   | "brunch-dining"
   | "staycation"
-  | "celebrations"
   | "staff-picks"
   | "affordable"
   | "personalized";

@@ -1,11 +1,33 @@
 "use client";
 
-import { moods } from "@/lib/data";
+import { useCallback, useEffect, useState } from "react";
+import { getExperiences } from "@/lib/api-client";
+import { transformExperience } from "@/lib/transform";
+import { moods as mockMoods } from "@/lib/data";
+import { Mood } from "@/lib/types";
 import MoodPill from "./MoodPill";
-import { useState } from "react";
+
+const MOODS_DATA: { label: Mood; description: string; accent: string }[] = [
+  { label: "Romantic", description: "For two", accent: "from-rose-500 to-pink-500" },
+  { label: "Relaxed", description: "Unwind", accent: "from-emerald-500 to-teal-500" },
+  { label: "Social", description: "With friends", accent: "from-amber-500 to-orange-500" },
+  { label: "Culinary", description: "Food lovers", accent: "from-amber-600 to-orange-600" },
+  { label: "Active", description: "Get moving", accent: "from-blue-500 to-cyan-500" },
+  { label: "Luxurious", description: "Premium", accent: "from-fuchsia-500 to-purple-500" },
+  { label: "Celebratory", description: "Special moments", accent: "from-pink-500 to-rose-500" },
+  { label: "Creative", description: "Artsy fun", accent: "from-violet-500 to-purple-500" },
+];
 
 export default function MoodPillWrapper() {
   const [activeMood, setActiveMood] = useState<string | null>(null);
+  const [moods, setMoods] = useState(MOODS_DATA);
+
+  // Try fetching live data to see if moods exist, fall back to static
+  useEffect(() => {
+    getExperiences({ limit: 1 })
+      .then(() => {})
+      .catch(() => setMoods(mockMoods.length > 0 ? mockMoods : MOODS_DATA));
+  }, []);
 
   return (
     <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-2">
