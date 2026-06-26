@@ -47,8 +47,8 @@ export const GIFT_CARD_VARIANTS = [
   {
     id: "signature",
     label: "Experio Signature",
-    gradient: "from-[#DD2A7B] via-[#e00b41] to-[#F58529]",
-    accent: "from-[#ff6b81] to-[#ff9055]",
+    gradient: "from-[#FF2D7A] via-[#FF2D7A] to-[#FF7A18]",
+    accent: "from-[#FF2D7A] to-[#FF7A18]",
     textColor: "text-white",
     textColorSecondary: "text-white/80",
     chipColor: "from-yellow-200 to-yellow-400",
@@ -211,10 +211,10 @@ export default function GiftCard({
 
       {/* Value Label Below */}
       <div className="mt-3">
-        <p className={`text-heading-sm font-bold ${variant.textColor.includes("white") ? "text-[#222222]" : "text-[#222222]"}`}>
+          <p className={`text-heading-sm font-bold text-[#F1F5F9]`}>
           {valueLabel}
         </p>
-        <p className="text-caption text-[#6a6a6a] mt-0.5">{description}</p>
+        <p className="text-caption text-[#CBD5E1] mt-0.5">{description}</p>
       </div>
     </button>
   );
