@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import HeroSection from "@/components/HeroSection";
 import ContentRail from "@/components/ContentRail";
 import Link from "next/link";
@@ -9,13 +9,17 @@ import { transformExperience } from "@/lib/transform";
 import { Experience } from "@/lib/types";
 import { experiences as mockExperiences } from "@/lib/data";
 import { useGeolocation, getDistance, formatDist } from "@/lib/use-geolocation";
-import { findNearestCity } from "@/lib/geo";
+import { findNearestCity, getLocationSuggestions, getSmartRadius, getPopularCities, haversineDistance, formatDistance, getTravelMode } from "@/lib/geo";
 import { getPersonalizedRecommendations, getRecommendedCategories, hasUserInteractions, trackView } from "@/lib/recommendations";
+import { getPopularInArea } from "@/lib/geofence";
+import DistanceBadge from "@/components/DistanceBadge";
 import AIConcierge from "@/components/AIConcierge";
+import type { LocationSuggestion } from "@/lib/geo";
 
 const RAILS: { key: string; title: string; filter: (e: Experience) => boolean }[] = [
   { key: "trending", title: "Trending Right Now", filter: (e: Experience) => e.rating >= 4.7 },
   { key: "nearby", title: "Near You", filter: (_e: Experience) => true },
+  { key: "popular", title: "Popular Around You", filter: (_e: Experience) => true },
   { key: "weekend", title: "Perfect For This Weekend", filter: (e: Experience) => parseInt(e.duration) > 0 && parseInt(e.duration) <= 4 },
   { key: "most-saved", title: "Most Saved", filter: () => true },
   { key: "date-night", title: "Date Night", filter: (e: Experience) => e.category === "Date Night" },
@@ -30,7 +34,7 @@ const RAILS: { key: string; title: string; filter: (e: Experience) => boolean }[
 ];
 
 const RAIL_ORDER = [
-  "trending", "personalized", "nearby", "weekend", "most-saved",
+  "trending", "personalized", "nearby", "popular", "weekend", "most-saved",
   "date-night", "pool-chill", "spa-wellness", "brunch-dining",
   "staycation", "celebrations", "staff-picks", "affordable",
 ];
@@ -49,6 +53,35 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const geo = useGeolocation();
   const [detectedCity, setDetectedCity] = useState<string | null>(null);
+
+  // ─── Location Search ───
+  const [locationQuery, setLocationQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  // Update suggestions as user types
+  useEffect(() => {
+    if (locationQuery.trim().length >= 1) {
+      setSuggestions(getLocationSuggestions(locationQuery));
+      setShowSuggestions(true);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  }, [locationQuery]);
+
+  // Close suggestions on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setShowSuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
 
   // Auto-detect city from GPS
   useEffect(() => {
@@ -103,6 +136,18 @@ export default function Home() {
                 return dA - dB;
               });
           }
+        }
+        if (key === "popular") {
+          // Show highest-rated experiences near the user's detected city
+          if (detectedCity) {
+            filtered = filtered.filter((e) => e.location === detectedCity);
+          } else if (geo.position) {
+            const nearbyIds = getPopularInArea(geo.position, filtered.map((e) => e.id));
+            if (nearbyIds.length > 0) {
+              filtered = filtered.filter((e) => nearbyIds.includes(e.id));
+            }
+          }
+          filtered = [...filtered].sort((a, b) => b.rating - a.rating);
         }
         if (key === "personalized") {
           filtered = getPersonalizedRecommendations(filtered, geo.position ?? undefined);
@@ -243,10 +288,64 @@ export default function Home() {
         )}
         {geo.error && !detectedCity && (
           <div className="px-4 sm:px-8 pt-4 pb-0">
-            <p className="text-caption text-amber-600">Enable location to see experiences near you</p>
+            <div className="flex items-center gap-3 text-caption text-amber-600 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3">
+              <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              <span className="flex-1">Enable location to see experiences near you</span>
+              <button
+                onClick={() => geo.requestPosition()}
+                className="shrink-0 text-[11px] font-semibold text-white bg-amber-600/80 hover:bg-amber-600 px-3 py-1.5 rounded-lg transition-all"
+              >
+                Enable GPS
+              </button>
+            </div>
           </div>
         )}
-        
+
+        {/* ─── Location Search ─── */}
+        <div ref={searchRef} className="px-4 sm:px-8 pt-3 pb-1">
+          <div className="relative max-w-md">
+            <div className="flex items-center gap-2 bg-[#1A2332] border border-white/[0.08] rounded-xl px-3.5 py-2.5 focus-within:border-[#FF2D7A]/40 focus-within:shadow-[0_0_0_2px_rgba(255,45,122,0.1)] transition-all">
+              <svg className="w-4 h-4 text-[#94A3B8] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+              <input
+                type="text"
+                placeholder="Search for a city or area..."
+                value={locationQuery}
+                onChange={(e) => setLocationQuery(e.target.value)}
+                onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
+                className="flex-1 bg-transparent text-white text-body-sm placeholder-[#64748B] outline-none"
+              />
+              {locationQuery && (
+                <button onClick={() => { setLocationQuery(""); setSuggestions([]); setSelectedCity(null); }} className="text-[#64748B] hover:text-white transition-colors">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              )}
+            </div>
+            {/* Suggestions dropdown */}
+            {showSuggestions && suggestions.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-[#1A2332] border border-white/[0.08] rounded-xl overflow-hidden shadow-xl z-50">
+                {suggestions.map((s) => (
+                  <button
+                    key={s.name}
+                    onClick={() => {
+                      setSelectedCity(s.name);
+                      setLocationQuery(s.name);
+                      setShowSuggestions(false);
+                      setDetectedCity(s.name);
+                    }}
+                    className="w-full flex items-center gap-3 px-3.5 py-2.5 text-left hover:bg-white/[0.06] transition-colors"
+                  >
+                    <svg className="w-4 h-4 text-[#FF2D7A] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    <div>
+                      <p className="text-white text-caption font-medium">{s.name}</p>
+                      <p className="text-[#64748B] text-[11px]">{s.region} Region{s.isUrban ? " · Urban" : ""}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* ─── Trending ─── */}
         {railsMap.trending && (
           <ContentRail title={railsMap.trending.title} experiences={railsMap.trending.experiences} viewAllHref="/experiences" />
@@ -264,6 +363,16 @@ export default function Home() {
             experiences={railsMap.nearby.experiences}
             viewAllHref="/experiences"
             subtitle={geo.position ? "Sorted by distance" : "Enable location for nearby picks"}
+          />
+        )}
+
+        {/* ─── Popular Around You ─── */}
+        {railsMap.popular && (
+          <ContentRail
+            title={railsMap.popular.title}
+            experiences={railsMap.popular.experiences}
+            viewAllHref="/experiences"
+            subtitle={detectedCity ? `Top-rated in ${detectedCity}` : "Highest rated nearby"}
           />
         )}
 

@@ -6,6 +6,7 @@ import { Experience } from "@/lib/types";
 import { useState, useCallback } from "react";
 import { trackView, trackSaved } from "@/lib/recommendations";
 import { trackBooked } from "@/lib/recommendation-engine";
+import DistanceBadge from "./DistanceBadge";
 
 const MOOD_COLORS: Record<string, { bg: string; text: string; glow: string }> = {
   Romantic: { bg: "from-rose-500 to-pink-500", text: "text-rose-300", glow: "rgba(244,63,94,0.3)" },
@@ -24,6 +25,7 @@ const MOOD_COLORS: Record<string, { bg: string; text: string; glow: string }> = 
 interface ExperienceCardProps {
   experience: Experience;
   size?: "sm" | "md" | "lg";
+  distance?: number; // km, optional
 }
 
 function loadSaved(): string[] {
@@ -36,7 +38,7 @@ function loadSaved(): string[] {
   } catch { return []; }
 }
 
-export default function ExperienceCard({ experience: exp, size = "md" }: ExperienceCardProps) {
+export default function ExperienceCard({ experience: exp, size = "md", distance }: ExperienceCardProps) {
   const widthMap = { sm: "w-44 sm:w-52", md: "w-56 sm:w-64 md:w-72", lg: "w-72 sm:w-80" };
   const width = widthMap[size];
   const [saved, setSaved] = useState(() => loadSaved().includes(exp.id));
@@ -130,6 +132,12 @@ export default function ExperienceCard({ experience: exp, size = "md" }: Experie
             <span className="text-caption text-white/60">{exp.reviewCount} reviews</span>
             <span className="text-caption text-white/30">·</span>
             <span className="text-caption text-white/60">{exp.location}</span>
+            {distance !== undefined && (
+              <>
+                <span className="text-caption text-white/30">·</span>
+                <DistanceBadge distanceKm={distance} showIcon={false} showTravelTime={true} />
+              </>
+            )}
           </div>
           
           <h3 className="text-white font-bold text-body-sm leading-tight line-clamp-1 tracking-tight">{exp.title}</h3>

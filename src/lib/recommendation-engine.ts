@@ -1,6 +1,8 @@
 "use client";
 
 import { Experience } from "./types";
+import { haversineDistance } from "./geo";
+import type { Coordinates } from "./geo";
 
 // ─── Types ───
 
@@ -140,7 +142,8 @@ function getDayOfWeekBonus(): Record<string, number> {
 
 function scoreExperiences(
   experiences: Experience[],
-  categoryAffinity: Record<string, number>
+  categoryAffinity: Record<string, number>,
+  userLocation?: Coordinates | null
 ): Experience[] {
   const interactedIds = getAllInteractedIds();
   const savedIds = getSavedExperienceIds();
@@ -168,6 +171,14 @@ function scoreExperiences(
     // Quality bonus
     score += (exp.rating - 4) * 3;
 
+    // Proximity bonus: boost experiences closer to user
+    if (userLocation && exp.coordinates) {
+      const dist = haversineDistance(userLocation, exp.coordinates);
+      if (dist < 2) score += 3;       // walking distance
+      else if (dist < 5) score += 2;  // short drive
+      else if (dist < 15) score += 1; // within city
+    }
+
     return { exp, score };
   });
 
@@ -185,7 +196,7 @@ export function getPersonalizedRails(
 
   const categoryAffinity = getUserCategoryAffinity(allExperiences);
   const interactedIds = getAllInteractedIds();
-  const scored = scoreExperiences(allExperiences, categoryAffinity);
+  const scored = scoreExperiences(allExperiences, categoryAffinity, location);
 
   const rails: DiscoveryRail[] = [];
 
@@ -328,6 +339,7 @@ export function getBasedOnHistory(
 
   return scoreExperiences(
     experiences.filter((e) => e.category === topCat && !ids.has(e.id)),
-    categoryAffinity
+    categoryAffinity,
+    undefined
   ).slice(0, limit);
 }
