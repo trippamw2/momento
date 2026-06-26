@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import Logo from "@/components/Logo";
 import AuthModal from "./AuthModal";
 import LoyaltyBadge from "./LoyaltyBadge";
+import { getUnreadCount, getNotifications, markAsRead } from "@/lib/notifications-engine";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -18,13 +19,22 @@ export default function Navbar() {
 
   const [signedIn, setSignedIn] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [notifList, setNotifList] = useState<ReturnType<typeof getNotifications>>([]);
 
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("experio-auth-token") : null;
     const role = typeof window !== "undefined" ? localStorage.getItem("experio-user-role") : null;
     setSignedIn(!!token);
     setUserRole(role);
+    setUnreadCount(getUnreadCount());
   }, []);
+
+  useEffect(() => {
+    if (notifOpen) {
+      setNotifList(getNotifications().slice(0, 5));
+    }
+  }, [notifOpen]);
 
   // Close profile dropdown on outside click
   useEffect(() => {
@@ -93,13 +103,18 @@ export default function Navbar() {
                 Near Me
               </Link>
 
-              <button
-                onClick={() => setNotifOpen(!notifOpen)}
+              <Link
+                href="/notifications"
+                onClick={(e) => { e.preventDefault(); setNotifOpen(!notifOpen); }}
                 className="relative px-3 py-2 rounded-xl text-[#CBD5E1] hover:text-white hover:bg-white/5 transition-all font-semibold"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF2D7A] ring-2 ring-[#05070B]" />
-              </button>
+                {unreadCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-[#FF2D7A] text-[10px] font-bold text-white ring-2 ring-[#05070B] px-1">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
+              </Link>
 
               {/* Profile / Auth Button */}
               <div className="relative" ref={profileRef}>
@@ -284,18 +299,28 @@ export default function Navbar() {
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
-            <div className="space-y-3">
-              {[
-                { title: "New experiences near you", desc: "5 new experiences added in Lilongwe", time: "2h ago" },
-                { title: "Weekend flash sale", desc: "Up to 30% off selected experiences", time: "1d ago" },
-              ].map((n, i) => (
-                <div key={i} className="p-3 rounded-xl bg-[#0A0E17] border border-white/[0.06]">
-                  <p className="text-body-sm font-medium text-white">{n.title}</p>
-                  <p className="text-caption text-[#CBD5E1] mt-0.5">{n.desc}</p>
-                  <p className="text-caption text-[#94A3B8] mt-1">{n.time}</p>
-                </div>
-              ))}
+            <div className="space-y-2">
+              {notifList.length === 0 ? (
+                <p className="text-caption text-[#64748B] text-center py-6">No notifications yet</p>
+              ) : (
+                notifList.map((n) => (
+                  <div key={n.id} className="p-3 rounded-xl bg-[#0A0E17] border border-white/[0.06]">
+                    <p className="text-body-sm font-medium text-white">{n.title}</p>
+                    <p className="text-caption text-[#CBD5E1] mt-0.5 line-clamp-1">{n.description}</p>
+                    <p className="text-caption text-[#94A3B8] mt-1">{n.time}</p>
+                  </div>
+                ))
+              )}
             </div>
+            {notifList.length > 0 && (
+              <Link
+                href="/notifications"
+                onClick={() => setNotifOpen(false)}
+                className="block mt-3 text-center text-caption font-semibold text-[#FF2D7A] hover:text-[#FF2D7A]/80 pt-2 border-t border-white/[0.08] transition-colors"
+              >
+                View All Notifications →
+              </Link>
+            )}
           </div>
         </div>
       )}
