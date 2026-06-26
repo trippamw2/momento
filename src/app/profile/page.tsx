@@ -83,6 +83,7 @@ function UserProfile({ user }: { user: UserData }) {
               { label: "My Bookings", href: "/bookings" },
               { label: "Saved Experiences", href: "/saved" },
               { label: "Gift Cards", href: "/gift" },
+              { label: "Loyalty Rewards", href: "/loyalty" },
             ].map((link) => (
               <Link
                 key={link.href}

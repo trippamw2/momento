@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Experience } from "@/lib/types";
 import { trackView, trackBooked, trackSaved } from "@/lib/recommendations";
+import { calculatePoints, calculateTier, addPointsLocally, TIER_MAP } from "@/lib/loyalty-engine";
 
 import ContentRail from "./ContentRail";
 import AuthModal from "./AuthModal";
@@ -170,6 +171,8 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
   const [giftAmount, setGiftAmount] = useState(0);
   const [giftChecking, setGiftChecking] = useState(false);
   const [giftError, setGiftError] = useState("");
+  const [earnedPoints, setEarnedPoints] = useState(0);
+  const [tierUpgrade, setTierUpgrade] = useState<string | null>(null);
   const [specialRequests, setSpecialRequests] = useState("");
   const [contactPhone, setContactPhone] = useState("");
   const [contactEmail, setContactEmail] = useState("");
@@ -212,6 +215,17 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
         trackBooked(exp.id);
         setBookedDate(selectedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }));
         setBookingDone(true);
+
+        // Award loyalty points
+        const pts = calculatePoints(exp.price * guests);
+        setEarnedPoints(pts);
+        const updated = addPointsLocally(pts, "booking");
+        const prevTier = calculateTier(updated.lifetimePoints - pts).tier;
+        const newTier = calculateTier(updated.lifetimePoints).tier;
+        if (newTier !== prevTier) {
+          const tc = TIER_MAP[newTier];
+          setTierUpgrade(`${tc.icon} ${tc.name.charAt(0).toUpperCase() + tc.name.slice(1)}`);
+        }
       }
     } catch (e) {
       console.error("Booking failed", e);
@@ -259,10 +273,31 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
           <p className="text-[#CBD5E1] text-body-lg mb-2">{exp.title}</p>
           <p className="text-body-sm text-[#94A3B8] mb-1">{bookedDate} · {guests} guest{guests > 1 ? "s" : ""}</p>
           <p className="text-heading-md font-bold text-white mb-8">MK {(exp.price * guests).toLocaleString()}</p>
-          <p className="text-caption text-[#94A3B8] mb-8">Check your email for the full confirmation and receipt.</p>
+          {/* Loyalty Points Earned */}
+          {earnedPoints > 0 && (
+            <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-[#FF2D7A]/10 to-[#FF7A18]/10 border border-[#FF2D7A]/20">
+              <p className="text-body-sm font-bold text-[#F1F5F9] mb-1">
+                🎉 You earned {earnedPoints.toLocaleString()} points!
+              </p>
+              {tierUpgrade ? (
+                <p className="text-caption text-emerald-400 font-medium">
+                  🎊 You&apos;ve been upgraded to {tierUpgrade}!
+                </p>
+              ) : (
+                <p className="text-caption text-[#CBD5E1]">
+                  Keep booking to unlock more rewards and higher tiers.
+                </p>
+              )}
+            </div>
+          )}
+
+          <p className="text-caption text-[#94A3B8] mb-6">Check your email for the full confirmation and receipt.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/bookings" className="px-8 py-3 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.25)] transition-all">
               View My Bookings
+            </Link>
+            <Link href="/loyalty" className="px-8 py-3 rounded-xl bg-[#111827] text-white font-semibold text-body-sm border border-white/[0.1] hover:bg-white/5 transition-all">
+              View Rewards
             </Link>
             <Link href="/" className="px-8 py-3 rounded-xl bg-[#111827] text-white font-semibold text-body-sm border border-white/[0.1] hover:bg-white/5 transition-all">
               Discover More

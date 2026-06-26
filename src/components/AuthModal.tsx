@@ -65,13 +65,17 @@ export default function AuthModal({ onClose }: AuthModalProps) {
 
         <div className="p-7">
           {success ? (
-            <div className="text-center py-6">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#DD2A7B] to-[#F58529] flex items-center justify-center mx-auto mb-5 shadow-[0_4px_16px_rgba(255,56,92,0.2)]">
-                <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+              <div className="text-center py-6">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] flex items-center justify-center mx-auto mb-5 shadow-[0_4px_16px_rgba(255,45,122,0.2)]">
+                  <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                </div>
+                <h2 className="text-heading-md font-bold text-[#222222] mb-2">Account created!</h2>
+                <p className="text-body-sm text-[#6a6a6a]">Check your email to confirm your account.</p>
+                <div className="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200">
+                  <p className="text-body-sm font-medium text-amber-800">🎉 You earned 100 bonus points!</p>
+                  <p className="text-caption text-amber-600 mt-0.5">Start booking to earn more and unlock tiers.</p>
+                </div>
               </div>
-              <h2 className="text-heading-md font-bold text-[#222222] mb-2">Account created!</h2>
-              <p className="text-body-sm text-[#6a6a6a]">Check your email to confirm your account.</p>
-            </div>
           ) : (
             <>
               <div className="flex items-center justify-between mb-6">
