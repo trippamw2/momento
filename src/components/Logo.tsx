@@ -7,9 +7,9 @@ interface LogoProps {
 }
 
 const sizes = {
-  sm: { logo: "h-7", tagline: "text-[10px]" },
-  md: { logo: "h-9", tagline: "text-xs" },
-  lg: { logo: "h-12", tagline: "text-sm" },
+  sm: { logo: "h-10", tagline: "text-[10px]" },
+  md: { logo: "h-12", tagline: "text-xs" },
+  lg: { logo: "h-16", tagline: "text-sm" },
 };
 
 export default function Logo({ size = "md", showTagline = false }: LogoProps) {
@@ -19,7 +19,7 @@ export default function Logo({ size = "md", showTagline = false }: LogoProps) {
     <Link href="/" className="flex items-center gap-2.5 group">
       <Image
         src="/experio-logo.png"
-        alt="Experio"
+        alt="Momento"
         width={0}
         height={0}
         className={`${s.logo} w-auto transition-transform duration-300 group-hover:scale-105`}
