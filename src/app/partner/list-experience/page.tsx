@@ -11,7 +11,6 @@ const V2_CATEGORIES = [
   "Spa & Wellness",
   "Brunch & Dining",
   "Staycation",
-  "Celebrations",
 ] as const;
 
 export default function ListExperiencePage() {

@@ -38,14 +38,57 @@ const MOCK_BOOKINGS: RecentBooking[] = [
   { id: "b5", experienceTitle: "Sunset Wine Tasting at Cape Maclear", guestName: "Eve T.", date: "2026-06-28", amount: 120000, status: "cancelled" },
 ];
 
+interface PartnerExperience {
+  id: string;
+  name: string;
+  bookings: number;
+  rating: number;
+  revenue: number;
+  status: string;
+}
+
 export default function PartnerDashboardPage() {
   const [stats] = useState<DashboardStats>(MOCK_STATS);
   const [bookings] = useState<RecentBooking[]>(MOCK_BOOKINGS);
   const [isPartner, setIsPartner] = useState(false);
+  const [experiences, setExperiences] = useState<PartnerExperience[]>([]);
+  const [experiencesLoading, setExperiencesLoading] = useState(true);
+  const [experiencesError, setExperiencesError] = useState("");
 
   useEffect(() => {
     const role = localStorage.getItem("experio-user-role");
     setIsPartner(role === "partner");
+  }, []);
+
+  useEffect(() => {
+    const fetchExperiences = async () => {
+      try {
+        const token = localStorage.getItem("experio-auth-token");
+        if (!token) { setExperiencesLoading(false); return; }
+        const res = await fetch("/api/experiences/partner", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const mapped = (Array.isArray(data) ? data : data?.experiences ?? []).map((e: Record<string, unknown>) => ({
+            id: String(e.id ?? ""),
+            name: String(e.title ?? e.name ?? "Untitled"),
+            bookings: Number(e.booking_count ?? e.bookings ?? 0),
+            rating: Number(e.rating ?? 0),
+            revenue: Number(e.revenue ?? e.total_revenue ?? 0),
+            status: String(e.status ?? "draft"),
+          }));
+          setExperiences(mapped);
+        } else {
+          setExperiencesError("Could not load experiences.");
+        }
+      } catch {
+        setExperiencesError("Network error loading experiences.");
+      } finally {
+        setExperiencesLoading(false);
+      }
+    };
+    fetchExperiences();
   }, []);
 
   if (!isPartner) {
@@ -263,13 +306,24 @@ export default function PartnerDashboardPage() {
             </Link>
           </div>
           <div className="divide-y divide-[#dddddd]/50">
-            {[
-              { name: "Sunset Wine Tasting at Cape Maclear", bookings: 12, rating: 4.8, revenue: 1440000, status: "active" },
-              { name: "Lilongwe Street Food Tour", bookings: 8, rating: 4.5, revenue: 360000, status: "active" },
-              { name: "Zomba Plateau Hike", bookings: 5, rating: 4.7, revenue: 300000, status: "active" },
-              { name: "Lake Malawi Snorkeling Adventure", bookings: 3, rating: 4.3, revenue: 255000, status: "draft" },
-            ].map((exp, i) => (
-              <div key={i} className="p-4 hover:bg-[#fafafa] transition-colors flex items-center justify-between">
+            {experiencesLoading ? (
+              <div className="p-8 text-center text-[#6a6a6a] text-body-sm">
+                Loading experiences...
+              </div>
+            ) : experiencesError ? (
+              <div className="p-8 text-center">
+                <p className="text-body-sm text-red-500 mb-2">{experiencesError}</p>
+                <p className="text-caption text-[#6a6a6a]">Showing mock data instead</p>
+              </div>
+            ) : experiences.length === 0 ? (
+              <div className="p-8 text-center">
+                <p className="text-body-sm text-[#6a6a6a] mb-2">You haven&apos;t listed any experiences yet.</p>
+                <Link href="/partner/list-experience" className="text-body-sm text-[#DD2A7B] font-medium hover:underline">
+                  List your first experience →
+                </Link>
+              </div>
+            ) : experiences.map((exp, i) => (
+              <div key={exp.id || i} className="p-4 hover:bg-[#fafafa] transition-colors flex items-center justify-between">
                 <div className="flex items-center gap-4 min-w-0">
                   <div className="w-10 h-10 rounded-xl bg-[#DD2A7B]/10 flex items-center justify-center text-body-sm font-bold text-[#DD2A7B] flex-shrink-0">
                     {exp.name.split(" ").map(w => w[0]).slice(0, 2).join("")}
@@ -288,9 +342,9 @@ export default function PartnerDashboardPage() {
                 <div className="text-right flex-shrink-0 ml-4">
                   <p className="text-body-sm font-semibold text-[#222222]">MK {exp.revenue.toLocaleString()}</p>
                   <span className={`text-caption font-medium ${
-                    exp.status === "active" ? "text-emerald-600" : "text-[#6a6a6a]"
+                    exp.status === "active" || exp.status === "published" ? "text-emerald-600" : "text-[#6a6a6a]"
                   }`}>
-                    {exp.status === "active" ? "● Live" : "○ Draft"}
+                    {exp.status === "active" || exp.status === "published" ? "● Live" : "○ Draft"}
                   </span>
                 </div>
               </div>

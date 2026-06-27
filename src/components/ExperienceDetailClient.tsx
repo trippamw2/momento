@@ -334,7 +334,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
       {/* ════════════════════════════════════════════ */}
       {/* HERO GALLERY                                */}
       {/* ════════════════════════════════════════════ */}
-      <section className="relative">
+      <section id="hero-gallery" className="relative">
         <div className="relative h-[55vh] sm:h-[70vh] md:h-[80vh] overflow-hidden">
           {exp.images.map((img, i) => (
             <Image
@@ -342,9 +342,10 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               src={img}
               alt={`${exp.title} - Image ${i + 1}`}
               fill
-              className={`object-cover transition-all duration-700 ease-out ${i === activeImage ? "opacity-100 scale-100" : "opacity-0 scale-105"}`}
+              className={`object-cover transition-all duration-700 ease-out ${i === activeImage ? "opacity-100 scale-100" : "opacity-0 scale-105 pointer-events-none"}`}
               sizes="100vw"
               priority={i === 0}
+              loading={i === 0 ? undefined : "lazy"}
             />
           ))}
           {/* Overlay gradients */}
@@ -388,7 +389,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
           {/* "Show all photos" button */}
           {exp.images.length > 5 && (
             <button
-              onClick={() => setActiveImage(0)}
+              onClick={() => { setActiveImage(0); document.getElementById("hero-gallery")?.scrollIntoView({ behavior: "smooth" }); }}
               className="absolute bottom-24 right-4 sm:right-8 z-10 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md text-white text-caption font-medium border border-white/[0.15] hover:bg-white/20 transition-all"
             >
               Show all {exp.images.length} photos
@@ -397,19 +398,20 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
         </div>
 
         {/* Thumbnail strip */}
-        <div className="absolute bottom-4 left-4 sm:left-8 right-4 sm:right-8 z-10">
-          <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
+        <div className="absolute bottom-4 left-4 sm:left-8 right-4 sm:right-8 z-30 pointer-events-none">
+          <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1 pointer-events-auto">
             {exp.images.map((img, i) => (
               <button
                 key={i}
                 onClick={() => setActiveImage(i)}
+                aria-label={`View image ${i + 1}`}
                 className={`relative w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all duration-200 ${
                   i === activeImage
                     ? "border-white ring-2 ring-white/60 shadow-lg"
                     : "border-white/50 hover:border-white"
                 }`}
               >
-                <Image src={img} alt="" fill className="object-cover" sizes="80px" />
+                <Image src={img} alt="" fill className="object-cover pointer-events-none" sizes="80px" />
               </button>
             ))}
           </div>
