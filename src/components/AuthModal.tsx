@@ -43,6 +43,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       } else {
         if (data.session?.access_token) {
           localStorage.setItem("experio-auth-token", data.session.access_token);
+          const role = data.user?.user_metadata?.role || "user";
+          localStorage.setItem("experio-user-role", role);
         }
         onClose();
         window.location.reload();
