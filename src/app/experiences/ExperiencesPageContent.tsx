@@ -217,30 +217,30 @@ export default function ExperiencesPageContent() {
   }, [filters, router]);
 
   return (
-    <div className="pt-20 pb-16 bg-ambient-warm min-h-screen">
+    <div className="pt-20 pb-16 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="mb-8">
-          <h1 className="text-display-sm font-bold text-[#222222] mb-1">
-            All <span className="bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] bg-clip-text text-transparent">Experiences</span>
+          <h1 className="text-display-sm font-bold text-[#F1F5F9] mb-1">
+            All <span className="bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] bg-clip-text text-transparent">Experiences</span>
           </h1>
-          <p className="text-[#4a4a4a] text-body-lg">{filtered.length} moments to discover</p>
+          <p className="text-[#CBD5E1] text-body-lg">{filtered.length} moments to discover</p>
           {geo.position && filters.location !== "All" && (
-            <p className="text-caption text-[#DD2A7B] mt-1">
+            <p className="text-caption text-[#FF2D7A] mt-1">
               📍 Showing experiences near <strong>{filters.location}</strong>
-              {geo.loading && <span className="text-text-tertiary ml-1">(detecting location...)</span>}
+              {geo.loading && <span className="text-[#64748B] ml-1">(detecting location...)</span>}
             </p>
           )}
           {geo.loading && !geo.position && (
-            <p className="text-caption text-text-tertiary mt-1 animate-pulse">Detecting your location...</p>
+            <p className="text-caption text-[#64748B] mt-1 animate-pulse">Detecting your location...</p>
           )}
           {geo.error && filters.location === "All" && (
-            <p className="text-caption text-amber-600 mt-1">Enable location to see experiences near you</p>
+            <p className="text-caption text-amber-400 mt-1">Enable location to see experiences near you</p>
           )}
         </div>
 
         <div className="relative mb-6 max-w-xl">
           <svg
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary"
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -252,10 +252,10 @@ export default function ExperiencesPageContent() {
             placeholder="Search by title, location, category..."
             value={filters.search}
             onChange={(e) => updateFilter("search", e.target.value)}
-            className="w-full pl-12 pr-10 py-3 rounded-xl bg-surface-primary border border-border-default text-text-primary text-body placeholder:text-text-tertiary/60 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink/30 transition-all shadow-xs"
+            className="w-full pl-12 pr-10 py-3 rounded-xl bg-[#1A2332] border border-white/[0.08] text-[#F1F5F9] text-body placeholder:text-[#64748B]/60 focus:outline-none focus:border-[#FF2D7A] focus:ring-1 focus:ring-[#FF2D7A]/30 transition-all shadow-xs"
           />
           {filters.search && (
-            <button onClick={() => updateFilter("search", "")} className="absolute right-4 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary text-sm">
+            <button onClick={() => updateFilter("search", "")} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-text-secondary text-sm">
               ✕
             </button>
           )}
@@ -268,8 +268,8 @@ export default function ExperiencesPageContent() {
               onClick={() => updateFilter("category", cat)}
               className={`px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all duration-200 ${
                 filters.category === cat
-                  ? "bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] text-white shadow-sm shadow-[#DD2A7B]/20"
-                  : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#DD2A7B]/30"
+                  ? "bg-[#FF2D7A] text-white shadow-sm shadow-[#FF2D7A]/20"
+                  : "bg-[#1A2332] text-[#CBD5E1] border border-white/[0.08] hover:bg-white/[0.05] hover:text-[#F1F5F9] hover:border-[#FF2D7A]/30"
               }`}
             >
               {cat}
@@ -284,8 +284,8 @@ export default function ExperiencesPageContent() {
               onClick={() => updateFilter("mood", filters.mood === mood.label ? null : mood.label)}
               className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 ${
                 filters.mood === mood.label
-                  ? "bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] text-white shadow-sm shadow-[#DD2A7B]/20"
-                  : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#DD2A7B]/30"
+                  ? "bg-[#FF2D7A] text-white shadow-sm shadow-[#FF2D7A]/20"
+                  : "bg-[#1A2332] text-[#CBD5E1] border border-white/[0.08] hover:bg-white/[0.05] hover:text-[#F1F5F9] hover:border-[#FF2D7A]/30"
               }`}
             >
               <span>{mood.emoji}</span>
@@ -293,7 +293,7 @@ export default function ExperiencesPageContent() {
             </button>
           ))}
 
-          <span className="text-text-tertiary text-caption hidden sm:inline select-none">|</span>
+          <span className="text-[#64748B] text-caption hidden sm:inline select-none">|</span>
 
           {PRICE_RANGES.map((pr) => (
             <button
@@ -301,20 +301,20 @@ export default function ExperiencesPageContent() {
               onClick={() => updateFilter("price", pr.value)}
               className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 ${
                 filters.price === pr.value
-                  ? "bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] text-white shadow-sm shadow-[#DD2A7B]/20"
-                  : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#DD2A7B]/30"
+                  ? "bg-[#FF2D7A] text-white shadow-sm shadow-[#FF2D7A]/20"
+                  : "bg-[#1A2332] text-[#CBD5E1] border border-white/[0.08] hover:bg-white/[0.05] hover:text-[#F1F5F9] hover:border-[#FF2D7A]/30"
               }`}
             >
               {pr.label}
             </button>
           ))}
 
-          <span className="text-text-tertiary text-caption hidden sm:inline select-none">|</span>
+          <span className="text-[#64748B] text-caption hidden sm:inline select-none">|</span>
 
           <select
             value={filters.location}
             onChange={(e) => updateFilter("location", e.target.value)}
-            className="px-3 py-1.5 rounded-full text-caption font-medium bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] focus:outline-none focus:border-[#DD2A7B]/50 appearance-none cursor-pointer hover:bg-[#FFF0F3] transition-colors"
+            className="px-3 py-1.5 rounded-full text-caption font-medium bg-[#1A2332] text-[#CBD5E1] border border-white/[0.08] focus:outline-none focus:border-[#FF2D7A]/50 appearance-none cursor-pointer hover:bg-white/[0.05] transition-colors"
           >
             {locations.map((loc) => (
               <option key={loc} value={loc}>
@@ -332,8 +332,8 @@ export default function ExperiencesPageContent() {
             }}
             className={`px-3 py-1.5 rounded-full text-caption font-medium whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 ${
               filters.nearby
-                ? "bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] text-white shadow-sm shadow-[#DD2A7B]/20"
-                : "bg-[#FFF8F0] text-[#4a4a4a] border border-[#ebebeb] hover:bg-[#FFF0F3] hover:text-[#222222] hover:border-[#DD2A7B]/30"
+                ? "bg-[#FF2D7A] text-white shadow-sm shadow-[#FF2D7A]/20"
+                : "bg-[#1A2332] text-[#CBD5E1] border border-white/[0.08] hover:bg-white/[0.05] hover:text-[#F1F5F9] hover:border-[#FF2D7A]/30"
             }`}
           >
             <svg className={`w-3.5 h-3.5 ${geo.loading ? "animate-pulse" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
@@ -344,11 +344,11 @@ export default function ExperiencesPageContent() {
         {visibleExperiences.length > 0 ? (
           <>
             <div className="flex items-center justify-between mb-4">
-              <p className="text-caption text-[#4a4a4a]">
+              <p className="text-caption text-[#CBD5E1]">
                 Showing {visibleExperiences.length} of {filtered.length} experience{filtered.length !== 1 ? "s" : ""}
               </p>
               {filters.search && (
-                <p className="text-caption text-[#DD2A7B] font-medium">
+                <p className="text-caption text-[#FF2D7A] font-medium">
                   Results for &ldquo;{filters.search}&rdquo;
                 </p>
               )}
@@ -361,14 +361,14 @@ export default function ExperiencesPageContent() {
           </>
         ) : (
           <div className="text-center py-20">
-            <div className="w-16 h-16 rounded-full bg-[#FFF0F3] flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-[#DD2A7B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <div className="w-16 h-16 rounded-full bg-white/[0.05] flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-[#FF2D7A]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
-            <p className="text-heading-md font-bold text-[#222222] mb-2">No experiences found</p>
-            <p className="text-body text-[#4a4a4a] mb-6">Try adjusting your filters or search term</p>
+            <p className="text-heading-md font-bold text-[#F1F5F9] mb-2">No experiences found</p>
+            <p className="text-body text-[#CBD5E1] mb-6">Try adjusting your filters or search term</p>
             <button
               onClick={clearFilters}
-              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] text-white text-body-sm font-semibold shadow-[0_4px_16px_rgba(255,56,92,0.2)] hover:shadow-[0_4px_24px_rgba(255,56,92,0.35)] transition-all duration-300"
+              className="px-6 py-2.5 rounded-full bg-[#FF2D7A] text-white text-body-sm font-semibold shadow-[0_4px_16px_rgba(255,45,122,0.2)] hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all duration-300"
             >
               Clear all filters
             </button>
@@ -382,7 +382,7 @@ export default function ExperiencesPageContent() {
         )}
 
         {!hasMore && filtered.length > 0 && (
-          <p className="text-center text-caption text-text-tertiary py-8">
+          <p className="text-center text-caption text-[#64748B] py-8">
             You&apos;ve seen them all
           </p>
         )}

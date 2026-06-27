@@ -152,10 +152,10 @@ export default function SavedPageContent() {
       <div className="max-w-7xl mx-auto flex gap-0 sm:gap-6 px-0 sm:px-8">
         {/* ─── Sidebar ─── */}
         <aside className="hidden sm:flex flex-col w-56 flex-shrink-0 sticky top-24 self-start">
-          <div className="bg-white border border-[#dddddd] rounded-2xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-[#dddddd]">
-              <h2 className="text-heading-sm font-bold text-[#222222]">My List</h2>
-              <p className="text-caption text-[#929292] mt-0.5">{savedExperiences.length} saved</p>
+          <div className="bg-[#111827] border border-white/[0.08] rounded-2xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-white/[0.08]">
+              <h2 className="text-heading-sm font-bold text-[#F1F5F9]">My List</h2>
+              <p className="text-caption text-[#64748B] mt-0.5">{savedExperiences.length} saved</p>
             </div>
             <nav className="p-2 space-y-0.5">
               {sidebarItems.map((item) => {
@@ -166,14 +166,14 @@ export default function SavedPageContent() {
                     onClick={() => setSidebarTab(item.key)}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all duration-200 ${
                       sidebarTab === item.key
-                        ? "bg-[#DD2A7B]/10 text-[#222222] border border-[#DD2A7B]/20"
-                        : "text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7]"
+                        ? "bg-[#FF2D7A]/10 text-[#F1F5F9] border border-[#FF2D7A]/20"
+                        : "text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#1A2332]"
                     }`}
                   >
                     <span className="flex-1 text-left">{item.label}</span>
                     {item.key !== "recently-viewed" && count > 0 && (
                       <span className={`text-caption px-1.5 py-0.5 rounded-md ${
-                        sidebarTab === item.key ? "bg-[#DD2A7B]/10 text-[#DD2A7B]" : "bg-[#f7f7f7] text-[#929292]"
+                        sidebarTab === item.key ? "bg-[#FF2D7A]/10 text-[#FF2D7A]" : "bg-[#1A2332] text-[#64748B]"
                       }`}>
                         {count}
                       </span>
@@ -194,8 +194,8 @@ export default function SavedPageContent() {
                 onClick={() => setSidebarTab(item.key)}
                 className={`px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all ${
                   sidebarTab === item.key
-                    ? "bg-[#DD2A7B] text-white"
-                    : "bg-[#f7f7f7] text-[#6a6a6a] border border-[#dddddd]"
+                    ? "bg-[#FF2D7A] text-white"
+                    : "bg-[#1A2332] text-[#94A3B8] border border-white/[0.08]"
                 }`}
               >
                 {item.label}
@@ -209,8 +209,8 @@ export default function SavedPageContent() {
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-heading-xl font-bold text-[#222222]">{pageTitle}</h1>
-              <p className="text-[#6a6a6a] text-body-sm mt-0.5">
+              <h1 className="text-heading-xl font-bold text-[#F1F5F9]">{pageTitle}</h1>
+              <p className="text-[#94A3B8] text-body-sm mt-0.5">
                 {isRecentlyTab
                   ? `${recentlyViewedMock.length} recently viewed`
                   : `${displayed.length} experience${displayed.length !== 1 ? "s" : ""}`
@@ -220,7 +220,7 @@ export default function SavedPageContent() {
             {!isRecentlyTab && displayed.length > 0 && (
               <button
                 onClick={() => window.location.href = "/experiences"}
-                className="text-body-sm text-[#6a6a6a] hover:text-[#222222] transition-colors font-medium"
+                className="text-body-sm text-[#94A3B8] hover:text-[#F1F5F9] transition-colors font-medium"
               >
                 Browse all
               </button>
@@ -247,10 +247,10 @@ export default function SavedPageContent() {
               {!isRecentlyTab && (
                 <section className="mb-10">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-heading-md font-bold text-[#222222]">Collections</h2>
+                    <h2 className="text-heading-md font-bold text-[#F1F5F9]">Collections</h2>
                     <button
                        onClick={() => setCreatingCollection(true)}
-                       className="text-body-sm text-[#6a6a6a] hover:text-[#222222] transition-colors font-medium"
+                       className="text-body-sm text-[#94A3B8] hover:text-[#F1F5F9] transition-colors font-medium"
                      >
                        Create
                      </button>
@@ -262,7 +262,7 @@ export default function SavedPageContent() {
                       const coverImg = colExps.length > 0 ? colExps[0].image : null;
                       return (
                         <div key={col.id} className="flex-shrink-0 w-48 group">
-                          <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-[#f7f7f7] mb-2">
+                          <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-[#1A2332] mb-2">
                             {coverImg ? (
                               <Image src={coverImg} alt={col.name} fill className="object-cover" sizes="192px" />
                             ) : (
@@ -287,25 +287,25 @@ export default function SavedPageContent() {
                     })}
 
                     {creatingCollection ? (
-                      <div className="flex-shrink-0 w-48 p-3 rounded-xl bg-[#f7f7f7] border border-[#dddddd] flex flex-col justify-center gap-2">
+                      <div className="flex-shrink-0 w-48 p-3 rounded-xl bg-[#1A2332] border border-white/[0.08] flex flex-col justify-center gap-2">
                         <input
                           type="text"
                           placeholder="Collection name"
                           value={newCollectionName}
                           onChange={(e) => setNewCollectionName(e.target.value)}
                           onKeyDown={(e) => { if (e.key === "Enter") createCollection(); }}
-                          className="w-full px-3 py-2 rounded-lg bg-[#f7f7f7] text-[#222222] text-body-sm border border-[#ebebeb] focus:outline-none focus:border-[#DD2A7B] placeholder:text-[#929292]"
+                          className="w-full px-3 py-2 rounded-lg bg-[#1A2332] text-[#F1F5F9] text-body-sm border border-white/[0.08] focus:outline-none focus:border-[#FF2D7A] placeholder:text-[#64748B]"
                           autoFocus
                         />
                         <div className="flex gap-1.5">
-                          <button onClick={createCollection} className="flex-1 py-1.5 rounded-lg bg-[#DD2A7B] text-white text-caption font-medium">Create</button>
-                          <button onClick={() => { setCreatingCollection(false); setNewCollectionName(""); }} className="flex-1 py-1.5 rounded-lg bg-white text-[#6a6a6a] text-caption border border-[#dddddd]">Cancel</button>
+                          <button onClick={createCollection} className="flex-1 py-1.5 rounded-lg bg-[#FF2D7A] text-white text-caption font-medium">Create</button>
+                          <button onClick={() => { setCreatingCollection(false); setNewCollectionName(""); }} className="flex-1 py-1.5 rounded-lg bg-[#111827] text-[#94A3B8] text-caption border border-white/[0.08]">Cancel</button>
                         </div>
                       </div>
                     ) : (
                       <button
                         onClick={() => setCreatingCollection(true)}
-                        className="flex-shrink-0 w-48 rounded-xl border-2 border-dashed border-[#ebebeb] hover:border-[#DD2A7B]/30 transition-all flex flex-col items-center justify-center gap-1 text-[#929292] hover:text-[#6a6a6a]"
+                        className="flex-shrink-0 w-48 rounded-xl border-2 border-dashed border-white/[0.08] hover:border-[#FF2D7A]/30 transition-all flex flex-col items-center justify-center gap-1 text-[#64748B] hover:text-[#94A3B8]"
                       >
                         <span className="text-3xl font-light">＋</span>
                         <span className="text-caption font-medium">New Collection</span>
@@ -319,10 +319,10 @@ export default function SavedPageContent() {
               {!isRecentlyTab && (
                 <section className="mb-10">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-heading-md font-bold text-[#222222]">Recently Viewed</h2>
+                    <h2 className="text-heading-md font-bold text-[#F1F5F9]">Recently Viewed</h2>
                     <button
                       onClick={() => setSidebarTab("recently-viewed")}
-                      className="text-body-sm text-[#6a6a6a] hover:text-[#222222] transition-colors"
+                      className="text-body-sm text-[#94A3B8] hover:text-[#F1F5F9] transition-colors"
                     >
                       View all
                     </button>
@@ -337,7 +337,7 @@ export default function SavedPageContent() {
                           href={`/experiences/${exp.id}`}
                           className="flex-shrink-0 w-40 group"
                         >
-                          <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-[#f7f7f7] transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
+                          <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-[#1A2332] transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_4px_16px_rgba(0,0,0,0.5)]">
                             <Image src={exp.image} alt={exp.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110" sizes="160px" />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-transparent to-transparent" />
                             <div className="absolute top-2 left-2">
@@ -358,17 +358,17 @@ export default function SavedPageContent() {
               )}
 
               {/* ─── Bottom CTA ─── */}
-              <section className="relative rounded-2xl overflow-hidden bg-white border border-[#dddddd] p-8 sm:p-10 text-center">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-[#DD2A7B]/5 via-[#8134AF]/5 to-[#DD2A7B]/5 rounded-full blur-3xl" />
+              <section className="relative rounded-2xl overflow-hidden bg-[#111827] border border-white/[0.08] p-8 sm:p-10 text-center">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-[#FF2D7A]/5 via-[#FF2D7A]/5 to-[#FF2D7A]/5 rounded-full blur-3xl" />
                 <div className="relative z-10">
-                  <div className="w-14 h-14 rounded-full bg-[#DD2A7B] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(255,56,92,0.2)]">
+                  <div className="w-14 h-14 rounded-full bg-[#FF2D7A] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(255,45,122,0.2)]">
                     <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                   </div>
-                  <h2 className="text-heading-xl font-bold text-[#222222] mb-2">Don&apos;t miss out on your favourites.</h2>
-                  <p className="text-[#6a6a6a] text-body-lg mb-6">Book now and live the moment.</p>
+                  <h2 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Don&apos;t miss out on your favourites.</h2>
+                  <p className="text-[#94A3B8] text-body-lg mb-6">Book now and live the moment.</p>
                   <Link
                     href="/experiences"
-                    className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.25)] transition-all duration-300"
+                    className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.25)] transition-all duration-300"
                   >
                     Discover Experiences
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
@@ -379,12 +379,12 @@ export default function SavedPageContent() {
           ) : (
             /* ─── Empty State ─── */
             <div className="text-center py-20">
-              <div className="w-16 h-16 rounded-full bg-[#f7f7f7] flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+              <div className="w-16 h-16 rounded-full bg-[#1A2332] flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
               </div>
-              <h2 className="text-heading-md font-bold text-[#222222] mb-2">Nothing saved yet</h2>
-              <p className="text-[#6a6a6a] text-body-sm mb-6">Start exploring and save experiences you love.</p>
-              <Link href="/experiences" className="inline-flex px-6 py-2.5 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.2)] transition-all">
+              <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-2">Nothing saved yet</h2>
+              <p className="text-[#94A3B8] text-body-sm mb-6">Start exploring and save experiences you love.</p>
+              <Link href="/experiences" className="inline-flex px-6 py-2.5 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.2)] transition-all">
                 Browse Experiences
               </Link>
             </div>
@@ -413,7 +413,7 @@ function SavedCard({
   return (
     <div className="group relative">
       <Link href={`/experiences/${exp.id}`}>
-          <div className="relative aspect-[4/3] sm:aspect-[3/4] rounded-xl overflow-hidden bg-[#f7f7f7] transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
+          <div className="relative aspect-[4/3] sm:aspect-[3/4] rounded-xl overflow-hidden bg-[#1A2332] transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_4px_16px_rgba(0,0,0,0.5)]">
           <Image
             src={exp.image}
             alt={exp.title}
@@ -425,7 +425,7 @@ function SavedCard({
 
           {/* Category Badge */}
           <div className="absolute top-2.5 left-2.5">
-            <span className="px-2.5 py-1 rounded-full text-caption font-medium bg-white/[0.08] backdrop-blur-md text-white/90 border border-white/[0.08]">
+            <span className="px-2.5 py-1 rounded-full text-caption font-medium bg-[#111827]/[0.08] backdrop-blur-md text-white/90 border border-white/[0.08]">
               {exp.category}
             </span>
           </div>
@@ -440,13 +440,13 @@ function SavedCard({
           {/* Heart / Save Toggle */}
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleSave(); }}
-            className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center hover:bg-[#DD2A7B]/60 transition-all duration-200 z-10"
+            className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center hover:bg-[#FF2D7A]/60 transition-all duration-200 z-10"
           >
             <svg
               width="16" height="16"
               viewBox="0 0 24 24"
-              fill={isSaved ? "#DD2A7B" : "none"}
-              stroke={isSaved ? "#DD2A7B" : "white"}
+              fill={isSaved ? "#FF2D7A" : "none"}
+              stroke={isSaved ? "#FF2D7A" : "white"}
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -486,15 +486,15 @@ function SavedCard({
             {showMenu && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
-                    <div className="absolute bottom-full right-0 mb-1 w-44 py-1 rounded-xl bg-white border border-[#ebebeb] shadow-xl z-20">
-                      <p className="px-3 py-1.5 text-caption text-[#929292]">Add to collection</p>
+                    <div className="absolute bottom-full right-0 mb-1 w-44 py-1 rounded-xl bg-[#111827] border border-white/[0.08] shadow-xl z-20">
+                      <p className="px-3 py-1.5 text-caption text-[#64748B]">Add to collection</p>
                   {collections.map((col) => (
                     <button
                       key={col.id}
                       onClick={(e) => { e.preventDefault(); e.stopPropagation(); onAddToCollection(col.id); setShowMenu(false); }}
-                      className="w-full px-3 py-2 text-left text-body-sm text-[#6a6a6a] hover:bg-[#f7f7f7] hover:text-[#222222] transition-colors flex items-center gap-2"
+                      className="w-full px-3 py-2 text-left text-body-sm text-[#94A3B8] hover:bg-[#1A2332] hover:text-[#F1F5F9] transition-colors flex items-center gap-2"
                     >
-                      <svg className="w-3.5 h-3.5 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                      <svg className="w-3.5 h-3.5 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                       {col.name}
                     </button>
                   ))}
