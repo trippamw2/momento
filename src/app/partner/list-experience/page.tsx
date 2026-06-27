@@ -103,18 +103,18 @@ export default function ListExperiencePage() {
     return (
       <div className="pt-24 pb-20">
         <div className="max-w-lg mx-auto px-4 sm:px-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#DD2A7B]/10 flex items-center justify-center mx-auto mb-5">
-            <svg className="w-8 h-8 text-[#DD2A7B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-16 h-16 rounded-full bg-[#FF2D7A]/10 flex items-center justify-center mx-auto mb-5">
+            <svg className="w-8 h-8 text-[#FF2D7A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h1 className="text-heading-xl font-bold text-[#222222] mb-3">Submission Received</h1>
-          <p className="text-[#6a6a6a] text-body mb-6">
+          <h1 className="text-heading-xl font-bold text-[#F1F5F9] mb-3">Submission Received</h1>
+          <p className="text-[#94A3B8] text-body mb-6">
             Thank you! Our team will review your experience and get back to you within 3&ndash;5 business days.
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
           >
             Back to Home
           </Link>
@@ -127,21 +127,21 @@ export default function ListExperiencePage() {
     <div className="pt-24 pb-20">
       <div className="max-w-2xl mx-auto px-4 sm:px-8">
         <div className="mb-8">
-          <h1 className="text-display-sm font-bold text-[#222222] mb-2">List Your Experience</h1>
-          <p className="text-[#6a6a6a] text-body-lg">
+          <h1 className="text-display-sm font-bold text-[#F1F5F9] mb-2">List Your Experience</h1>
+          <p className="text-[#94A3B8] text-body-lg">
             Share your unique experience with the Experio community. Fill out the details below and our team will review your listing.
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-body-sm">
+          <div className="mb-6 p-4 rounded-xl bg-red-900/20 border border-red-500/20 text-red-400 text-body-sm">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="title" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Experience Title</label>
+            <label htmlFor="title" className="block text-body-sm font-semibold text-[#F1F5F9] mb-1.5">Experience Title</label>
             <input
               id="title"
               type="text"
@@ -149,30 +149,30 @@ export default function ListExperiencePage() {
               value={form.title}
               onChange={(e) => updateField("title", e.target.value)}
               placeholder="e.g. Sunset Wine Tasting at Cape Maclear"
-              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
             />
           </div>
 
           <div>
-            <label htmlFor="subtitle" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Subtitle (optional)</label>
+            <label htmlFor="subtitle" className="block text-body-sm font-semibold text-[#F1F5F9] mb-1.5">Subtitle (optional)</label>
             <input
               id="subtitle"
               type="text"
               value={form.subtitle}
               onChange={(e) => updateField("subtitle", e.target.value)}
               placeholder="e.g. Sun, Swim & Sip by the lake"
-              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
             />
           </div>
 
           <div>
-            <label htmlFor="category" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Category</label>
+            <label htmlFor="category" className="block text-body-sm font-semibold text-[#F1F5F9] mb-1.5">Category</label>
             <select
               id="category"
               required
               value={form.category}
               onChange={(e) => updateField("category", e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
             >
               <option value="" disabled>Select a category</option>
               {V2_CATEGORIES.map((cat) => (
@@ -182,7 +182,7 @@ export default function ListExperiencePage() {
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Description</label>
+            <label htmlFor="description" className="block text-body-sm font-semibold text-[#F1F5F9] mb-1.5">Description</label>
             <textarea
               id="description"
               required
@@ -190,13 +190,13 @@ export default function ListExperiencePage() {
               value={form.description}
               onChange={(e) => updateField("description", e.target.value)}
               placeholder="Describe what guests will experience, what makes it unique, and what they should expect."
-              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all resize-y"
+              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all resize-y"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="price" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Price (MK)</label>
+              <label htmlFor="price" className="block text-body-sm font-semibold text-[#F1F5F9] mb-1.5">Price (MK)</label>
               <input
                 id="price"
                 type="number"
@@ -205,11 +205,11 @@ export default function ListExperiencePage() {
                 value={form.price}
                 onChange={(e) => updateField("price", e.target.value)}
                 placeholder="50000"
-                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
+                className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
               />
             </div>
             <div>
-              <label htmlFor="duration" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Duration</label>
+              <label htmlFor="duration" className="block text-body-sm font-semibold text-[#F1F5F9] mb-1.5">Duration</label>
               <input
                 id="duration"
                 type="text"
@@ -217,20 +217,20 @@ export default function ListExperiencePage() {
                 value={form.duration}
                 onChange={(e) => updateField("duration", e.target.value)}
                 placeholder="e.g. 2 hours, Full day"
-                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
+                className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="location" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Location</label>
+              <label htmlFor="location" className="block text-body-sm font-semibold text-[#F1F5F9] mb-1.5">Location</label>
               <select
                 id="location"
                 required
                 value={form.location}
                 onChange={(e) => updateField("location", e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all appearance-none cursor-pointer"
+                className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all appearance-none cursor-pointer"
               >
                 <option value="" disabled>
                   {geo.loading ? "Detecting location..." : "Select a city"}
@@ -239,14 +239,14 @@ export default function ListExperiencePage() {
                 <option value="Blantyre">Blantyre</option>
               </select>
               {geo.loading && !form.location && (
-                <p className="text-caption text-text-tertiary mt-1 animate-pulse">Detecting your location via GPS...</p>
+                <p className="text-caption text-[#64748B] mt-1 animate-pulse">Detecting your location via GPS...</p>
               )}
               {geo.position && form.location && (
-                <p className="text-caption text-[#DD2A7B] mt-1">📍 Auto-detected</p>
+                <p className="text-caption text-[#FF2D7A] mt-1">📍 Auto-detected</p>
               )}
             </div>
             <div>
-              <label htmlFor="capacity" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Max Guests</label>
+              <label htmlFor="capacity" className="block text-body-sm font-semibold text-[#F1F5F9] mb-1.5">Max Guests</label>
               <input
                 id="capacity"
                 type="number"
@@ -255,13 +255,13 @@ export default function ListExperiencePage() {
                 value={form.capacity}
                 onChange={(e) => updateField("capacity", e.target.value)}
                 placeholder="10"
-                className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
+                className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="contact" className="block text-body-sm font-semibold text-[#222222] mb-1.5">Contact Email</label>
+            <label htmlFor="contact" className="block text-body-sm font-semibold text-[#F1F5F9] mb-1.5">Contact Email</label>
             <input
               id="contact"
               type="email"
@@ -269,14 +269,14 @@ export default function ListExperiencePage() {
               value={form.contact}
               onChange={(e) => updateField("contact", e.target.value)}
               placeholder="you@example.com"
-              className="w-full px-4 py-3 rounded-xl border border-[#dddddd] bg-white text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-2 focus:ring-[#DD2A7B]/30 focus:border-[#DD2A7B] transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
             />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {submitting ? (
               <>
@@ -292,7 +292,7 @@ export default function ListExperiencePage() {
         <div className="mt-8 text-center">
           <Link
             href="/"
-            className="text-body-sm text-[#6a6a6a] hover:text-[#222222] transition-colors"
+            className="text-body-sm text-[#94A3B8] hover:text-[#F1F5F9] transition-colors"
           >
             &larr; Back to Home
           </Link>

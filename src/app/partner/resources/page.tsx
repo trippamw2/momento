@@ -42,8 +42,8 @@ export default function PartnerResourcesPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-8">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-display-sm font-bold text-[#222222] mb-3">Partner Resources</h1>
-          <p className="text-[#6a6a6a] text-body-lg max-w-lg">
+          <h1 className="text-display-sm font-bold text-[#F1F5F9] mb-3">Partner Resources</h1>
+          <p className="text-[#94A3B8] text-body-lg max-w-lg">
             Everything you need to succeed as an Experio host — from getting started to growing your business.
           </p>
         </div>
@@ -53,17 +53,17 @@ export default function PartnerResourcesPage() {
           {resources.map((item) => (
             <div
               key={item.title}
-              className="rounded-2xl border border-[#dddddd] bg-white p-6 hover:shadow-[0_4px_16px_rgba(0,0,0,0.04)] transition-shadow"
+              className="rounded-2xl border border-white/[0.08] bg-[#111827] p-6 hover:shadow-[0_4px_16px_rgba(0,0,0,0.04)] transition-shadow"
             >
               <div className="flex items-start gap-4">
                 <span className="text-2xl flex-shrink-0">{item.icon}</span>
                 <div>
-                  <h3 className="text-heading-sm font-bold text-[#222222] mb-1">{item.title}</h3>
-                  <p className="text-[#6a6a6a] text-body-sm leading-relaxed">{item.desc}</p>
+                  <h3 className="text-heading-sm font-bold text-[#F1F5F9] mb-1">{item.title}</h3>
+                  <p className="text-[#94A3B8] text-body-sm leading-relaxed">{item.desc}</p>
                   {item.link && (
                     <Link
                       href={item.link}
-                      className="inline-flex items-center gap-1 text-[#DD2A7B] text-body-sm font-medium hover:underline mt-2"
+                      className="inline-flex items-center gap-1 text-[#FF2D7A] text-body-sm font-medium hover:underline mt-2"
                     >
                       Go to Dashboard
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -78,14 +78,14 @@ export default function PartnerResourcesPage() {
         </div>
 
         {/* Contact */}
-        <div className="rounded-2xl border border-[#dddddd] bg-[#fafafa] p-8 text-center">
-          <h2 className="text-heading-sm font-bold text-[#222222] mb-2">Have questions?</h2>
-          <p className="text-[#6a6a6a] text-body-sm mb-5 max-w-md mx-auto">
+        <div className="rounded-2xl border border-white/[0.08] bg-[#1A2332] p-8 text-center">
+          <h2 className="text-heading-sm font-bold text-[#F1F5F9] mb-2">Have questions?</h2>
+          <p className="text-[#94A3B8] text-body-sm mb-5 max-w-md mx-auto">
             Our partner support team is here to help you every step of the way.
           </p>
           <a
             href="mailto:partners@experio.life"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
           >
             Contact Partner Support
           </a>
@@ -94,7 +94,7 @@ export default function PartnerResourcesPage() {
         <div className="mt-8 text-center">
           <Link
             href="/"
-            className="text-body-sm text-[#6a6a6a] hover:text-[#222222] transition-colors"
+            className="text-body-sm text-[#94A3B8] hover:text-[#F1F5F9] transition-colors"
           >
             &larr; Back to Home
           </Link>
