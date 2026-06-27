@@ -7,9 +7,9 @@ interface LogoProps {
 }
 
 const sizes = {
-  sm: { logo: "h-10", tagline: "text-[10px]" },
-  md: { logo: "h-12", tagline: "text-xs" },
-  lg: { logo: "h-16", tagline: "text-sm" },
+  sm: { logo: "h-14", tagline: "text-[10px]" },
+  md: { logo: "h-16", tagline: "text-xs" },
+  lg: { logo: "h-20", tagline: "text-sm" },
 };
 
 export default function Logo({ size = "md", showTagline = false }: LogoProps) {
