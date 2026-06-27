@@ -68,19 +68,19 @@ const NAV: { key: Section; label: string; icon: string }[] = [
 
 function StatusBadge({ status }: { status: string }) {
   const colors: Record<string, string> = {
-    confirmed: "bg-emerald-100 text-emerald-700",
-    pending: "bg-amber-100 text-amber-700",
-    completed: "bg-blue-100 text-blue-700",
-    cancelled: "bg-red-100 text-red-700",
-    published: "bg-emerald-100 text-emerald-700",
-    draft: "bg-gray-100 text-gray-700",
-    archived: "bg-red-100 text-red-700",
-    paused: "bg-amber-100 text-amber-700",
-    approved: "bg-emerald-100 text-emerald-700",
-    rejected: "bg-red-100 text-red-700",
+    confirmed: "bg-emerald-900/30 text-emerald-400",
+    pending: "bg-amber-900/30 text-amber-400",
+    completed: "bg-blue-900/30 text-blue-400",
+    cancelled: "bg-red-900/30 text-red-400",
+    published: "bg-emerald-900/30 text-emerald-400",
+    draft: "bg-gray-800 text-gray-300",
+    archived: "bg-red-900/30 text-red-400",
+    paused: "bg-amber-900/30 text-amber-400",
+    approved: "bg-emerald-900/30 text-emerald-400",
+    rejected: "bg-red-900/30 text-red-400",
   };
   return (
-    <span className={`px-2 py-0.5 rounded-full text-caption font-medium capitalize ${colors[status] || "bg-gray-100 text-gray-700"}`}>
+    <span className={`px-2 py-0.5 rounded-full text-caption font-medium capitalize ${colors[status] || "bg-gray-800 text-gray-300"}`}>
       {status}
     </span>
   );
@@ -228,17 +228,17 @@ export default function AdminPage() {
   if (!isAdmin) return null;
 
   return (
-    <div className="min-h-screen bg-[#f7f7f7] flex pt-18">
+    <div className="min-h-screen bg-[#05070B] flex pt-18">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-[#ebebeb] transform transition-transform duration-300 lg:translate-x-0 pt-18 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
-        <div className="p-5 border-b border-[#ebebeb]">
+      <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#0F172A] border-r border-white/[0.08] transform transition-transform duration-300 lg:translate-x-0 pt-18 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className="p-5 border-b border-white/[0.08]">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#DD2A7B] to-purple-500 flex items-center justify-center shadow-md">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF2D7A] to-purple-500 flex items-center justify-center shadow-md">
               <span className="text-white font-bold text-body">A</span>
             </div>
             <div>
-              <p className="text-body-sm font-bold text-[#222222]">Admin Panel</p>
-              <p className="text-caption text-[#929292]">Platform Management</p>
+              <p className="text-body-sm font-bold text-[#F1F5F9]">Admin Panel</p>
+              <p className="text-caption text-[#64748B]">Platform Management</p>
             </div>
           </div>
         </div>
@@ -248,7 +248,7 @@ export default function AdminPage() {
               key={item.key}
               onClick={() => switchSection(item.key)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all ${
-                section === item.key ? "bg-[#DD2A7B] text-white" : "text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7]"
+                section === item.key ? "bg-[#FF2D7A] text-white" : "text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-white/[0.05]"
               }`}
             >
               <span>{item.icon}</span>
@@ -256,8 +256,8 @@ export default function AdminPage() {
             </button>
           ))}
         </nav>
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[#ebebeb]">
-          <Link href="/" className="flex items-center gap-2 text-caption text-[#929292] hover:text-[#222222] transition-colors">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/[0.08]">
+          <Link href="/" className="flex items-center gap-2 text-caption text-[#64748B] hover:text-[#F1F5F9] transition-colors">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
             Back to Platform
           </Link>
@@ -268,20 +268,20 @@ export default function AdminPage() {
 
       {/* Main */}
       <main className="flex-1 lg:ml-64 min-h-screen">
-        <header className="sticky top-18 z-20 bg-white/80 backdrop-blur-xl border-b border-[#ebebeb]">
+        <header className="sticky top-18 z-20 bg-[#0F172A]/80 backdrop-blur-xl border-b border-white/[0.08]">
           <div className="flex items-center justify-between px-4 sm:px-6 h-14">
             <div className="flex items-center gap-3">
-              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#f7f7f7] text-[#6a6a6a] font-bold text-heading">≡</button>
-              <h1 className="text-heading-md font-bold text-[#222222] hidden sm:block">{NAV.find((n) => n.key === section)?.label}</h1>
+              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/[0.05] text-[#94A3B8] font-bold text-heading">≡</button>
+              <h1 className="text-heading-md font-bold text-[#F1F5F9] hidden sm:block">{NAV.find((n) => n.key === section)?.label}</h1>
             </div>
-            <span className="text-caption text-[#929292] bg-[#f7f7f7] px-3 py-1.5 rounded-full">Admin</span>
+            <span className="text-caption text-[#64748B] bg-[#05070B] px-3 py-1.5 rounded-full">Admin</span>
           </div>
         </header>
 
         <div className="p-4 sm:p-6">
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <div className="w-8 h-8 rounded-full border-2 border-[#DD2A7B]/30 border-t-[#DD2A7B] animate-spin" />
+              <div className="w-8 h-8 rounded-full border-2 border-[#FF2D7A]/30 border-t-[#FF2D7A] animate-spin" />
             </div>
           ) : (
             <>
@@ -297,20 +297,20 @@ export default function AdminPage() {
                       { label: "Pending", value: overview.pendingBookings.toLocaleString(), icon: "⏳" },
                       { label: "Revenue", value: `MK ${overview.totalRevenue.toLocaleString()}`, icon: "💰" },
                     ].map((stat) => (
-                      <div key={stat.label} className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                      <div key={stat.label} className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-2xl">{stat.icon}</span>
                         </div>
-                        <p className="text-heading-sm font-bold text-[#222222]">{stat.value}</p>
-                        <p className="text-caption text-[#929292]">{stat.label}</p>
+                        <p className="text-heading-sm font-bold text-[#F1F5F9]">{stat.value}</p>
+                        <p className="text-caption text-[#64748B]">{stat.label}</p>
                       </div>
                     ))}
                   </div>
-                  <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
-                    <p className="text-caption text-[#929292] mb-2">Quick Actions</p>
+                  <div className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
+                    <p className="text-caption text-[#64748B] mb-2">Quick Actions</p>
                     <div className="flex flex-wrap gap-2">
                       {NAV.slice(1).map((item) => (
-                        <button key={item.key} onClick={() => switchSection(item.key)} className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-body-sm text-[#6a6a6a] hover:bg-[#DD2A7B] hover:text-white transition-all">
+                        <button key={item.key} onClick={() => switchSection(item.key)} className="px-4 py-2 rounded-xl bg-[#05070B] text-body-sm text-[#94A3B8] hover:bg-[#FF2D7A] hover:text-white transition-all">
                           {item.icon} {item.label}
                         </button>
                       ))}
@@ -321,26 +321,26 @@ export default function AdminPage() {
 
               {/* Users */}
               {section === "users" && (
-                <div className="overflow-x-auto rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                <div className="overflow-x-auto rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                   <table className="w-full min-w-[600px]">
                     <thead>
-                      <tr className="border-b border-[#ebebeb]">
+                      <tr className="border-b border-white/[0.08]">
                         {["Name", "Role", "Joined", "Actions"].map((h) => (
-                          <th key={h} className="py-3 px-4 text-left text-caption text-[#929292] font-medium">{h}</th>
+                          <th key={h} className="py-3 px-4 text-left text-caption text-[#64748B] font-medium">{h}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {users.map((u) => (
-                        <tr key={u.id} className="border-b border-[#ebebeb] hover:bg-[#fafafa] transition-colors">
-                          <td className="py-3 px-4 text-body-sm text-[#222222]">{u.full_name || "—"}</td>
+                        <tr key={u.id} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
+                          <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">{u.full_name || "—"}</td>
                           <td className="py-3 px-4"><StatusBadge status={u.role} /></td>
-                          <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{new Date(u.created_at).toLocaleDateString()}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{new Date(u.created_at).toLocaleDateString()}</td>
                           <td className="py-3 px-4">
                             <select
                               value={u.role}
                               onChange={(e) => handleRoleChange(u.id, e.target.value)}
-                              className="px-2 py-1 rounded-lg text-caption border border-[#dddddd] focus:outline-none focus:border-[#DD2A7B]"
+                              className="px-2 py-1 rounded-lg text-caption border border-white/[0.08] focus:outline-none focus:border-[#FF2D7A]"
                             >
                               {["user", "partner", "admin"].map((r) => (
                                 <option key={r} value={r}>{r}</option>
@@ -350,7 +350,7 @@ export default function AdminPage() {
                         </tr>
                       ))}
                       {users.length === 0 && (
-                        <tr><td colSpan={4} className="py-8 text-center text-caption text-[#929292]">No users found</td></tr>
+                        <tr><td colSpan={4} className="py-8 text-center text-caption text-[#64748B]">No users found</td></tr>
                       )}
                     </tbody>
                   </table>
@@ -359,33 +359,33 @@ export default function AdminPage() {
 
               {/* Experiences */}
               {section === "experiences" && (
-                <div className="overflow-x-auto rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                <div className="overflow-x-auto rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                   <table className="w-full min-w-[700px]">
                     <thead>
-                      <tr className="border-b border-[#ebebeb]">
+                      <tr className="border-b border-white/[0.08]">
                         {["Title", "Category", "Price", "Status", "Bookings", "Rating", "Actions"].map((h) => (
-                          <th key={h} className="py-3 px-4 text-left text-caption text-[#929292] font-medium">{h}</th>
+                          <th key={h} className="py-3 px-4 text-left text-caption text-[#64748B] font-medium">{h}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {experiences.map((e) => (
-                        <tr key={e.id} className="border-b border-[#ebebeb] hover:bg-[#fafafa] transition-colors">
-                          <td className="py-3 px-4 text-body-sm text-[#222222] font-medium">{e.title}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{e.category}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#222222]">MK {e.price.toLocaleString()}</td>
+                        <tr key={e.id} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
+                          <td className="py-3 px-4 text-body-sm text-[#F1F5F9] font-medium">{e.title}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{e.category}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">MK {e.price.toLocaleString()}</td>
                           <td className="py-3 px-4"><StatusBadge status={e.status} /></td>
-                          <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{e.booking_count}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">★ {e.rating}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{e.booking_count}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">★ {e.rating}</td>
                           <td className="py-3 px-4">
                             <div className="flex gap-1">
                               {e.status !== "published" && (
-                                <button onClick={() => handleExperienceStatus(e.id, "published")} className="px-2 py-1 rounded-lg bg-emerald-50 text-emerald-600 text-caption hover:bg-emerald-100">
+                                <button onClick={() => handleExperienceStatus(e.id, "published")} className="px-2 py-1 rounded-lg bg-emerald-900/30 text-emerald-400 hover:bg-emerald-800/40">
                                   Publish
                                 </button>
                               )}
                               {e.status !== "archived" && (
-                                <button onClick={() => handleExperienceStatus(e.id, "archived")} className="px-2 py-1 rounded-lg bg-red-50 text-red-500 text-caption hover:bg-red-100">
+                                <button onClick={() => handleExperienceStatus(e.id, "archived")} className="px-2 py-1 rounded-lg bg-red-900/30 text-red-400 hover:bg-red-800/40">
                                   Archive
                                 </button>
                               )}
@@ -394,7 +394,7 @@ export default function AdminPage() {
                         </tr>
                       ))}
                       {experiences.length === 0 && (
-                        <tr><td colSpan={7} className="py-8 text-center text-caption text-[#929292]">No experiences found</td></tr>
+                        <tr><td colSpan={7} className="py-8 text-center text-caption text-[#64748B]">No experiences found</td></tr>
                       )}
                     </tbody>
                   </table>
@@ -405,25 +405,25 @@ export default function AdminPage() {
               {section === "reviews" && (
                 <div className="space-y-3">
                   {reviews.map((r) => (
-                    <div key={r.id} className="p-4 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                    <div key={r.id} className="p-4 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-body-sm font-medium text-[#222222]">{r.user?.full_name || "Anonymous"}</span>
-                            <span className="text-caption text-[#929292]">·</span>
-                            <span className="text-caption text-[#929292]">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
+                            <span className="text-body-sm font-medium text-[#F1F5F9]">{r.user?.full_name || "Anonymous"}</span>
+                            <span className="text-caption text-[#64748B]">·</span>
+                            <span className="text-caption text-[#64748B]">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
                           </div>
-                          <p className="text-caption text-[#929292] mb-1">{r.experience?.title || "Unknown experience"}</p>
-                          {r.body && <p className="text-body-sm text-[#6a6a6a] mt-1">{r.body}</p>}
+                          <p className="text-caption text-[#64748B] mb-1">{r.experience?.title || "Unknown experience"}</p>
+                          {r.body && <p className="text-body-sm text-[#94A3B8] mt-1">{r.body}</p>}
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0">
                           <StatusBadge status={r.status} />
                           {r.status === "pending" && (
                             <>
-                              <button onClick={() => handleReviewStatus(r.id, "approved")} className="px-3 py-1 rounded-lg bg-emerald-50 text-emerald-600 text-caption hover:bg-emerald-100">
+                              <button onClick={() => handleReviewStatus(r.id, "approved")} className="px-3 py-1 rounded-lg bg-emerald-900/30 text-emerald-400 hover:bg-emerald-800/40">
                                 Approve
                               </button>
-                              <button onClick={() => handleReviewStatus(r.id, "rejected")} className="px-3 py-1 rounded-lg bg-red-50 text-red-500 text-caption hover:bg-red-100">
+                              <button onClick={() => handleReviewStatus(r.id, "rejected")} className="px-3 py-1 rounded-lg bg-red-900/30 text-red-400 hover:bg-red-800/40">
                                 Reject
                               </button>
                             </>
@@ -433,36 +433,36 @@ export default function AdminPage() {
                     </div>
                   ))}
                   {reviews.length === 0 && (
-                    <div className="py-8 text-center text-caption text-[#929292]">No reviews found</div>
+                    <div className="py-8 text-center text-caption text-[#64748B]">No reviews found</div>
                   )}
                 </div>
               )}
 
               {/* Bookings */}
               {section === "bookings" && (
-                <div className="overflow-x-auto rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                <div className="overflow-x-auto rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                   <table className="w-full min-w-[700px]">
                     <thead>
-                      <tr className="border-b border-[#ebebeb]">
+                      <tr className="border-b border-white/[0.08]">
                         {["ID", "Experience", "Date", "Guests", "Total", "Status", "Created"].map((h) => (
-                          <th key={h} className="py-3 px-4 text-left text-caption text-[#929292] font-medium">{h}</th>
+                          <th key={h} className="py-3 px-4 text-left text-caption text-[#64748B] font-medium">{h}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {bookings.map((b) => (
-                        <tr key={b.id} className="border-b border-[#ebebeb] hover:bg-[#fafafa] transition-colors">
-                          <td className="py-3 px-4 text-body-sm text-[#222222] font-mono">{b.id.slice(0, 8)}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#222222]">{b.experience?.title || "—"}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{b.experience_date}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{b.guests_count}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#222222] font-medium">MK {b.total_price.toLocaleString()}</td>
+                        <tr key={b.id} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
+                          <td className="py-3 px-4 text-body-sm text-[#F1F5F9] font-mono">{b.id.slice(0, 8)}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">{b.experience?.title || "—"}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{b.experience_date}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{b.guests_count}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#F1F5F9] font-medium">MK {b.total_price.toLocaleString()}</td>
                           <td className="py-3 px-4"><StatusBadge status={b.status} /></td>
-                          <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{new Date(b.created_at).toLocaleDateString()}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{new Date(b.created_at).toLocaleDateString()}</td>
                         </tr>
                       ))}
                       {bookings.length === 0 && (
-                        <tr><td colSpan={7} className="py-8 text-center text-caption text-[#929292]">No bookings found</td></tr>
+                        <tr><td colSpan={7} className="py-8 text-center text-caption text-[#64748B]">No bookings found</td></tr>
                       )}
                     </tbody>
                   </table>
@@ -480,36 +480,36 @@ export default function AdminPage() {
                       { label: "Partially Redeemed", value: giftCards.filter(g => g.status === "partially_redeemed").length, icon: "🔄" },
                       { label: "Redeemed", value: giftCards.filter(g => g.status === "redeemed").length, icon: "✔️" },
                     ].map((stat) => (
-                      <div key={stat.label} className="p-4 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                      <div key={stat.label} className="p-4 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-2xl">{stat.icon}</span>
                         </div>
-                        <p className="text-heading-sm font-bold text-[#222222]">{stat.value}</p>
-                        <p className="text-caption text-[#929292]">{stat.label}</p>
+                        <p className="text-heading-sm font-bold text-[#F1F5F9]">{stat.value}</p>
+                        <p className="text-caption text-[#64748B]">{stat.label}</p>
                       </div>
                     ))}
                   </div>
 
                   {/* Table */}
-                  <div className="overflow-x-auto rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                  <div className="overflow-x-auto rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                     <table className="w-full min-w-[800px]">
                       <thead>
-                        <tr className="border-b border-[#ebebeb]">
+                        <tr className="border-b border-white/[0.08]">
                           {["Code", "Amount", "Balance", "Status", "Buyer", "Recipient", "Created"].map((h) => (
-                            <th key={h} className="py-3 px-4 text-left text-caption text-[#929292] font-medium">{h}</th>
+                            <th key={h} className="py-3 px-4 text-left text-caption text-[#64748B] font-medium">{h}</th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
                         {giftCards.map((gc) => (
-                          <tr key={gc.code} className="border-b border-[#ebebeb] hover:bg-[#fafafa] transition-colors">
-                            <td className="py-3 px-4 text-body-sm font-mono text-[#222222] font-medium">{gc.code}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#222222]">MK {gc.amount.toLocaleString()}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#222222]">MK {gc.balance.toLocaleString()}</td>
+                          <tr key={gc.code} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
+                            <td className="py-3 px-4 text-body-sm font-mono text-[#F1F5F9] font-medium">{gc.code}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">MK {gc.amount.toLocaleString()}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">MK {gc.balance.toLocaleString()}</td>
                             <td className="py-3 px-4"><StatusBadge status={gc.status} /></td>
-                            <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{gc.buyer}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{gc.recipient}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{gc.created}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{gc.buyer}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{gc.recipient}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{gc.created}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -529,39 +529,39 @@ export default function AdminPage() {
                       { label: "Pending", value: partners.filter(p => p.status === "pending").length, icon: "⏳" },
                       { label: "Suspended", value: partners.filter(p => p.status === "suspended").length, icon: "⛔" },
                     ].map((stat) => (
-                      <div key={stat.label} className="p-4 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                      <div key={stat.label} className="p-4 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-2xl">{stat.icon}</span>
                         </div>
-                        <p className="text-heading-sm font-bold text-[#222222]">{stat.value}</p>
-                        <p className="text-caption text-[#929292]">{stat.label}</p>
+                        <p className="text-heading-sm font-bold text-[#F1F5F9]">{stat.value}</p>
+                        <p className="text-caption text-[#64748B]">{stat.label}</p>
                       </div>
                     ))}
                   </div>
 
                   {/* Table */}
-                  <div className="overflow-x-auto rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                  <div className="overflow-x-auto rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                     <table className="w-full min-w-[800px]">
                       <thead>
-                        <tr className="border-b border-[#ebebeb]">
+                        <tr className="border-b border-white/[0.08]">
                           {["Partner", "Owner", "Experiences", "Revenue", "Status", "Joined", "Actions"].map((h) => (
-                            <th key={h} className="py-3 px-4 text-left text-caption text-[#929292] font-medium">{h}</th>
+                            <th key={h} className="py-3 px-4 text-left text-caption text-[#64748B] font-medium">{h}</th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
                         {partners.map((p) => (
-                          <tr key={p.id} className="border-b border-[#ebebeb] hover:bg-[#fafafa] transition-colors">
-                            <td className="py-3 px-4 text-body-sm text-[#222222] font-medium">{p.name}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{p.owner}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{p.experiences}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#222222]">MK {p.revenue.toLocaleString()}</td>
+                          <tr key={p.id} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
+                            <td className="py-3 px-4 text-body-sm text-[#F1F5F9] font-medium">{p.name}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{p.owner}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{p.experiences}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">MK {p.revenue.toLocaleString()}</td>
                             <td className="py-3 px-4"><StatusBadge status={p.status} /></td>
-                            <td className="py-3 px-4 text-body-sm text-[#6a6a6a]">{p.joined}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{p.joined}</td>
                             <td className="py-3 px-4">
                               <div className="flex gap-1">
-                                <button className="px-2 py-1 rounded-lg bg-emerald-50 text-emerald-600 text-caption hover:bg-emerald-100">View</button>
-                                <button className="px-2 py-1 rounded-lg bg-amber-50 text-amber-600 text-caption hover:bg-amber-100">Contact</button>
+                                <button className="px-2 py-1 rounded-lg bg-emerald-900/30 text-emerald-400 hover:bg-emerald-800/40">View</button>
+                                <button className="px-2 py-1 rounded-lg bg-amber-900/30 text-amber-400 text-caption hover:bg-amber-800/40">Contact</button>
                               </div>
                             </td>
                           </tr>
@@ -578,36 +578,36 @@ export default function AdminPage() {
                   {/* Summary Cards */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
-                      { label: "Total Revenue", value: `MK ${financials.totalRevenue.toLocaleString()}`, icon: "💰", accent: "text-emerald-600" },
-                      { label: "Pending Payouts", value: `MK ${financials.pendingPayouts.toLocaleString()}`, icon: "⏳", accent: "text-amber-600" },
-                      { label: "Completed Payouts", value: `MK ${financials.completedPayouts.toLocaleString()}`, icon: "✅", accent: "text-blue-600" },
-                      { label: "Platform Fees", value: `MK ${financials.platformFee.toLocaleString()}`, icon: "📊", accent: "text-purple-600" },
+                      { label: "Total Revenue", value: `MK ${financials.totalRevenue.toLocaleString()}`, icon: "💰", accent: "text-emerald-400" },
+                      { label: "Pending Payouts", value: `MK ${financials.pendingPayouts.toLocaleString()}`, icon: "⏳", accent: "text-amber-400" },
+                      { label: "Completed Payouts", value: `MK ${financials.completedPayouts.toLocaleString()}`, icon: "✅", accent: "text-blue-400" },
+                      { label: "Platform Fees", value: `MK ${financials.platformFee.toLocaleString()}`, icon: "📊", accent: "text-purple-400" },
                     ].map((stat) => (
-                      <div key={stat.label} className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
+                      <div key={stat.label} className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-2xl">{stat.icon}</span>
                         </div>
                         <p className={`text-heading-sm font-bold ${stat.accent}`}>{stat.value}</p>
-                        <p className="text-caption text-[#929292]">{stat.label}</p>
+                        <p className="text-caption text-[#64748B]">{stat.label}</p>
                       </div>
                     ))}
                   </div>
 
                   {/* Monthly Revenue Chart */}
-                  <div className="rounded-xl bg-white border border-[#ebebeb] shadow-sm p-5">
-                    <h3 className="text-body-sm font-semibold text-[#222222] mb-4">Monthly Revenue (2026)</h3>
+                  <div className="rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm p-5">
+                    <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-4">Monthly Revenue (2026)</h3>
                     <div className="flex items-end gap-3 h-40">
                       {financials.monthlyRevenue.map((m) => {
                         const maxRevenue = Math.max(...financials.monthlyRevenue.map(r => r.amount));
                         const height = (m.amount / maxRevenue) * 100;
                         return (
                           <div key={m.month} className="flex-1 flex flex-col items-center gap-1">
-                            <span className="text-[10px] text-[#6a6a6a] font-medium">MK {(m.amount / 1000).toFixed(0)}k</span>
+                            <span className="text-[10px] text-[#94A3B8] font-medium">MK {(m.amount / 1000).toFixed(0)}k</span>
                             <div
-                              className="w-full rounded-lg bg-gradient-to-t from-[#DD2A7B] via-[#8134AF] to-[#515BD4] transition-all duration-500 hover:opacity-80"
+                              className="w-full rounded-lg bg-gradient-to-t from-[#FF2D7A] via-[#A855F7] to-[#6366F1] transition-all duration-500 hover:opacity-80"
                               style={{ height: `${height}%` }}
                             />
-                            <span className="text-[10px] text-[#929292]">{m.month}</span>
+                            <span className="text-[10px] text-[#64748B]">{m.month}</span>
                           </div>
                         );
                       })}
@@ -616,15 +616,15 @@ export default function AdminPage() {
 
                   {/* Additional Metrics */}
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
-                      <h3 className="text-body-sm font-semibold text-[#222222] mb-2">Refunds</h3>
-                      <p className="text-heading-sm font-bold text-red-600">MK {financials.refundedAmount.toLocaleString()}</p>
-                      <p className="text-caption text-[#929292]">Total refunded amount</p>
+                    <div className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
+                      <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-2">Refunds</h3>
+                      <p className="text-heading-sm font-bold text-red-400">MK {financials.refundedAmount.toLocaleString()}</p>
+                      <p className="text-caption text-[#64748B]">Total refunded amount</p>
                     </div>
-                    <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
-                      <h3 className="text-body-sm font-semibold text-[#222222] mb-2">Net Revenue</h3>
-                      <p className="text-heading-sm font-bold text-[#222222]">MK {(financials.totalRevenue - financials.refundedAmount).toLocaleString()}</p>
-                      <p className="text-caption text-[#929292]">After refunds</p>
+                    <div className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
+                      <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-2">Net Revenue</h3>
+                      <p className="text-heading-sm font-bold text-[#F1F5F9]">MK {(financials.totalRevenue - financials.refundedAmount).toLocaleString()}</p>
+                      <p className="text-caption text-[#64748B]">After refunds</p>
                     </div>
                   </div>
                 </div>
@@ -633,20 +633,20 @@ export default function AdminPage() {
               {/* Settings */}
               {section === "settings" && (
                 <div className="space-y-4">
-                  <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
-                    <h3 className="text-body-sm font-semibold text-[#222222] mb-3">Platform Info</h3>
-                    <div className="space-y-2 text-body-sm text-[#6a6a6a]">
+                  <div className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
+                    <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-3">Platform Info</h3>
+                    <div className="space-y-2 text-body-sm text-[#94A3B8]">
                       <p>Version: 1.0.0</p>
                       <p>Environment: {process.env.NODE_ENV}</p>
                       <p>Database: Supabase (PostgreSQL)</p>
                       <p>Auth: Supabase Auth</p>
                     </div>
                   </div>
-                  <div className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
-                    <h3 className="text-body-sm font-semibold text-[#222222] mb-3">Admin Actions</h3>
+                  <div className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
+                    <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-3">Admin Actions</h3>
                     <div className="flex flex-wrap gap-2">
-                      <button onClick={() => switchSection("users")} className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-body-sm text-[#6a6a6a] hover:bg-[#f0f0f0] transition-all border border-[#ebebeb]">Manage Users</button>
-                      <button onClick={() => switchSection("reviews")} className="px-4 py-2 rounded-xl bg-[#f7f7f7] text-body-sm text-[#6a6a6a] hover:bg-[#f0f0f0] transition-all border border-[#ebebeb]">Moderate Reviews</button>
+                      <button onClick={() => switchSection("users")} className="px-4 py-2 rounded-xl bg-[#05070B] text-body-sm text-[#94A3B8] hover:bg-[#1A2332] transition-all border border-white/[0.08]">Manage Users</button>
+                      <button onClick={() => switchSection("reviews")} className="px-4 py-2 rounded-xl bg-[#05070B] text-body-sm text-[#94A3B8] hover:bg-[#1A2332] transition-all border border-white/[0.08]">Moderate Reviews</button>
                     </div>
                   </div>
                 </div>
