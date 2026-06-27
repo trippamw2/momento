@@ -194,34 +194,6 @@ export default function Home() {
     </section>
   );
 
-  const GridCards2 = ({ title, items }: { title: string; items: Experience[] }) => (
-    <section className="mb-10 px-4 sm:px-8">
-      <div className="flex items-end justify-between mb-4">
-        <h2 className="text-heading-lg sm:text-heading-xl font-bold text-white">{title}</h2>
-        <Link href="/experiences" className="text-body-sm text-[#CBD5E1] hover:text-[#FF2D7A] transition-colors duration-200 flex items-center gap-1 flex-shrink-0">
-          See all
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-        </Link>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {items.map((exp) => (
-          <Link key={exp.id} href={`/experiences/${exp.id}`} className="group relative aspect-[16/10] rounded-2xl overflow-hidden bg-[#1A2332]">
-            <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-4">
-              <p className="text-white text-body font-bold line-clamp-1">{exp.title}</p>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-yellow-400 text-xs">★ {exp.rating}</span>
-                <span className="text-white/50 text-caption">MK {exp.price.toLocaleString()}</span>
-                <span className="text-white/40 text-caption">{exp.location}</span>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </section>
-  );
-
   const SectionDivider = ({ title }: { title: string }) => (
     <div className="px-4 sm:px-8 my-6 sm:my-8">
       <div className="flex items-center gap-4">
@@ -381,7 +353,7 @@ export default function Home() {
         )}
         
         {railsMap['most-saved'] && (
-          <GridCards2 title={railsMap['most-saved'].title} items={railsMap['most-saved'].experiences} />
+          <GridCards title={railsMap['most-saved'].title} items={railsMap['most-saved'].experiences} />
         )}
 
         {/* ─── Featured Experience ─── */}
