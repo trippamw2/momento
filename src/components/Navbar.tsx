@@ -48,7 +48,7 @@ export default function Navbar() {
   }, []);
 
   const navItems = [
-    { label: "Discover", href: "/" },
+    { label: "Discover", href: "/discover" },
     { label: "Experiences", href: "/experiences" },
     { label: "Gift", href: "/gift" },
     { label: "Saved", href: "/saved" },
@@ -67,7 +67,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-[999] bg-white/90 backdrop-blur-xl border-b border-gray-200/60 shadow-sm">
+      <header className="fixed top-0 left-0 right-0 z-[999] bg-[#111827]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="flex items-center justify-between h-18">
             {/* Left: Logo + Nav */}
@@ -76,20 +76,18 @@ export default function Navbar() {
 
               <nav className="hidden md:flex items-center gap-0.5">
                 {navItems.map((item) => {
-                  const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
-                  const isDiscover = item.href === "/";
-                  const actualHref = isDiscover ? "/discover" : item.href;
+                  const isActive = pathname === item.href || (item.href !== "/discover" && pathname.startsWith(item.href));
                   return (
                     <Link
                       key={item.href}
-                      href={actualHref}
+                      href={item.href}
                       className={`relative px-3.5 py-2 rounded-xl text-body-sm font-semibold transition-all duration-200 ${
                         isActive
-                          ? "text-gray-900 after:absolute after:bottom-0 after:left-1/4 after:w-1/2 after:h-0.5 after:bg-[#FF2D7A] after:rounded-full"
-                          : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+                          ? "text-white after:absolute after:bottom-0 after:left-1/4 after:w-1/2 after:h-0.5 after:bg-[#FF2D7A] after:rounded-full"
+                          : "text-[#94A3B8] hover:text-white hover:bg-white/[0.05]"
                       }`}
                     >
-                      {item.label === "Discover" ? "Discover" : item.label}
+                      {item.label}
                     </Link>
                   );
                 })}
@@ -100,7 +98,7 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-2">
               <Link
                 href="/experiences?nearby=true"
-                className="px-4 py-2 rounded-xl text-body-sm font-semibold transition-all duration-200 text-gray-500 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1.5"
+                className="px-4 py-2 rounded-xl text-body-sm font-semibold transition-all duration-200 text-[#94A3B8] hover:text-white hover:bg-white/[0.05] flex items-center gap-1.5"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                 Near Me
@@ -109,7 +107,7 @@ export default function Navbar() {
               <Link
                 href="/notifications"
                 onClick={(e) => { e.preventDefault(); setNotifOpen(!notifOpen); }}
-                className="relative px-3 py-2 rounded-xl text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all font-semibold"
+                className="relative px-3 py-2 rounded-xl text-[#94A3B8] hover:text-white hover:bg-white/[0.05] transition-all font-semibold"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
                 {unreadCount > 0 && (
@@ -198,13 +196,13 @@ export default function Navbar() {
             {/* Mobile hamburger */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-colors"
+              className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/[0.05] transition-colors"
               aria-label="Toggle menu"
             >
               <div className="w-5 flex flex-col gap-1">
-                <span className={`block h-0.5 bg-gray-800 transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-1.5" : ""}`} />
-                <span className={`block h-0.5 bg-gray-800 transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
-                <span className={`block h-0.5 bg-gray-800 transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""}`} />
+                <span className={`block h-0.5 bg-white transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-1.5" : ""}`} />
+                <span className={`block h-0.5 bg-white transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+                <span className={`block h-0.5 bg-white transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""}`} />
               </div>
             </button>
           </div>

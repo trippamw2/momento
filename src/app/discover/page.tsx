@@ -148,8 +148,10 @@ export default function DiscoverPage() {
     <div
       ref={containerRef}
       className="fixed inset-0 bg-[#05070B] overflow-y-scroll snap-y snap-mandatory hide-scrollbar"
-      style={{ scrollBehavior: "smooth" }}
+      style={{ scrollBehavior: "smooth", scrollPaddingTop: "72px" }}
     >
+      {/* Spacer so first item content isn't hidden behind fixed header */}
+      <div className="snap-none h-16 sm:h-18" />
       {feedExperiences.map((exp, index) => (
         <div
           key={exp.id}

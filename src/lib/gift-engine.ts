@@ -1,5 +1,7 @@
 "use client";
 
+import { sendGiftViaEmail } from "./delivery-email";
+
 export interface GiftCardCreate {
   amount: number;
   recipientName: string;
@@ -119,18 +121,17 @@ function sendViaWhatsApp(card: GiftCardFull): void {
 }
 
 function sendViaEmail(card: GiftCardFull): void {
-  const subject = encodeURIComponent(`🎁 You've received an Experio Gift Card from ${card.senderName}!`);
-  const body = encodeURIComponent(
-    `Hi ${card.recipientName},\n\n` +
-    `${card.senderName} has sent you an Experio Gift Card!\n\n` +
-    `Amount: ${card.currency} ${card.amount.toLocaleString()}\n` +
-    (card.message ? `Message: "${card.message}"\n\n` : "\n") +
-    `Code: ${card.code}\n\n` +
-    `Redeem here: ${window.location.origin}/gift/redeem?code=${card.code}\n\n` +
-    `Expires: ${new Date(card.expiresAt).toLocaleDateString()}\n\n` +
-    `Live The Moment,\nExperio`
-  );
-  window.open(`mailto:${card.recipientContact}?subject=${subject}&body=${body}`, "_blank");
+  // Use Brevo transactional email API for reliable delivery
+  sendGiftViaEmail({
+    code: card.code,
+    amount: card.amount,
+    currency: card.currency,
+    recipientName: card.recipientName,
+    recipientContact: card.recipientContact,
+    senderName: card.senderName,
+    message: card.message,
+    occasion: card.occasion,
+  });
 }
 
 function sendViaSMS(card: GiftCardFull): void {

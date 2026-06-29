@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuthGuard } from "@/lib/use-auth-guard";
 
 type Section = "overview" | "users" | "experiences" | "reviews" | "bookings" | "settings" | "gift-cards" | "partners" | "financials";
 
@@ -91,7 +92,7 @@ export default function AdminPage() {
   const [section, setSection] = useState<Section>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { allowed: isAdmin, loading: authLoading } = useAuthGuard({ requiredRole: "admin" });
 
   // Data states
   const [overview, setOverview] = useState<OverviewData | null>(null);
@@ -132,16 +133,15 @@ export default function AdminPage() {
     const token = getToken();
     if (!token) throw new Error("No auth token");
     const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-    if (res.status === 401 || res.status === 403) { setIsAdmin(false); return null; }
+    if (res.status === 401 || res.status === 403) return null;
     return res.json();
   }, [getToken]);
 
   useEffect(() => {
-    const role = localStorage.getItem("experio-user-role");
-    if (role !== "admin") { router.push("/"); return; }
-    setIsAdmin(true);
-    loadSection("overview");
-  }, []);
+    if (isAdmin) {
+      loadSection("overview");
+    }
+  }, [isAdmin]);
 
   const loadSection = useCallback(async (s: Section) => {
     setLoading(true);
@@ -224,6 +224,14 @@ export default function AdminPage() {
       loadSection("reviews");
     } catch (e) { console.error(e); }
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-[#05070B] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-[#FF2D7A]/30 border-t-[#FF2D7A] animate-spin" />
+      </div>
+    );
+  }
 
   if (!isAdmin) return null;
 

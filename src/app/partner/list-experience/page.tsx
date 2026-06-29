@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
+import { useAuthGuard } from "@/lib/use-auth-guard";
 import { findNearestCity } from "@/lib/geo";
 import { useGeolocation } from "@/lib/use-geolocation";
 
@@ -14,9 +15,11 @@ const V2_CATEGORIES = [
 ] as const;
 
 export default function ListExperiencePage() {
+  const { allowed: isPartner, loading: authLoading } = useAuthGuard({ requiredRole: "partner", redirectTo: "/?auth=partner-required" });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
     title: "",
     subtitle: "",
@@ -51,10 +54,33 @@ export default function ListExperiencePage() {
 
   const updateField = useCallback((field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
-  }, []);
+    if (fieldErrors[field]) setFieldErrors((prev) => ({ ...prev, [field]: "" }));
+  }, [fieldErrors]);
+
+  const validate = (): boolean => {
+    const errors: Record<string, string> = {};
+    if (!form.title.trim()) errors.title = "Title is required";
+    else if (form.title.trim().length < 5) errors.title = "Title must be at least 5 characters";
+    if (!form.category) errors.category = "Please select a category";
+    if (!form.description.trim()) errors.description = "Description is required";
+    else if (form.description.trim().length < 20) errors.description = "Description must be at least 20 characters";
+    if (!form.price) errors.price = "Price is required";
+    else if (isNaN(Number(form.price)) || Number(form.price) <= 0) errors.price = "Enter a valid price greater than 0";
+    if (!form.duration.trim()) errors.duration = "Duration is required";
+    if (!form.location) errors.location = "Please select a location";
+    if (!form.contact.trim()) errors.contact = "Contact email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.contact)) errors.contact = "Invalid email format";
+    const cap = parseInt(form.capacity);
+    if (!form.capacity) errors.capacity = "Capacity is required";
+    else if (isNaN(cap) || cap < 1) errors.capacity = "Capacity must be at least 1";
+    else if (cap > 100) errors.capacity = "Capacity cannot exceed 100";
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validate()) return;
     setError("");
     setSubmitting(true);
 
@@ -98,6 +124,40 @@ export default function ListExperiencePage() {
       setSubmitting(false);
     }
   };
+
+  if (authLoading) {
+    return (
+      <div className="pt-24 pb-20 flex items-center justify-center min-h-[50vh]">
+        <div className="w-8 h-8 rounded-full border-2 border-[#FF2D7A]/30 border-t-[#FF2D7A] animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isPartner) {
+    return (
+      <div className="pt-24 pb-20">
+        <div className="max-w-lg mx-auto px-4 sm:px-8 text-center">
+          <div className="w-16 h-16 rounded-full bg-[#FF2D7A]/10 flex items-center justify-center mx-auto mb-5">
+            <svg className="w-8 h-8 text-[#FF2D7A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <h1 className="text-heading-xl font-bold text-[#F1F5F9] mb-3">Partner Access Required</h1>
+          <p className="text-[#94A3B8] text-body mb-6">
+            Please sign in with a partner account to list an experience.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/"
+              className="px-6 py-3 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all"
+            >
+              Back to Home
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (submitted) {
     return (
@@ -149,8 +209,13 @@ export default function ListExperiencePage() {
               value={form.title}
               onChange={(e) => updateField("title", e.target.value)}
               placeholder="e.g. Sunset Wine Tasting at Cape Maclear"
-              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
+              className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 transition-all ${
+                fieldErrors.title
+                  ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
+                  : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+              }`}
             />
+            {fieldErrors.title && <p className="mt-1 text-caption text-red-400">{fieldErrors.title}</p>}
           </div>
 
           <div>
@@ -172,13 +237,18 @@ export default function ListExperiencePage() {
               required
               value={form.category}
               onChange={(e) => updateField("category", e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
+              className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm focus:outline-none focus:ring-2 transition-all appearance-none cursor-pointer ${
+                fieldErrors.category
+                  ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
+                  : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+              }`}
             >
               <option value="" disabled>Select a category</option>
               {V2_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
+            {fieldErrors.category && <p className="mt-1 text-caption text-red-400">{fieldErrors.category}</p>}
           </div>
 
           <div>
@@ -190,8 +260,13 @@ export default function ListExperiencePage() {
               value={form.description}
               onChange={(e) => updateField("description", e.target.value)}
               placeholder="Describe what guests will experience, what makes it unique, and what they should expect."
-              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all resize-y"
+              className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 transition-all resize-y ${
+                fieldErrors.description
+                  ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
+                  : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+              }`}
             />
+            {fieldErrors.description && <p className="mt-1 text-caption text-red-400">{fieldErrors.description}</p>}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -205,8 +280,13 @@ export default function ListExperiencePage() {
                 value={form.price}
                 onChange={(e) => updateField("price", e.target.value)}
                 placeholder="50000"
-                className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
+                className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 transition-all ${
+                  fieldErrors.price
+                    ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
+                    : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+                }`}
               />
+              {fieldErrors.price && <p className="mt-1 text-caption text-red-400">{fieldErrors.price}</p>}
             </div>
             <div>
               <label htmlFor="duration" className="block text-body-sm font-semibold text-[#F1F5F9] mb-1.5">Duration</label>
@@ -217,8 +297,13 @@ export default function ListExperiencePage() {
                 value={form.duration}
                 onChange={(e) => updateField("duration", e.target.value)}
                 placeholder="e.g. 2 hours, Full day"
-                className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
+                className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 transition-all ${
+                  fieldErrors.duration
+                    ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
+                    : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+                }`}
               />
+              {fieldErrors.duration && <p className="mt-1 text-caption text-red-400">{fieldErrors.duration}</p>}
             </div>
           </div>
 
@@ -230,7 +315,11 @@ export default function ListExperiencePage() {
                 required
                 value={form.location}
                 onChange={(e) => updateField("location", e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all appearance-none cursor-pointer"
+                className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm focus:outline-none focus:ring-2 transition-all appearance-none cursor-pointer ${
+                  fieldErrors.location
+                    ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
+                    : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+                }`}
               >
                 <option value="" disabled>
                   {geo.loading ? "Detecting location..." : "Select a city"}
@@ -238,6 +327,7 @@ export default function ListExperiencePage() {
                 <option value="Lilongwe">Lilongwe</option>
                 <option value="Blantyre">Blantyre</option>
               </select>
+              {fieldErrors.location && <p className="mt-1 text-caption text-red-400">{fieldErrors.location}</p>}
               {geo.loading && !form.location && (
                 <p className="text-caption text-[#64748B] mt-1 animate-pulse">Detecting your location via GPS...</p>
               )}
@@ -255,8 +345,13 @@ export default function ListExperiencePage() {
                 value={form.capacity}
                 onChange={(e) => updateField("capacity", e.target.value)}
                 placeholder="10"
-                className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
+                className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 transition-all ${
+                  fieldErrors.capacity
+                    ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
+                    : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+                }`}
               />
+              {fieldErrors.capacity && <p className="mt-1 text-caption text-red-400">{fieldErrors.capacity}</p>}
             </div>
           </div>
 
@@ -269,8 +364,13 @@ export default function ListExperiencePage() {
               value={form.contact}
               onChange={(e) => updateField("contact", e.target.value)}
               placeholder="you@example.com"
-              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
+              className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 transition-all ${
+                fieldErrors.contact
+                  ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
+                  : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+              }`}
             />
+            {fieldErrors.contact && <p className="mt-1 text-caption text-red-400">{fieldErrors.contact}</p>}
           </div>
 
           <button

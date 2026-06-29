@@ -1,9 +1,9 @@
 export default function Loading() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#faf8f6]">
+    <div className="min-h-screen flex items-center justify-center bg-[#05070B]">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-10 h-10 rounded-full border-2 border-[#DD2A7B]/20 border-t-[#DD2A7B] animate-spin" />
-        <p className="text-body-sm text-[#929292]">Loading Experio...</p>
+        <div className="w-10 h-10 rounded-full border-2 border-[#FF2D7A]/20 border-t-[#FF2D7A] animate-spin" />
+        <p className="text-body-sm text-[#94A3B8]">Loading Experio...</p>
       </div>
     </div>
   );

@@ -13,10 +13,37 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [success, setSuccess] = useState(false);
+
+  const validate = (): boolean => {
+    const errors: Record<string, string> = {};
+
+    if (!email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = "Invalid email format";
+    }
+
+    if (!password) {
+      errors.password = "Password is required";
+    } else if (password.length < 6) {
+      errors.password = "Password must be at least 6 characters";
+    }
+
+    if (mode === "signup" && !name.trim()) {
+      errors.name = "Full name is required";
+    } else if (mode === "signup" && name.trim().length < 2) {
+      errors.name = "Name must be at least 2 characters";
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validate()) return;
     setError("");
     setLoading(true);
 
@@ -96,40 +123,57 @@ export default function AuthModal({ onClose }: AuthModalProps) {
 
               <form onSubmit={handleSubmit} className="space-y-3.5">
                 {mode === "signup" && (
-                  <div className="relative">
-                    <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                    <input
-                      type="text"
-                      placeholder="Full name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#f5f2ef] border border-[#ebebeb] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/20 transition-all"
-                      required
-                    />
+                  <div>
+                    <div className="relative">
+                      <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                      <input
+                        type="text"
+                        placeholder="Full name"
+                        value={name}
+                        onChange={(e) => { setName(e.target.value); if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: "" })); }}
+                        className={`w-full pl-10 pr-4 py-3 rounded-xl bg-[#f5f2ef] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-1 transition-all ${
+                          fieldErrors.name
+                            ? "border border-[#c13515] focus:border-[#c13515] focus:ring-[#c13515]/20"
+                            : "border border-[#ebebeb] focus:border-[#DD2A7B] focus:ring-[#DD2A7B]/20"
+                        }`}
+                      />
+                    </div>
+                    {fieldErrors.name && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.name}</p>}
                   </div>
                 )}
-                <div className="relative">
-                  <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                  <input
-                    type="email"
-                    placeholder="Email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#f5f2ef] border border-[#ebebeb] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/20 transition-all"
-                    required
-                  />
+                <div>
+                  <div className="relative">
+                    <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                    <input
+                      type="email"
+                      placeholder="Email address"
+                      value={email}
+                      onChange={(e) => { setEmail(e.target.value); if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: "" })); }}
+                      className={`w-full pl-10 pr-4 py-3 rounded-xl bg-[#f5f2ef] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-1 transition-all ${
+                        fieldErrors.email
+                          ? "border border-[#c13515] focus:border-[#c13515] focus:ring-[#c13515]/20"
+                          : "border border-[#ebebeb] focus:border-[#DD2A7B] focus:ring-[#DD2A7B]/20"
+                      }`}
+                    />
+                  </div>
+                  {fieldErrors.email && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.email}</p>}
                 </div>
-                <div className="relative">
-                  <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#f5f2ef] border border-[#ebebeb] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/20 transition-all"
-                    required
-                    minLength={6}
-                  />
+                <div>
+                  <div className="relative">
+                    <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => { setPassword(e.target.value); if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: "" })); }}
+                      className={`w-full pl-10 pr-4 py-3 rounded-xl bg-[#f5f2ef] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-1 transition-all ${
+                        fieldErrors.password
+                          ? "border border-[#c13515] focus:border-[#c13515] focus:ring-[#c13515]/20"
+                          : "border border-[#ebebeb] focus:border-[#DD2A7B] focus:ring-[#DD2A7B]/20"
+                      }`}
+                    />
+                  </div>
+                  {fieldErrors.password && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.password}</p>}
                 </div>
 
                 {error && (

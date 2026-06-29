@@ -1,87 +1,155 @@
 import { json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
+import { experiences } from "@/lib/data";
+import type { Experience } from "@/lib/types";
 
-const CONCIERGE_RESPONSES: Record<string, { explanation: string }> = {
-  romantic: {
-    explanation: "For a romantic experience, I recommend these intimate and beautiful moments perfect for two.",
-  },
-  relax: {
-    explanation: "Unwind and recharge with these calming experiences designed to melt your stress away.",
-  },
-  celebrate: {
-    explanation: "Time to celebrate! These experiences are perfect for marking life's special moments.",
-  },
-  adventure: {
-    explanation: "Feed your adventurous spirit with these thrilling and exciting experiences.",
-  },
-  food: {
-    explanation: "For food lovers, here are the best culinary experiences that will delight your taste buds.",
-  },
-  family: {
-    explanation: "Perfect for the whole family! These experiences have something for everyone to enjoy together.",
-  },
-  budget: {
-    explanation: "Great experiences that won't break the bank. Here are affordable options you'll love.",
-  },
-};
+const GEMINI_MODEL = "gemini-2.0-flash";
+const GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
-function classifyQuery(query: string): string {
-  const q = query.toLowerCase();
-  if (q.includes("relax") || q.includes("calm") || q.includes("stress") || q.includes("unwind")) return "relax";
-  if (q.includes("celebrate") || q.includes("birthday") || q.includes("party")) return "celebrate";
-  if (q.includes("adventure") || q.includes("thrill") || q.includes("active") || q.includes("sport")) return "adventure";
-  if (q.includes("food") || q.includes("eat") || q.includes("dinner") || q.includes("brunch") || q.includes("wine")) return "food";
-  if (q.includes("family") || q.includes("kid") || q.includes("child")) return "family";
-  if (q.includes("budget") || q.includes("cheap") || q.includes("affordable")) return "budget";
-  return "romantic";
+interface GeminiResponse {
+  candidates?: {
+    content?: {
+      parts?: { text?: string }[];
+    };
+    finishReason?: string;
+  }[];
+}
+
+/**
+ * Build a condensed experience catalog for Gemini context.
+ * Includes id, title, subtitle, description snippet, price, mood, category, location, rating.
+ */
+function buildExperiencesContext(expList: typeof experiences): string {
+  return expList
+    .map(
+      (e) =>
+        `[ID:${e.id}] ${e.title} — ${e.subtitle}. ${e.description.slice(0, 120)}... ` +
+        `Category: ${e.category}. Mood: ${e.mood.join(", ")}. ` +
+        `Location: ${e.location}. Price: MK ${e.price.toLocaleString()}. Rating: ${e.rating}/5.`
+    )
+    .join("\n");
 }
 
 export async function GET(request: Request) {
   try {
     const params = getQueryParams(request.url);
     const query = params.query || "";
-    const key = classifyQuery(query);
-
-    const supabase = createServerClient();
-
-    // Map concierge categories to experience moods
-    const moodMap: Record<string, string[]> = {
-      romantic: ["Romantic"],
-      relax: ["Relax", "Self Care"],
-      celebrate: ["Celebrate"],
-      adventure: ["Adventure"],
-      food: ["Food & Drink"],
-      family: ["Family"],
-      budget: [],
-    };
-
-    const moods = moodMap[key] || [];
-
-    let experienceQuery = supabase
-      .from("experiences")
-      .select("*, images:experience_images(url, alt, is_primary)", { count: "exact" })
-      .eq("status", "published");
-
-    if (moods.length > 0) {
-      experienceQuery = experienceQuery.overlaps("mood_tags", moods);
+    if (!query.trim()) {
+      return json({ explanation: "Please tell me what you're looking for.", results: [] });
     }
 
-    if (key === "budget") {
-      experienceQuery = experienceQuery.lte("price", 50000).order("price", { ascending: true });
-    } else {
-      experienceQuery = experienceQuery.order("rating", { ascending: false });
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      // Fallback: use existing keyword-based matching when no API key
+      return json({
+        explanation: "AI concierge is not fully configured yet. Please set up a Gemini API key.",
+        results: [],
+      });
     }
 
-    experienceQuery = experienceQuery.limit(5);
+    const geminiUrl = `${GEMINI_API_BASE}/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
 
-    const { data: experiences, error } = await experienceQuery;
-    if (error) throw error;
+    const experienceCatalog = buildExperiencesContext(experiences);
 
-    const response = CONCIERGE_RESPONSES[key] || CONCIERGE_RESPONSES.romantic;
+    const prompt = `You are an AI concierge for Experio, a premium experience booking platform in Malawi. 
+Your job is to understand what the user is looking for and recommend the best matching experiences from the catalog below.
+
+USER QUERY: "${query}"
+
+EXPERIENCE CATALOG:
+${experienceCatalog}
+
+Respond ONLY with a JSON object in this exact format (no markdown, no code fences):
+{
+  "explanation": "A warm, personalized 2-3 sentence explanation of why you chose these experiences. Reference the user's request.",
+  "resultIds": ["id1", "id2", "id3", "id4", "id5"]
+}
+
+Rules:
+- Select 1-5 experiences that best match the user's query (title, description, mood, category, price, location).
+- If the user mentions a budget, prefer experiences within that range.
+- If the user mentions a mood or category, prefer matching experiences.
+- If the user mentions a location, prefer experiences in that city.
+- If nothing matches well, select the closest options and explain honestly.
+- The "explanation" must be in natural, warm language. Do NOT list IDs or technical details.
+- Keep resultIds to at most 5 IDs.`;
+
+    const res = await fetch(geminiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }],
+          },
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 1024,
+        },
+      }),
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("Gemini API error:", res.status, errorText);
+      return json({
+        explanation: "Sorry, I'm having trouble thinking right now. Please try again.",
+        results: [],
+      });
+    }
+
+    const data: GeminiResponse = await res.json();
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!text) {
+      return json({
+        explanation: "I couldn't find any matching experiences. Try a different search!",
+        results: [],
+      });
+    }
+
+    // Parse JSON from Gemini response (handle possible markdown fences)
+    let jsonStr = text.trim();
+    if (jsonStr.startsWith("```")) {
+      jsonStr = jsonStr.replace(/```(?:json)?\n?/g, "").trim();
+    }
+
+    let parsed: { explanation?: string; resultIds?: string[] };
+    try {
+      parsed = JSON.parse(jsonStr);
+    } catch {
+      // If parsing fails, try to extract JSON from the text
+      const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        try {
+          parsed = JSON.parse(jsonMatch[0]);
+        } catch {
+          return json({
+            explanation: "I found some ideas but had trouble organizing them. Try asking differently!",
+            results: [],
+          });
+        }
+      } else {
+        return json({
+          explanation: "I found some ideas but had trouble organizing them. Try asking differently!",
+          results: [],
+        });
+      }
+    }
+
+    const explanation = parsed.explanation || "Here are some experiences you might enjoy:";
+    const resultIds = parsed.resultIds || [];
+
+    // Map IDs to full experience objects
+    const idToExp = new Map(experiences.map((e) => [e.id, e]));
+    const results: Experience[] = resultIds
+      .map((id) => idToExp.get(id))
+      .filter((e): e is Experience => e !== undefined);
 
     return json({
-      explanation: response.explanation,
-      results: experiences || [],
+      explanation,
+      results,
       query,
     });
   } catch (error) {

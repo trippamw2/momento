@@ -150,8 +150,8 @@ export default function ExperienceCard({ experience: exp, size = "md", distance 
             <span className="text-caption text-white/40">{exp.duration}</span>
           </div>
 
-          {/* CTA Buttons */}
-          <div className="flex items-center gap-1.5 mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-3 group-hover:translate-y-0">
+          {/* CTA Buttons - always visible on mobile, show on hover for desktop */}
+          <div className="flex items-center gap-1.5 mt-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 translate-y-0 md:translate-y-3 md:group-hover:translate-y-0">
             <Link
               href={`/experiences/${exp.id}`}
               onClick={(e) => { e.stopPropagation(); trackBooked(exp.id); }}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useAuthGuard } from "@/lib/use-auth-guard";
 
 interface DashboardStats {
   totalExperiences: number;
@@ -50,15 +51,10 @@ interface PartnerExperience {
 export default function PartnerDashboardPage() {
   const [stats] = useState<DashboardStats>(MOCK_STATS);
   const [bookings] = useState<RecentBooking[]>(MOCK_BOOKINGS);
-  const [isPartner, setIsPartner] = useState(false);
+  const { allowed: isPartner, loading: authLoading } = useAuthGuard({ requiredRole: "partner" });
   const [experiences, setExperiences] = useState<PartnerExperience[]>([]);
   const [experiencesLoading, setExperiencesLoading] = useState(true);
   const [experiencesError, setExperiencesError] = useState("");
-
-  useEffect(() => {
-    const role = localStorage.getItem("experio-user-role");
-    setIsPartner(role === "partner");
-  }, []);
 
   useEffect(() => {
     const fetchExperiences = async () => {
@@ -90,6 +86,14 @@ export default function PartnerDashboardPage() {
     };
     fetchExperiences();
   }, []);
+
+  if (authLoading) {
+    return (
+      <div className="pt-24 pb-20 flex items-center justify-center min-h-[50vh]">
+        <div className="w-8 h-8 rounded-full border-2 border-[#FF2D7A]/30 border-t-[#FF2D7A] animate-spin" />
+      </div>
+    );
+  }
 
   if (!isPartner) {
     return (

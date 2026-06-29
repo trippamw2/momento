@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Experience } from "@/lib/types";
 import { trackView, trackBooked, trackSaved } from "@/lib/recommendations";
 import { calculatePoints, calculateTier, addPointsLocally, TIER_MAP } from "@/lib/loyalty-engine";
+import { sendBookingConfirmationEmail } from "@/lib/delivery-email";
 
 import ContentRail from "./ContentRail";
 import AuthModal from "./AuthModal";
@@ -217,6 +218,24 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
         trackBooked(exp.id);
         setBookedDate(selectedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }));
         setBookingDone(true);
+
+        // Send booking confirmation email (async, non-blocking)
+        const emailTarget = contactEmail || data?.user?.email || "";
+        if (emailTarget) {
+          sendBookingConfirmationEmail({
+            email: emailTarget,
+            guestName: data?.user?.name || "Guest",
+            experienceTitle: exp.title,
+            experienceDate: selectedDate.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }),
+            experienceTime: exp.duration,
+            guests: guests,
+            totalPrice: exp.price * guests,
+            currency: exp.currency,
+            bookingId: data?.id || data?.booking?.id || `BK-${Date.now()}`,
+            location: exp.location,
+            partnerName: exp.partner,
+          }).catch(() => {}); // Silently handle email failures
+        }
 
         // Award loyalty points
         const pts = calculatePoints(exp.price * guests);
