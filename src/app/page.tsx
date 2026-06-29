@@ -241,7 +241,7 @@ export default function Home() {
     <div className="overflow-x-hidden">
       <HeroSection />
 
-      <div className="relative z-10 -mt-12 sm:-mt-16 pb-16 space-y-1">
+      <div className="relative z-10 pt-6 sm:pt-8 pb-16 space-y-1">
         
         {/* ─── City Detection Banner ─── */}
         {detectedCity && (
