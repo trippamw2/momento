@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase-admin";
+import { createServerClient } from "@/lib/supabase-server";
 import { badRequest, serverError, handleRouteError } from "@/lib/api-helpers";
 
 export async function POST(request: Request) {
@@ -9,28 +10,24 @@ export async function POST(request: Request) {
     if (!email || !password) return badRequest("Email and password are required");
     if (password.length < 6) return badRequest("Password must be at least 6 characters");
 
-    const validatedRole: "user" | "partner" = (role === "partner") ? "partner" : "user";
+    const validatedRole: "user" | "partner" = role === "partner" ? "partner" : "user";
 
+    // Step 1: Create user in Supabase Auth (bypass email confirmation)
     const admin = createAdminClient();
-    const { data: authData, error: signUpError } = await admin.auth.signUp({
+    const { data: createData, error: createError } = await admin.auth.admin.createUser({
       email,
       password,
-      options: {
-        data: {
-          full_name,
-          role: validatedRole,
-          phone: phone ?? null,
-        },
-      },
+      email_confirm: true,
+      user_metadata: { full_name, role: validatedRole, phone },
     });
 
-    if (signUpError) return badRequest(signUpError.message);
-    if (!authData.user) return serverError("Failed to create user");
+    if (createError) return badRequest(createError.message);
+    if (!createData.user) return serverError("Failed to create user");
 
-    // Insert into users table
+    // Step 2: Insert into users table
     const { error: profileError } = await admin.from("users").insert({
-      id: authData.user.id,
-      email: authData.user.email ?? email,
+      id: createData.user.id,
+      email: createData.user.email ?? email,
       full_name: full_name ?? null,
       phone: phone ?? null,
       avatar_url: avatar_url ?? null,
@@ -38,19 +35,15 @@ export async function POST(request: Request) {
     });
 
     if (profileError) {
-      await admin.auth.admin.deleteUser(authData.user.id);
+      await admin.auth.admin.deleteUser(createData.user.id);
       return badRequest(profileError.message);
     }
 
-    // If role is partner, create partner profile
+    // Step 3: If partner, create partner profile
     if (validatedRole === "partner") {
-      const partnerBusinessName = full_name
-        ? `${full_name}'s Experiences`
-        : "New Partner";
-
       const { error: partnerError } = await admin.from("partners").insert({
-        user_id: authData.user.id,
-        business_name: partnerBusinessName,
+        user_id: createData.user.id,
+        business_name: full_name ? `${full_name}'s Experiences` : "New Partner",
         business_logo: avatar_url ?? null,
         business_email: email,
         verification_status: "pending",
@@ -58,39 +51,52 @@ export async function POST(request: Request) {
       });
 
       if (partnerError) {
-        // Non-blocking: log but don't fail the signup
         console.error("Failed to create partner profile:", partnerError);
       }
     }
 
-    // Create notification preferences
+    // Step 4: Create notification preferences (non-blocking)
     try {
-      await admin.from("notification_preferences").insert({ user_id: authData.user.id });
+      await admin.from("notification_preferences").insert({ user_id: createData.user.id });
     } catch {
-      // non-blocking
+      // table may not exist
     }
 
+    // Step 5: Sign in with the same credentials to get a session
+    const server = createServerClient();
+    const { data: signIn, error: signInError } = await server.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (signInError || !signIn.session) {
+      // User was created but we can't log them in — tell them to sign in manually
+      return NextResponse.json(
+        { user: createData.user, session: null, message: "Account created. Please sign in." },
+        { status: 201 }
+      );
+    }
+
+    // Step 6: Set auth cookies and return session
     const response = NextResponse.json(
-      { user: authData.user, session: authData.session },
+      { user: signIn.user, session: signIn.session, created: true },
       { status: 201 }
     );
 
-    if (authData.session?.access_token) {
-      response.cookies.set("experio-auth-token", authData.session.access_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7,
-      });
-      response.cookies.set("experio-user-role", validatedRole, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7,
-      });
-    }
+    response.cookies.set("experio-auth-token", signIn.session.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+    response.cookies.set("experio-user-role", validatedRole, {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
 
     return response;
   } catch (error) {

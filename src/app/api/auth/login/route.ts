@@ -9,7 +9,20 @@ export async function POST(request: Request) {
 
     const supabase = createServerClient();
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) return unauthorized(error.message);
+
+    if (error) {
+      const msg = error.message.toLowerCase();
+      if (msg.includes("email not confirmed")) {
+        return NextResponse.json(
+          { error: "Please confirm your email address first. Check your inbox (and spam folder).", code: "email_not_confirmed" },
+          { status: 401 }
+        );
+      }
+      if (msg.includes("invalid login credentials")) {
+        return unauthorized("Incorrect email or password. Try again.");
+      }
+      return unauthorized(error.message);
+    }
 
     const response = NextResponse.json({ user: data.user, session: data.session });
 
@@ -19,7 +32,7 @@ export async function POST(request: Request) {
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
+        maxAge: 60 * 60 * 24 * 7,
       });
       response.cookies.set("experio-user-role", data.user?.user_metadata?.role || "user", {
         httpOnly: false,
