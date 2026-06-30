@@ -1,8 +1,9 @@
 import { json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
-import { experiences } from "@/lib/data";
+import { experiences, getConciergeResponse } from "@/lib/data";
 import type { Experience } from "@/lib/types";
 
 const GEMINI_MODEL = "gemini-2.0-flash";
+const GEMINI_MODEL_FALLBACK = "gemini-1.5-flash";
 const GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
 interface GeminiResponse {
@@ -29,25 +30,12 @@ function buildExperiencesContext(expList: typeof experiences): string {
     .join("\n");
 }
 
-export async function GET(request: Request) {
+/**
+ * Call Gemini API and return the text response, or null on failure.
+ */
+async function callGemini(query: string, apiKey: string, model: string): Promise<string | null> {
   try {
-    const params = getQueryParams(request.url);
-    const query = params.query || "";
-    if (!query.trim()) {
-      return json({ explanation: "Please tell me what you're looking for.", results: [] });
-    }
-
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      // Fallback: use existing keyword-based matching when no API key
-      return json({
-        explanation: "AI concierge is not fully configured yet. Please set up a Gemini API key.",
-        results: [],
-      });
-    }
-
-    const geminiUrl = `${GEMINI_API_BASE}/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
-
+    const geminiUrl = `${GEMINI_API_BASE}/${model}:generateContent?key=${apiKey}`;
     const experienceCatalog = buildExperiencesContext(experiences);
 
     const prompt = `You are an AI concierge for Experio, a premium experience booking platform in Malawi. 
@@ -92,66 +80,79 @@ Rules:
 
     if (!res.ok) {
       const errorText = await res.text();
-      console.error("Gemini API error:", res.status, errorText);
-      return json({
-        explanation: "Sorry, I'm having trouble thinking right now. Please try again.",
-        results: [],
-      });
+      console.error(`Gemini API error (${model}):`, res.status, errorText.slice(0, 300));
+      return null;
     }
 
     const data: GeminiResponse = await res.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text ?? null;
+  } catch (error) {
+    console.error(`Gemini fetch error (${model}):`, error);
+    return null;
+  }
+}
 
-    if (!text) {
-      return json({
-        explanation: "I couldn't find any matching experiences. Try a different search!",
-        results: [],
-      });
+export async function GET(request: Request) {
+  try {
+    const params = getQueryParams(request.url);
+    const query = params.query || "";
+    if (!query.trim()) {
+      return json({ explanation: "Please tell me what you're looking for.", results: [] });
     }
 
-    // Parse JSON from Gemini response (handle possible markdown fences)
-    let jsonStr = text.trim();
-    if (jsonStr.startsWith("```")) {
-      jsonStr = jsonStr.replace(/```(?:json)?\n?/g, "").trim();
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      // No API key — fall back to built-in keyword matching
+      return json(getConciergeResponse(query));
     }
 
-    let parsed: { explanation?: string; resultIds?: string[] };
-    try {
-      parsed = JSON.parse(jsonStr);
-    } catch {
-      // If parsing fails, try to extract JSON from the text
-      const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        try {
-          parsed = JSON.parse(jsonMatch[0]);
-        } catch {
-          return json({
-            explanation: "I found some ideas but had trouble organizing them. Try asking differently!",
-            results: [],
-          });
-        }
-      } else {
-        return json({
-          explanation: "I found some ideas but had trouble organizing them. Try asking differently!",
-          results: [],
-        });
+    // Try Gemini with primary model, fallback to secondary model
+    let geminiResult = await callGemini(query, apiKey, GEMINI_MODEL);
+    if (!geminiResult) {
+      geminiResult = await callGemini(query, apiKey, GEMINI_MODEL_FALLBACK);
+    }
+
+    // If Gemini succeeded, parse and return its response
+    if (geminiResult) {
+      const text = geminiResult;
+
+      // Parse JSON from Gemini response (handle possible markdown fences)
+      let jsonStr = text.trim();
+      if (jsonStr.startsWith("```")) {
+        jsonStr = jsonStr.replace(/```(?:json)?\n?/g, "").trim();
       }
+
+      let parsed: { explanation?: string; resultIds?: string[] };
+      try {
+        parsed = JSON.parse(jsonStr);
+      } catch {
+        const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try {
+            parsed = JSON.parse(jsonMatch[0]);
+          } catch {
+            // Fall through to keyword matcher below
+            return json(getConciergeResponse(query));
+          }
+        } else {
+          return json(getConciergeResponse(query));
+        }
+      }
+
+      const explanation = parsed.explanation || "Here are some experiences you might enjoy:";
+      const resultIds = parsed.resultIds || [];
+
+      const idToExp = new Map(experiences.map((e) => [e.id, e]));
+      const results: Experience[] = resultIds
+        .map((id) => idToExp.get(id))
+        .filter((e): e is Experience => e !== undefined);
+
+      return json({ explanation, results, query });
     }
 
-    const explanation = parsed.explanation || "Here are some experiences you might enjoy:";
-    const resultIds = parsed.resultIds || [];
-
-    // Map IDs to full experience objects
-    const idToExp = new Map(experiences.map((e) => [e.id, e]));
-    const results: Experience[] = resultIds
-      .map((id) => idToExp.get(id))
-      .filter((e): e is Experience => e !== undefined);
-
-    return json({
-      explanation,
-      results,
-      query,
-    });
+    // Gemini failed — fall back to keyword-based matching
+    console.log("Gemini unavailable, using keyword fallback for:", query);
+    return json(getConciergeResponse(query));
   } catch (error) {
     return handleRouteError(error);
   }
