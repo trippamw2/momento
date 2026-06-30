@@ -4,7 +4,7 @@ import { badRequest, serverError, handleRouteError } from "@/lib/api-helpers";
 
 export async function POST(request: Request) {
   try {
-    const { email, password, fullName, phone } = await request.json();
+    const { email, password, full_name, phone } = await request.json();
 
     if (!email || !password) return badRequest("Email and password are required");
     if (password.length < 6) return badRequest("Password must be at least 6 characters");
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     const { data: authData, error: signUpError } = await admin.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName } },
+      options: { data: { full_name, role: "user" } },
     });
 
     if (signUpError) return badRequest(signUpError.message);
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
 
     const { error: profileError } = await admin.from("profiles").insert({
       id: authData.user.id,
-      full_name: fullName ?? null,
+      full_name: full_name ?? null,
       phone: phone ?? null,
       role: "user",
     });
@@ -31,7 +31,11 @@ export async function POST(request: Request) {
       return badRequest(profileError.message);
     }
 
-    await admin.from("notification_preferences").insert({ user_id: authData.user.id });
+    try {
+      await admin.from("notification_preferences").insert({ user_id: authData.user.id });
+    } catch {
+      // notification_preferences table may not exist yet; non-blocking
+    }
 
     const response = NextResponse.json({ user: authData.user, session: authData.session }, { status: 201 });
 

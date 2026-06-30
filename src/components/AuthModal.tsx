@@ -65,8 +65,18 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       }
 
       if (mode === "signup") {
-        setSuccess(true);
-        setTimeout(() => { setMode("login"); setSuccess(false); }, 2000);
+        // If signup returned a session (auto-confirm enabled), log the user in immediately
+        if (data.session?.access_token) {
+          localStorage.setItem("experio-auth-token", data.session.access_token);
+          const role = data.user?.user_metadata?.role || "user";
+          localStorage.setItem("experio-user-role", role);
+          onClose();
+          window.location.reload();
+        } else {
+          // Email confirmation required — show success message, then switch to login
+          setSuccess(true);
+          setTimeout(() => { setMode("login"); setSuccess(false); }, 2000);
+        }
       } else {
         if (data.session?.access_token) {
           localStorage.setItem("experio-auth-token", data.session.access_token);
