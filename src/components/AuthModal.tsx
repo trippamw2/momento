@@ -73,9 +73,9 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           onClose();
           window.location.reload();
         } else {
-          // Email confirmation required — show success message, then switch to login
-          setSuccess(true);
-          setTimeout(() => { setMode("login"); setSuccess(false); }, 2000);
+          // Email confirmation required — switch to login with a clear message
+          setMode("login");
+          setError("Account created! Check your email to confirm, then sign in.");
         }
       } else {
         if (data.session?.access_token) {
