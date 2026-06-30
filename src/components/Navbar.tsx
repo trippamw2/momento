@@ -126,6 +126,20 @@ export default function Navbar() {
                 )}
               </Link>
 
+              {/* Become a Host */}
+              {signedIn && userRole !== "partner" && userRole !== "admin" && (
+                <button
+                  onClick={() => {
+                    localStorage.setItem("experio-signup-role", "partner");
+                    setAuthOpen(true);
+                  }}
+                  className="px-4 py-2 rounded-xl text-body-sm font-semibold transition-all duration-200 bg-gradient-to-r from-[#8134AF]/20 to-[#DD2A7B]/20 text-[#8134AF] hover:from-[#8134AF]/30 hover:to-[#DD2A7B]/30 hover:text-[#8134AF] flex items-center gap-1.5 border border-[#8134AF]/20 hover:border-[#8134AF]/30"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                  Become a Host
+                </button>
+              )}
+
               {/* Profile / Auth Button */}
               <div className="relative" ref={profileRef}>
                 <button
@@ -184,6 +198,16 @@ export default function Navbar() {
                       >
                         <svg className="w-4 h-4 text-[#94A3B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                         Admin Dashboard
+                      </Link>
+                    )}
+                    {userRole === "partner" && (
+                      <Link
+                        href="/partner/dashboard"
+                        onClick={() => setProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-body-sm text-white hover:bg-white/5 transition-colors"
+                      >
+                        <svg className="w-4 h-4 text-[#94A3B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                        Host Dashboard
                       </Link>
                     )}
                     <div className="px-4 py-2">
