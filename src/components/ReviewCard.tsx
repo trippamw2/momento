@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 interface ReviewCardProps {
   author: string;
   avatar?: string;
@@ -10,14 +12,16 @@ interface ReviewCardProps {
 }
 
 export default function ReviewCard({ author, avatar, rating, date, text, className = "" }: ReviewCardProps) {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div className={`p-4 rounded-2xl bg-[#0A0E17] border border-white/[0.06] ${className}`}>
       <div className="flex items-center gap-3 mb-3">
         <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] flex items-center justify-center text-white text-caption font-bold shrink-0">
-          {avatar ? (
-            <img src={avatar} alt={author} className="w-full h-full rounded-full object-cover" />
+          {avatar && !imgError ? (
+            <img src={avatar} alt={author} className="w-full h-full rounded-full object-cover" onError={() => setImgError(true)} />
           ) : (
-            author.charAt(0).toUpperCase()
+            <span>{author.charAt(0).toUpperCase()}</span>
           )}
         </div>
         <div>

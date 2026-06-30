@@ -440,7 +440,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
       {/* ════════════════════════════════════════════ */}
       {/* MAIN LAYOUT: Content + Sidebar              */}
       {/* ════════════════════════════════════════════ */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:grid lg:grid-cols-3 lg:gap-10 relative -mt-8 sm:-mt-12 lg:-mt-16 z-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:grid lg:grid-cols-3 lg:gap-10 relative -mt-8 sm:-mt-8 lg:-mt-8 z-20">
 
         {/* ─── LEFT COLUMN: Content ─── */}
         <div className="lg:col-span-2">
