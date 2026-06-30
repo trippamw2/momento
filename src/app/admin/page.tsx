@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthGuard } from "@/lib/use-auth-guard";
 
-type Section = "overview" | "users" | "experiences" | "reviews" | "bookings" | "settings" | "gift-cards" | "partners" | "financials";
+type Section = "overview" | "users" | "experiences" | "reviews" | "testimonials" | "bookings" | "settings" | "gift-cards" | "partners" | "financials";
 
 interface OverviewData {
   totalUsers: number;
@@ -60,6 +60,7 @@ const NAV: { key: Section; label: string; icon: string }[] = [
   { key: "users", label: "Users", icon: "👥" },
   { key: "experiences", label: "Experiences", icon: "🎯" },
   { key: "reviews", label: "Reviews", icon: "⭐" },
+  { key: "testimonials", label: "Testimonials", icon: "💬" },
   { key: "bookings", label: "Bookings", icon: "📅" },
   { key: "gift-cards", label: "Gift Cards", icon: "🎁" },
   { key: "partners", label: "Partners", icon: "🤝" },
@@ -99,6 +100,8 @@ export default function AdminPage() {
   const [users, setUsers] = useState<UserRow[]>([]);
   const [experiences, setExperiences] = useState<ExpRow[]>([]);
   const [reviews, setReviews] = useState<ReviewRow[]>([]);
+  const [testimonials, setTestimonials] = useState<ReviewRow[]>([]);
+  const [featuredIds, setFeaturedIds] = useState<string[]>([]);
   const [bookings, setBookings] = useState<BookingRow[]>([]);
 
   // Mock data for new sections (will be replaced with API data)
@@ -165,6 +168,15 @@ export default function AdminPage() {
         case "reviews": {
           const d = await apiFetch("/api/reviews?limit=50");
           if (d) setReviews(d.reviews || []);
+          break;
+        }
+        case "testimonials": {
+          const d = await apiFetch("/api/reviews?limit=50&status=approved");
+          if (d) {
+            setTestimonials(d.reviews || []);
+            const saved = JSON.parse(localStorage.getItem("experio-featured-testimonials") || "[]");
+            setFeaturedIds(saved);
+          }
           break;
         }
         case "bookings": {
@@ -442,6 +454,59 @@ export default function AdminPage() {
                   ))}
                   {reviews.length === 0 && (
                     <div className="py-8 text-center text-caption text-[#64748B]">No reviews found</div>
+                  )}
+                </div>
+              )}
+
+              {/* Testimonials */}
+              {section === "testimonials" && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-body-sm text-[#64748B]">
+                      Feature approved reviews as testimonials on the home page.
+                    </p>
+                    <span className="text-caption text-[#94A3B8]">{featuredIds.length} featured</span>
+                  </div>
+                  {testimonials.map((r) => {
+                    const featured = featuredIds.includes(r.id);
+                    return (
+                      <div key={r.id} className={`p-4 rounded-xl border shadow-sm transition-all ${
+                        featured
+                          ? "bg-[#1A0A1E] border-[#FF2D7A]/30 ring-1 ring-[#FF2D7A]/20"
+                          : "bg-[#0F172A] border-white/[0.08]"
+                      }`}>
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-body-sm font-medium text-[#F1F5F9]">{r.user?.full_name || "Anonymous"}</span>
+                              <span className="text-caption text-[#64748B]">·</span>
+                              <span className="text-caption text-[#64748B]">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
+                            </div>
+                            <p className="text-caption text-[#64748B] mb-1">{r.experience?.title || "Unknown experience"}</p>
+                            {r.body && <p className="text-body-sm text-[#94A3B8] mt-1 line-clamp-2">{r.body}</p>}
+                          </div>
+                          <button
+                            onClick={() => {
+                              const next = featured
+                                ? featuredIds.filter((id) => id !== r.id)
+                                : [...featuredIds, r.id];
+                              setFeaturedIds(next);
+                              localStorage.setItem("experio-featured-testimonials", JSON.stringify(next));
+                            }}
+                            className={`px-3 py-1.5 rounded-lg text-caption font-medium transition-all flex-shrink-0 ${
+                              featured
+                                ? "bg-[#FF2D7A]/20 text-[#FF2D7A] hover:bg-[#FF2D7A]/30"
+                                : "bg-white/[0.06] text-[#94A3B8] hover:bg-[#1A2332]"
+                            }`}
+                          >
+                            {featured ? "★ Featured" : "☆ Feature"}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {testimonials.length === 0 && (
+                    <div className="py-8 text-center text-caption text-[#64748B]">No approved reviews yet. Approve reviews first in the Reviews section.</div>
                   )}
                 </div>
               )}
