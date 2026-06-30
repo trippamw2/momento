@@ -9,7 +9,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     const { data: experience, error } = await supabase
       .from("experiences")
-      .select("*, partner:partner_id(business_name, business_logo, business_description, business_city, business_phone, business_email), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
+      .select("*, partner:partner_id(business_name, business_logo, business_description, cities, business_phone, business_email), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
       .eq("id", id)
       .single();
 
@@ -68,7 +68,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
     if (user.role !== "admin") {
       const { data: partner } = await supabase
-        .from("partner_profiles")
+        .from("partners")
         .select("id")
         .eq("user_id", user.id)
         .single();
@@ -109,7 +109,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
     if (user.role !== "admin") {
       const { data: partner } = await supabase
-        .from("partner_profiles")
+        .from("partners")
         .select("id")
         .eq("user_id", user.id)
         .single();

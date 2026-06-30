@@ -9,7 +9,7 @@ export async function GET(request: Request) {
 
     const supabase = createServerClient();
     const { data: partner, error } = await supabase
-      .from("partner_profiles")
+      .from("partners")
       .select("*")
       .eq("user_id", user.id)
       .maybeSingle();
@@ -48,7 +48,7 @@ export async function PATCH(request: Request) {
     const allowedFields = [
       "business_name", "business_description", "business_logo", "business_cover",
       "business_email", "business_phone", "business_website", "business_address",
-      "business_city", "business_country", "categories", "payout_method", "payout_details",
+      "categories", "payout_method", "payout_details",
     ];
 
     const filtered: Record<string, unknown> = {};
@@ -59,7 +59,7 @@ export async function PATCH(request: Request) {
 
     const admin = createAdminClient();
     const { data, error } = await admin
-      .from("partner_profiles")
+      .from("partners")
       .update(filtered)
       .eq("user_id", user.id)
       .select()

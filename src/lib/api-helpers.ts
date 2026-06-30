@@ -45,7 +45,7 @@ export async function getUser(request: Request): Promise<AuthUser | null> {
   if (error || !user) return null;
 
   const { data: profile } = await supabase
-    .from("profiles")
+    .from("users")
     .select("role")
     .eq("id", user.id)
     .single();

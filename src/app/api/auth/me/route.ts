@@ -9,13 +9,13 @@ export async function GET(request: Request) {
     const supabase = createServerClient();
 
     const { data: profile } = await supabase
-      .from("profiles")
+      .from("users")
       .select("*")
       .eq("id", user.id)
       .single();
 
     const { data: partner } = await supabase
-      .from("partner_profiles")
+      .from("partners")
       .select("id, business_name, verification_status")
       .eq("user_id", user.id)
       .maybeSingle();

@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     const supabase = createServerClient();
     let query = supabase
       .from("experiences")
-      .select("*, partner:partner_id(business_name, business_logo, business_city), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))", { count: "exact" });
+      .select("*, partner:partner_id(business_name, business_logo, cities), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))", { count: "exact" });
 
     const user = await getUser(request);
     if (!user || user.role !== "partner") {
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
 
     const supabase = createServerClient();
     const { data: partner } = await supabase
-      .from("partner_profiles")
+      .from("partners")
       .select("id")
       .eq("user_id", user.id)
       .single();

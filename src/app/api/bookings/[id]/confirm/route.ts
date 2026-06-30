@@ -17,7 +17,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     if (!booking) return json({ error: "Booking not found" }, 404);
 
     const { data: partner } = await admin
-      .from("partner_profiles")
+      .from("partners")
       .select("id")
       .eq("user_id", user.id)
       .single();

@@ -5,7 +5,7 @@ import { createAdminClient } from "@/lib/supabase-admin";
 async function verifyOwnership(id: string, userId: string): Promise<boolean> {
   const supabase = createServerClient();
   const { data: partner } = await supabase
-    .from("partner_profiles")
+    .from("partners")
     .select("id")
     .eq("user_id", userId)
     .single();

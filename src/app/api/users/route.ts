@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     const offset = (page - 1) * limit;
 
     const admin = createAdminClient();
-    let query = admin.from("profiles").select("*", { count: "exact" });
+    let query = admin.from("users").select("*", { count: "exact" });
 
     if (params.role) query = query.eq("role", params.role);
     if (params.search) {
@@ -46,7 +46,7 @@ export async function PATCH(request: Request) {
 
     const supabase = createAdminClient();
     const { error } = await supabase
-      .from("profiles")
+      .from("users")
       .update({ role: body.role, updated_at: new Date().toISOString() })
       .eq("id", body.userId);
 

@@ -18,7 +18,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     if (booking.user_id !== user.id) {
       const { data: partner } = await supabase
-        .from("partner_profiles")
+        .from("partners")
         .select("id")
         .eq("user_id", user.id)
         .single();

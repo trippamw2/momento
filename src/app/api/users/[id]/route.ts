@@ -11,7 +11,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     const admin = createAdminClient();
     const { data: profile, error } = await admin
-      .from("profiles")
+      .from("users")
       .select("*")
       .eq("id", id)
       .single();
@@ -19,7 +19,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     if (error || !profile) return json({ error: "User not found" }, 404);
 
     const { data: partner } = await admin
-      .from("partner_profiles")
+      .from("partners")
       .select("id, business_name, verification_status")
       .eq("user_id", id)
       .maybeSingle();
@@ -39,7 +39,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     }
 
     const body = await parseBody<Record<string, unknown>>(request);
-    const allowedFields = ["full_name", "avatar_url", "phone", "country", "city", "preferences"];
+    const allowedFields = ["full_name", "avatar_url", "phone", "country", "city", "metadata"];
 
     if (user.role !== "admin") {
       Object.keys(body).forEach((k) => {
@@ -51,7 +51,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
     const admin = createAdminClient();
     const { data, error } = await admin
-      .from("profiles")
+      .from("users")
       .update(body)
       .eq("id", id)
       .select()

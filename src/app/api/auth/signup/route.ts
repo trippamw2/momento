@@ -19,8 +19,9 @@ export async function POST(request: Request) {
     if (signUpError) return badRequest(signUpError.message);
     if (!authData.user) return serverError("Failed to create user");
 
-    const { error: profileError } = await admin.from("profiles").insert({
+    const { error: profileError } = await admin.from("users").insert({
       id: authData.user.id,
+      email: authData.user.email ?? email,
       full_name: full_name ?? null,
       phone: phone ?? null,
       role: "user",

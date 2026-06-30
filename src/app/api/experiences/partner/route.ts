@@ -8,7 +8,7 @@ export async function GET(request: Request) {
 
     const supabase = createServerClient();
     const { data: partner } = await supabase
-      .from("partner_profiles")
+      .from("partners")
       .select("id")
       .eq("user_id", user.id)
       .single();

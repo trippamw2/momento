@@ -13,11 +13,11 @@ export async function GET(request: Request) {
 
     if (user.role === "admin") {
       const { count: totalUsers } = await supabase
-        .from("profiles")
+        .from("users")
         .select("id", { count: "exact", head: true });
 
       const { count: totalPartners } = await supabase
-        .from("partner_profiles")
+        .from("partners")
         .select("id", { count: "exact", head: true })
         .eq("verification_status", "verified");
 
@@ -54,7 +54,7 @@ export async function GET(request: Request) {
     }
 
     const { data: partner } = await supabase
-      .from("partner_profiles")
+      .from("partners")
       .select("id")
       .eq("user_id", user.id)
       .single();

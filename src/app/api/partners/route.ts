@@ -11,13 +11,13 @@ export async function GET(request: Request) {
 
     const supabase = createServerClient();
     let query = supabase
-      .from("partner_profiles")
+      .from("partners")
       .select("*, user:user_id(id, full_name, avatar_url)", { count: "exact" });
 
     query = query.eq("verification_status", "verified");
     query = query.eq("is_active", true);
 
-    if (params.city) query = query.ilike("business_city", `%${params.city}%`);
+    if (params.city) query = query.contains("cities", [params.city]);
     if (params.category) query = query.contains("categories", [params.category]);
     if (params.search) query = query.ilike("business_name", `%${params.search}%`);
 
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
     const supabase = createServerClient();
     const { data: existing } = await supabase
-      .from("partner_profiles")
+      .from("partners")
       .select("id")
       .eq("user_id", user.id)
       .maybeSingle();
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
 
     const admin = createAdminClient();
     const { data, error } = await admin
-      .from("partner_profiles")
+      .from("partners")
       .insert({ user_id: user.id, ...body })
       .select()
       .single();
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     if (error) return json({ error: error.message }, 400);
 
     await admin
-      .from("profiles")
+      .from("users")
       .update({ role: "partner", updated_at: new Date().toISOString() })
       .eq("id", user.id);
 
