@@ -279,7 +279,7 @@ export default function BookingsPage() {
                       <span className="flex-1 text-left">{item.label}</span>
                       {count > 0 && (
                         <span className={`text-caption px-1.5 py-0.5 rounded-md ${
-                          sidebarTab === item.key ? "bg-[#FF2D7A] text-white" : "bg-white/[0.06] text-[#64748B]"
+                          sidebarTab === item.key ? "bg-[#FF0F73] text-white" : "bg-white/[0.06] text-[#64748B]"
                         }`}>
                           {count}
                         </span>
@@ -300,7 +300,7 @@ export default function BookingsPage() {
                   onClick={() => setSidebarTab(item.key)}
                   className={`px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all ${
                     sidebarTab === item.key
-                      ? "bg-[#FF2D7A] text-white"
+                      ? "bg-[#FF0F73] text-white"
                       : "bg-[#111827] text-[#CBD5E1] border border-white/[0.08] shadow-sm"
                   }`}
                 >
@@ -322,14 +322,14 @@ export default function BookingsPage() {
               </div>
               {loadingApi && signedIn && (
                 <div className="flex items-center gap-2 text-body-sm text-[#64748B]">
-                  <div className="w-4 h-4 rounded-full border-2 border-white/[0.08] border-t-[#FF2D7A] animate-spin" />
+                  <div className="w-4 h-4 rounded-full border-2 border-white/[0.08] border-t-[#FF0F73] animate-spin" />
                   Loading bookings...
                 </div>
               )}
               {!signedIn && !isSpecialTab && !loadingApi && (
                 <button
                   onClick={() => setAuthOpen(true)}
-                  className="px-5 py-2 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all"
+                  className="px-5 py-2 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all"
                 >
                   Sign In
                 </button>
@@ -357,7 +357,7 @@ export default function BookingsPage() {
                       {count > 0 && (
                         <span className={`ml-1.5 px-1.5 py-0.5 rounded text-[10px] ${
                           isActiveTab(t)
-                            ? "bg-[#FF2D7A]/20 text-[#FF2D7A]"
+                            ? "bg-[#FF0F73]/20 text-[#FF0F73]"
                             : "bg-white/[0.06] text-[#64748B]"
                         }`}>
                           {count}
@@ -383,7 +383,7 @@ export default function BookingsPage() {
                 </p>
                 <button
                   onClick={() => setAuthOpen(true)}
-                  className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all"
+                  className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                   Sign In to View Bookings
@@ -411,7 +411,7 @@ export default function BookingsPage() {
                 </p>
                 <Link
                   href={sidebarTab === "gifted" ? "/gift" : "/experiences"}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all"
                 >
                   {sidebarTab === "gifted" ? "Send a Gift" : "Browse Experiences"}
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
@@ -449,8 +449,8 @@ export default function BookingsPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {features.map((f) => (
                       <div key={f.title} className="text-center p-5 rounded-2xl bg-[#111827] border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-sm">
-                        <div className="w-12 h-12 rounded-full bg-[#FF2D7A]/10 flex items-center justify-center mx-auto mb-3">
-                          <span className="text-xl font-bold text-[#FF2D7A]">M</span>
+                        <div className="w-12 h-12 rounded-full bg-[#FF0F73]/10 flex items-center justify-center mx-auto mb-3">
+                          <span className="text-xl font-bold text-[#FF0F73]">M</span>
                         </div>
                         <h3 className="text-heading-sm font-bold text-[#F1F5F9] mb-1">{f.title}</h3>
                         <p className="text-[#CBD5E1] text-body-sm leading-relaxed">{f.desc}</p>

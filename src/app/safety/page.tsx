@@ -69,7 +69,7 @@ export default function SafetyPage() {
           </p>
           <a
             href="mailto:safety@experio.life"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all duration-300"
           >
             Report
           </a>

@@ -103,7 +103,7 @@ export default function DiscoveryFeedItem({
       <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent" />
 
       {/* Subtle brand glow */}
-      <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#FF2D7A]/5 via-transparent to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#FF0F73]/5 via-transparent to-transparent" />
 
       {/* ─── Bottom content ─── */}
       <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-10 z-10">
@@ -141,13 +141,13 @@ export default function DiscoveryFeedItem({
           className="group/btn flex flex-col items-center gap-1"
           aria-label={isSaved ? "Unsave" : "Save"}
         >
-          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-[#FF2D7A]/30 hover:scale-110 active:scale-90">
+          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-[#FF0F73]/30 hover:scale-110 active:scale-90">
             <svg
               width="20"
               height="20"
               viewBox="0 0 24 24"
-              fill={isSaved ? "#FF2D7A" : "none"}
-              stroke={isSaved ? "#FF2D7A" : "white"}
+              fill={isSaved ? "#FF0F73" : "none"}
+              stroke={isSaved ? "#FF0F73" : "white"}
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -166,7 +166,7 @@ export default function DiscoveryFeedItem({
           className="group/btn flex flex-col items-center gap-1"
           aria-label="Gift"
         >
-          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-[#FF7A18]/30 hover:scale-110 active:scale-90">
+          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-[#FF7A1A]/30 hover:scale-110 active:scale-90">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 12 20 22 4 22 4 12" />
               <rect x="2" y="7" width="20" height="5" />
@@ -207,7 +207,7 @@ export default function DiscoveryFeedItem({
           className="group/btn flex flex-col items-center gap-1"
           aria-label="Book"
         >
-          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] shadow-[0_2px_12px_rgba(255,45,122,0.3)] flex items-center justify-center transition-all duration-300 hover:shadow-[0_4px_20px_rgba(255,45,122,0.5)] hover:scale-110 active:scale-90">
+          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] shadow-[0_2px_12px_rgba(255, 15, 115, 0.3)] flex items-center justify-center transition-all duration-300 hover:shadow-[0_4px_20px_rgba(255, 15, 115, 0.5)] hover:scale-110 active:scale-90">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
               <line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
@@ -220,7 +220,7 @@ export default function DiscoveryFeedItem({
       {/* ─── Progress indicator (bottom-left) ─── */}
       {isActive && (
         <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-8 z-20 flex items-center gap-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-[#FF2D7A] animate-pulse" />
+          <div className="w-1.5 h-1.5 rounded-full bg-[#FF0F73] animate-pulse" />
           <span className="text-caption text-white/50">Swipe up to explore</span>
         </div>
       )}

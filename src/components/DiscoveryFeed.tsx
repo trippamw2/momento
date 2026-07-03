@@ -114,7 +114,7 @@ export default function DiscoveryFeed() {
                 <div className="flex items-center gap-3">
                   <Link
                     href={`/experiences/${exp.id}`}
-                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.35)] transition-all"
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FFA22C] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255, 15, 115, 0.35)] transition-all"
                   >
                     View Experience
                   </Link>
@@ -122,7 +122,7 @@ export default function DiscoveryFeed() {
                     onClick={() => setSavedIds(toggleSave(exp.id, savedIds))}
                     className={`px-4 py-2.5 rounded-xl border transition-all text-body-sm font-medium ${
                       saved
-                        ? "border-[#DD2A7B] text-[#DD2A7B] bg-[#DD2A7B]/10"
+                        ? "border-[#FF0F73] text-[#FF0F73] bg-[#FF0F73]/10"
                         : "border-white/[0.15] text-white/80 hover:bg-white/[0.06]"
                     }`}
                   >

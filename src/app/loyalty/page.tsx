@@ -21,7 +21,7 @@ interface LoyaltyData {
 function Loading() {
   return (
     <div className="min-h-screen flex items-center justify-center pt-20 bg-[#05070B]">
-      <div className="w-8 h-8 rounded-full border-2 border-[#FF2D7A]/30 border-t-[#FF2D7A] animate-spin" />
+      <div className="w-8 h-8 rounded-full border-2 border-[#FF0F73]/30 border-t-[#FF0F73] animate-spin" />
     </div>
   );
 }
@@ -64,7 +64,7 @@ export default function LoyaltyPage() {
           </p>
           <Link
             href="/experiences"
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all"
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all"
           >
             Browse Experiences
           </Link>
@@ -91,7 +91,7 @@ export default function LoyaltyPage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-8 space-y-10">
         {/* ─── Hero ─── */}
         <section className="text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#FF2D7A]/10 to-[#FF7A18]/10 border border-[#FF2D7A]/20 text-[#FF2D7A] text-caption font-semibold mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#FF0F73]/10 to-[#FF7A1A]/10 border border-[#FF0F73]/20 text-[#FF0F73] text-caption font-semibold mb-4">
             <span>👑</span> Loyalty Program
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold text-[#F1F5F9] mb-3 tracking-tight">
@@ -147,7 +147,7 @@ export default function LoyaltyPage() {
                     </div>
                     <div className="w-full h-3 rounded-full bg-[#1E293B] overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] transition-all duration-1000 ease-out"
+                        className="h-full rounded-full bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] transition-all duration-1000 ease-out"
                         style={{ width: `${Math.min(100, tierInfo.progress)}%` }}
                       />
                     </div>
@@ -178,7 +178,7 @@ export default function LoyaltyPage() {
                   key={t.name}
                   className={`p-5 rounded-2xl border transition-all duration-300 ${
                     isCurrent
-                      ? "bg-[#1A2332] border-[#FF2D7A]/30 shadow-[0_0_20px_rgba(255,45,122,0.1)]"
+                      ? "bg-[#1A2332] border-[#FF0F73]/30 shadow-[0_0_20px_rgba(255, 15, 115, 0.1)]"
                       : "bg-[#111827] border-white/[0.08] opacity-70 hover:opacity-100"
                   }`}
                 >
@@ -192,7 +192,7 @@ export default function LoyaltyPage() {
                       {t.name.charAt(0).toUpperCase() + t.name.slice(1)}
                     </span>
                     {isCurrent && (
-                      <span className="ml-auto px-2 py-0.5 rounded-full bg-[#FF2D7A]/15 text-[#FF2D7A] text-[10px] font-semibold">
+                      <span className="ml-auto px-2 py-0.5 rounded-full bg-[#FF0F73]/15 text-[#FF0F73] text-[10px] font-semibold">
                         Current
                       </span>
                     )}
@@ -257,7 +257,7 @@ export default function LoyaltyPage() {
                   {!unlocked && (
                     <div className="w-full h-1.5 rounded-full bg-[#1E293B] overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-[#FF2D7A] transition-all duration-500"
+                        className="h-full rounded-full bg-[#FF0F73] transition-all duration-500"
                         style={{ width: `${Math.min(100, (ach.check({ totalBookings: 0, totalSpent: 0, totalReviews: 0, totalReferrals: 0, totalGifts: 0, totalGifted: 0, totalShares: 0, daysSinceSignup: 0, citiesVisited: [], categories: [], consecutiveBookings: 0, birthdayBooked: false }).current / ach.check({ totalBookings: 0, totalSpent: 0, totalReviews: 0, totalReferrals: 0, totalGifts: 0, totalGifted: 0, totalShares: 0, daysSinceSignup: 0, citiesVisited: [], categories: [], consecutiveBookings: 0, birthdayBooked: false }).requirement) * 100)}%` }}
                       />
                     </div>
@@ -292,7 +292,7 @@ export default function LoyaltyPage() {
                 {item.link && (
                   <Link
                     href={item.link}
-                    className="inline-block mt-2 text-caption font-medium text-[#FF2D7A] hover:text-[#FF7A18] transition-colors"
+                    className="inline-block mt-2 text-caption font-medium text-[#FF0F73] hover:text-[#FF7A1A] transition-colors"
                   >
                     {item.link === "/experiences" ? "Browse experiences →" : "Start gifting →"}
                   </Link>
@@ -313,7 +313,7 @@ export default function LoyaltyPage() {
             </p>
             <Link
               href="/experiences"
-              className="inline-block mt-4 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all"
+              className="inline-block mt-4 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all"
             >
               Explore Experiences
             </Link>

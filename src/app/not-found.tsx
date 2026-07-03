@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#faf8f6]">
       <div className="text-center px-4">
-        <div className="text-[120px] leading-none font-bold bg-gradient-to-br from-[#DD2A7B] to-[#F58529] bg-clip-text text-transparent mb-4">
+        <div className="text-[120px] leading-none font-bold bg-gradient-to-br from-[#FF0F73] to-[#FFA22C] bg-clip-text text-transparent mb-4">
           404
         </div>
         <h1 className="text-heading-xl font-bold text-[#222222] mb-2">Lost your way?</h1>
@@ -14,7 +14,7 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/"
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all"
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FFA22C] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all"
           >
             Go Home
           </Link>

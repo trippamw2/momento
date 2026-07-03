@@ -43,7 +43,7 @@ export default function PartnerResourcesPage() {
   if (authLoading) {
     return (
       <div className="pt-24 pb-20 flex items-center justify-center min-h-[50vh]">
-        <div className="w-8 h-8 rounded-full border-2 border-[#FF2D7A]/30 border-t-[#FF2D7A] animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-[#FF0F73]/30 border-t-[#FF0F73] animate-spin" />
       </div>
     );
   }
@@ -52,8 +52,8 @@ export default function PartnerResourcesPage() {
     return (
       <div className="pt-24 pb-20">
         <div className="max-w-lg mx-auto px-4 sm:px-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#FF2D7A]/10 flex items-center justify-center mx-auto mb-5">
-            <svg className="w-8 h-8 text-[#FF2D7A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-16 h-16 rounded-full bg-[#FF0F73]/10 flex items-center justify-center mx-auto mb-5">
+            <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
@@ -64,7 +64,7 @@ export default function PartnerResourcesPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/"
-              className="px-6 py-3 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all"
+              className="px-6 py-3 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all"
             >
               Back to Home
             </Link>
@@ -100,7 +100,7 @@ export default function PartnerResourcesPage() {
                   {item.link && (
                     <Link
                       href={item.link}
-                      className="inline-flex items-center gap-1 text-[#FF2D7A] text-body-sm font-medium hover:underline mt-2"
+                      className="inline-flex items-center gap-1 text-[#FF0F73] text-body-sm font-medium hover:underline mt-2"
                     >
                       Go to Dashboard
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -122,7 +122,7 @@ export default function PartnerResourcesPage() {
           </p>
           <a
             href="mailto:partners@experio.life"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all duration-300"
           >
             Contact Partner Support
           </a>

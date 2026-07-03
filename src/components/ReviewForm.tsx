@@ -104,7 +104,7 @@ export default function ReviewForm({ experienceId, onSubmitted, onCancel }: Revi
           onChange={(e) => setText(e.target.value)}
           placeholder="Share your experience... What did you enjoy? Any tips for future visitors?"
           rows={4}
-          className="w-full bg-[#0A0E17] border border-white/[0.08] rounded-xl p-3 text-white text-body-sm placeholder-[#64748B] outline-none focus:border-[#FF2D7A]/40 resize-none transition-colors"
+          className="w-full bg-[#0A0E17] border border-white/[0.08] rounded-xl p-3 text-white text-body-sm placeholder-[#64748B] outline-none focus:border-[#FF0F73]/40 resize-none transition-colors"
         />
         <p className="text-caption text-[#64748B] mt-1">{text.length} characters</p>
       </div>
@@ -117,7 +117,7 @@ export default function ReviewForm({ experienceId, onSubmitted, onCancel }: Revi
         <button
           onClick={handleSubmit}
           disabled={submitting}
-          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white text-caption font-bold tracking-wide hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all disabled:opacity-50"
+          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white text-caption font-bold tracking-wide hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all disabled:opacity-50"
         >
           {submitting ? "Submitting..." : "Submit Review"}
         </button>

@@ -79,7 +79,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
       ctx.fill();
 
       // Draw decorative circles
-      ctx.fillStyle = "rgba(255, 45, 122, 0.08)";
+      ctx.fillStyle = "rgba(255, 15, 115, 0.08)";
       ctx.beginPath();
       ctx.arc(rect.width - 60, -30, 120, 0, Math.PI * 2);
       ctx.fill();
@@ -135,7 +135,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
       }
 
       // Price
-      ctx.fillStyle = "#FF2D7A";
+      ctx.fillStyle = "#FF0F73";
       ctx.font = "bold 22px sans-serif";
       ctx.textAlign = "right";
       ctx.fillText(`MK ${booking.price.toLocaleString()}`, rect.width - 20, 88);
@@ -214,8 +214,8 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
         className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0f0f1a] via-[#1a1a2e] to-[#16213e] border border-white/[0.08] shadow-xl transition-all duration-500 hover:shadow-2xl hover:scale-[1.01] ${actualStatus === "cancelled" ? "opacity-70" : ""}`}
       >
         {/* Decorative background elements */}
-        <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF2D7A]/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-40 h-40 bg-[#FF2D7A]/5 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl" />
+        <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF0F73]/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-2xl" />
+        <div className="absolute bottom-0 left-0 w-40 h-40 bg-[#FF0F73]/5 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.03)_0%,transparent_60%)]" />
 
         {/* Perforation line (left side ticket stub effect) */}
@@ -291,7 +291,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
 
             {/* Right: Price + QR (desktop) */}
             <div className="hidden sm:flex flex-col items-end gap-3">
-              <p className="text-heading-lg font-bold text-[#FF2D7A]">MK {booking.price.toLocaleString()}</p>
+              <p className="text-heading-lg font-bold text-[#FF0F73]">MK {booking.price.toLocaleString()}</p>
               {qrDataUrl && (
                 <div className="flex flex-col items-center gap-1">
                   <Image src={qrDataUrl} alt="QR Code" width={80} height={80} className="rounded-lg bg-white p-1.5 shadow-lg" />
@@ -304,7 +304,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
           {/* Mobile price */}
           <div className="sm:hidden mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between">
             <p className="text-caption text-white/40">Total</p>
-            <p className="text-heading-sm font-bold text-[#FF2D7A]">MK {booking.price.toLocaleString()}</p>
+            <p className="text-heading-sm font-bold text-[#FF0F73]">MK {booking.price.toLocaleString()}</p>
           </div>
         </div>
       </div>
@@ -316,7 +316,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
             <>
               <Link
                 href={`/experiences/${booking.id}`}
-                className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white text-body-sm font-semibold text-center hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all duration-300"
+                className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white text-body-sm font-semibold text-center hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all duration-300"
               >
                 View Details
               </Link>

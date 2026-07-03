@@ -128,7 +128,7 @@ export default function ListExperiencePage() {
   if (authLoading) {
     return (
       <div className="pt-24 pb-20 flex items-center justify-center min-h-[50vh]">
-        <div className="w-8 h-8 rounded-full border-2 border-[#FF2D7A]/30 border-t-[#FF2D7A] animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-[#FF0F73]/30 border-t-[#FF0F73] animate-spin" />
       </div>
     );
   }
@@ -137,8 +137,8 @@ export default function ListExperiencePage() {
     return (
       <div className="pt-24 pb-20">
         <div className="max-w-lg mx-auto px-4 sm:px-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#FF2D7A]/10 flex items-center justify-center mx-auto mb-5">
-            <svg className="w-8 h-8 text-[#FF2D7A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-16 h-16 rounded-full bg-[#FF0F73]/10 flex items-center justify-center mx-auto mb-5">
+            <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
@@ -149,7 +149,7 @@ export default function ListExperiencePage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/"
-              className="px-6 py-3 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all"
+              className="px-6 py-3 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all"
             >
               Back to Home
             </Link>
@@ -163,8 +163,8 @@ export default function ListExperiencePage() {
     return (
       <div className="pt-24 pb-20">
         <div className="max-w-lg mx-auto px-4 sm:px-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#FF2D7A]/10 flex items-center justify-center mx-auto mb-5">
-            <svg className="w-8 h-8 text-[#FF2D7A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-16 h-16 rounded-full bg-[#FF0F73]/10 flex items-center justify-center mx-auto mb-5">
+            <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
@@ -174,7 +174,7 @@ export default function ListExperiencePage() {
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all duration-300"
           >
             Back to Home
           </Link>
@@ -212,7 +212,7 @@ export default function ListExperiencePage() {
               className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 transition-all ${
                 fieldErrors.title
                   ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
-                  : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+                  : "border border-white/[0.08] focus:ring-[#FF0F73]/30 focus:border-[#FF0F73]"
               }`}
             />
             {fieldErrors.title && <p className="mt-1 text-caption text-red-400">{fieldErrors.title}</p>}
@@ -226,7 +226,7 @@ export default function ListExperiencePage() {
               value={form.subtitle}
               onChange={(e) => updateField("subtitle", e.target.value)}
               placeholder="e.g. Sun, Swim & Sip by the lake"
-              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A] transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#FF0F73]/30 focus:border-[#FF0F73] transition-all"
             />
           </div>
 
@@ -240,7 +240,7 @@ export default function ListExperiencePage() {
               className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm focus:outline-none focus:ring-2 transition-all appearance-none cursor-pointer ${
                 fieldErrors.category
                   ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
-                  : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+                  : "border border-white/[0.08] focus:ring-[#FF0F73]/30 focus:border-[#FF0F73]"
               }`}
             >
               <option value="" disabled>Select a category</option>
@@ -263,7 +263,7 @@ export default function ListExperiencePage() {
               className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 transition-all resize-y ${
                 fieldErrors.description
                   ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
-                  : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+                  : "border border-white/[0.08] focus:ring-[#FF0F73]/30 focus:border-[#FF0F73]"
               }`}
             />
             {fieldErrors.description && <p className="mt-1 text-caption text-red-400">{fieldErrors.description}</p>}
@@ -283,7 +283,7 @@ export default function ListExperiencePage() {
                 className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 transition-all ${
                   fieldErrors.price
                     ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
-                    : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+                    : "border border-white/[0.08] focus:ring-[#FF0F73]/30 focus:border-[#FF0F73]"
                 }`}
               />
               {fieldErrors.price && <p className="mt-1 text-caption text-red-400">{fieldErrors.price}</p>}
@@ -300,7 +300,7 @@ export default function ListExperiencePage() {
                 className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 transition-all ${
                   fieldErrors.duration
                     ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
-                    : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+                    : "border border-white/[0.08] focus:ring-[#FF0F73]/30 focus:border-[#FF0F73]"
                 }`}
               />
               {fieldErrors.duration && <p className="mt-1 text-caption text-red-400">{fieldErrors.duration}</p>}
@@ -318,7 +318,7 @@ export default function ListExperiencePage() {
                 className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm focus:outline-none focus:ring-2 transition-all appearance-none cursor-pointer ${
                   fieldErrors.location
                     ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
-                    : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+                    : "border border-white/[0.08] focus:ring-[#FF0F73]/30 focus:border-[#FF0F73]"
                 }`}
               >
                 <option value="" disabled>
@@ -332,7 +332,7 @@ export default function ListExperiencePage() {
                 <p className="text-caption text-[#64748B] mt-1 animate-pulse">Detecting your location via GPS...</p>
               )}
               {geo.position && form.location && (
-                <p className="text-caption text-[#FF2D7A] mt-1">📍 Auto-detected</p>
+                <p className="text-caption text-[#FF0F73] mt-1">📍 Auto-detected</p>
               )}
             </div>
             <div>
@@ -348,7 +348,7 @@ export default function ListExperiencePage() {
                 className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 transition-all ${
                   fieldErrors.capacity
                     ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
-                    : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+                    : "border border-white/[0.08] focus:ring-[#FF0F73]/30 focus:border-[#FF0F73]"
                 }`}
               />
               {fieldErrors.capacity && <p className="mt-1 text-caption text-red-400">{fieldErrors.capacity}</p>}
@@ -367,7 +367,7 @@ export default function ListExperiencePage() {
               className={`w-full px-4 py-3 rounded-xl bg-[#1A2332] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-2 transition-all ${
                 fieldErrors.contact
                   ? "border border-red-500 focus:ring-red-500/30 focus:border-red-500"
-                  : "border border-white/[0.08] focus:ring-[#FF2D7A]/30 focus:border-[#FF2D7A]"
+                  : "border border-white/[0.08] focus:ring-[#FF0F73]/30 focus:border-[#FF0F73]"
               }`}
             />
             {fieldErrors.contact && <p className="mt-1 text-caption text-red-400">{fieldErrors.contact}</p>}
@@ -376,7 +376,7 @@ export default function ListExperiencePage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,56,92,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {submitting ? (
               <>

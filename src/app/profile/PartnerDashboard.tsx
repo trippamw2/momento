@@ -114,7 +114,7 @@ function MiniBar({ data, height = 40 }: { data: number[]; height?: number }) {
       {data.map((v, i) => (
         <div
           key={i}
-          className="flex-1 rounded-t-sm bg-[#DD2A7B] transition-all duration-300"
+          className="flex-1 rounded-t-sm bg-[#FF0F73] transition-all duration-300"
           style={{ height: `${(v / max) * 100}%` }}
         />
       ))}
@@ -209,15 +209,15 @@ function ExperienceForm({ onClose }: { onClose: () => void }) {
             <div key={field.label}>
               <label className="block text-body-sm font-medium text-[#222222] mb-1.5">{field.label}</label>
               {field.type === "textarea" ? (
-                <textarea rows={3} placeholder={field.placeholder} className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#dddddd] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/40 transition-all resize-none" />
+                <textarea rows={3} placeholder={field.placeholder} className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#dddddd] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#FF0F73] focus:ring-1 focus:ring-[#FF0F73]/40 transition-all resize-none" />
               ) : (
-                <input type={field.type || "text"} placeholder={field.placeholder} className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#dddddd] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#DD2A7B] focus:ring-1 focus:ring-[#DD2A7B]/40 transition-all" />
+                <input type={field.type || "text"} placeholder={field.placeholder} className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#dddddd] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:border-[#FF0F73] focus:ring-1 focus:ring-[#FF0F73]/40 transition-all" />
               )}
             </div>
           ))}
           <div>
             <label className="block text-body-sm font-medium text-[#222222] mb-1.5">Category</label>
-            <select className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#dddddd] text-[#222222] text-body-sm focus:outline-none focus:border-[#DD2A7B] appearance-none cursor-pointer">
+            <select className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#dddddd] text-[#222222] text-body-sm focus:outline-none focus:border-[#FF0F73] appearance-none cursor-pointer">
               <option>Romantic</option>
               <option>Wellness</option>
               <option>Food & Drink</option>
@@ -232,7 +232,7 @@ function ExperienceForm({ onClose }: { onClose: () => void }) {
             <div className="flex flex-wrap gap-1.5">
               {["Romantic", "Relax", "Celebrate", "Escape", "Indulge"].map((m) => (
                 <label key={m} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#f7f7f7] border border-[#ebebeb] cursor-pointer hover:bg-[#f0f0f0] transition-colors">
-                  <input type="checkbox" className="accent-[#DD2A7B]" />
+                  <input type="checkbox" className="accent-[#FF0F73]" />
                   <span className="text-caption text-[#6a6a6a]">{m}</span>
                 </label>
               ))}
@@ -240,7 +240,7 @@ function ExperienceForm({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <div className="flex gap-3 mt-6">
-          <button className="flex-1 py-2.5 rounded-xl bg-[#DD2A7B] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all">
+          <button className="flex-1 py-2.5 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255, 15, 115, 0.25)] transition-all">
             Save Experience
           </button>
           <button onClick={onClose} className="flex-1 py-2.5 rounded-xl bg-white text-[#6a6a6a] text-body-sm font-medium border border-[#dddddd] hover:bg-[#f7f7f7] transition-all">
@@ -287,7 +287,7 @@ export default function PartnerDashboard() {
       }`}>
         <div className="p-5 border-b border-[#ebebeb]">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#DD2A7B] flex items-center justify-center shadow-[0_4px_12px_rgba(255,56,92,0.2)]">
+            <div className="w-9 h-9 rounded-xl bg-[#FF0F73] flex items-center justify-center shadow-[0_4px_12px_rgba(255, 15, 115, 0.2)]">
               <span className="text-white font-bold text-body">M</span>
             </div>
             <div>
@@ -304,7 +304,7 @@ export default function PartnerDashboard() {
               onClick={() => { setSection(item.key); setSidebarOpen(false); }}
               className={`w-full px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all ${
                 section === item.key
-                  ? "bg-[#DD2A7B] text-white"
+                  ? "bg-[#FF0F73] text-white"
                   : "text-[#6a6a6a] hover:text-[#222222] hover:bg-[#f7f7f7]"
               }`}
             >
@@ -315,7 +315,7 @@ export default function PartnerDashboard() {
 
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[#ebebeb]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#DD2A7B] flex items-center justify-center text-white text-body-sm font-bold">
+            <div className="w-9 h-9 rounded-full bg-[#FF0F73] flex items-center justify-center text-white text-body-sm font-bold">
               LC
             </div>
             <div>
@@ -346,7 +346,7 @@ export default function PartnerDashboard() {
               <select
                 value={partnerType}
                 onChange={(e) => setPartnerType(e.target.value)}
-                className="px-3 py-1.5 rounded-lg bg-white text-[#6a6a6a] text-caption border border-[#dddddd] focus:outline-none focus:border-[#DD2A7B]/50 appearance-none cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-white text-[#6a6a6a] text-caption border border-[#dddddd] focus:outline-none focus:border-[#FF0F73]/50 appearance-none cursor-pointer"
               >
                 <option>All Types</option>
                 {partnerTypes.map((t) => (
@@ -354,7 +354,7 @@ export default function PartnerDashboard() {
                 ))}
               </select>
               <div className="relative">
-                <div className="w-8 h-8 rounded-full bg-[#DD2A7B] flex items-center justify-center text-white text-body-sm font-bold cursor-pointer">
+                <div className="w-8 h-8 rounded-full bg-[#FF0F73] flex items-center justify-center text-white text-body-sm font-bold cursor-pointer">
                   LC
                 </div>
                 <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white" />
@@ -436,7 +436,7 @@ export default function PartnerDashboard() {
                 <p className="text-body-sm text-[#6a6a6a]">{partnerExperiences.length} experiences</p>
                 <button
                   onClick={() => setShowForm(true)}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#DD2A7B] text-white text-body-sm font-medium hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all"
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#FF0F73] text-white text-body-sm font-medium hover:shadow-[0_4px_24px_rgba(255, 15, 115, 0.25)] transition-all"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                   Add Experience
@@ -484,7 +484,7 @@ export default function PartnerDashboard() {
             <div>
               <div className="flex items-center justify-between mb-6">
                 <p className="text-body-sm text-[#6a6a6a]">Toggle dates to block availability</p>
-                <button className="px-4 py-2 rounded-xl bg-[#DD2A7B] text-white text-body-sm font-medium hover:shadow-[0_4px_24px_rgba(255,56,92,0.25)] transition-all">
+                <button className="px-4 py-2 rounded-xl bg-[#FF0F73] text-white text-body-sm font-medium hover:shadow-[0_4px_24px_rgba(255, 15, 115, 0.25)] transition-all">
                   Save Changes
                 </button>
               </div>
@@ -513,7 +513,7 @@ export default function PartnerDashboard() {
                   <button
                     key={f}
                     className={`px-3 py-1.5 rounded-full text-caption font-medium capitalize transition-all ${
-                      f === "all" ? "bg-[#DD2A7B] text-white" : "bg-white text-[#6a6a6a] border border-[#dddddd] hover:bg-[#f7f7f7]"
+                      f === "all" ? "bg-[#FF0F73] text-white" : "bg-white text-[#6a6a6a] border border-[#dddddd] hover:bg-[#f7f7f7]"
                     }`}
                   >
                     {f}
@@ -588,7 +588,7 @@ export default function PartnerDashboard() {
                           <span className="text-caption font-medium text-[#222222]">{seg.pct}%</span>
                         </div>
                         <div className="h-2 rounded-full bg-[#ebebeb] overflow-hidden">
-                          <div className="h-full rounded-full bg-[#DD2A7B]" style={{ width: `${seg.pct}%` }} />
+                          <div className="h-full rounded-full bg-[#FF0F73]" style={{ width: `${seg.pct}%` }} />
                         </div>
                       </div>
                     ))}
@@ -700,7 +700,7 @@ export default function PartnerDashboard() {
             <div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 {[
-                  { label: "Revenue Report", desc: "Monthly revenue breakdown with trends and forecasts", icon: "💰", color: "bg-[#DD2A7B]" },
+                  { label: "Revenue Report", desc: "Monthly revenue breakdown with trends and forecasts", icon: "💰", color: "bg-[#FF0F73]" },
                   { label: "Bookings Report", desc: "Booking volumes, status distribution, and peak periods", icon: "📅", color: "bg-purple-500" },
                   { label: "Customer Report", desc: "Customer acquisition, retention, and lifetime value", icon: "👥", color: "bg-cyan-500" },
                   { label: "Performance Report", desc: "Experience ratings, reviews, and popularity scores", icon: "⭐", color: "bg-amber-500" },
@@ -711,7 +711,7 @@ export default function PartnerDashboard() {
                     </div>
                     <h3 className="text-body-sm font-semibold text-[#222222] mb-1">{report.label}</h3>
                     <p className="text-caption text-[#929292] mb-3 leading-relaxed">{report.desc}</p>
-                    <button className="text-caption font-medium text-[#DD2A7B] hover:text-[#e0314f] transition-colors flex items-center gap-1 opacity-0 group-hover:opacity-100">
+                    <button className="text-caption font-medium text-[#FF0F73] hover:text-[#e0314f] transition-colors flex items-center gap-1 opacity-0 group-hover:opacity-100">
                       Download Report
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                     </button>
@@ -778,12 +778,12 @@ export default function PartnerDashboard() {
                     key={n.id}
                     className={`p-4 rounded-xl border transition-all shadow-sm ${
                       !n.read
-                        ? "bg-white border-[#DD2A7B]/20"
+                        ? "bg-white border-[#FF0F73]/20"
                         : "bg-white border-[#ebebeb]"
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${!n.read ? "bg-[#DD2A7B]" : "bg-transparent"}`} />
+                      <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${!n.read ? "bg-[#FF0F73]" : "bg-transparent"}`} />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-4">
                           <h3 className="text-body-sm font-medium text-[#222222]">{n.title}</h3>
@@ -811,7 +811,7 @@ export default function PartnerDashboard() {
                         <p className="text-body-sm text-[#222222]">{pref.label}</p>
                         <p className="text-caption text-[#929292]">{pref.desc}</p>
                       </div>
-                      <div className="relative w-10 h-6 rounded-full bg-[#DD2A7B] cursor-pointer transition-colors">
+                      <div className="relative w-10 h-6 rounded-full bg-[#FF0F73] cursor-pointer transition-colors">
                         <div className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white shadow-sm" />
                       </div>
                     </label>

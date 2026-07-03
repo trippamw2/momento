@@ -82,7 +82,7 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
             </div>
             <div className="w-full h-2 rounded-full bg-[#1E293B] overflow-hidden">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] transition-all duration-700 ease-out"
+                className="h-full rounded-full bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] transition-all duration-700 ease-out"
                 style={{ width: `${Math.min(100, progress)}%` }}
               />
             </div>
@@ -131,7 +131,7 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
 
         {/* View full dashboard link */}
         <div className="mt-3 text-center">
-          <span className="text-caption font-medium bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] bg-clip-text text-transparent">
+          <span className="text-caption font-medium bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] bg-clip-text text-transparent">
             View Full Dashboard →
           </span>
         </div>

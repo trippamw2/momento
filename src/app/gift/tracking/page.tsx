@@ -84,7 +84,7 @@ export default function GiftTrackingPage() {
           </div>
           <Link
             href="/gift"
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all"
           >
             Send New Gift
           </Link>
@@ -150,7 +150,7 @@ export default function GiftTrackingPage() {
             {filter === "all" && (
               <Link
                 href="/gift"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                 Send a Gift
@@ -169,8 +169,8 @@ export default function GiftTrackingPage() {
                   {/* Top row */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#FF2D7A]/10 flex items-center justify-center">
-                        <svg className="w-5 h-5 text-[#FF2D7A]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
+                      <div className="w-10 h-10 rounded-full bg-[#FF0F73]/10 flex items-center justify-center">
+                        <svg className="w-5 h-5 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
@@ -183,7 +183,7 @@ export default function GiftTrackingPage() {
                         </p>
                       </div>
                     </div>
-                    <p className="text-heading-sm font-bold text-[#FF2D7A]">{gift.currency} {gift.amount.toLocaleString()}</p>
+                    <p className="text-heading-sm font-bold text-[#FF0F73]">{gift.currency} {gift.amount.toLocaleString()}</p>
                   </div>
 
                   {/* Details */}
@@ -209,7 +209,7 @@ export default function GiftTrackingPage() {
                   {/* Occasion + Message */}
                   {(gift.occasion || gift.message) && (
                     <div className="mb-4 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-                      {gift.occasion && <p className="text-caption text-[#FF2D7A] font-medium">{gift.occasion}</p>}
+                      {gift.occasion && <p className="text-caption text-[#FF0F73] font-medium">{gift.occasion}</p>}
                       {gift.message && <p className="text-caption text-[#CBD5E1] italic mt-1">"{gift.message}"</p>}
                     </div>
                   )}

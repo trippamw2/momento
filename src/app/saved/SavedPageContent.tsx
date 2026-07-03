@@ -166,14 +166,14 @@ export default function SavedPageContent() {
                     onClick={() => setSidebarTab(item.key)}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all duration-200 ${
                       sidebarTab === item.key
-                        ? "bg-[#FF2D7A]/10 text-[#F1F5F9] border border-[#FF2D7A]/20"
+                        ? "bg-[#FF0F73]/10 text-[#F1F5F9] border border-[#FF0F73]/20"
                         : "text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#1A2332]"
                     }`}
                   >
                     <span className="flex-1 text-left">{item.label}</span>
                     {item.key !== "recently-viewed" && count > 0 && (
                       <span className={`text-caption px-1.5 py-0.5 rounded-md ${
-                        sidebarTab === item.key ? "bg-[#FF2D7A]/10 text-[#FF2D7A]" : "bg-[#1A2332] text-[#64748B]"
+                        sidebarTab === item.key ? "bg-[#FF0F73]/10 text-[#FF0F73]" : "bg-[#1A2332] text-[#64748B]"
                       }`}>
                         {count}
                       </span>
@@ -194,7 +194,7 @@ export default function SavedPageContent() {
                 onClick={() => setSidebarTab(item.key)}
                 className={`px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all ${
                   sidebarTab === item.key
-                    ? "bg-[#FF2D7A] text-white"
+                    ? "bg-[#FF0F73] text-white"
                     : "bg-[#1A2332] text-[#94A3B8] border border-white/[0.08]"
                 }`}
               >
@@ -294,18 +294,18 @@ export default function SavedPageContent() {
                           value={newCollectionName}
                           onChange={(e) => setNewCollectionName(e.target.value)}
                           onKeyDown={(e) => { if (e.key === "Enter") createCollection(); }}
-                          className="w-full px-3 py-2 rounded-lg bg-[#1A2332] text-[#F1F5F9] text-body-sm border border-white/[0.08] focus:outline-none focus:border-[#FF2D7A] placeholder:text-[#64748B]"
+                          className="w-full px-3 py-2 rounded-lg bg-[#1A2332] text-[#F1F5F9] text-body-sm border border-white/[0.08] focus:outline-none focus:border-[#FF0F73] placeholder:text-[#64748B]"
                           autoFocus
                         />
                         <div className="flex gap-1.5">
-                          <button onClick={createCollection} className="flex-1 py-1.5 rounded-lg bg-[#FF2D7A] text-white text-caption font-medium">Create</button>
+                          <button onClick={createCollection} className="flex-1 py-1.5 rounded-lg bg-[#FF0F73] text-white text-caption font-medium">Create</button>
                           <button onClick={() => { setCreatingCollection(false); setNewCollectionName(""); }} className="flex-1 py-1.5 rounded-lg bg-[#111827] text-[#94A3B8] text-caption border border-white/[0.08]">Cancel</button>
                         </div>
                       </div>
                     ) : (
                       <button
                         onClick={() => setCreatingCollection(true)}
-                        className="flex-shrink-0 w-48 rounded-xl border-2 border-dashed border-white/[0.08] hover:border-[#FF2D7A]/30 transition-all flex flex-col items-center justify-center gap-1 text-[#64748B] hover:text-[#94A3B8]"
+                        className="flex-shrink-0 w-48 rounded-xl border-2 border-dashed border-white/[0.08] hover:border-[#FF0F73]/30 transition-all flex flex-col items-center justify-center gap-1 text-[#64748B] hover:text-[#94A3B8]"
                       >
                         <span className="text-3xl font-light">＋</span>
                         <span className="text-caption font-medium">New Collection</span>
@@ -359,16 +359,16 @@ export default function SavedPageContent() {
 
               {/* ─── Bottom CTA ─── */}
               <section className="relative rounded-2xl overflow-hidden bg-[#111827] border border-white/[0.08] p-8 sm:p-10 text-center">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-[#FF2D7A]/5 via-[#FF2D7A]/5 to-[#FF2D7A]/5 rounded-full blur-3xl" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-[#FF0F73]/5 via-[#FF0F73]/5 to-[#FF0F73]/5 rounded-full blur-3xl" />
                 <div className="relative z-10">
-                  <div className="w-14 h-14 rounded-full bg-[#FF2D7A] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(255,45,122,0.2)]">
+                  <div className="w-14 h-14 rounded-full bg-[#FF0F73] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(255, 15, 115, 0.2)]">
                     <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                   </div>
                   <h2 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Don&apos;t miss out on your favourites.</h2>
                   <p className="text-[#94A3B8] text-body-lg mb-6">Book now and live the moment.</p>
                   <Link
                     href="/experiences"
-                    className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.25)] transition-all duration-300"
+                    className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.25)] transition-all duration-300"
                   >
                     Discover Experiences
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
@@ -384,7 +384,7 @@ export default function SavedPageContent() {
               </div>
               <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-2">Nothing saved yet</h2>
               <p className="text-[#94A3B8] text-body-sm mb-6">Start exploring and save experiences you love.</p>
-              <Link href="/experiences" className="inline-flex px-6 py-2.5 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.2)] transition-all">
+              <Link href="/experiences" className="inline-flex px-6 py-2.5 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.2)] transition-all">
                 Browse Experiences
               </Link>
             </div>
@@ -440,13 +440,13 @@ function SavedCard({
           {/* Heart / Save Toggle */}
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleSave(); }}
-            className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center hover:bg-[#FF2D7A]/60 transition-all duration-200 z-10"
+            className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center hover:bg-[#FF0F73]/60 transition-all duration-200 z-10"
           >
             <svg
               width="16" height="16"
               viewBox="0 0 24 24"
-              fill={isSaved ? "#FF2D7A" : "none"}
-              stroke={isSaved ? "#FF2D7A" : "white"}
+              fill={isSaved ? "#FF0F73" : "none"}
+              stroke={isSaved ? "#FF0F73" : "white"}
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"

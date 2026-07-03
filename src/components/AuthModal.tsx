@@ -183,7 +183,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         className="w-full max-w-md rounded-3xl bg-white shadow-[0_16px_48px_rgba(0,0,0,0.12)] border border-[#ebebeb] overflow-hidden animate-[slideUp_0.3s_cubic-bezier(0.16,1,0.3,1)]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="h-1.5 bg-gradient-to-r from-[#DD2A7B] via-[#F58529] to-[#8134AF]" />
+        <div className="h-1.5 bg-gradient-to-r from-[#FF0F73] via-[#FFA22C] to-[#F82D7B]" />
 
         <div className="p-7">
           {/* Role Selection (signup only) */}
@@ -197,8 +197,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                   onClick={() => setSignupRole("user")}
                   className={`p-4 rounded-xl border-2 text-left transition-all ${
                     signupRole === "user"
-                      ? "border-[#DD2A7B] bg-[#FFF0F5]"
-                      : "border-[#ebebeb] bg-[#fafafa] hover:border-[#DD2A7B]/30"
+                      ? "border-[#FF0F73] bg-[#FFF0F5]"
+                      : "border-[#ebebeb] bg-[#fafafa] hover:border-[#FF0F73]/30"
                   }`}
                 >
                   <p className="text-body-sm font-semibold text-[#222222]">Customer</p>
@@ -209,8 +209,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                   onClick={() => setSignupRole("partner")}
                   className={`p-4 rounded-xl border-2 text-left transition-all ${
                     signupRole === "partner"
-                      ? "border-[#8134AF] bg-[#F5F0FF]"
-                      : "border-[#ebebeb] bg-[#fafafa] hover:border-[#8134AF]/30"
+                      ? "border-[#F82D7B] bg-[#F5F0FF]"
+                      : "border-[#ebebeb] bg-[#fafafa] hover:border-[#F82D7B]/30"
                   }`}
                 >
                   <p className="text-body-sm font-semibold text-[#222222]">Host</p>
@@ -244,7 +244,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                   className={`w-full px-4 py-3 rounded-xl bg-[#f5f2ef] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-1 transition-all ${
                     fieldErrors.name
                       ? "border border-[#c13515] focus:border-[#c13515] focus:ring-[#c13515]/20"
-                      : "border border-[#ebebeb] focus:border-[#DD2A7B] focus:ring-[#DD2A7B]/20"
+                      : "border border-[#ebebeb] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
                   }`}
                 />
                 {fieldErrors.name && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.name}</p>}
@@ -261,7 +261,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                 className={`w-full px-4 py-3 rounded-xl bg-[#f5f2ef] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-1 transition-all ${
                   fieldErrors.email
                     ? "border border-[#c13515] focus:border-[#c13515] focus:ring-[#c13515]/20"
-                    : "border border-[#ebebeb] focus:border-[#DD2A7B] focus:ring-[#DD2A7B]/20"
+                    : "border border-[#ebebeb] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
                 }`}
               />
               {fieldErrors.email && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.email}</p>}
@@ -277,7 +277,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                 className={`w-full px-4 py-3 rounded-xl bg-[#f5f2ef] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-1 transition-all ${
                   fieldErrors.password
                     ? "border border-[#c13515] focus:border-[#c13515] focus:ring-[#c13515]/20"
-                    : "border border-[#ebebeb] focus:border-[#DD2A7B] focus:ring-[#DD2A7B]/20"
+                    : "border border-[#ebebeb] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
                 }`}
               />
               {fieldErrors.password && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.password}</p>}
@@ -294,7 +294,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                   className={`w-full px-4 py-3 rounded-xl bg-[#f5f2ef] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-1 transition-all ${
                     fieldErrors.phone
                       ? "border border-[#c13515] focus:border-[#c13515] focus:ring-[#c13515]/20"
-                      : "border border-[#ebebeb] focus:border-[#DD2A7B] focus:ring-[#DD2A7B]/20"
+                      : "border border-[#ebebeb] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
                   }`}
                 />
                 {fieldErrors.phone && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.phone}</p>}
@@ -314,7 +314,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                     )}
                   </div>
                   <label className="flex-1 cursor-pointer">
-                    <div className="px-4 py-2.5 rounded-xl border border-[#ebebeb] bg-[#fafafa] text-body-sm text-[#6a6a6a] hover:border-[#8134AF]/30 hover:text-[#8134AF] transition-all text-center">
+                    <div className="px-4 py-2.5 rounded-xl border border-[#ebebeb] bg-[#fafafa] text-body-sm text-[#6a6a6a] hover:border-[#F82D7B]/30 hover:text-[#F82D7B] transition-all text-center">
                       {avatarFile ? avatarFile.name : "Choose image"}
                     </div>
                     <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
@@ -340,7 +340,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-[#DD2A7B] to-[#F58529] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,56,92,0.35)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FFA22C] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255, 15, 115, 0.35)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
@@ -359,7 +359,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
               {mode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
               <button
                 onClick={() => switchMode(mode === "login" ? "signup" : "login")}
-                className="text-[#DD2A7B] hover:text-[#e00b41] font-semibold transition-colors"
+                className="text-[#FF0F73] hover:text-[#e00b41] font-semibold transition-colors"
               >
                 {mode === "login" ? "Sign up" : "Sign in"}
               </button>

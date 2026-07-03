@@ -67,7 +67,7 @@ function baseLayout(title: string, bodyHtml: string): string {
         <table role="presentation" width="100%" style="max-width:560px;">
           <tr>
             <td style="padding-bottom:24px;text-align:center;">
-              <span style="font-size:24px;font-weight:700;color:#FF2D7A;">experio</span>
+              <span style="font-size:24px;font-weight:700;color:#FF0F73;">experio</span>
             </td>
           </tr>
           <tr>
@@ -139,15 +139,15 @@ function bookingConfirmedHtml(params: {
 
     <div style="background-color:#1A2332;border-radius:12px;padding:16px;margin-bottom:24px;">
       <p style="margin:0 0 4px;font-size:12px;color:#6B7280;">Booking Reference</p>
-      <p style="margin:0;font-size:16px;color:#FF2D7A;font-weight:600;font-family:monospace;">${params.bookingId}</p>
+      <p style="margin:0;font-size:16px;color:#FF0F73;font-weight:600;font-family:monospace;">${params.bookingId}</p>
     </div>
 
-    <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/bookings" style="display:block;text-align:center;background:linear-gradient(135deg,#FF2D7A,#8134AF);color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;margin-bottom:24px;">
+    <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/bookings" style="display:block;text-align:center;background:linear-gradient(135deg,#FF0F73,#F82D7B);color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;margin-bottom:24px;">
       View My Booking
     </a>
 
     <p style="margin:0;font-size:12px;color:#6B7280;text-align:center;">
-      Need to make changes? Visit your <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/bookings" style="color:#FF2D7A;">bookings page</a>.
+      Need to make changes? Visit your <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/bookings" style="color:#FF0F73;">bookings page</a>.
     </p>
   `;
   return baseLayout("Booking Confirmed - Experio", body);
@@ -166,9 +166,9 @@ function giftCardReceivedHtml(params: {
     <h1 style="margin:0 0 8px;font-size:22px;color:#ffffff;font-weight:600;">You've Received a Gift Card! 🎁</h1>
     <p style="margin:0 0 24px;font-size:14px;color:#94A3B8;">Hi ${params.recipientName}, ${params.senderName} has sent you an Experio gift card!</p>
 
-    ${params.occasion ? `<p style="margin:0 0 16px;font-size:13px;color:#FF2D7A;text-align:center;">🎉 ${params.occasion}</p>` : ""}
+    ${params.occasion ? `<p style="margin:0 0 16px;font-size:13px;color:#FF0F73;text-align:center;">🎉 ${params.occasion}</p>` : ""}
 
-    <div style="background:linear-gradient(135deg,#FF2D7A,#8134AF);border-radius:12px;padding:24px;text-align:center;margin-bottom:20px;">
+    <div style="background:linear-gradient(135deg,#FF0F73,#F82D7B);border-radius:12px;padding:24px;text-align:center;margin-bottom:20px;">
       <p style="margin:0 0 4px;font-size:12px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px;">Gift Card Value</p>
       <p style="margin:0;font-size:36px;color:#ffffff;font-weight:700;">${params.currency} ${params.amount.toLocaleString()}</p>
     </div>
@@ -182,16 +182,16 @@ function giftCardReceivedHtml(params: {
 
     <div style="background-color:#1A2332;border-radius:12px;padding:16px;margin-bottom:24px;">
       <p style="margin:0 0 4px;font-size:12px;color:#6B7280;">Your Gift Code</p>
-      <p style="margin:0;font-size:18px;color:#FF2D7A;font-weight:700;font-family:monospace;letter-spacing:2px;">${params.code}</p>
+      <p style="margin:0;font-size:18px;color:#FF0F73;font-weight:700;font-family:monospace;letter-spacing:2px;">${params.code}</p>
     </div>
 
-    <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/gift/redeem?code=${params.code}" style="display:block;text-align:center;background:linear-gradient(135deg,#FF2D7A,#8134AF);color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;margin-bottom:16px;">
+    <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/gift/redeem?code=${params.code}" style="display:block;text-align:center;background:linear-gradient(135deg,#FF0F73,#F82D7B);color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;margin-bottom:16px;">
       Redeem Your Gift
     </a>
 
     <p style="margin:0;font-size:12px;color:#6B7280;text-align:center;">
       This gift card expires one year from the date of issue. <br/>
-      <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/gift" style="color:#FF2D7A;">Learn more about gift cards</a>
+      <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/gift" style="color:#FF0F73;">Learn more about gift cards</a>
     </p>
   `;
   return baseLayout("Gift Card Received - Experio", body);
@@ -213,7 +213,7 @@ function bookingCancelledHtml(params: {
       <p style="margin:0;font-size:13px;color:#94A3B8;">${params.refundStatus}</p>
     </div>
 
-    <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/experiences" style="display:block;text-align:center;background:linear-gradient(135deg,#FF2D7A,#8134AF);color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;">
+    <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/experiences" style="display:block;text-align:center;background:linear-gradient(135deg,#FF0F73,#F82D7B);color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;">
       Explore More Experiences
     </a>
   `;

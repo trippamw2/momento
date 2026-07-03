@@ -240,7 +240,7 @@ export default function AdminPage() {
   if (authLoading) {
     return (
       <div className="min-h-screen bg-[#05070B] flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-[#FF2D7A]/30 border-t-[#FF2D7A] animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-[#FF0F73]/30 border-t-[#FF0F73] animate-spin" />
       </div>
     );
   }
@@ -253,7 +253,7 @@ export default function AdminPage() {
       <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#0F172A] border-r border-white/[0.08] transform transition-transform duration-300 lg:translate-x-0 pt-18 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="p-5 border-b border-white/[0.08]">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF2D7A] to-purple-500 flex items-center justify-center shadow-md">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF0F73] to-purple-500 flex items-center justify-center shadow-md">
               <span className="text-white font-bold text-body">A</span>
             </div>
             <div>
@@ -268,7 +268,7 @@ export default function AdminPage() {
               key={item.key}
               onClick={() => switchSection(item.key)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all ${
-                section === item.key ? "bg-[#FF2D7A] text-white" : "text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-white/[0.05]"
+                section === item.key ? "bg-[#FF0F73] text-white" : "text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-white/[0.05]"
               }`}
             >
               <span>{item.icon}</span>
@@ -301,7 +301,7 @@ export default function AdminPage() {
         <div className="p-4 sm:p-6">
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <div className="w-8 h-8 rounded-full border-2 border-[#FF2D7A]/30 border-t-[#FF2D7A] animate-spin" />
+              <div className="w-8 h-8 rounded-full border-2 border-[#FF0F73]/30 border-t-[#FF0F73] animate-spin" />
             </div>
           ) : (
             <>
@@ -330,7 +330,7 @@ export default function AdminPage() {
                     <p className="text-caption text-[#64748B] mb-2">Quick Actions</p>
                     <div className="flex flex-wrap gap-2">
                       {NAV.slice(1).map((item) => (
-                        <button key={item.key} onClick={() => switchSection(item.key)} className="px-4 py-2 rounded-xl bg-[#05070B] text-body-sm text-[#94A3B8] hover:bg-[#FF2D7A] hover:text-white transition-all">
+                        <button key={item.key} onClick={() => switchSection(item.key)} className="px-4 py-2 rounded-xl bg-[#05070B] text-body-sm text-[#94A3B8] hover:bg-[#FF0F73] hover:text-white transition-all">
                           {item.icon} {item.label}
                         </button>
                       ))}
@@ -360,7 +360,7 @@ export default function AdminPage() {
                             <select
                               value={u.role}
                               onChange={(e) => handleRoleChange(u.id, e.target.value)}
-                              className="px-2 py-1 rounded-lg text-caption border border-white/[0.08] focus:outline-none focus:border-[#FF2D7A]"
+                              className="px-2 py-1 rounded-lg text-caption border border-white/[0.08] focus:outline-none focus:border-[#FF0F73]"
                             >
                               {["user", "partner", "admin"].map((r) => (
                                 <option key={r} value={r}>{r}</option>
@@ -472,7 +472,7 @@ export default function AdminPage() {
                     return (
                       <div key={r.id} className={`p-4 rounded-xl border shadow-sm transition-all ${
                         featured
-                          ? "bg-[#1A0A1E] border-[#FF2D7A]/30 ring-1 ring-[#FF2D7A]/20"
+                          ? "bg-[#1A0A1E] border-[#FF0F73]/30 ring-1 ring-[#FF0F73]/20"
                           : "bg-[#0F172A] border-white/[0.08]"
                       }`}>
                         <div className="flex items-start justify-between gap-4">
@@ -495,7 +495,7 @@ export default function AdminPage() {
                             }}
                             className={`px-3 py-1.5 rounded-lg text-caption font-medium transition-all flex-shrink-0 ${
                               featured
-                                ? "bg-[#FF2D7A]/20 text-[#FF2D7A] hover:bg-[#FF2D7A]/30"
+                                ? "bg-[#FF0F73]/20 text-[#FF0F73] hover:bg-[#FF0F73]/30"
                                 : "bg-white/[0.06] text-[#94A3B8] hover:bg-[#1A2332]"
                             }`}
                           >
@@ -677,7 +677,7 @@ export default function AdminPage() {
                           <div key={m.month} className="flex-1 flex flex-col items-center gap-1">
                             <span className="text-[10px] text-[#94A3B8] font-medium">MK {(m.amount / 1000).toFixed(0)}k</span>
                             <div
-                              className="w-full rounded-lg bg-gradient-to-t from-[#FF2D7A] via-[#A855F7] to-[#6366F1] transition-all duration-500 hover:opacity-80"
+                              className="w-full rounded-lg bg-gradient-to-t from-[#FF0F73] via-[#A855F7] to-[#6366F1] transition-all duration-500 hover:opacity-80"
                               style={{ height: `${height}%` }}
                             />
                             <span className="text-[10px] text-[#64748B]">{m.month}</span>

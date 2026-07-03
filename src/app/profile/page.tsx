@@ -24,7 +24,7 @@ type UserData = {
 function Loading() {
   return (
     <div className="min-h-screen flex items-center justify-center pt-20">
-      <div className="w-8 h-8 rounded-full border-2 border-[#DD2A7B]/30 border-t-[#DD2A7B] animate-spin" />
+      <div className="w-8 h-8 rounded-full border-2 border-[#FF0F73]/30 border-t-[#FF0F73] animate-spin" />
     </div>
   );
 }
@@ -35,7 +35,7 @@ function UserProfile({ user }: { user: UserData }) {
       <div className="max-w-3xl mx-auto px-4 sm:px-8">
         <div className="mb-8">
           <div className="flex items-center gap-5">
-            <div className="w-16 h-16 rounded-2xl bg-[#DD2A7B] flex items-center justify-center text-white text-heading font-bold">
+            <div className="w-16 h-16 rounded-2xl bg-[#FF0F73] flex items-center justify-center text-white text-heading font-bold">
               {user.profile?.full_name?.[0] || user.email[0]?.toUpperCase() || "U"}
             </div>
             <div>

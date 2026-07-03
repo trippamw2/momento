@@ -76,7 +76,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-heading-sm font-bold text-[#222222] mb-3">10. Contact</h2>
             <p>
-              For questions about these terms, contact us at <a href="mailto:legal@experio.life" className="text-[#DD2A7B] hover:underline">legal@experio.life</a>.
+              For questions about these terms, contact us at <a href="mailto:legal@experio.life" className="text-[#FF0F73] hover:underline">legal@experio.life</a>.
             </p>
           </section>
         </div>

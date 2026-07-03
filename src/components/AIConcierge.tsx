@@ -73,7 +73,7 @@ export default function AIConcierge() {
     <div className="w-full max-w-2xl mx-auto">
       <div className="p-5 sm:p-6 rounded-2xl bg-[#0A101B] border border-white/[0.06]">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#DD2A7B] to-[#8134AF] flex items-center justify-center shadow-[0_4px_16px_rgba(255,45,122,0.3)] overflow-hidden">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF0F73] to-[#F82D7B] flex items-center justify-center shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] overflow-hidden">
             <Image src="/experio-logo.png" alt="Experio" width={24} height={24} className="object-contain" />
           </div>
           <div>
@@ -95,7 +95,7 @@ export default function AIConcierge() {
             <button
               type="submit"
               disabled={!query.trim() || thinking}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-gradient-to-r from-[#DD2A7B] via-[#8134AF] to-[#515BD4] flex items-center justify-center disabled:opacity-30 transition-all hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)]"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-gradient-to-r from-[#FF0F73] via-[#F82D7B] to-[#515BD4] flex items-center justify-center disabled:opacity-30 transition-all hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)]"
             >
               {thinking ? (
                 <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
@@ -124,7 +124,7 @@ export default function AIConcierge() {
           <div className="concierge-response mt-4">
             <div className="p-4 rounded-xl bg-[#111827] border border-white/[0.06] mb-4">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#DD2A7B] to-[#8134AF] flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FF0F73] to-[#F82D7B] flex items-center justify-center flex-shrink-0 overflow-hidden">
                   <Image src="/experio-logo.png" alt="Experio" width={20} height={20} className="object-contain" />
                 </div>
                 <p className="text-body-sm text-[#A1A1AA] leading-relaxed">{response.explanation}</p>
@@ -148,9 +148,9 @@ export default function AIConcierge() {
                         <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-transparent to-transparent" />
                         <button
                           onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSavedIds(toggleSave(exp.id, savedIds)); }}
-                          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-[#DD2A7B]/60"
+                          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-[#FF0F73]/60"
                         >
-                          <span className="text-caption font-bold" style={{ color: saved ? "#DD2A7B" : "white" }}>
+                          <span className="text-caption font-bold" style={{ color: saved ? "#FF0F73" : "white" }}>
                             {saved ? "♥" : "♡"}
                           </span>
                         </button>

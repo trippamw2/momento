@@ -47,8 +47,8 @@ export const GIFT_CARD_VARIANTS = [
   {
     id: "signature",
     label: "Experio Signature",
-    gradient: "from-[#FF2D7A] via-[#FF2D7A] to-[#FF7A18]",
-    accent: "from-[#FF2D7A] to-[#FF7A18]",
+    gradient: "from-[#FF0F73] via-[#FF5B3A] to-[#FFA22C]",
+    accent: "from-[#FF0F73] to-[#FF7A1A]",
     textColor: "text-white",
     textColorSecondary: "text-white/80",
     chipColor: "from-yellow-200 to-yellow-400",

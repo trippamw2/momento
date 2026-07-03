@@ -84,7 +84,7 @@ export default function Navbar() {
                       href={item.href}
                       className={`relative px-3.5 py-2 rounded-xl text-body-sm font-semibold transition-all duration-200 ${
                         isActive
-                          ? "text-white after:absolute after:bottom-0 after:left-1/4 after:w-1/2 after:h-0.5 after:bg-[#FF2D7A] after:rounded-full"
+                          ? "text-white after:absolute after:bottom-0 after:left-1/4 after:w-1/2 after:h-0.5 after:bg-[#FF0F73] after:rounded-full"
                           : "text-[#94A3B8] hover:text-white hover:bg-white/[0.05]"
                       }`}
                     >
@@ -99,7 +99,7 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-2">
               <Link
                 href="/ask-ai"
-                className="px-4 py-2 rounded-xl text-body-sm font-semibold transition-all duration-200 bg-gradient-to-r from-[#DD2A7B]/20 to-[#8134AF]/20 text-[#DD2A7B] hover:from-[#DD2A7B]/30 hover:to-[#8134AF]/30 hover:text-[#DD2A7B] flex items-center gap-1.5 border border-[#DD2A7B]/20 hover:border-[#DD2A7B]/30"
+                className="px-4 py-2 rounded-xl text-body-sm font-semibold transition-all duration-200 bg-gradient-to-r from-[#FF0F73]/20 to-[#F82D7B]/20 text-[#FF0F73] hover:from-[#FF0F73]/30 hover:to-[#F82D7B]/30 hover:text-[#FF0F73] flex items-center gap-1.5 border border-[#FF0F73]/20 hover:border-[#FF0F73]/30"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" /></svg>
                 ASK AI
@@ -120,7 +120,7 @@ export default function Navbar() {
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
                 {unreadCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-[#FF2D7A] text-[10px] font-bold text-white ring-2 ring-white px-1">
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-[#FF0F73] text-[10px] font-bold text-white ring-2 ring-white px-1">
                     {unreadCount > 9 ? "9+" : unreadCount}
                   </span>
                 )}
@@ -133,7 +133,7 @@ export default function Navbar() {
                     localStorage.setItem("experio-signup-role", "partner");
                     setAuthOpen(true);
                   }}
-                  className="px-4 py-2 rounded-xl text-body-sm font-semibold transition-all duration-200 bg-gradient-to-r from-[#8134AF]/20 to-[#DD2A7B]/20 text-[#8134AF] hover:from-[#8134AF]/30 hover:to-[#DD2A7B]/30 hover:text-[#8134AF] flex items-center gap-1.5 border border-[#8134AF]/20 hover:border-[#8134AF]/30"
+                  className="px-4 py-2 rounded-xl text-body-sm font-semibold transition-all duration-200 bg-gradient-to-r from-[#F82D7B]/20 to-[#FF0F73]/20 text-[#F82D7B] hover:from-[#F82D7B]/30 hover:to-[#FF0F73]/30 hover:text-[#F82D7B] flex items-center gap-1.5 border border-[#F82D7B]/20 hover:border-[#F82D7B]/30"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                   Become a Host
@@ -150,7 +150,7 @@ export default function Navbar() {
                       setAuthOpen(true);
                     }
                   }}
-                  className="ml-1 w-9 h-9 rounded-full bg-gradient-to-br from-[#FF2D7A] to-[#FF7A18] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(255,45,122,0.25)] hover:shadow-[0_4px_12px_rgba(255,45,122,0.35)] transition-all duration-300 hover:scale-105"
+                  className="ml-1 w-9 h-9 rounded-full bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(255, 15, 115, 0.25)] hover:shadow-[0_4px_12px_rgba(255, 15, 115, 0.35)] transition-all duration-300 hover:scale-105"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                 </button>
@@ -216,7 +216,7 @@ export default function Navbar() {
                     <hr className="my-2 border-white/[0.1]" />
                     <button
                       onClick={handleSignOut}
-                      className="flex items-center gap-3 w-full px-4 py-2.5 text-body-sm text-[#FF2D7A] hover:bg-white/5 transition-colors"
+                      className="flex items-center gap-3 w-full px-4 py-2.5 text-body-sm text-[#FF0F73] hover:bg-white/5 transition-colors"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
                       Sign Out
@@ -277,7 +277,7 @@ export default function Navbar() {
               <Link
                 href="/ask-ai"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-body-sm font-semibold text-[#DD2A7B] hover:bg-white/10 transition-all"
+                className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-body-sm font-semibold text-[#FF0F73] hover:bg-white/10 transition-all"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" /></svg>
                 ASK AI
@@ -319,7 +319,7 @@ export default function Navbar() {
                     setMenuOpen(false);
                     setAuthOpen(true);
                   }}
-                  className="flex items-center gap-3 w-full px-4 py-3.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255,45,122,0.4)] transition-all"
+                  className="flex items-center gap-3 w-full px-4 py-3.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255, 15, 115, 0.4)] transition-all"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
                   Sign In / Register
@@ -358,7 +358,7 @@ export default function Navbar() {
               <Link
                 href="/notifications"
                 onClick={() => setNotifOpen(false)}
-                className="block mt-3 text-center text-caption font-semibold text-[#FF2D7A] hover:text-[#FF2D7A]/80 pt-2 border-t border-white/[0.08] transition-colors"
+                className="block mt-3 text-center text-caption font-semibold text-[#FF0F73] hover:text-[#FF0F73]/80 pt-2 border-t border-white/[0.08] transition-colors"
               >
                 View All Notifications →
               </Link>

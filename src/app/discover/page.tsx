@@ -120,7 +120,7 @@ export default function DiscoverPage() {
     return (
       <div className="fixed inset-0 bg-[#05070B] flex items-center justify-center z-50">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 rounded-full border-2 border-[#FF2D7A] border-t-transparent animate-spin" />
+          <div className="w-12 h-12 rounded-full border-2 border-[#FF0F73] border-t-transparent animate-spin" />
           <p className="text-[#CBD5E1] text-body-sm animate-pulse">Curating your feed...</p>
         </div>
       </div>
@@ -135,7 +135,7 @@ export default function DiscoverPage() {
           <p className="text-[#CBD5E1] text-body-sm mb-6">Check back soon for new discoveries.</p>
           <a
             href="/experiences"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,45,122,0.3)] transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255, 15, 115, 0.3)] transition-all"
           >
             Browse Experiences
           </a>

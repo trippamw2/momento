@@ -23,7 +23,7 @@ export default function ContentRail({ title, experiences, viewAllHref, subtitle,
         {viewAllHref && (
           <Link
             href={viewAllHref}
-            className="text-body-sm text-[#CBD5E1] hover:text-[#FF2D7A] transition-colors duration-200 flex items-center gap-1 flex-shrink-0"
+            className="text-body-sm text-[#CBD5E1] hover:text-[#FF0F73] transition-colors duration-200 flex items-center gap-1 flex-shrink-0"
           >
             See all
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
@@ -32,7 +32,7 @@ export default function ContentRail({ title, experiences, viewAllHref, subtitle,
       </div>
       {isPersonalized && (
         <div className="px-4 sm:px-8 mb-3">
-          <span className="text-caption text-[#FF2D7A] font-semibold flex items-center gap-1">
+          <span className="text-caption text-[#FF0F73] font-semibold flex items-center gap-1">
             <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
             Personalized for you
           </span>

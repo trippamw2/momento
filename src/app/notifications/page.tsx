@@ -47,7 +47,7 @@ export default function NotificationsPage() {
           {unreadCount > 0 && (
             <button
               onClick={handleMarkAllRead}
-              className="text-body-sm text-[#FF2D7A] hover:text-[#FF2D7A]/80 font-semibold transition-colors"
+              className="text-body-sm text-[#FF0F73] hover:text-[#FF0F73]/80 font-semibold transition-colors"
             >
               Mark all as read
             </button>
@@ -64,7 +64,7 @@ export default function NotificationsPage() {
             </p>
             <Link
               href="/experiences"
-              className="inline-block mt-6 px-6 py-3 rounded-xl bg-[#FF2D7A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all"
+              className="inline-block mt-6 px-6 py-3 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all"
             >
               Explore Experiences
             </Link>
@@ -77,7 +77,7 @@ export default function NotificationsPage() {
                 className={`rounded-2xl border p-4 transition-all ${
                   n.read
                     ? "bg-[#0A0E17] border-white/[0.06]"
-                    : "bg-[#111827] border-[#FF2D7A]/20 shadow-[0_0_0_1px_rgba(255,45,122,0.1)]"
+                    : "bg-[#111827] border-[#FF0F73]/20 shadow-[0_0_0_1px_rgba(255, 15, 115, 0.1)]"
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -92,10 +92,10 @@ export default function NotificationsPage() {
                         {!n.read && (
                           <button
                             onClick={() => handleMarkRead(n.id)}
-                            className="w-6 h-6 rounded-full bg-[#FF2D7A]/10 hover:bg-[#FF2D7A]/20 flex items-center justify-center transition-colors"
+                            className="w-6 h-6 rounded-full bg-[#FF0F73]/10 hover:bg-[#FF0F73]/20 flex items-center justify-center transition-colors"
                             title="Mark as read"
                           >
-                            <svg className="w-3 h-3 text-[#FF2D7A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="w-3 h-3 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                           </button>
@@ -107,7 +107,7 @@ export default function NotificationsPage() {
                       <Link
                         href={n.actionHref}
                         onClick={() => handleMarkRead(n.id)}
-                        className="inline-block mt-2 text-caption font-semibold text-[#FF2D7A] hover:text-[#FF2D7A]/80 transition-colors"
+                        className="inline-block mt-2 text-caption font-semibold text-[#FF0F73] hover:text-[#FF0F73]/80 transition-colors"
                       >
                         {n.actionLabel} →
                       </Link>

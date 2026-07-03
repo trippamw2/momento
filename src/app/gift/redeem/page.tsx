@@ -75,8 +75,8 @@ function RedeemContent() {
     <div className="max-w-3xl mx-auto px-4 sm:px-8">
       {/* Hero */}
       <div className="text-center mb-10">
-        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#FF2D7A]/20 to-[#FF7A18]/20 flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-[#FF2D7A]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
+        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#FF0F73]/20 to-[#FF7A1A]/20 flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
         </div>
         <h1 className="text-heading-2xl font-bold text-[#F1F5F9] mb-2">Have a Gift Card?</h1>
         <p className="text-[#CBD5E1] text-body-lg max-w-md mx-auto">
@@ -94,13 +94,13 @@ function RedeemContent() {
               placeholder="Enter code (e.g. MOMO-XXXXXXXX)"
               value={code}
               onChange={(e) => setCode(e.target.value.toUpperCase())}
-              className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body placeholder:text-[#64748B] focus:outline-none focus:border-[#FF2D7A] focus:ring-1 focus:ring-[#FF2D7A]/30 transition-all font-mono tracking-wider"
+              className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body placeholder:text-[#64748B] focus:outline-none focus:border-[#FF0F73] focus:ring-1 focus:ring-[#FF0F73]/30 transition-all font-mono tracking-wider"
             />
           </div>
           <button
             type="submit"
             disabled={!code.trim() || checking}
-            className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shrink-0"
+            className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shrink-0"
           >
             {checking ? (
               <>
@@ -147,7 +147,7 @@ function RedeemContent() {
 
                   <div className="text-center mb-5">
                     <p className="text-3xl font-bold text-[#F1F5F9]">{card.currency} {card.amount.toLocaleString()}</p>
-                    {card.occasion && <p className="text-caption text-[#FF2D7A] mt-1">🎉 {card.occasion}</p>}
+                    {card.occasion && <p className="text-caption text-[#FF0F73] mt-1">🎉 {card.occasion}</p>}
                   </div>
 
                   {/* Balance Bar */}
@@ -158,7 +158,7 @@ function RedeemContent() {
                     </div>
                     <div className="h-2 rounded-full bg-white/[0.06] overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] transition-all duration-500"
+                        className="h-full rounded-full bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] transition-all duration-500"
                         style={{ width: `${balancePercent}%` }}
                       />
                     </div>
@@ -182,7 +182,7 @@ function RedeemContent() {
                 {card.status === "active" && card.balance > 0 ? (
                   <Link
                     href="/experiences"
-                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FF2D7A] to-[#FF7A18] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255,45,122,0.3)] transition-all flex items-center justify-center gap-2"
+                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all flex items-center justify-center gap-2"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     Browse Experiences to Redeem
@@ -218,9 +218,9 @@ function RedeemContent() {
                   </div>
                 </div>
                 <div className="p-4">
-                  <h3 className="text-body-sm font-bold text-[#F1F5F9] group-hover:text-[#FF2D7A] transition-colors line-clamp-1">{exp.title}</h3>
+                  <h3 className="text-body-sm font-bold text-[#F1F5F9] group-hover:text-[#FF0F73] transition-colors line-clamp-1">{exp.title}</h3>
                   <p className="text-caption text-[#64748B] mt-0.5 line-clamp-1">{exp.subtitle}</p>
-                  <p className="text-body-sm font-bold text-[#FF2D7A] mt-2">MK {exp.price.toLocaleString()}</p>
+                  <p className="text-body-sm font-bold text-[#FF0F73] mt-2">MK {exp.price.toLocaleString()}</p>
                 </div>
               </Link>
             ))}
@@ -238,8 +238,8 @@ function RedeemContent() {
             { step: "3", title: "Enjoy", desc: "The amount is applied instantly. Any balance stays for next time!" },
           ].map((s) => (
             <div key={s.step} className="text-center p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-              <div className="w-8 h-8 rounded-full bg-[#FF2D7A]/20 flex items-center justify-center mx-auto mb-2">
-                <span className="text-body-sm font-bold text-[#FF2D7A]">{s.step}</span>
+              <div className="w-8 h-8 rounded-full bg-[#FF0F73]/20 flex items-center justify-center mx-auto mb-2">
+                <span className="text-body-sm font-bold text-[#FF0F73]">{s.step}</span>
               </div>
               <h4 className="text-body-sm font-bold text-[#F1F5F9] mb-1">{s.title}</h4>
               <p className="text-caption text-[#64748B]">{s.desc}</p>
