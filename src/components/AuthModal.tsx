@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -14,9 +14,9 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   const [mode, setMode] = useState<AuthMode>("login");
   const [signupRole, setSignupRole] = useState<SignupRole>(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("experio-signup-role");
+      const saved = localStorage.getItem("momento-signup-role");
       if (saved === "partner") {
-        localStorage.removeItem("experio-signup-role");
+        localStorage.removeItem("momento-signup-role");
         return "partner";
       }
     }
@@ -84,15 +84,15 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         }
 
         if (data.session?.access_token) {
-          localStorage.setItem("experio-auth-token", data.session.access_token);
-          localStorage.setItem("experio-user-role", data.user?.user_metadata?.role || "user");
+          localStorage.setItem("momento-auth-token", data.session.access_token);
+          localStorage.setItem("momento-user-role", data.user?.user_metadata?.role || "user");
         }
         onClose();
         window.location.reload();
         return;
       }
 
-      // ─── Signup ──────────────────────────────────────────
+      // â”€â”€â”€ Signup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
       const res = await fetch("/api/auth/signup", {
         method: "POST",
@@ -120,8 +120,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         return;
       }
 
-      localStorage.setItem("experio-auth-token", data.session.access_token);
-      localStorage.setItem("experio-user-role", signupRole);
+      localStorage.setItem("momento-auth-token", data.session.access_token);
+      localStorage.setItem("momento-user-role", signupRole);
 
       // Upload avatar if provided
       if (avatarFile) {
@@ -202,7 +202,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                       : "border-[#ebebeb] bg-[#fafafa] hover:border-[#FF0F73]/30"
                   }`}
                 >
-                  <p className="text-body-sm font-semibold text-[#222222]">Experion</p>
+                  <p className="text-body-sm font-semibold text-[#222222]">Explorer</p>
                   <p className="text-caption text-[#6a6a6a] mt-0.5">Discover &amp; book experiences</p>
                 </button>
                 <button

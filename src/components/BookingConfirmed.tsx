@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -25,7 +25,7 @@ function generateICS({ title, date, location, description }: { title: string; da
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Momento//Experio//EN",
+    "PRODID:-//Momento//Momento//EN",
     "BEGIN:VEVENT",
     `DTSTART:${fmt(dtStart)}`,
     `DTEND:${fmt(dtEnd)}`,
@@ -78,12 +78,12 @@ export default function BookingConfirmed({
 
   const handleAddToCalendar = () => {
     const ics = generateICS({
-      title: `Experio: ${title}`,
+      title: `Momento: ${title}`,
       date: experienceDate || new Date().toISOString(),
       location,
       description: `${guests} guest${guests > 1 ? "s" : ""} · Ref: ${bookingRef || "N/A"}`,
     });
-    downloadICS(ics, `experio-${title.replace(/\s+/g, "-").toLowerCase()}.ics`);
+    downloadICS(ics, `MOMENTO-${title.replace(/\s+/g, "-").toLowerCase()}.ics`);
   };
 
   return (

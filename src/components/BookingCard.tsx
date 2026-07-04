@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
@@ -153,7 +153,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
       ctx.fillStyle = "rgba(255,255,255,0.2)";
       ctx.font = "8px sans-serif";
       ctx.textAlign = "left";
-      ctx.fillText("EXPERIO — Live The Experience", 20, rect.height - 10);
+      ctx.fillText("Momento — Live The Experience", 20, rect.height - 10);
 
       const link = document.createElement("a");
       link.download = `booking-${booking.bookingRef}.png`;
@@ -259,7 +259,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
               <span className="text-caption font-semibold text-white/60 uppercase tracking-wider">{actualStatus}</span>
             </div>
             <div className="text-right">
-              <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.15em]">Experio</p>
+              <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.15em]">Momento</p>
               <p className="text-[8px] text-white/10">EXPERIENCE PASS</p>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import Logo from "@/components/Logo";
 
 export default function Footer() {
@@ -43,7 +43,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-semibold text-body-sm mb-4">For Experions</h4>
+            <h4 className="text-white font-semibold text-body-sm mb-4">For Explorers</h4>
             <ul className="space-y-2.5 text-body-sm text-[#CBD5E1]">
               <li><Link href="/" className="hover:text-white transition-colors duration-200">Discover</Link></li>
               <li><Link href="/gift" className="hover:text-white transition-colors duration-200">Gift Cards</Link></li>
@@ -75,7 +75,7 @@ export default function Footer() {
         <div className="mt-12 pt-6 border-t border-white/[0.1] flex flex-col sm:flex-row items-center justify-between gap-4 text-caption text-[#94A3B8]">
           <p>&copy; {new Date().getFullYear()} Momento. All rights reserved.</p>
           <p className="flex items-center gap-1">
-            Made with <span className="text-[#FF0F73]">♥</span> in Malawi
+            Made with <span className="text-[#FF0F73]">â™¥</span> in Malawi
           </p>
         </div>
       </div>

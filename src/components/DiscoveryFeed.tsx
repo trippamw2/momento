@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
@@ -11,7 +11,7 @@ import { Experience } from "@/lib/types";
 function loadSaved(): string[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem("experio-saved");
+    const raw = localStorage.getItem("momento-saved");
     if (!raw) return [];
     const state = JSON.parse(raw);
     return state.savedIds || [];
@@ -23,10 +23,10 @@ function toggleSave(id: string, currentSaved: string[]): string[] {
     ? currentSaved.filter((s) => s !== id)
     : [...currentSaved, id];
   try {
-    const raw = localStorage.getItem("experio-saved");
+    const raw = localStorage.getItem("momento-saved");
     const state = raw ? JSON.parse(raw) : { savedIds: [], collections: [] };
     state.savedIds = next;
-    localStorage.setItem("experio-saved", JSON.stringify(state));
+    localStorage.setItem("momento-saved", JSON.stringify(state));
   } catch (e) { console.warn("Failed to save toggle state:", e); }
   return next;
 }
@@ -100,12 +100,12 @@ export default function DiscoveryFeed() {
 
                 <div className="flex items-center gap-4 mb-4">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-yellow-400 text-body-sm font-medium">★</span>
+                    <span className="text-yellow-400 text-body-sm font-medium">â˜…</span>
                     <span className="text-white/80 text-body-sm font-medium">{exp.rating}</span>
                   </div>
-                  <span className="text-white/50">·</span>
+                  <span className="text-white/50">Â·</span>
                   <span className="text-white/60 text-body-sm">{exp.location}</span>
-                  <span className="text-white/50">·</span>
+                  <span className="text-white/50">Â·</span>
                   <span className="text-white font-semibold text-heading-sm">MK {exp.price.toLocaleString()}</span>
                 </div>
 
@@ -126,7 +126,7 @@ export default function DiscoveryFeed() {
                         : "border-white/[0.15] text-white/80 hover:bg-white/[0.06]"
                     }`}
                   >
-                    {saved ? "♥ Saved" : "♡ Save"}
+                    {saved ? "â™¥ Saved" : "â™¡ Save"}
                   </button>
                   <button
                     onClick={() => {

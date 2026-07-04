@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
@@ -8,7 +8,7 @@ import { Experience } from "@/lib/types";
 function loadSaved(): string[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem("experio-saved");
+    const raw = localStorage.getItem("momento-saved");
     if (!raw) return [];
     return JSON.parse(raw).savedIds || [];
   } catch { return []; }
@@ -17,10 +17,10 @@ function loadSaved(): string[] {
 function toggleSave(id: string, current: string[]): string[] {
   const next = current.includes(id) ? current.filter((s) => s !== id) : [...current, id];
   try {
-    const raw = localStorage.getItem("experio-saved");
+    const raw = localStorage.getItem("momento-saved");
     const state = raw ? JSON.parse(raw) : { savedIds: [], collections: [] };
     state.savedIds = next;
-    localStorage.setItem("experio-saved", JSON.stringify(state));
+    localStorage.setItem("momento-saved", JSON.stringify(state));
   } catch (e) { console.warn("Failed to save saved state:", e); }
   return next;
 }
@@ -61,12 +61,12 @@ export default function AIConcierge() {
   };
 
   const suggestions = [
-    "I'm feeling romantic 🌹",
-    "I want somewhere quiet ☕",
-    "Surprise me! ✨",
-    "I have MWK 50,000 💰",
-    "I only have two hours ⏰",
-    "What's nearby? 📍",
+    "I'm feeling romantic ðŸŒ¹",
+    "I want somewhere quiet â˜•",
+    "Surprise me! âœ¨",
+    "I have MWK 50,000 ðŸ’°",
+    "I only have two hours â°",
+    "What's nearby? ðŸ“",
   ];
 
   return (
@@ -74,11 +74,11 @@ export default function AIConcierge() {
       <div className="p-5 sm:p-6 rounded-2xl bg-[#0A101B] border border-white/[0.06]">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF0F73] to-[#F82D7B] flex items-center justify-center shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] overflow-hidden">
-            <Image src="/experio-logo.png" alt="Experio" width={24} height={24} className="object-contain" />
+            <Image src="/momento-logo.png" alt="Momento" width={24} height={24} className="object-contain" />
           </div>
           <div>
             <p className="text-body font-semibold text-white">AI Concierge</p>
-            <p className="text-caption text-[#6B7280]">Ask me anything — I'll find your perfect experience</p>
+            <p className="text-caption text-[#6B7280]">Ask me anything â€” I'll find your perfect experience</p>
           </div>
         </div>
 
@@ -100,7 +100,7 @@ export default function AIConcierge() {
               {thinking ? (
                 <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
               ) : (
-                <span className="text-body font-bold text-white">→</span>
+                <span className="text-body font-bold text-white">â†’</span>
               )}
             </button>
           </div>
@@ -125,7 +125,7 @@ export default function AIConcierge() {
             <div className="p-4 rounded-xl bg-[#111827] border border-white/[0.06] mb-4">
               <div className="flex items-start gap-3">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FF0F73] to-[#F82D7B] flex items-center justify-center flex-shrink-0 overflow-hidden">
-                  <Image src="/experio-logo.png" alt="Experio" width={20} height={20} className="object-contain" />
+                  <Image src="/momento-logo.png" alt="Momento" width={20} height={20} className="object-contain" />
                 </div>
                 <p className="text-body-sm text-[#A1A1AA] leading-relaxed">{response.explanation}</p>
               </div>
@@ -151,7 +151,7 @@ export default function AIConcierge() {
                           className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-[#FF0F73]/60"
                         >
                           <span className="text-caption font-bold" style={{ color: saved ? "#FF0F73" : "white" }}>
-                            {saved ? "♥" : "♡"}
+                            {saved ? "â™¥" : "â™¡"}
                           </span>
                         </button>
                         <div className="absolute bottom-0 left-0 right-0 p-2.5">
