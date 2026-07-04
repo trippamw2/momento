@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import HeroSection from "@/components/HeroSection";
 import ContentRail from "@/components/ContentRail";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { getExperiences } from "@/lib/api-client";
 import { transformExperience } from "@/lib/transform";
 import { Experience, Mood } from "@/lib/types";
@@ -48,7 +49,14 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export default function Home() {
+  const router = useRouter();
   const [experiences, setExperiences] = useState<Experience[]>([]);
+
+  const handleSurpriseMe = useCallback(() => {
+    if (experiences.length === 0) return;
+    const random = experiences[Math.floor(Math.random() * experiences.length)];
+    router.push(`/experiences/${random.id}`);
+  }, [experiences, router]);
   const [loading, setLoading] = useState(true);
   const geo = useGeolocation();
   const [detectedCity, setDetectedCity] = useState<string | null>(null);
@@ -240,6 +248,23 @@ export default function Home() {
   return (
     <div className="overflow-x-hidden">
       <HeroSection />
+
+      {/* ─── Surprise Me ─── */}
+      <div className="relative z-10 px-4 sm:px-8 pt-6 sm:pt-8">
+        <button
+          onClick={handleSurpriseMe}
+          className="group w-full sm:w-auto px-6 py-4 rounded-2xl bg-gradient-to-r from-[#FF0F73]/15 to-[#FF7A1A]/15 border border-[#FF7A1A]/25 hover:border-[#FF7A1A]/50 text-white transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(255, 122, 26, 0.15)]"
+        >
+          <span className="text-2xl">🎲</span>
+          <div className="text-left">
+            <p className="text-body-sm font-bold">Surprise Me</p>
+            <p className="text-caption text-[#CBD5E1]">Feeling lucky? Let us pick for you</p>
+          </div>
+          <svg className="w-5 h-5 text-[#FF7A1A] group-hover:translate-x-1 transition-transform shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </button>
+      </div>
 
       <div className="relative z-10 pt-6 sm:pt-8 pb-16 space-y-1">
         

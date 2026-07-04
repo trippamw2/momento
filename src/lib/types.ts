@@ -30,6 +30,9 @@ export interface Review {
   rating: number;
   date: string;
   text: string;
+  photos?: string[];       // data URLs or image paths
+  verified?: boolean;      // confirmed booking
+  timestamp?: number;
 }
 
 export interface Experience {

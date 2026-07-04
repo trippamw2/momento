@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import Image from "next/image";
 
 interface ReviewFormProps {
   experienceId: string;
@@ -12,9 +13,32 @@ export default function ReviewForm({ experienceId, onSubmitted, onCancel }: Revi
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [text, setText] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    for (const file of Array.from(files)) {
+      if (!file.type.startsWith("image/")) continue;
+      if (photos.length >= 5) break;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const dataUrl = ev.target?.result as string;
+        setPhotos((prev) => [...prev, dataUrl]);
+      };
+      reader.readAsDataURL(file);
+    }
+    // Reset input so same file can be picked again
+    e.target.value = "";
+  };
+
+  const removePhoto = (index: number) => {
+    setPhotos((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = async () => {
     if (rating === 0) {
@@ -43,9 +67,13 @@ export default function ReviewForm({ experienceId, onSubmitted, onCancel }: Revi
         text: text.trim(),
         date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
         timestamp: Date.now(),
+        photos: photos.length > 0 ? photos : undefined,
+        verified: true,
       });
       localStorage.setItem(key, JSON.stringify(existing));
-    } catch { /* ignore */ }
+    } catch {
+      console.warn("Failed to save review");
+    }
 
     setSubmitting(false);
     setSubmitted(true);
@@ -107,6 +135,48 @@ export default function ReviewForm({ experienceId, onSubmitted, onCancel }: Revi
           className="w-full bg-[#0A0E17] border border-white/[0.08] rounded-xl p-3 text-white text-body-sm placeholder-[#64748B] outline-none focus:border-[#FF0F73]/40 resize-none transition-colors"
         />
         <p className="text-caption text-[#64748B] mt-1">{text.length} characters</p>
+      </div>
+
+      {/* Photo Upload */}
+      <div className="mb-4">
+        <p className="text-caption text-[#94A3B8] mb-2">
+          Photos <span className="text-[#64748B]">(optional, up to 5)</span>
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {photos.map((src, i) => (
+            <div key={i} className="relative w-16 h-16 rounded-lg overflow-hidden border border-white/[0.08] group">
+              <Image src={src} alt={`Review photo ${i + 1}`} fill className="object-cover" unoptimized />
+              <button
+                type="button"
+                onClick={() => removePhoto(i)}
+                className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-black/70 text-white text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                aria-label="Remove photo"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+          {photos.length < 5 && (
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              className="w-16 h-16 rounded-lg border-2 border-dashed border-white/[0.12] flex items-center justify-center text-[#64748B] hover:border-[#FF0F73]/40 hover:text-[#FF0F73] transition-all"
+              aria-label="Add photo"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          )}
+        </div>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handlePhotoSelect}
+          className="hidden"
+        />
       </div>
 
       {error && (

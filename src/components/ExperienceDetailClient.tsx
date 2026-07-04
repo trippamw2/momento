@@ -4,7 +4,7 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Experience } from "@/lib/types";
+import { Experience, Review } from "@/lib/types";
 import { trackView, trackBooked, trackSaved } from "@/lib/recommendation-engine";
 import { calculatePoints, calculateTier, addPointsLocally, TIER_MAP } from "@/lib/loyalty-engine";
 import { sendBookingConfirmationEmail } from "@/lib/delivery-email";
@@ -47,10 +47,32 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
   const [contactEmail, setContactEmail] = useState("");
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [contactError, setContactError] = useState("");
+  const [reviewSort, setReviewSort] = useState<"recent" | "highest" | "lowest">("recent");
   const router = useRouter();
 
   // Track view on mount
   useEffect(() => { trackView(exp.id); }, [exp.id]);
+
+  // Load local reviews and merge with exp.reviews
+  const allReviews = useMemo(() => {
+    const local: Review[] = [];
+    try {
+      const key = `experio-reviews-${exp.id}`;
+      const raw = localStorage.getItem(key);
+      if (raw) local.push(...JSON.parse(raw));
+    } catch { /* ignore */ }
+    return [...local, ...exp.reviews];
+  }, [exp.id, exp.reviews]);
+
+  const sortedReviews = useMemo(() => {
+    const sorted = [...allReviews];
+    switch (reviewSort) {
+      case "recent":  sorted.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)); break;
+      case "highest": sorted.sort((a, b) => b.rating - a.rating); break;
+      case "lowest":  sorted.sort((a, b) => a.rating - b.rating); break;
+    }
+    return sorted;
+  }, [allReviews, reviewSort]);
 
   const handleShare = useCallback(() => {
     if (navigator.share) {
@@ -394,8 +416,24 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 <h2 className="text-heading-md font-bold text-white flex items-center gap-2">
                   <span className="text-yellow-400 text-heading">★</span>
                   <span>{exp.rating}</span>
-                  <span className="text-[#94A3B8] font-normal text-body-sm">· {exp.reviews.length} reviews</span>
+                  <span className="text-[#94A3B8] font-normal text-body-sm">· {allReviews.length} reviews</span>
                 </h2>
+                {/* Sort Controls */}
+                <div className="flex items-center gap-1 bg-white/[0.04] rounded-lg p-0.5 border border-white/[0.06]">
+                  {([["recent", "Recent"], ["highest", "Highest"], ["lowest", "Lowest"]] as const).map(([key, label]) => (
+                    <button
+                      key={key}
+                      onClick={() => setReviewSort(key)}
+                      className={`px-2.5 py-1 rounded-md text-caption font-medium transition-all ${
+                        reviewSort === key
+                          ? "bg-[#FF0F73]/20 text-[#FF0F73]"
+                          : "text-[#64748B] hover:text-white"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Star Breakdown Bars */}
@@ -419,12 +457,12 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
 
               {/* Review Cards */}
               <div className="space-y-4">
-                {exp.reviews.map((review) => (
-                  <ReviewCard key={review.id} author={review.author} avatar={review.avatar} rating={review.rating} date={review.date} text={review.text} />
+                {sortedReviews.map((review) => (
+                  <ReviewCard key={review.id} author={review.author} avatar={review.avatar} rating={review.rating} date={review.date} text={review.text} photos={review.photos} verified={review.verified} />
                 ))}
               </div>
 
-              {exp.reviews.length === 0 && (
+              {allReviews.length === 0 && (
                 <div className="text-center py-8 text-[#94A3B8] text-body-sm">
                   No reviews yet. Be the first to share your experience!
                 </div>
