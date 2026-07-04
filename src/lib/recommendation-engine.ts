@@ -42,7 +42,7 @@ function loadInteractions(): UserInteraction[] {
 function saveInteractions(interactions: UserInteraction[]) {
   try {
     localStorage.setItem(KEYS.INTERACTIONS, JSON.stringify(interactions.slice(0, 200)));
-  } catch {}
+  } catch (e) { console.warn("Failed to save interactions:", e); }
 }
 
 // ─── Tracking ───
@@ -72,8 +72,8 @@ export function trackView(experienceId: string) {
   trackInteraction(experienceId, "viewed");
 }
 
-export function trackSaved(experienceId: string) {
-  trackInteraction(experienceId, "saved");
+export function trackSaved(experienceId: string, saved?: boolean) {
+  if (saved !== false) trackInteraction(experienceId, "saved");
 }
 
 export function trackBooked(experienceId: string) {
@@ -342,4 +342,38 @@ export function getBasedOnHistory(
     categoryAffinity,
     undefined
   ).slice(0, limit);
+}
+
+// ─── Category-based recommendations ───
+
+export function getRecommendedCategories(experiences: Experience[]): string[] {
+  const timeBonus = getTimeOfDayBonus();
+  const dayBonus = getDayOfWeekBonus();
+  const scores: Record<string, number> = {};
+  for (const cat of [...new Set(experiences.map((e) => e.category))]) {
+    scores[cat] = (timeBonus[cat] || 0) + (dayBonus[cat] || 0);
+  }
+  return Object.entries(scores)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 3)
+    .map(([cat]) => cat);
+}
+
+export function hasUserInteractions(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const interactions = loadInteractions();
+    return interactions.length > 0;
+  } catch {
+    return false;
+  }
+}
+
+export function getPersonalizedRecommendations(
+  experiences: Experience[],
+  location?: { lat: number; lng: number }
+): Experience[] {
+  if (experiences.length === 0) return [];
+  const categoryAffinity = getUserCategoryAffinity(experiences);
+  return scoreExperiences(experiences, categoryAffinity, location).slice(0, 10);
 }

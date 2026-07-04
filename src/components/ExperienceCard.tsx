@@ -4,8 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Experience } from "@/lib/types";
 import { useState, useCallback } from "react";
-import { trackView, trackSaved } from "@/lib/recommendations";
-import { trackBooked } from "@/lib/recommendation-engine";
+import { trackView, trackSaved, trackBooked } from "@/lib/recommendation-engine";
 import DistanceBadge from "./DistanceBadge";
 
 const MOOD_COLORS: Record<string, { bg: string; text: string; glow: string }> = {
@@ -57,7 +56,7 @@ export default function ExperienceCard({ experience: exp, size = "md", distance 
       const state = raw ? JSON.parse(raw) : { savedIds: [], collections: [] };
       state.savedIds = next;
       localStorage.setItem("experio-saved", JSON.stringify(state));
-    } catch {}
+    } catch (e) { console.warn("Failed to save toggle state:", e); }
     trackSaved(exp.id, !saved);
     setSaved(!saved);
   }, [saved, exp.id]);

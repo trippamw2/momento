@@ -6,11 +6,11 @@ import ContentRail from "@/components/ContentRail";
 import Link from "next/link";
 import { getExperiences } from "@/lib/api-client";
 import { transformExperience } from "@/lib/transform";
-import { Experience } from "@/lib/types";
+import { Experience, Mood } from "@/lib/types";
 import { experiences as mockExperiences } from "@/lib/data";
 import { useGeolocation, getDistance, formatDist } from "@/lib/use-geolocation";
 import { findNearestCity, getLocationSuggestions, getSmartRadius, getPopularCities, haversineDistance, formatDistance, getTravelMode } from "@/lib/geo";
-import { getPersonalizedRecommendations, getRecommendedCategories, hasUserInteractions, trackView } from "@/lib/recommendations";
+import { getPersonalizedRecommendations, getRecommendedCategories, hasUserInteractions, trackView } from "@/lib/recommendation-engine";
 import { getPopularInArea } from "@/lib/geofence";
 import DistanceBadge from "@/components/DistanceBadge";
 import AIConcierge from "@/components/AIConcierge";
@@ -158,8 +158,8 @@ export default function Home() {
   const giftIdeas = useMemo(() => {
     if (experiences.length === 0) return [];
     const all = [
-      ...experiences.filter((e) => e.mood.includes("Luxurious" as any)),
-      ...experiences.filter((e) => e.mood.includes("Romantic" as any)),
+      ...experiences.filter((e) => e.mood.includes("Luxurious" as Mood)),
+      ...experiences.filter((e) => e.mood.includes("Romantic" as Mood)),
     ];
     return shuffle(all).slice(0, 4);
   }, [experiences]);

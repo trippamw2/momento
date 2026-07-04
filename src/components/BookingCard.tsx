@@ -158,7 +158,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
       link.download = `booking-${booking.bookingRef}.png`;
       link.href = canvas.toDataURL();
       link.click();
-    } catch {}
+    } catch (e) { console.warn("Failed to download booking card:", e); }
   }, [booking, qrDataUrl]);
 
   const handleDownloadPDF = useCallback(() => {

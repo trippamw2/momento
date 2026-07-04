@@ -283,7 +283,7 @@ export default function GiftPageContent() {
       link.download = `experio-giftcard-${redemptionCode}.png`;
       link.href = canvas.toDataURL();
       link.click();
-    } catch {}
+    } catch (e) { console.warn("Failed to download gift card image:", e); }
   }, [redemptionCode, qrDataUrl, recipientName, senderName, tab, selectedCard]);
 
   const selectedValue = tab === "cards" && selectedCard !== null

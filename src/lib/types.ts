@@ -22,28 +22,6 @@ export type ExperioCategory =
   | "Celebrate"
   | "Escape";
 
-export const EXPERIO_CATEGORIES: { key: ExperioCategory; emoji: string; label: string; description: string; accent: string }[] = [
-  { key: "Date", emoji: "❤️", label: "Date", description: "Romantic dinners, sunset spots, couples activities", accent: "from-rose-400 to-pink-500" },
-  { key: "Chill", emoji: "🌿", label: "Chill", description: "Coffee shops, spas, beaches, cafés", accent: "from-emerald-400 to-teal-500" },
-  { key: "Celebrate", emoji: "🎉", label: "Celebrate", description: "Birthdays, nightlife, concerts, private dining", accent: "from-amber-400 to-orange-500" },
-  { key: "Escape", emoji: "🌍", label: "Escape", description: "Weekend getaways, lodges, safaris, adventures", accent: "from-blue-400 to-cyan-500" },
-];
-
-export const CATEGORY_EMOJI: Record<ExperioCategory, string> = Object.fromEntries(
-  EXPERIO_CATEGORIES.map((c) => [c.key, c.emoji])
-) as Record<ExperioCategory, string>;
-
-export const CATEGORY_LABEL: Record<ExperioCategory, string> = Object.fromEntries(
-  EXPERIO_CATEGORIES.map((c) => [c.key, c.label])
-) as Record<ExperioCategory, string>;
-
-export const CATEGORY_DESCRIPTION: Record<ExperioCategory, string> = Object.fromEntries(
-  EXPERIO_CATEGORIES.map((c) => [c.key, c.description])
-) as Record<ExperioCategory, string>;
-
-export const CATEGORY_ACCENT: Record<ExperioCategory, string> = Object.fromEntries(
-  EXPERIO_CATEGORIES.map((c) => [c.key, c.accent])
-) as Record<ExperioCategory, string>;
 
 export interface Review {
   id: string;

@@ -1,5 +1,6 @@
-import { Experience, Review, ExperioCategory } from "./types";
+import { Experience, Review, ExperioCategory, V2Category } from "./types";
 import { mapV2CategoryToExperio } from "./categories";
+import { AFRICAN_CITY_COORDS } from "./geo";
 
 const CITY_MAP: Record<string, string> = {
   "Cape Maclear": "Lilongwe",
@@ -12,17 +13,6 @@ const CITY_MAP: Record<string, string> = {
   Liwonde: "Blantyre",
   Nkhotakota: "Lilongwe",
   Mzuzu: "Mzuzu",
-};
-
-const AFRICAN_CITY_COORDS: Record<string, { lat: number; lng: number }> = {
-  Lilongwe: { lat: -13.9626, lng: 33.7741 },
-  Blantyre: { lat: -15.7861, lng: 35.0058 },
-  Lusaka: { lat: -15.4167, lng: 28.2833 },
-  Harare: { lat: -17.8252, lng: 31.0335 },
-  Johannesburg: { lat: -26.2041, lng: 28.0473 },
-  "Dar es Salaam": { lat: -6.7924, lng: 39.2083 },
-  Nairobi: { lat: -1.2921, lng: 36.8219 },
-  Mzuzu: { lat: -11.4656, lng: 34.0207 },
 };
 
 function nearestCity(location: string): string {
@@ -60,7 +50,7 @@ export function transformExperience(raw: Record<string, unknown>): Experience {
     const valid: ExperioCategory[] = ["Date", "Chill", "Celebrate", "Escape"];
     if (valid.includes(cat as ExperioCategory)) return cat as ExperioCategory;
     // Legacy V2Category mapping
-    return mapV2CategoryToExperio(cat as any);
+    return mapV2CategoryToExperio(cat as V2Category);
   }
 
   return {

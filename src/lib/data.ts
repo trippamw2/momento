@@ -1,5 +1,4 @@
 import { Experience, Mood, NavItem, DiscoveryRailKey, Review, ExperioCategory } from "./types";
-import { EXPERIO_CATEGORIES } from "./categories";
 import { haversineDistance, formatDistance, AFRICAN_CITY_COORDS } from "./geo";
 
 export const moods: { label: Mood; description: string; accent: string }[] = [

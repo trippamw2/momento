@@ -151,7 +151,7 @@ export async function GET(request: Request) {
     }
 
     // Gemini failed — fall back to keyword-based matching
-    console.log("Gemini unavailable, using keyword fallback for:", query);
+    console.warn("Gemini unavailable, using keyword fallback for:", query);
     return json(getConciergeResponse(query));
   } catch (error) {
     return handleRouteError(error);

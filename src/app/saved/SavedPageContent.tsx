@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { experiences, defaultCollections, defaultSavedIds, recentlyViewedMock } from "@/lib/data";
 import { Experience } from "@/lib/types";
-import { trackSaved } from "@/lib/recommendations";
+import { trackSaved } from "@/lib/recommendation-engine";
 
 interface Collection {
   id: string;
@@ -33,7 +33,7 @@ function loadState(): SavedState {
   try {
     const raw = localStorage.getItem("experio-saved");
     if (raw) return JSON.parse(raw);
-  } catch {}
+  } catch (e) { console.warn("Failed to load saved state:", e); }
   return { savedIds: defaultSavedIds, collections: defaultCollections };
 }
 
@@ -41,7 +41,7 @@ function saveState(state: SavedState) {
   if (typeof window === "undefined") return;
   try {
     localStorage.setItem("experio-saved", JSON.stringify(state));
-  } catch {}
+  } catch (e) { console.warn("Failed to save state:", e); }
 }
 
 type SidebarTab = "all" | "favorites" | "want-to-try" | "events" | "gift-ideas" | "recently-viewed";

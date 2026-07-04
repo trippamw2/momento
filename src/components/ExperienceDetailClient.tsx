@@ -4,7 +4,7 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Experience } from "@/lib/types";
-import { trackView, trackBooked, trackSaved } from "@/lib/recommendations";
+import { trackView, trackBooked, trackSaved } from "@/lib/recommendation-engine";
 import { calculatePoints, calculateTier, addPointsLocally, TIER_MAP } from "@/lib/loyalty-engine";
 import { sendBookingConfirmationEmail } from "@/lib/delivery-email";
 

@@ -21,7 +21,7 @@ function toggleSave(id: string, current: string[]): string[] {
     const state = raw ? JSON.parse(raw) : { savedIds: [], collections: [] };
     state.savedIds = next;
     localStorage.setItem("experio-saved", JSON.stringify(state));
-  } catch {}
+  } catch (e) { console.warn("Failed to save saved state:", e); }
   return next;
 }
 

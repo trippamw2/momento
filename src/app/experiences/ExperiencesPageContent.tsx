@@ -54,7 +54,7 @@ function filterExperiences(exps: Experience[], opts: {
     result = result.filter((e) => e.category === opts.category);
   }
   if (opts.mood) {
-    result = result.filter((e) => e.mood.includes(opts.mood as any));
+    result = result.filter((e) => e.mood.includes(opts.mood as Mood));
   }
   if (opts.priceRange && opts.priceRange !== "all") {
     const [min, max] = opts.priceRange.split("-").map(Number);

@@ -28,7 +28,7 @@ export default function SocialShare({ url, title = "Check this out!", descriptio
     try {
       await navigator.clipboard.writeText(shareUrl);
       setOpen(false);
-    } catch {}
+    } catch (e) { console.warn("Failed to copy link:", e); }
   };
 
   const shareLinks = [
