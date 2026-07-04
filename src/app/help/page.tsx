@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -9,11 +9,11 @@ const faqs = [
   },
   {
     q: "Can I cancel or reschedule a booking?",
-    a: "Yes — you can reschedule any booking up to 48 hours before the start time at no charge. Cancellations made more than 48 hours in advance are fully refunded. See our cancellation policy for details.",
+    a: "Yes â€” you can reschedule any booking up to 48 hours before the start time at no charge. Cancellations made more than 48 hours in advance are fully refunded. See our cancellation policy for details.",
   },
   {
     q: "How do gift cards work?",
-    a: "Purchase a gift card for any amount, and the recipient receives a unique code via SMS or email. They can redeem it at checkout toward any experience on Experio. Gift cards never expire.",
+    a: "Purchase a gift card for any amount, and the recipient receives a unique code via SMS or email. They can redeem it at checkout toward any experience on Momento. Gift cards never expire.",
   },
   {
     q: "Is my payment information secure?",
@@ -25,7 +25,7 @@ const faqs = [
   },
   {
     q: "What if I have issues during an experience?",
-    a: "Contact us immediately through the in-app support chat or email help@experio.life. We'll work with you and the host to resolve any issues. Your safety and satisfaction are our priority.",
+    a: "Contact us immediately through the in-app support chat or email help@momento.life. We'll work with you and the host to resolve any issues. Your safety and satisfaction are our priority.",
   },
 ];
 
@@ -37,7 +37,7 @@ export default function HelpPage() {
         <div className="text-center mb-12">
           <h1 className="text-display-sm font-bold text-[#222222] mb-3">Help Center</h1>
           <p className="text-[#6a6a6a] text-body-lg max-w-lg mx-auto">
-            Everything you need to know about booking, gifting, and partnering with Experio.
+            Everything you need to know about booking, gifting, and partnering with Momento.
           </p>
         </div>
 
@@ -73,7 +73,7 @@ export default function HelpPage() {
             Reach out to our support team and we&apos;ll get back to you within 24 hours.
           </p>
           <a
-            href="mailto:help@experio.life"
+            href="mailto:help@momento.life"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all duration-300"
           >
             Email Support

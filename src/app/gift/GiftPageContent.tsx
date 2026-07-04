@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
@@ -82,7 +82,7 @@ export default function GiftPageContent() {
   }, [sent, redemptionCode]);
 
   const handleSend = async () => {
-    const token = localStorage.getItem("experio-auth-token");
+    const token = localStorage.getItem("momento-auth-token");
     if (!token) {
       setGiftError("Please sign in to send a gift");
       return;
@@ -189,11 +189,11 @@ export default function GiftPageContent() {
       ctx.arc(-30, rect.height - 30, 80, 0, Math.PI * 2);
       ctx.fill();
 
-      // Experio brand mark
+      // Momento brand mark
       ctx.fillStyle = "#FF0F73";
       ctx.font = "bold 12px sans-serif";
       ctx.textAlign = "right";
-      ctx.fillText("✦ EXPERIO", rect.width - 20, 30);
+      ctx.fillText("âœ¦ Momento", rect.width - 20, 30);
 
       // Card chip
       ctx.fillStyle = "rgba(255, 200, 50, 0.7)";
@@ -244,7 +244,7 @@ export default function GiftPageContent() {
         qrImg.onload = () => {
           ctx.drawImage(qrImg, rect.width - 110, rect.height - 130, 90, 90);
           const link = document.createElement("a");
-          link.download = `experio-giftcard-${redemptionCode}.png`;
+          link.download = `momento-giftcard-${redemptionCode}.png`;
           link.href = canvas.toDataURL();
           link.click();
         };
@@ -253,7 +253,7 @@ export default function GiftPageContent() {
       }
 
       const link = document.createElement("a");
-      link.download = `experio-giftcard-${redemptionCode}.png`;
+      link.download = `momento-giftcard-${redemptionCode}.png`;
       link.href = canvas.toDataURL();
       link.click();
     } catch (e) { console.warn("Failed to download gift card image:", e); }
@@ -304,11 +304,11 @@ export default function GiftPageContent() {
 
   return (
     <div className="pt-20 pb-16">
-      {/* ─── Hero ─── */}
+      {/* â”€â”€â”€ Hero â”€â”€â”€ */}
       <GiftHero />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-14">
-        {/* ─── Experience Finder ─── */}
+        {/* â”€â”€â”€ Experience Finder â”€â”€â”€ */}
         <section>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-heading-xl font-bold text-[#F1F5F9]">Find the perfect gift</h2>
@@ -321,7 +321,7 @@ export default function GiftPageContent() {
             </Link>
           </div>
 
-          {/* ─── Filters ─── */}
+          {/* â”€â”€â”€ Filters â”€â”€â”€ */}
           <div className="flex flex-wrap items-center gap-2.5 mb-6">
             <span className="text-caption font-medium text-[#64748B] uppercase tracking-wider mr-1">Category</span>
             {categories.map((cat) => (
@@ -358,7 +358,7 @@ export default function GiftPageContent() {
             </Link>
           </div>
 
-          {/* ─── Popular Gift Ideas Rail ─── */}
+          {/* â”€â”€â”€ Popular Gift Ideas Rail â”€â”€â”€ */}
           <div className="mb-8">
             <h3 className="text-heading-md font-bold text-[#F1F5F9] mb-4">Popular Gift Ideas</h3>
             <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar snap-x snap-mandatory">
@@ -380,9 +380,9 @@ export default function GiftPageContent() {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-transparent to-transparent" />
                       <div className="absolute bottom-0 left-0 right-0 p-4">
                         <div className="flex items-center gap-1.5 mb-1">
-                          <span className="text-yellow-400 text-[11px]">★</span>
+                          <span className="text-yellow-400 text-[11px]">â˜…</span>
                           <span className="text-caption text-white/80 font-medium">{exp.rating}</span>
-                          <span className="text-caption text-white/30">·</span>
+                          <span className="text-caption text-white/30">Â·</span>
                           <span className="text-caption text-white/50">{exp.reviewCount}</span>
                         </div>
                         <h4 className="text-white font-semibold text-body-sm leading-tight">{exp.title}</h4>
@@ -398,7 +398,7 @@ export default function GiftPageContent() {
             </div>
           </div>
 
-          {/* ─── Occasion Chips ─── */}
+          {/* â”€â”€â”€ Occasion Chips â”€â”€â”€ */}
           <div className="pt-2">
             <h3 className="text-heading-sm font-bold text-[#F1F5F9] mb-3 text-center">What&apos;s the occasion?</h3>
             <div className="flex flex-wrap items-center justify-center gap-2.5">
@@ -419,7 +419,7 @@ export default function GiftPageContent() {
           </div>
         </section>
 
-        {/* ─── Gift Cards (Physical ATM/Credit Card Style) ─── */}
+        {/* â”€â”€â”€ Gift Cards (Physical ATM/Credit Card Style) â”€â”€â”€ */}
         <section>
           <div className="text-center mb-8">
             <h2 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Gift Cards</h2>
@@ -435,7 +435,7 @@ export default function GiftPageContent() {
                 variantId={GIFT_CARD_VARIANTS[i].id}
                 selected={selectedCard === i}
                 onSelect={() => setSelectedCard(selectedCard === i ? null : i)}
-                cardNumber={`•••• •••• •••• ${4829 + i * 100}`}
+                cardNumber={`â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ ${4829 + i * 100}`}
                 expiry={`12/${27 + i}`}
                 holderName="Your Gift"
               />
@@ -443,7 +443,7 @@ export default function GiftPageContent() {
           </div>
         </section>
 
-        {/* ─── Gifting Process ─── */}
+        {/* â”€â”€â”€ Gifting Process â”€â”€â”€ */}
         <section>
           <h2 className="text-heading-xl font-bold text-[#F1F5F9] mb-8 text-center">How It Works</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto">
@@ -459,7 +459,7 @@ export default function GiftPageContent() {
           </div>
         </section>
 
-        {/* ─── Interactive Gift Form ─── */}
+        {/* â”€â”€â”€ Interactive Gift Form â”€â”€â”€ */}
         <section className="max-w-4xl mx-auto">
           <div className="bg-[#111827] rounded-2xl border border-white/[0.08] p-6 sm:p-8 shadow-sm">
             <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-6 text-center">Send Your Gift</h2>
@@ -498,7 +498,7 @@ export default function GiftPageContent() {
                     : "bg-white/[0.05] text-[#64748B] border border-white/[0.08] hover:text-[#CBD5E1]"
                 }`}
               >
-                ⚡ Send Now
+                âš¡ Send Now
               </button>
               <button
                 onClick={() => setSendMode("schedule")}
@@ -508,7 +508,7 @@ export default function GiftPageContent() {
                     : "bg-white/[0.05] text-[#64748B] border border-white/[0.08] hover:text-[#CBD5E1]"
                 }`}
               >
-                📅 Schedule for Later
+                ðŸ“… Schedule for Later
               </button>
             </div>
 
@@ -539,7 +539,7 @@ export default function GiftPageContent() {
                         variantId={GIFT_CARD_VARIANTS[i].id}
                         selected={selectedCard === i}
                         onSelect={() => setSelectedCard(selectedCard === i ? null : i)}
-                        cardNumber={`•••• •••• •••• ${4829 + i * 100}`}
+                        cardNumber={`â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ ${4829 + i * 100}`}
                         expiry={`12/${27 + i}`}
                         holderName="Your Gift"
                         isCompact
@@ -648,9 +648,9 @@ export default function GiftPageContent() {
                     <div className="flex items-center justify-between">
                       <span className="text-body-sm text-[#CBD5E1]">
                         {tab === "cards" && selectedCard !== null
-                          ? `Gift Card — ${giftCardValues[selectedCard].label}`
+                          ? `Gift Card â€” ${giftCardValues[selectedCard].label}`
                           : tab === "experiences" && selectedExp
-                            ? `Experience — ${experiences.find((e) => e.id === selectedExp)?.title}`
+                            ? `Experience â€” ${experiences.find((e) => e.id === selectedExp)?.title}`
                             : "Select a gift above"}
                       </span>
                       <span className="text-heading-sm font-bold text-[#F1F5F9]">
@@ -658,10 +658,10 @@ export default function GiftPageContent() {
                       </span>
                     </div>
                     {occasion && (
-                      <p className="text-caption text-[#CBD5E1] mt-2">🎉 {occasion}</p>
+                      <p className="text-caption text-[#CBD5E1] mt-2">ðŸŽ‰ {occasion}</p>
                     )}
                     {sendMode === "schedule" && scheduleLabel && (
-                      <p className="text-caption text-[#FF0F73] mt-1">📅 Delivering {scheduleLabel}</p>
+                      <p className="text-caption text-[#FF0F73] mt-1">ðŸ“… Delivering {scheduleLabel}</p>
                     )}
                     {message && (
                       <p className="text-caption text-[#CBD5E1] mt-1 italic line-clamp-1">&ldquo;{message}&rdquo;</p>
@@ -695,13 +695,13 @@ export default function GiftPageContent() {
                 </div>
               </>
             ) : (
-              /* ─── Success State with ATM-style Card ─── */
+              /* â”€â”€â”€ Success State with ATM-style Card â”€â”€â”€ */
               <div className="max-w-lg mx-auto text-center py-6">
                 <div className="w-16 h-16 rounded-full bg-emerald-500 flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(16,185,129,0.3)]">
                   <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 </div>
                 <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-1">
-                  {sendMode === "schedule" ? "Gift Scheduled! 🎉" : "Gift Sent! 🎉"}
+                  {sendMode === "schedule" ? "Gift Scheduled! ðŸŽ‰" : "Gift Sent! ðŸŽ‰"}
                 </h2>
                 <p className="text-[#CBD5E1] text-body-sm mb-6">
                   {sendMode === "schedule"
@@ -729,7 +729,7 @@ export default function GiftPageContent() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.15em]">Experio</p>
+                          <p className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.15em]">Momento</p>
                           <p className="text-[8px] text-white/30">Gift Card</p>
                         </div>
                       </div>
@@ -811,7 +811,7 @@ export default function GiftPageContent() {
           </div>
         </section>
 
-        {/* ─── Track & Redeem ─── */}
+        {/* â”€â”€â”€ Track & Redeem â”€â”€â”€ */}
         <TrackRedeem />
       </div>
     </div>

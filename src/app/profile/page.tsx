@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -99,7 +99,7 @@ function UserProfile({ user }: { user: UserData }) {
         <div className="mt-8 text-center">
           <button
             onClick={() => {
-              localStorage.removeItem("experio-auth-token");
+              localStorage.removeItem("momento-auth-token");
               window.location.href = "/";
             }}
             className="px-6 py-2.5 rounded-xl bg-red-50 text-red-500 text-body-sm font-medium hover:bg-red-100 transition-all border border-red-200"
@@ -121,7 +121,7 @@ function GuestProfile() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
           </svg>
         </div>
-        <h1 className="text-heading-xl font-bold text-[#222222] mb-2">Welcome to Experio</h1>
+        <h1 className="text-heading-xl font-bold text-[#222222] mb-2">Welcome to Momento</h1>
         <p className="text-[#6a6a6a] text-body mb-8">
           Sign in to view your profile, manage bookings, and access partner tools.
         </p>
@@ -145,7 +145,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem("experio-auth-token");
+      const token = localStorage.getItem("momento-auth-token");
       if (!token) {
         setLoading(false);
         return;
@@ -159,7 +159,7 @@ export default function ProfilePage() {
           const data = await res.json();
           setUser(data);
         } else {
-          localStorage.removeItem("experio-auth-token");
+          localStorage.removeItem("momento-auth-token");
         }
       } catch {
         setError("Failed to load profile");
@@ -180,16 +180,16 @@ export default function ProfilePage() {
     );
   }
 
-  // Partner → show PartnerDashboard
+  // Partner â†’ show PartnerDashboard
   if (user?.role === "partner" || user?.role === "admin") {
     return <PartnerDashboard />;
   }
 
-  // Authenticated user → show user profile
+  // Authenticated user â†’ show user profile
   if (user) {
     return <UserProfile user={user} />;
   }
 
-  // Guest → show welcome page
+  // Guest â†’ show welcome page
   return <GuestProfile />;
 }

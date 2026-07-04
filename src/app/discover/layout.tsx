@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import Logo from "@/components/Logo";
 
 export const metadata: Metadata = {
-  title: "Discover — Experio",
+  title: "Discover — Momento",
   description: "Swipe through unforgettable experiences. Save, gift, share, or book instantly.",
 };
 

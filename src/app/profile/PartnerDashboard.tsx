@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo } from "react";
 import Image from "next/image";
@@ -110,7 +110,7 @@ export default function PartnerDashboard() {
               <span className="text-white font-bold text-body">M</span>
             </div>
             <div>
-              <p className="text-body-sm font-bold text-[#222222]">Experio</p>
+              <p className="text-body-sm font-bold text-[#222222]">Momento</p>
               <p className="text-caption text-[#929292]">Partner Dashboard</p>
             </div>
           </div>

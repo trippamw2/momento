@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -12,7 +12,7 @@ import DiscoveryFeedItem from "@/components/DiscoveryFeedItem";
 function loadSaved(): string[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem("experio-saved");
+    const raw = localStorage.getItem("momento-saved");
     if (!raw) return [];
     const state = JSON.parse(raw);
     return state.savedIds || [];
@@ -98,10 +98,10 @@ export default function DiscoverPage() {
       setSavedIds((prev) => {
         const updated = next ? [...prev, id] : prev.filter((s) => s !== id);
         try {
-          const raw = localStorage.getItem("experio-saved");
+          const raw = localStorage.getItem("momento-saved");
           const state = raw ? JSON.parse(raw) : { savedIds: [], collections: [] };
           state.savedIds = updated;
-          localStorage.setItem("experio-saved", JSON.stringify(state));
+          localStorage.setItem("momento-saved", JSON.stringify(state));
         } catch {}
         return updated;
       });

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
@@ -44,7 +44,7 @@ function StreakDisplay() {
           <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-lg shrink-0 ${
             streak.current > 0 ? "bg-gradient-to-br from-orange-500 to-red-500" : "bg-[#1E293B]"
           }`}>
-            {streak.current > 0 ? "🔥" : "⏳"}
+            {streak.current > 0 ? "ðŸ”¥" : "â³"}
           </div>
           <div>
             <p className="text-heading-md font-bold text-[#F1F5F9]">
@@ -96,7 +96,7 @@ export default function LoyaltyPage() {
   const [signedIn, setSignedIn] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("experio-auth-token");
+    const token = localStorage.getItem("momento-auth-token");
     if (!token) {
       setLoading(false);
       setSignedIn(false);
@@ -120,7 +120,7 @@ export default function LoyaltyPage() {
       <div className="min-h-screen pt-20 pb-16 flex items-center justify-center bg-[#05070B]">
         <div className="max-w-md mx-auto px-4 text-center">
           <div className="w-20 h-20 rounded-full bg-[#111827] flex items-center justify-center mx-auto mb-6 border border-white/[0.08]">
-            <span className="text-3xl">👑</span>
+            <span className="text-3xl">ðŸ‘‘</span>
           </div>
           <h1 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Loyalty & Rewards</h1>
           <p className="text-[#CBD5E1] text-body mb-8">
@@ -153,10 +153,10 @@ export default function LoyaltyPage() {
   return (
     <div className="min-h-screen pt-24 pb-16 bg-[#05070B]">
       <div className="max-w-5xl mx-auto px-4 sm:px-8 space-y-10">
-        {/* ─── Hero ─── */}
+        {/* â”€â”€â”€ Hero â”€â”€â”€ */}
         <section className="text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#FF0F73]/10 to-[#FF7A1A]/10 border border-[#FF0F73]/20 text-[#FF0F73] text-caption font-semibold mb-4">
-            <span>👑</span> Loyalty Program
+            <span>ðŸ‘‘</span> Loyalty Program
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold text-[#F1F5F9] mb-3 tracking-tight">
             Loyalty & Rewards
@@ -166,7 +166,7 @@ export default function LoyaltyPage() {
           </p>
         </section>
 
-        {/* ─── Points Balance ─── */}
+        {/* â”€â”€â”€ Points Balance â”€â”€â”€ */}
         <section>
           <div className="max-w-md mx-auto text-center p-8 rounded-3xl bg-gradient-to-br from-[#111827] to-[#0A0E17] border border-white/[0.08] shadow-sm">
             <p className="text-caption text-[#94A3B8] uppercase tracking-wider mb-1">Your Balance</p>
@@ -177,7 +177,7 @@ export default function LoyaltyPage() {
           </div>
         </section>
 
-        {/* ─── Tier Card ─── */}
+        {/* â”€â”€â”€ Tier Card â”€â”€â”€ */}
         <section>
           <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-4">Current Tier</h2>
           <div className="p-6 sm:p-8 rounded-3xl bg-[#111827] border border-white/[0.08] shadow-sm">
@@ -222,8 +222,8 @@ export default function LoyaltyPage() {
                   </>
                 ) : (
                   <div className="flex items-center gap-2 text-emerald-400 text-body-sm font-medium">
-                    <span className="text-2xl">👑</span>
-                    Maximum Tier — You&apos;re at the top!
+                    <span className="text-2xl">ðŸ‘‘</span>
+                    Maximum Tier â€” You&apos;re at the top!
                   </div>
                 )}
               </div>
@@ -231,7 +231,7 @@ export default function LoyaltyPage() {
           </div>
         </section>
 
-        {/* ─── Tier Benefits Comparison ─── */}
+        {/* â”€â”€â”€ Tier Benefits Comparison â”€â”€â”€ */}
         <section>
           <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-4">Tier Benefits</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
@@ -272,7 +272,7 @@ export default function LoyaltyPage() {
                   <ul className="space-y-1.5">
                     {t.benefits.map((b, i) => (
                       <li key={i} className="text-caption text-[#CBD5E1] flex items-start gap-1.5">
-                        <span className="text-emerald-400 shrink-0 mt-0.5">✓</span>
+                        <span className="text-emerald-400 shrink-0 mt-0.5">âœ“</span>
                         {b}
                       </li>
                     ))}
@@ -283,7 +283,7 @@ export default function LoyaltyPage() {
           </div>
         </section>
 
-        {/* ─── Achievements ─── */}
+        {/* â”€â”€â”€ Achievements â”€â”€â”€ */}
         <section>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-heading-lg font-bold text-[#F1F5F9]">Achievements</h2>
@@ -332,19 +332,19 @@ export default function LoyaltyPage() {
           </div>
         </section>
 
-        {/* ─── How to Earn Points ─── */}
+        {/* â”€â”€â”€ How to Earn Points â”€â”€â”€ */}
         <section>
           <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-4">How to Earn Points</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {[
-              { icon: "📅", title: "Book Experiences", desc: "10 pts per MK 1,000 spent", link: "/experiences" },
-              { icon: "✍️", title: "Write Reviews", desc: "50 pts per review", link: null },
-              { icon: "🤝", title: "Refer Friends", desc: "200 pts per referral", link: null },
-              { icon: "🎁", title: "Send Gifts", desc: "5 pts per MK 1,000 gifted", link: "/gift" },
-              { icon: "📤", title: "Share on Social", desc: "20 pts per share", link: null },
-              { icon: "🎉", title: "Sign Up Bonus", desc: "100 pts on joining", link: null },
-              { icon: "🎂", title: "Birthday Bonus", desc: "500 pts on your birthday", link: null },
-              { icon: "💎", title: "Tier Multiplier", desc: "Earn up to 3x points as VIP", link: null },
+              { icon: "ðŸ“…", title: "Book Experiences", desc: "10 pts per MK 1,000 spent", link: "/experiences" },
+              { icon: "âœï¸", title: "Write Reviews", desc: "50 pts per review", link: null },
+              { icon: "ðŸ¤", title: "Refer Friends", desc: "200 pts per referral", link: null },
+              { icon: "ðŸŽ", title: "Send Gifts", desc: "5 pts per MK 1,000 gifted", link: "/gift" },
+              { icon: "ðŸ“¤", title: "Share on Social", desc: "20 pts per share", link: null },
+              { icon: "ðŸŽ‰", title: "Sign Up Bonus", desc: "100 pts on joining", link: null },
+              { icon: "ðŸŽ‚", title: "Birthday Bonus", desc: "500 pts on your birthday", link: null },
+              { icon: "ðŸ’Ž", title: "Tier Multiplier", desc: "Earn up to 3x points as VIP", link: null },
             ].map((item) => (
               <div
                 key={item.title}
@@ -358,7 +358,7 @@ export default function LoyaltyPage() {
                     href={item.link}
                     className="inline-block mt-2 text-caption font-medium text-[#FF0F73] hover:text-[#FF7A1A] transition-colors"
                   >
-                    {item.link === "/experiences" ? "Browse experiences →" : "Start gifting →"}
+                    {item.link === "/experiences" ? "Browse experiences â†’" : "Start gifting â†’"}
                   </Link>
                 )}
               </div>
@@ -366,17 +366,17 @@ export default function LoyaltyPage() {
           </div>
         </section>
 
-        {/* ─── Booking Streak ─── */}
+        {/* â”€â”€â”€ Booking Streak â”€â”€â”€ */}
         <section>
           <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-4">Booking Streak</h2>
           <StreakDisplay />
         </section>
 
-        {/* ─── Points History ─── */}
+        {/* â”€â”€â”€ Points History â”€â”€â”€ */}
         <section>
           <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-4">Points History</h2>
           <div className="p-8 rounded-3xl bg-[#111827] border border-white/[0.08] text-center shadow-sm">
-            <span className="text-3xl block mb-3">📊</span>
+            <span className="text-3xl block mb-3">ðŸ“Š</span>
             <p className="text-[#CBD5E1] text-body-sm mb-1">Your points activity will appear here</p>
             <p className="text-caption text-[#64748B]">
               Start booking experiences to earn points and track your progress.

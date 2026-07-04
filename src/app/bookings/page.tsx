@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -181,7 +181,7 @@ export default function BookingsPage() {
 
   // Detect auth state and fetch real bookings
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("experio-auth-token") : null;
+    const token = typeof window !== "undefined" ? localStorage.getItem("momento-auth-token") : null;
     setSignedIn(!!token);
 
     if (token) {
@@ -202,7 +202,7 @@ export default function BookingsPage() {
   // Re-fetch when auth modal closes and user became signed in
   const handleAuthClose = useCallback(() => {
     setAuthOpen(false);
-    const token = localStorage.getItem("experio-auth-token");
+    const token = localStorage.getItem("momento-auth-token");
     setSignedIn(!!token);
     if (token) {
       setLoadingApi(true);
@@ -252,7 +252,7 @@ export default function BookingsPage() {
     <>
       <div className="pt-20 pb-16 min-h-screen">
         <div className="max-w-7xl mx-auto flex gap-0 sm:gap-6 px-0 sm:px-8">
-          {/* ─── Sidebar ─── */}
+          {/* â”€â”€â”€ Sidebar â”€â”€â”€ */}
           <aside className="hidden sm:flex flex-col w-56 flex-shrink-0 sticky top-24 self-start">
             <div className="bg-[#111827] border border-white/[0.08] rounded-2xl overflow-hidden shadow-sm">
               <div className="px-5 py-4 border-b border-white/[0.08]">
@@ -310,7 +310,7 @@ export default function BookingsPage() {
             </div>
           </div>
 
-          {/* ─── Main Content ─── */}
+          {/* â”€â”€â”€ Main Content â”€â”€â”€ */}
           <main className="flex-1 min-w-0 px-4 sm:px-0">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
@@ -370,7 +370,7 @@ export default function BookingsPage() {
             )}
 
             {!signedIn && !isSpecialTab ? (
-              /* ─── Empty / Sign-in State ─── */
+              /* â”€â”€â”€ Empty / Sign-in State â”€â”€â”€ */
               <div className="rounded-2xl bg-[#111827] border border-white/[0.08] p-8 sm:p-12 text-center mb-10">
                 <div className="w-16 h-16 rounded-full bg-white/[0.06] flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -390,7 +390,7 @@ export default function BookingsPage() {
                 </button>
               </div>
             ) : isSpecialTab ? (
-              /* ─── Special Tab Placeholders ─── */
+              /* â”€â”€â”€ Special Tab Placeholders â”€â”€â”€ */
               <div className="rounded-2xl bg-[#111827] border border-white/[0.08] p-8 sm:p-12 text-center mb-10">
                 <div className="w-16 h-16 rounded-full bg-white/[0.06] flex items-center justify-center mx-auto mb-4">
                   {sidebarTab === "payments" ? (
@@ -419,7 +419,7 @@ export default function BookingsPage() {
               </div>
             ) : (
               <>
-                {/* ─── Booking Cards with Cancel + PDF + Countdown ─── */}
+                {/* â”€â”€â”€ Booking Cards with Cancel + PDF + Countdown â”€â”€â”€ */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
                   {displayed.map((booking) => (
                     <BookingCard
@@ -443,9 +443,9 @@ export default function BookingsPage() {
                   ))}
                 </div>
 
-                {/* ─── Bottom Features ─── */}
+                {/* â”€â”€â”€ Bottom Features â”€â”€â”€ */}
                 <section>
-                  <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-5 text-center">Why Book With Experio?</h2>
+                  <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-5 text-center">Why Book With Momento?</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {features.map((f) => (
                       <div key={f.title} className="text-center p-5 rounded-2xl bg-[#111827] border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-sm">
