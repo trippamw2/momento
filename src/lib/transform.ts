@@ -1,5 +1,5 @@
-import { Experience, Review } from "./types";
-import { getIntentionsForExperience } from "./intentions";
+import { Experience, Review, ExperioCategory } from "./types";
+import { mapV2CategoryToExperio } from "./categories";
 
 const CITY_MAP: Record<string, string> = {
   "Cape Maclear": "Lilongwe",
@@ -54,13 +54,14 @@ export function transformExperience(raw: Record<string, unknown>): Experience {
   }));
 
   const parsedMood = moods.map((m) => m.moods?.label).filter(Boolean) as Experience["mood"];
-  const rawIntentions = raw.intentions as Experience["intentions"] | undefined;
-  const intentions: Experience["intentions"] = rawIntentions?.length
-    ? rawIntentions
-    : getIntentionsForExperience({
-        category: (raw.category as Experience["category"]) ?? "Date Night",
-        mood: parsedMood,
-      });
+
+  function safeCategory(rawCat: unknown): ExperioCategory {
+    const cat = String(rawCat ?? "Chill");
+    const valid: ExperioCategory[] = ["Date", "Chill", "Celebrate", "Escape"];
+    if (valid.includes(cat as ExperioCategory)) return cat as ExperioCategory;
+    // Legacy V2Category mapping
+    return mapV2CategoryToExperio(cat as any);
+  }
 
   return {
     id: raw.id as string,
@@ -77,11 +78,11 @@ export function transformExperience(raw: Record<string, unknown>): Experience {
     distance: (raw.distance as string) ?? "",
     duration: (raw.duration as string) ?? "",
     mood: parsedMood,
-    intentions,
     emotionalHeadline: (raw.emotionalHeadline as string) ?? undefined,
+    bestTimeToVisit: (raw.bestTimeToVisit as string) ?? undefined,
     rating: (raw.rating as number) ?? 0,
     reviewCount: (raw.review_count as number) ?? reviews.length,
-    category: (raw.category as Experience["category"]) ?? "Date Night",
+    category: safeCategory(raw.category),
     featured: (raw.featured as boolean) ?? false,
     includes: (raw.includes as string[]) ?? [],
     capacity: (raw.capacity as number) ?? 8,

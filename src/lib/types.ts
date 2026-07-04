@@ -8,6 +8,7 @@ export type Mood =
   | "Celebratory"
   | "Creative";
 
+/** @deprecated Use ExperioCategory instead. Kept for backward compatibility. */
 export type V2Category =
   | "Date Night"
   | "Pool & Chill"
@@ -15,36 +16,34 @@ export type V2Category =
   | "Brunch & Dining"
   | "Staycation";
 
-export type Intention =
-  | "let-eat"
-  | "treat-me"
-  | "lets-go-out"
-  | "together"
-  | "get-away";
+export type ExperioCategory =
+  | "Date"
+  | "Chill"
+  | "Celebrate"
+  | "Escape";
 
-export const INTENTIONS: { key: Intention; emoji: string; label: string; description: string; accent: string }[] = [
-  { key: "let-eat", emoji: "🍽", label: "Let's Eat", description: "I'm hungry / I want food or drinks", accent: "from-amber-400 to-orange-500" },
-  { key: "treat-me", emoji: "✨", label: "Treat Me", description: "I need to relax and recharge", accent: "from-fuchsia-400 to-purple-500" },
-  { key: "lets-go-out", emoji: "☀️", label: "Let's Go Out", description: "I want to go out and have fun", accent: "from-blue-400 to-cyan-500" },
-  { key: "together", emoji: "❤️", label: "Together", description: "I'm planning something for us", accent: "from-rose-400 to-pink-500" },
-  { key: "get-away", emoji: "🌴", label: "Get Away", description: "I need a change of scenery", accent: "from-emerald-400 to-teal-500" },
+export const EXPERIO_CATEGORIES: { key: ExperioCategory; emoji: string; label: string; description: string; accent: string }[] = [
+  { key: "Date", emoji: "❤️", label: "Date", description: "Romantic dinners, sunset spots, couples activities", accent: "from-rose-400 to-pink-500" },
+  { key: "Chill", emoji: "🌿", label: "Chill", description: "Coffee shops, spas, beaches, cafés", accent: "from-emerald-400 to-teal-500" },
+  { key: "Celebrate", emoji: "🎉", label: "Celebrate", description: "Birthdays, nightlife, concerts, private dining", accent: "from-amber-400 to-orange-500" },
+  { key: "Escape", emoji: "🌍", label: "Escape", description: "Weekend getaways, lodges, safaris, adventures", accent: "from-blue-400 to-cyan-500" },
 ];
 
-export const INTENTION_EMOJI: Record<Intention, string> = Object.fromEntries(
-  INTENTIONS.map((i) => [i.key, i.emoji])
-) as Record<Intention, string>;
+export const CATEGORY_EMOJI: Record<ExperioCategory, string> = Object.fromEntries(
+  EXPERIO_CATEGORIES.map((c) => [c.key, c.emoji])
+) as Record<ExperioCategory, string>;
 
-export const INTENTION_LABEL: Record<Intention, string> = Object.fromEntries(
-  INTENTIONS.map((i) => [i.key, i.label])
-) as Record<Intention, string>;
+export const CATEGORY_LABEL: Record<ExperioCategory, string> = Object.fromEntries(
+  EXPERIO_CATEGORIES.map((c) => [c.key, c.label])
+) as Record<ExperioCategory, string>;
 
-export const INTENTION_DESCRIPTION: Record<Intention, string> = Object.fromEntries(
-  INTENTIONS.map((i) => [i.key, i.description])
-) as Record<Intention, string>;
+export const CATEGORY_DESCRIPTION: Record<ExperioCategory, string> = Object.fromEntries(
+  EXPERIO_CATEGORIES.map((c) => [c.key, c.description])
+) as Record<ExperioCategory, string>;
 
-export const INTENTION_ACCENT: Record<Intention, string> = Object.fromEntries(
-  INTENTIONS.map((i) => [i.key, i.accent])
-) as Record<Intention, string>;
+export const CATEGORY_ACCENT: Record<ExperioCategory, string> = Object.fromEntries(
+  EXPERIO_CATEGORIES.map((c) => [c.key, c.accent])
+) as Record<ExperioCategory, string>;
 
 export interface Review {
   id: string;
@@ -70,11 +69,11 @@ export interface Experience {
   distance: string;
   duration: string;
   mood: Mood[];
-  intentions: Intention[];
   emotionalHeadline?: string;
+  bestTimeToVisit?: string;
   rating: number;
   reviewCount: number;
-  category: V2Category;
+  category: ExperioCategory;
   featured: boolean;
   includes: string[];
   capacity: number;
@@ -94,11 +93,10 @@ export type DiscoveryRailKey =
   | "nearby"
   | "weekend"
   | "most-saved"
-  | "date-night"
-  | "pool-chill"
-  | "spa-wellness"
-  | "brunch-dining"
-  | "staycation"
+  | "date"
+  | "chill"
+  | "celebrate"
+  | "escape"
   | "staff-picks"
   | "affordable"
   | "personalized";

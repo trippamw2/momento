@@ -1,4 +1,5 @@
-import { Experience, Mood, NavItem, DiscoveryRailKey, Review, V2Category, Intention } from "./types";
+import { Experience, Mood, NavItem, DiscoveryRailKey, Review, ExperioCategory } from "./types";
+import { EXPERIO_CATEGORIES } from "./categories";
 import { haversineDistance, formatDistance, AFRICAN_CITY_COORDS } from "./geo";
 
 export const moods: { label: Mood; description: string; accent: string }[] = [
@@ -24,114 +25,28 @@ export const navItems: NavItem[] = [
   { label: "Partners", href: "/profile", icon: "briefcase" },
 ];
 
-// Shared data migrated from ../utils/intentions.ts to keep all intention data in one place
-const INTENTION_EMOJI: Record<Intention, string> = {
-  "let-eat": "🍽",
-  "treat-me": "✨",
-  "lets-go-out": "☀️",
-  "together": "❤️",
-  "get-away": "🌴",
-};
-
-const INTENTION_LABEL: Record<Intention, string> = {
-  "let-eat": "Let's Eat",
-  "treat-me": "Treat Me",
-  "lets-go-out": "Let's Go Out",
-  "together": "Together",
-  "get-away": "Get Away",
-};
-
-const INTENTION_DESCRIPTION: Record<Intention, string> = {
-  "let-eat": "I'm hungry / I want food or drinks",
-  "treat-me": "I need to relax and recharge",
-  "lets-go-out": "I want to have fun and socialize",
-  "together": "Planning something special for two",
-  "get-away": "I need a change of scenery",
-};
-
-const INTENTION_ACCENT: Record<Intention, string> = {
-  "let-eat": "from-amber-500 to-orange-500",
-  "treat-me": "from-emerald-500 to-teal-500",
-  "lets-go-out": "from-rose-500 to-pink-500",
-  "together": "from-pink-500 to-rose-500",
-  "get-away": "from-blue-500 to-cyan-500",
-};
-
-export const INTENTIONS = [
-  {
-    key: "let-eat" as Intention,
-    emoji: INTENTION_EMOJI["let-eat"],
-    label: INTENTION_LABEL["let-eat"],
-    description: INTENTION_DESCRIPTION["let-eat"],
-    accent: INTENTION_ACCENT["let-eat"],
-  },
-  {
-    key: "treat-me" as Intention,
-    emoji: INTENTION_EMOJI["treat-me"],
-    label: INTENTION_LABEL["treat-me"],
-    description: INTENTION_DESCRIPTION["treat-me"],
-    accent: INTENTION_ACCENT["treat-me"],
-  },
-  {
-    key: "lets-go-out" as Intention,
-    emoji: INTENTION_EMOJI["lets-go-out"],
-    label: INTENTION_LABEL["lets-go-out"],
-    description: INTENTION_DESCRIPTION["lets-go-out"],
-    accent: INTENTION_ACCENT["lets-go-out"],
-  },
-  {
-    key: "together" as Intention,
-    emoji: INTENTION_EMOJI["together"],
-    label: INTENTION_LABEL["together"],
-    description: INTENTION_DESCRIPTION["together"],
-    accent: INTENTION_ACCENT["together"],
-  },
-  {
-    key: "get-away" as Intention,
-    emoji: INTENTION_EMOJI["get-away"],
-    label: INTENTION_LABEL["get-away"],
-    description: INTENTION_DESCRIPTION["get-away"],
-    accent: INTENTION_ACCENT["get-away"],
-  },
-] as const;
-
-export {
-  INTENTION_EMOJI,
-  INTENTION_LABEL,
-  INTENTION_DESCRIPTION,
-  INTENTION_ACCENT,
-};
+// Shared data — categories imported from ./categories
 
 const gallerySets: Record<string, string[]> = {
-  "Date Night": [
+  Date: [
     "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80",
     "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=1200&q=80",
     "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1200&q=80",
   ],
-  "Pool & Chill": [
+  Chill: [
     "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80",
     "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=1200&q=80",
     "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80",
   ],
-  "Spa & Wellness": [
-    "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1200&q=80",
-    "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=1200&q=80",
-    "https://images.unsplash.com/photo-1447452001602-7090c7ab2db3?w=1200&q=80",
-  ],
-  "Brunch & Dining": [
+  Celebrate: [
     "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1200&q=80",
     "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=1200&q=80",
     "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=80",
   ],
-  Staycation: [
+  Escape: [
     "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1200&q=80",
-    "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1200&q=80",
+    "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=1200&q=80",
     "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200&q=80",
-  ],
-  Celebrations: [
-    "https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=1200&q=80",
-    "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=80",
-    "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1200&q=80",
   ],
 };
 
@@ -165,35 +80,28 @@ const partners: Record<string, string> = {
 };
 
 const includesMap: Record<string, string[]> = {
-  "Date Night": [
+  Date: [
     "Curated multi-course menu or picnic",
     "Premium beverage pairing",
     "Private or VIP seating",
     "Personalized service",
     "All taxes and charges",
   ],
-  "Pool & Chill": [
+  Chill: [
     "Pool access and loungers",
     "Curated lunch or snacks",
     "Premium beverages",
     "Towels and amenities",
     "Return transfers available",
   ],
-  "Spa & Wellness": [
-    "Full-body treatment session",
-    "Organic product use",
-    "Sauna or steam room access",
-    "Herbal tea and refreshments",
-    "Post-treatment relaxation lounge",
-  ],
-  "Brunch & Dining": [
+  Celebrate: [
     "Curated multi-course menu",
     "Premium beverage pairing",
     "Personal chef or waiter service",
     "Private or VIP seating",
     "All taxes and service charges",
   ],
-  Staycation: [
+  Escape: [
     "Luxury accommodation",
     "All-inclusive dining",
     "Spa or activity credit",
@@ -203,11 +111,10 @@ const includesMap: Record<string, string[]> = {
 };
 
 const capacityMap: Record<string, number> = {
-  "Date Night": 4,
-  "Pool & Chill": 10,
-  "Spa & Wellness": 4,
-  "Brunch & Dining": 8,
-  Staycation: 4,
+  Date: 4,
+  Chill: 10,
+  Celebrate: 8,
+  Escape: 4,
 };
 
 const reviewAuthors = [
@@ -231,7 +138,7 @@ const reviewTexts = [
 ];
 
 function getGalleryImages(category: string): string[] {
-  return gallerySets[category] || gallerySets["Date Night"];
+  return gallerySets[category] || gallerySets["Date"];
 }
 
 function getPartner(title: string): string {
@@ -239,7 +146,7 @@ function getPartner(title: string): string {
 }
 
 function getIncludes(category: string): string[] {
-  return includesMap[category] || includesMap["Date Night"];
+  return includesMap[category] || includesMap["Date"];
 }
 
 function getCapacity(category: string): number {
@@ -281,11 +188,11 @@ interface RawExperience {
   location: string;
   duration: string;
   mood: Mood[];
-  intentions: Intention[];
   emotionalHeadline?: string;
+  bestTimeToVisit?: string;
   rating: number;
   reviewCount: number;
-  category: V2Category;
+  category: ExperioCategory;
   featured: boolean;
   galleryCategory: string;
 }
@@ -302,13 +209,12 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "3 hours",
     mood: ["Romantic", "Luxurious"],
-    intentions: ["together", "treat-me"],
     emotionalHeadline: "Where the sky meets the lake, and time stands still",
     rating: 4.9,
     reviewCount: 178,
-    category: "Date Night",
+    category: "Date",
     featured: true,
-    galleryCategory: "Date Night",
+    galleryCategory: "Date",
   },
   {
     id: "pool-lunch",
@@ -321,13 +227,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "4 hours",
     mood: ["Relaxed", "Social"],
-    intentions: ["lets-go-out", "treat-me"],
     emotionalHeadline: "Your weekend deserves a little splash",
     rating: 4.8,
     reviewCount: 124,
-    category: "Pool & Chill",
+    category: "Chill",
     featured: true,
-    galleryCategory: "Pool & Chill",
+    galleryCategory: "Chill",
   },
   {
     id: "date-night",
@@ -340,13 +245,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "3 hours",
     mood: ["Romantic", "Culinary", "Luxurious"],
-    intentions: ["together", "treat-me"],
     emotionalHeadline: "The perfect table for tonight's memories",
     rating: 4.9,
     reviewCount: 89,
-    category: "Date Night",
+    category: "Date",
     featured: true,
-    galleryCategory: "Date Night",
+    galleryCategory: "Date",
   },
   {
     id: "spa-day",
@@ -359,13 +263,12 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "6 hours",
     mood: ["Relaxed", "Luxurious"],
-    intentions: ["treat-me"],
     emotionalHeadline: "A few hours where the world doesn't need you",
     rating: 4.7,
     reviewCount: 156,
-    category: "Spa & Wellness",
+    category: "Chill",
     featured: true,
-    galleryCategory: "Spa & Wellness",
+    galleryCategory: "Chill",
   },
   {
     id: "brunch-experience",
@@ -378,13 +281,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "3 hours",
     mood: ["Culinary", "Social"],
-    intentions: ["let-eat", "lets-go-out"],
     emotionalHeadline: "Slow mornings. Good food. Even better company.",
     rating: 4.6,
     reviewCount: 203,
-    category: "Brunch & Dining",
+    category: "Celebrate",
     featured: true,
-    galleryCategory: "Brunch & Dining",
+    galleryCategory: "Celebrate",
   },
   {
     id: "staycation",
@@ -397,13 +299,12 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "2 nights",
     mood: ["Romantic", "Relaxed"],
-    intentions: ["get-away", "together"],
     emotionalHeadline: "Wake up somewhere that feels different",
     rating: 4.9,
     reviewCount: 67,
-    category: "Staycation",
+    category: "Escape",
     featured: true,
-    galleryCategory: "Staycation",
+    galleryCategory: "Escape",
   },
   {
     id: "girls-day-out",
@@ -416,13 +317,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "6 hours",
     mood: ["Social", "Celebratory"],
-    intentions: ["lets-go-out", "treat-me"],
     emotionalHeadline: "Because your besties deserve the best",
     rating: 4.7,
     reviewCount: 112,
-    category: "Spa & Wellness",
+    category: "Chill",
     featured: true,
-    galleryCategory: "Spa & Wellness",
+    galleryCategory: "Chill",
   },
   {
     id: "birthday-experience",
@@ -435,13 +335,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "4 hours",
     mood: ["Celebratory", "Social"],
-    intentions: ["together", "lets-go-out"],
     emotionalHeadline: "Your day. Your way. Your moment to shine.",
     rating: 4.8,
     reviewCount: 91,
-    category: "Date Night",
+    category: "Date",
     featured: true,
-    galleryCategory: "Date Night",
+    galleryCategory: "Date",
   },
   {
     id: "wellness-retreat",
@@ -454,13 +353,12 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "2 days",
     mood: ["Relaxed", "Active"],
-    intentions: ["treat-me", "get-away"],
     emotionalHeadline: "Reset your soul. Find your center.",
     rating: 4.8,
     reviewCount: 45,
-    category: "Spa & Wellness",
+    category: "Chill",
     featured: true,
-    galleryCategory: "Spa & Wellness",
+    galleryCategory: "Chill",
   },
   {
     id: "wine-tasting",
@@ -473,13 +371,12 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "2.5 hours",
     mood: ["Culinary", "Social"],
-    intentions: ["let-eat", "lets-go-out"],
     emotionalHeadline: "Sip, savour, and let the evening unfold",
     rating: 4.5,
     reviewCount: 54,
-    category: "Brunch & Dining",
+    category: "Celebrate",
     featured: false,
-    galleryCategory: "Brunch & Dining",
+    galleryCategory: "Celebrate",
   },
   {
     id: "adventure-day",
@@ -492,13 +389,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "6 hours",
     mood: ["Active", "Romantic"],
-    intentions: ["together", "lets-go-out"],
     emotionalHeadline: "For the kind of love that loves adventure",
     rating: 4.6,
     reviewCount: 78,
-    category: "Date Night",
+    category: "Date",
     featured: false,
-    galleryCategory: "Date Night",
+    galleryCategory: "Date",
   },
   {
     id: "couples-massage",
@@ -511,13 +407,12 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "90 minutes",
     mood: ["Romantic", "Relaxed"],
-    intentions: ["together", "treat-me"],
     emotionalHeadline: "Side by side. In perfect stillness.",
     rating: 4.9,
     reviewCount: 143,
-    category: "Spa & Wellness",
+    category: "Chill",
     featured: false,
-    galleryCategory: "Spa & Wellness",
+    galleryCategory: "Chill",
   },
   {
     id: "photoshoot",
@@ -530,13 +425,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "3 hours",
     mood: ["Celebratory", "Creative"],
-    intentions: ["treat-me", "lets-go-out"],
     emotionalHeadline: "Your best angles. Your best light. Your best self.",
     rating: 4.7,
     reviewCount: 99,
-    category: "Date Night",
+    category: "Date",
     featured: false,
-    galleryCategory: "Date Night",
+    galleryCategory: "Date",
   },
   {
     id: "lake-kayaking",
@@ -549,13 +443,12 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "3 hours",
     mood: ["Active", "Relaxed"],
-    intentions: ["lets-go-out", "get-away"],
     emotionalHeadline: "Peace on water. Paddles at dawn.",
     rating: 4.5,
     reviewCount: 63,
-    category: "Pool & Chill",
+    category: "Chill",
     featured: false,
-    galleryCategory: "Pool & Chill",
+    galleryCategory: "Chill",
   },
   {
     id: "rooftop-dining",
@@ -568,13 +461,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "3 hours",
     mood: ["Romantic", "Culinary", "Luxurious"],
-    intentions: ["together", "treat-me"],
     emotionalHeadline: "City lights. Fine wine. Your kind of evening.",
     rating: 4.8,
     reviewCount: 134,
-    category: "Date Night",
+    category: "Date",
     featured: true,
-    galleryCategory: "Date Night",
+    galleryCategory: "Date",
   },
   {
     id: "coffee-brunch",
@@ -587,13 +479,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "2 hours",
     mood: ["Culinary", "Social"],
-    intentions: ["let-eat", "lets-go-out"],
     emotionalHeadline: "Slow mornings start with great coffee",
     rating: 4.4,
     reviewCount: 87,
-    category: "Brunch & Dining",
+    category: "Celebrate",
     featured: false,
-    galleryCategory: "Brunch & Dining",
+    galleryCategory: "Celebrate",
   },
   {
     id: "sunset-safari",
@@ -606,13 +497,12 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "4 hours",
     mood: ["Romantic", "Active"],
-    intentions: ["together", "lets-go-out"],
     emotionalHeadline: "Where the wild meets the romantic",
     rating: 4.9,
     reviewCount: 56,
-    category: "Date Night",
+    category: "Date",
     featured: false,
-    galleryCategory: "Date Night",
+    galleryCategory: "Date",
   },
   {
     id: "private-beach-dinner",
@@ -625,13 +515,12 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "4 hours",
     mood: ["Romantic", "Luxurious"],
-    intentions: ["together", "treat-me"],
     emotionalHeadline: "Secluded sands. Starlit skies. Just the two of you.",
     rating: 5.0,
     reviewCount: 32,
-    category: "Date Night",
+    category: "Date",
     featured: true,
-    galleryCategory: "Date Night",
+    galleryCategory: "Date",
   },
   {
     id: "glamping-weekend",
@@ -644,13 +533,12 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "2 nights",
     mood: ["Romantic", "Active"],
-    intentions: ["get-away", "together"],
     emotionalHeadline: "Roughing it, refined. Luxury under canvas.",
     rating: 4.7,
     reviewCount: 41,
-    category: "Staycation",
+    category: "Escape",
     featured: false,
-    galleryCategory: "Staycation",
+    galleryCategory: "Escape",
   },
   {
     id: "paint-sip",
@@ -663,13 +551,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "3 hours",
     mood: ["Creative", "Social"],
-    intentions: ["lets-go-out", "treat-me"],
     emotionalHeadline: "Wine in one hand. Brush in the other.",
     rating: 4.6,
     reviewCount: 73,
-    category: "Date Night",
+    category: "Date",
     featured: false,
-    galleryCategory: "Date Night",
+    galleryCategory: "Date",
   },
   {
     id: "live-music-night",
@@ -682,13 +569,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "3 hours",
     mood: ["Social", "Romantic"],
-    intentions: ["lets-go-out", "together"],
     emotionalHeadline: "Let the music move you. Let the night take over.",
     rating: 4.5,
     reviewCount: 68,
-    category: "Date Night",
+    category: "Date",
     featured: false,
-    galleryCategory: "Date Night",
+    galleryCategory: "Date",
   },
   {
     id: "cooking-class",
@@ -701,13 +587,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "4 hours",
     mood: ["Culinary", "Social", "Creative"],
-    intentions: ["let-eat", "lets-go-out"],
     emotionalHeadline: "Taste Malawi. Learn. Laugh. Eat.",
     rating: 4.6,
     reviewCount: 47,
-    category: "Brunch & Dining",
+    category: "Celebrate",
     featured: false,
-    galleryCategory: "Brunch & Dining",
+    galleryCategory: "Celebrate",
   },
   {
     id: "yoga-retreat",
@@ -720,13 +605,12 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "4 hours",
     mood: ["Relaxed", "Active"],
-    intentions: ["treat-me", "get-away"],
     emotionalHeadline: "Breathe. Stretch. Exist. Find your flow.",
     rating: 4.7,
     reviewCount: 38,
-    category: "Spa & Wellness",
+    category: "Chill",
     featured: false,
-    galleryCategory: "Spa & Wellness",
+    galleryCategory: "Chill",
   },
   {
     id: "family-picnic",
@@ -739,13 +623,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "4 hours",
     mood: ["Social", "Relaxed"],
-    intentions: ["lets-go-out"],
     emotionalHeadline: "Sun, games, and smiles all around",
     rating: 4.5,
     reviewCount: 82,
-    category: "Pool & Chill",
+    category: "Chill",
     featured: false,
-    galleryCategory: "Pool & Chill",
+    galleryCategory: "Chill",
   },
   {
     id: "mixology-class",
@@ -758,13 +641,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "2.5 hours",
     mood: ["Creative", "Social", "Celebratory"],
-    intentions: ["lets-go-out", "let-eat"],
     emotionalHeadline: "Shake things up. Literally.",
     rating: 4.6,
     reviewCount: 55,
-    category: "Brunch & Dining",
+    category: "Celebrate",
     featured: false,
-    galleryCategory: "Brunch & Dining",
+    galleryCategory: "Celebrate",
   },
   {
     id: "horse-riding",
@@ -777,13 +659,12 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "2 hours",
     mood: ["Active", "Romantic"],
-    intentions: ["lets-go-out", "together"],
     emotionalHeadline: "Trails, gallops, and the open plains",
     rating: 4.4,
     reviewCount: 36,
-    category: "Date Night",
+    category: "Date",
     featured: false,
-    galleryCategory: "Date Night",
+    galleryCategory: "Date",
   },
 ];
 
@@ -833,7 +714,7 @@ export const discoveryRails: Record<DiscoveryRailKey, { title: string; getExperi
   },
   recommended: {
     title: "Recommended For You",
-    getExperiences: () => shuffle(experiences.filter((e) => e.category === "Date Night" || e.category === "Brunch & Dining")).slice(0, 8),
+    getExperiences: () => shuffle(experiences.filter((e) => e.category === "Date" || e.category === "Celebrate")).slice(0, 8),
   },
   nearby: {
     title: "Near You",
@@ -847,25 +728,21 @@ export const discoveryRails: Record<DiscoveryRailKey, { title: string; getExperi
     title: "Most Saved",
     getExperiences: () => [...experiences].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 8),
   },
-  "date-night": {
-    title: "Date Night Ideas",
-    getExperiences: () => shuffle(experiences.filter((e) => e.category === "Date Night")).slice(0, 8),
+  "date": {
+    title: "Date Ideas",
+    getExperiences: () => shuffle(experiences.filter((e) => e.category === "Date")).slice(0, 8),
   },
-  "pool-chill": {
-    title: "Pool & Chill",
-    getExperiences: () => shuffle(experiences.filter((e) => e.category === "Pool & Chill")).slice(0, 8),
+  "chill": {
+    title: "Chill Vibes",
+    getExperiences: () => shuffle(experiences.filter((e) => e.category === "Chill")).slice(0, 8),
   },
-  "spa-wellness": {
-    title: "Spa & Wellness",
-    getExperiences: () => shuffle(experiences.filter((e) => e.category === "Spa & Wellness")).slice(0, 8),
+  "celebrate": {
+    title: "Celebrate",
+    getExperiences: () => shuffle(experiences.filter((e) => e.category === "Celebrate")).slice(0, 8),
   },
-  "brunch-dining": {
-    title: "Brunch & Dining",
-    getExperiences: () => shuffle(experiences.filter((e) => e.category === "Brunch & Dining")).slice(0, 8),
-  },
-  staycation: {
-    title: "Staycations",
-    getExperiences: () => shuffle(experiences.filter((e) => e.category === "Staycation")).slice(0, 8),
+  "escape": {
+    title: "Weekend Escapes",
+    getExperiences: () => shuffle(experiences.filter((e) => e.category === "Escape")).slice(0, 8),
   },
   "staff-picks": {
     title: "Staff Picks",
@@ -887,11 +764,10 @@ export const railOrder: DiscoveryRailKey[] = [
   "nearby",
   "weekend",
   "most-saved",
-  "date-night",
-  "pool-chill",
-  "spa-wellness",
-  "brunch-dining",
-  "staycation",
+  "date",
+  "chill",
+  "celebrate",
+  "escape",
   "staff-picks",
   "affordable",
   "personalized",
@@ -1032,7 +908,7 @@ export function getConciergeResponse(query: string): { explanation: string; resu
 export const defaultCollections = [
   { id: "date-ideas", name: "Date Ideas", experienceIds: [] },
   { id: "weekend-plans", name: "Weekend Plans", experienceIds: [] },
-  { id: "spa-breaks", name: "Spa & Wellness", experienceIds: [] },
+  { id: "spa-breaks", name: "Chill & Relax", experienceIds: [] },
 ];
 
 export const defaultSavedIds = [
