@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase-admin";
 import { getUser, unauthorized, badRequest, handleRouteError } from "@/lib/api-helpers";
 
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(await file.arrayBuffer());
 
     const { data, error } = await admin.storage
-      .from("experio-assets")
+      .from("momento-assets")
       .upload(fileName, buffer, {
         contentType: file.type,
         upsert: true,
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     if (error) return badRequest(error.message);
 
     const { data: urlData } = admin.storage
-      .from("experio-assets")
+      .from("momento-assets")
       .getPublicUrl(fileName);
 
     // Update user's avatar_url in the users table

@@ -1,4 +1,4 @@
-import { json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
+﻿import { json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
 import { experiences, getConciergeResponse } from "@/lib/data";
 import type { Experience } from "@/lib/types";
 
@@ -39,7 +39,7 @@ async function callGemini(query: string, apiKey: string, model: string): Promise
     const geminiUrl = `${GEMINI_API_BASE}/${model}:generateContent?key=${apiKey}`;
     const experienceCatalog = buildExperiencesContext(experiences);
 
-    const prompt = `You are an AI lifestyle companion for Experio.life — an experience discovery platform that helps people answer "What do you feel like doing today?" Your job is to understand what the user is looking for and recommend the best matching experiences from the catalog below.
+    const prompt = `You are an AI lifestyle companion for Momento.life — an experience discovery platform that helps people answer "What do you feel like doing today?" Your job is to understand what the user is looking for and recommend the best matching experiences from the catalog below.
 
 USER QUERY: "${query}"
 

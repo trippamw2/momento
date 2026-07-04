@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
@@ -45,10 +45,10 @@ export async function proxy(request: NextRequest) {
   const isAdminRoute = adminPaths.some((p) => pathname.startsWith(p));
   const isAdminPage = adminPagePaths.some((p) => pathname.startsWith(p));
 
-  // Admin page routes — redirect to home if not admin
+  // Admin page routes â€” redirect to home if not admin
   if (isAdminPage) {
-    const authCookie = request.cookies.get("experio-auth-token");
-    const roleCookie = request.cookies.get("experio-user-role");
+    const authCookie = request.cookies.get("momento-auth-token");
+    const roleCookie = request.cookies.get("momento-user-role");
     if (!authCookie?.value || roleCookie?.value !== "admin") {
       return NextResponse.redirect(new URL("/", request.url));
     }
@@ -59,7 +59,7 @@ export async function proxy(request: NextRequest) {
   }
 
   const token = request.headers.get("Authorization")?.replace("Bearer ", "") 
-    || request.cookies.get("experio-auth-token")?.value;
+    || request.cookies.get("momento-auth-token")?.value;
     
   if (!token) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

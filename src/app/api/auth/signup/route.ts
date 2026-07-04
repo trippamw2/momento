@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase-admin";
 import { createServerClient } from "@/lib/supabase-server";
 import { badRequest, serverError, handleRouteError } from "@/lib/api-helpers";
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
     });
 
     if (signInError || !signIn.session) {
-      // User was created but we can't log them in — tell them to sign in manually
+      // User was created but we can't log them in â€” tell them to sign in manually
       return NextResponse.json(
         { user: createData.user, session: null, message: "Account created. Please sign in." },
         { status: 201 }
@@ -83,14 +83,14 @@ export async function POST(request: Request) {
       { status: 201 }
     );
 
-    response.cookies.set("experio-auth-token", signIn.session.access_token, {
+    response.cookies.set("momento-auth-token", signIn.session.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
     });
-    response.cookies.set("experio-user-role", validatedRole, {
+    response.cookies.set("momento-user-role", validatedRole, {
       httpOnly: false,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
