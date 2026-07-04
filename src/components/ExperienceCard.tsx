@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -30,7 +30,7 @@ interface ExperienceCardProps {
 function loadSaved(): string[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem("experio-saved");
+    const raw = localStorage.getItem("momento-saved");
     if (!raw) return [];
     const state = JSON.parse(raw);
     return state.savedIds || [];
@@ -52,10 +52,10 @@ export default function ExperienceCard({ experience: exp, size = "md", distance 
     const current = loadSaved();
     const next = saved ? current.filter((id: string) => id !== exp.id) : [...current, exp.id];
     try {
-      const raw = localStorage.getItem("experio-saved");
+      const raw = localStorage.getItem("momento-saved");
       const state = raw ? JSON.parse(raw) : { savedIds: [], collections: [] };
       state.savedIds = next;
-      localStorage.setItem("experio-saved", JSON.stringify(state));
+      localStorage.setItem("momento-saved", JSON.stringify(state));
     } catch (e) { console.warn("Failed to save toggle state:", e); }
     trackSaved(exp.id, !saved);
     setSaved(!saved);
@@ -125,15 +125,15 @@ export default function ExperienceCard({ experience: exp, size = "md", distance 
         <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
           {/* Rating row */}
           <div className="flex items-center gap-1.5 mb-1.5">
-            <span className="text-yellow-400 text-[11px]">★</span>
+            <span className="text-yellow-400 text-[11px]">â˜…</span>
             <span className="text-caption text-white/90 font-semibold">{exp.rating}</span>
-            <span className="text-caption text-white/30">·</span>
+            <span className="text-caption text-white/30">Â·</span>
             <span className="text-caption text-white/60">{exp.reviewCount} reviews</span>
-            <span className="text-caption text-white/30">·</span>
+            <span className="text-caption text-white/30">Â·</span>
             <span className="text-caption text-white/60">{exp.location}</span>
             {distance !== undefined && (
               <>
-                <span className="text-caption text-white/30">·</span>
+                <span className="text-caption text-white/30">Â·</span>
                 <DistanceBadge distanceKm={distance} showIcon={false} showTravelTime={true} />
               </>
             )}
@@ -143,6 +143,21 @@ export default function ExperienceCard({ experience: exp, size = "md", distance 
           <p className="text-white/50 text-caption mt-0.5 line-clamp-1">{exp.subtitle}</p>
           {exp.emotionalHeadline && (
             <p className="text-white/40 text-[10px] mt-0.5 italic line-clamp-1">"{exp.emotionalHeadline}"</p>
+          )}
+
+          {/* What's included - compact preview */}
+          {exp.includes && exp.includes.length > 0 && (
+            <div className="mt-1 flex flex-wrap gap-1">
+              {exp.includes.slice(0, 2).map((item, i) => (
+                <span key={i} className="inline-flex items-center gap-0.5 text-[9px] text-emerald-300/70 bg-emerald-400/5 px-1.5 py-0.5 rounded-full border border-emerald-400/10 leading-none">
+                  <svg className="w-2 h-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                  {item}
+                </span>
+              ))}
+              {exp.includes.length > 2 && (
+                <span className="text-[9px] text-white/30 leading-none py-0.5">+{exp.includes.length - 2} more</span>
+              )}
+            </div>
           )}
           
           <div className="flex items-center justify-between mt-2">
