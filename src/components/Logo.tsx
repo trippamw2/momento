@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import Image from "next/image";
 
 interface LogoProps {
@@ -16,8 +16,8 @@ export default function Logo({ size = "md", showTagline = false }: LogoProps) {
   return (
     <Link href="/" className="flex items-center gap-2.5 group">
       <Image
-        src="/experio-logo.png"
-        alt="Experio"
+        src="/momento-logo.png"
+        alt="Momento"
         width={600}
         height={320}
         className={`w-full h-auto ${sizeClasses[size]} transition-transform duration-300 group-hover:scale-105`}
