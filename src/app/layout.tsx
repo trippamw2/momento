@@ -15,14 +15,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Momento — Curated Experiences in Malawi",
+    title: "Experio — Curated Experiences in Malawi",
   description:
     "Discover unforgettable experiences curated for every mood across Malawi. Romantic dinners, wellness retreats, adventures, and more — live the moment.",
   openGraph: {
-    title: "Momento — Curated Experiences in Malawi",
+  title: "Experio — Curated Experiences in Malawi",
     description:
       "Discover unforgettable experiences curated for every mood across Malawi. Romantic dinners, wellness retreats, adventures, and more — live the moment.",
-    siteName: "Momento",
+    siteName: "Experio",
     type: "website",
     images: [{ url: "/experio-logo.png", width: 512, height: 512 }],
   },

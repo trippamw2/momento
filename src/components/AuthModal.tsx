@@ -189,8 +189,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           {/* Role Selection (signup only) */}
           {mode === "signup" && (
             <div className="mb-6">
-              <h2 className="text-heading-lg font-bold text-[#222222] mb-1">Join Momento</h2>
-              <p className="text-caption text-[#6a6a6a] mb-4">Choose how you&apos;ll use Momento</p>
+              <h2 className="text-heading-lg font-bold text-[#222222] mb-1">Join Experio</h2>
+              <p className="text-caption text-[#6a6a6a] mb-4">Choose how you&apos;ll use Experio</p>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
