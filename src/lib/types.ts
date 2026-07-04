@@ -15,6 +15,37 @@ export type V2Category =
   | "Brunch & Dining"
   | "Staycation";
 
+export type Intention =
+  | "let-eat"
+  | "treat-me"
+  | "lets-go-out"
+  | "together"
+  | "get-away";
+
+export const INTENTIONS: { key: Intention; emoji: string; label: string; description: string; accent: string }[] = [
+  { key: "let-eat", emoji: "🍽", label: "Let's Eat", description: "I'm hungry / I want food or drinks", accent: "from-amber-400 to-orange-500" },
+  { key: "treat-me", emoji: "✨", label: "Treat Me", description: "I need to relax and recharge", accent: "from-fuchsia-400 to-purple-500" },
+  { key: "lets-go-out", emoji: "☀️", label: "Let's Go Out", description: "I want to go out and have fun", accent: "from-blue-400 to-cyan-500" },
+  { key: "together", emoji: "❤️", label: "Together", description: "I'm planning something for us", accent: "from-rose-400 to-pink-500" },
+  { key: "get-away", emoji: "🌴", label: "Get Away", description: "I need a change of scenery", accent: "from-emerald-400 to-teal-500" },
+];
+
+export const INTENTION_EMOJI: Record<Intention, string> = Object.fromEntries(
+  INTENTIONS.map((i) => [i.key, i.emoji])
+) as Record<Intention, string>;
+
+export const INTENTION_LABEL: Record<Intention, string> = Object.fromEntries(
+  INTENTIONS.map((i) => [i.key, i.label])
+) as Record<Intention, string>;
+
+export const INTENTION_DESCRIPTION: Record<Intention, string> = Object.fromEntries(
+  INTENTIONS.map((i) => [i.key, i.description])
+) as Record<Intention, string>;
+
+export const INTENTION_ACCENT: Record<Intention, string> = Object.fromEntries(
+  INTENTIONS.map((i) => [i.key, i.accent])
+) as Record<Intention, string>;
+
 export interface Review {
   id: string;
   author: string;
@@ -39,6 +70,8 @@ export interface Experience {
   distance: string;
   duration: string;
   mood: Mood[];
+  intentions: Intention[];
+  emotionalHeadline?: string;
   rating: number;
   reviewCount: number;
   category: V2Category;
