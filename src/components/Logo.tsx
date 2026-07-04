@@ -6,28 +6,26 @@ interface LogoProps {
   showTagline?: boolean;
 }
 
-const sizes = {
-  sm: { logo: "h-14", tagline: "text-[10px]" },
-  md: { logo: "h-16", tagline: "text-xs" },
-  lg: { logo: "h-20", tagline: "text-sm" },
+const sizeClasses = {
+  sm: "max-w-[140px] sm:max-w-[180px]",
+  md: "max-w-[200px] sm:max-w-[260px]",
+  lg: "max-w-[280px] sm:max-w-[340px]",
 };
 
 export default function Logo({ size = "md", showTagline = false }: LogoProps) {
-  const s = sizes[size];
-
   return (
     <Link href="/" className="flex items-center gap-2.5 group">
       <Image
         src="/experio-logo.png"
         alt="Experio"
-        width={0}
-        height={0}
-        className={`${s.logo} w-auto transition-transform duration-300 group-hover:scale-105`}
+        width={1717}
+        height={916}
+        className={`w-full h-auto ${sizeClasses[size]} transition-transform duration-300 group-hover:scale-105`}
         priority
         unoptimized
       />
       {showTagline && (
-        <span className={`${s.tagline} text-[#94A3B8] tracking-[0.15em] uppercase mt-0.5 hidden sm:block`}>
+        <span className="text-xs sm:text-sm text-[#94A3B8] tracking-[0.15em] uppercase mt-0.5 hidden sm:block">
           Live Life.
         </span>
       )}
