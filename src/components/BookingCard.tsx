@@ -31,6 +31,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [cancelled, setCancelled] = useState(false);
+  const [showQRVerification, setShowQRVerification] = useState(false);
   const [countdown, setCountdown] = useState<ReturnType<typeof getBookingCountdown> | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -207,6 +208,35 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
         </div>
       )}
 
+      {/* QR Verification Modal */}
+      {showQRVerification && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md" onClick={() => setShowQRVerification(false)}>
+          <div className="bg-[#111827] rounded-3xl border border-white/[0.1] p-8 max-w-sm mx-4 shadow-2xl text-center" onClick={(e) => e.stopPropagation()}>
+            <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+            </div>
+            <h3 className="text-heading-md font-bold text-white mb-1">Verification QR</h3>
+            <p className="text-caption text-[#94A3B8] mb-6">Present this code at check-in</p>
+            {qrDataUrl && (
+              <div className="mb-6 p-4 rounded-2xl bg-white inline-block shadow-lg">
+                <Image src={qrDataUrl} alt="Verification QR" width={200} height={200} className="mx-auto" />
+              </div>
+            )}
+            <div className="space-y-1 mb-6">
+              <p className="text-body-sm font-semibold text-white">{booking.title}</p>
+              <p className="text-caption text-[#94A3B8]">{booking.dateLabel} · {booking.time}</p>
+              <p className="text-caption text-[#64748B] font-mono">{booking.bookingRef}</p>
+            </div>
+            <button
+              onClick={() => setShowQRVerification(false)}
+              className="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white text-body-sm font-medium hover:bg-white/20 transition-all"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Luxury Ticket Card */}
       <div
         ref={cardRef}
@@ -319,6 +349,13 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
               >
                 View Details
               </Link>
+              <button
+                onClick={() => setShowQRVerification(true)}
+                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all"
+                title="Show QR for verification"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" /></svg>
+              </button>
               <button
                 onClick={handleDownloadPNG}
                 className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all"

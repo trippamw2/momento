@@ -322,3 +322,84 @@ export function canUserEarnPoints(): boolean {
 export function formatPoints(amount: number): string {
   return amount.toLocaleString();
 }
+
+// ─── Streak Tracking ───
+
+export function calculateStreak(): { current: number; longest: number; lastBookingDate: string | null } {
+  try {
+    const raw = localStorage.getItem("experio-interactions");
+    if (!raw) return { current: 0, longest: 0, lastBookingDate: null };
+    const interactions = JSON.parse(raw);
+    const bookingDates = interactions
+      .filter((i: { type: string }) => i.type === "booked")
+      .map((i: { timestamp: number }) => new Date(i.timestamp))
+      .sort((a: Date, b: Date) => b.getTime() - a.getTime());
+
+    if (bookingDates.length === 0) return { current: 0, longest: 0, lastBookingDate: null };
+
+    const uniqueWeeks = new Set<string>();
+    for (const d of bookingDates) {
+      // Get Monday of the week
+      const monday = new Date(d);
+      monday.setDate(monday.getDate() - monday.getDay() + 1);
+      uniqueWeeks.add(monday.toISOString().split("T")[0]);
+    }
+
+    const sortedWeeks = [...uniqueWeeks].sort().reverse();
+    const lastDate = sortedWeeks[0];
+
+    // Calculate current streak: count consecutive weeks backwards
+    let currentStreak = 1;
+    const thisWeek = new Date();
+    thisWeek.setDate(thisWeek.getDate() - thisWeek.getDay() + 1);
+    thisWeek.setHours(0, 0, 0, 0);
+
+    // Check if last booking was within the last 2 weeks (allow 1 week gap)
+    const lastWeekDate = new Date(sortedWeeks[0]);
+    const weeksDiff = Math.round((thisWeek.getTime() - lastWeekDate.getTime()) / 604800000);
+    if (weeksDiff > 1) {
+      currentStreak = 0;
+    } else {
+      for (let i = 1; i < sortedWeeks.length; i++) {
+        const prev = new Date(sortedWeeks[i - 1]);
+        const curr = new Date(sortedWeeks[i]);
+        const diffDays = Math.round((prev.getTime() - curr.getTime()) / 86400000);
+        if (diffDays <= 10) { // within ~1.5 weeks
+          currentStreak++;
+        } else {
+          break;
+        }
+      }
+    }
+
+    // Calculate longest streak
+    let longest = 1;
+    let streak = 1;
+    const ascWeeks = [...sortedWeeks].reverse();
+    for (let i = 1; i < ascWeeks.length; i++) {
+      const prev = new Date(ascWeeks[i - 1]);
+      const curr = new Date(ascWeeks[i]);
+      const diffDays = Math.round((curr.getTime() - prev.getTime()) / 86400000);
+      if (diffDays <= 10) {
+        streak++;
+        longest = Math.max(longest, streak);
+      } else {
+        streak = 1;
+      }
+    }
+
+    return { current: currentStreak, longest: Math.max(longest, currentStreak), lastBookingDate: lastDate };
+  } catch {
+    return { current: 0, longest: 0, lastBookingDate: null };
+  }
+}
+
+export function getStreakMilestones(): { weeks: number; label: string; icon: string }[] {
+  return [
+    { weeks: 1, label: "First Step", icon: "🌱" },
+    { weeks: 3, label: "Weekend Warrior", icon: "🔥" },
+    { weeks: 5, label: "Regular Explorer", icon: "⭐" },
+    { weeks: 8, label: "Dedicated Adventurer", icon: "🌟" },
+    { weeks: 12, label: "Loyal Legend", icon: "👑" },
+  ];
+}

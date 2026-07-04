@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import {
   TIERS,
@@ -8,6 +8,8 @@ import {
   calculateTier,
   TIER_MAP,
   formatPoints,
+  calculateStreak,
+  getStreakMilestones,
   type TierName,
   type TierConfig,
 } from "@/lib/loyalty-engine";
@@ -22,6 +24,68 @@ function Loading() {
   return (
     <div className="min-h-screen flex items-center justify-center pt-20 bg-[#05070B]">
       <div className="w-8 h-8 rounded-full border-2 border-[#FF0F73]/30 border-t-[#FF0F73] animate-spin" />
+    </div>
+  );
+}
+
+function StreakDisplay() {
+  const streak = useMemo(() => calculateStreak(), []);
+  const milestones = getStreakMilestones();
+
+  // Find next milestone
+  const nextMilestone = milestones.find((m) => m.weeks > streak.current);
+  const prevMilestone = [...milestones].reverse().find((m) => m.weeks <= streak.current);
+
+  return (
+    <div className="p-6 sm:p-8 rounded-3xl bg-[#111827] border border-white/[0.08] shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+        {/* Streak counter */}
+        <div className="flex items-center gap-4">
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-lg shrink-0 ${
+            streak.current > 0 ? "bg-gradient-to-br from-orange-500 to-red-500" : "bg-[#1E293B]"
+          }`}>
+            {streak.current > 0 ? "🔥" : "⏳"}
+          </div>
+          <div>
+            <p className="text-heading-md font-bold text-[#F1F5F9]">
+              {streak.current > 0 ? `${streak.current} week${streak.current > 1 ? "s" : ""}` : "No active streak"}
+            </p>
+            <p className="text-body-sm text-[#94A3B8]">
+              {streak.current > 0
+                ? `Longest: ${streak.longest} week${streak.longest > 1 ? "s" : ""}`
+                : "Book experiences weekly to start a streak"}
+            </p>
+          </div>
+        </div>
+
+        {/* Streak milestones */}
+        <div className="flex-1">
+          <p className="text-caption text-[#94A3B8] mb-3">
+            {nextMilestone
+              ? `${nextMilestone.weeks - streak.current} more week${nextMilestone.weeks - streak.current > 1 ? "s" : ""} to "${nextMilestone.label}"`
+              : "All milestones reached!"}
+          </p>
+          <div className="flex items-center gap-2">
+            {milestones.map((m, i) => {
+              const unlocked = streak.current >= m.weeks;
+              return (
+                <div key={m.weeks} className="flex-1 flex flex-col items-center gap-1">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm border-2 transition-all ${
+                    unlocked
+                      ? "bg-gradient-to-br from-orange-500 to-red-500 border-orange-400 shadow-md"
+                      : "bg-[#1E293B] border-white/[0.1]"
+                  }`}>
+                    <span className={unlocked ? "" : "opacity-30"}>{m.icon}</span>
+                  </div>
+                  <span className={`text-[10px] text-center leading-tight ${unlocked ? "text-[#CBD5E1]" : "text-[#64748B]"}`}>
+                    {m.weeks}w
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -300,6 +364,12 @@ export default function LoyaltyPage() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* ─── Booking Streak ─── */}
+        <section>
+          <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-4">Booking Streak</h2>
+          <StreakDisplay />
         </section>
 
         {/* ─── Points History ─── */}
