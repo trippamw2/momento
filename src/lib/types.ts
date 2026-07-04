@@ -1,4 +1,4 @@
-﻿export type Mood =
+export type Mood =
   | "Romantic"
   | "Relaxed"
   | "Social"

@@ -1,4 +1,4 @@
-﻿import { json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
+import { json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
 import { experiences, getConciergeResponse } from "@/lib/data";
 import type { Experience } from "@/lib/types";
 

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useAuthGuard } from "@/lib/use-auth-guard";

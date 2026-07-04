@@ -1,4 +1,4 @@
-﻿import { Experience, Mood, NavItem, DiscoveryRailKey, Review, MomentoCategory } from "../types";
+import { Experience, Mood, NavItem, DiscoveryRailKey, Review, MomentoCategory } from "../types";
 import { haversineDistance, formatDistance, AFRICAN_CITY_COORDS } from "../geo";
 
 export const moods: { label: Mood; description: string; accent: string }[] = [

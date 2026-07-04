@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Experience } from "./types";
 import { haversineDistance } from "./geo";

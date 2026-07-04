@@ -1,5 +1,5 @@
-import { Experience, Review, ExperioCategory, V2Category } from "./types";
-import { mapV2CategoryToExperio } from "./categories";
+import { Experience, Review, MomentoCategory, V2Category } from "./types";
+import { mapV2CategoryToMomento } from "./categories";
 import { AFRICAN_CITY_COORDS } from "./geo";
 
 const CITY_MAP: Record<string, string> = {
@@ -45,12 +45,12 @@ export function transformExperience(raw: Record<string, unknown>): Experience {
 
   const parsedMood = moods.map((m) => m.moods?.label).filter(Boolean) as Experience["mood"];
 
-  function safeCategory(rawCat: unknown): ExperioCategory {
+  function safeCategory(rawCat: unknown): MomentoCategory {
     const cat = String(rawCat ?? "Chill");
-    const valid: ExperioCategory[] = ["Date", "Chill", "Celebrate", "Escape"];
-    if (valid.includes(cat as ExperioCategory)) return cat as ExperioCategory;
+    const valid: MomentoCategory[] = ["Date", "Chill", "Celebrate", "Escape"];
+    if (valid.includes(cat as MomentoCategory)) return cat as MomentoCategory;
     // Legacy V2Category mapping
-    return mapV2CategoryToExperio(cat as V2Category);
+    return mapV2CategoryToMomento(cat as V2Category);
   }
 
   return {

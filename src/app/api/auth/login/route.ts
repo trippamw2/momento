@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase-server";
 import { badRequest, unauthorized, handleRouteError } from "@/lib/api-helpers";
 

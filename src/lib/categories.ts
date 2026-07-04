@@ -1,4 +1,4 @@
-﻿import { V2Category, MomentoCategory } from "./types";
+import { V2Category, MomentoCategory } from "./types";
 
 export const MOMENTO_CATEGORIES = [
   { key: "Date" as MomentoCategory, emoji: "â¤ï¸", label: "Date", description: "Romantic dinners, sunset spots, couples activities", accent: "from-rose-400 to-pink-500" },

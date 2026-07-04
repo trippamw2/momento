@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -56,16 +56,16 @@ interface BookingRow {
 }
 
 const NAV: { key: Section; label: string; icon: string }[] = [
-  { key: "overview", label: "Overview", icon: "ðŸ“Š" },
-  { key: "users", label: "Users", icon: "ðŸ‘¥" },
-  { key: "experiences", label: "Experiences", icon: "ðŸŽ¯" },
-  { key: "reviews", label: "Reviews", icon: "â­" },
-  { key: "testimonials", label: "Testimonials", icon: "ðŸ’¬" },
-  { key: "bookings", label: "Bookings", icon: "ðŸ“…" },
-  { key: "gift-cards", label: "Gift Cards", icon: "ðŸŽ" },
-  { key: "partners", label: "Partners", icon: "ðŸ¤" },
-  { key: "financials", label: "Financials", icon: "ðŸ’°" },
-  { key: "settings", label: "Settings", icon: "âš™ï¸" },
+  { key: "overview", label: "Overview", icon: "📊" },
+  { key: "users", label: "Users", icon: "👥" },
+  { key: "experiences", label: "Experiences", icon: "🎯" },
+  { key: "reviews", label: "Reviews", icon: "⭐" },
+  { key: "testimonials", label: "Testimonials", icon: "💬" },
+  { key: "bookings", label: "Bookings", icon: "📅" },
+  { key: "gift-cards", label: "Gift Cards", icon: "🎁" },
+  { key: "partners", label: "Partners", icon: "🤝" },
+  { key: "financials", label: "Financials", icon: "💰" },
+  { key: "settings", label: "Settings", icon: "⚙️" },
 ];
 
 function StatusBadge({ status }: { status: string }) {
@@ -291,7 +291,7 @@ export default function AdminPage() {
         <header className="sticky top-18 z-20 bg-[#0F172A]/80 backdrop-blur-xl border-b border-white/[0.08]">
           <div className="flex items-center justify-between px-4 sm:px-6 h-14">
             <div className="flex items-center gap-3">
-              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/[0.05] text-[#94A3B8] font-bold text-heading">â‰¡</button>
+              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/[0.05] text-[#94A3B8] font-bold text-heading">≡</button>
               <h1 className="text-heading-md font-bold text-[#F1F5F9] hidden sm:block">{NAV.find((n) => n.key === section)?.label}</h1>
             </div>
             <span className="text-caption text-[#64748B] bg-[#05070B] px-3 py-1.5 rounded-full">Admin</span>
@@ -310,12 +310,12 @@ export default function AdminPage() {
                 <div className="space-y-6">
                   <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                     {[
-                      { label: "Total Users", value: overview.totalUsers.toLocaleString(), icon: "ðŸ‘¥" },
-                      { label: "Partners", value: overview.totalPartners.toLocaleString(), icon: "ðŸ¤" },
-                      { label: "Experiences", value: overview.totalExperiences.toLocaleString(), icon: "ðŸŽ¯" },
-                      { label: "Total Bookings", value: overview.totalBookings.toLocaleString(), icon: "ðŸ“…" },
-                      { label: "Pending", value: overview.pendingBookings.toLocaleString(), icon: "â³" },
-                      { label: "Revenue", value: `MK ${overview.totalRevenue.toLocaleString()}`, icon: "ðŸ’°" },
+                      { label: "Total Users", value: overview.totalUsers.toLocaleString(), icon: "👥" },
+                      { label: "Partners", value: overview.totalPartners.toLocaleString(), icon: "🤝" },
+                      { label: "Experiences", value: overview.totalExperiences.toLocaleString(), icon: "🎯" },
+                      { label: "Total Bookings", value: overview.totalBookings.toLocaleString(), icon: "📅" },
+                      { label: "Pending", value: overview.pendingBookings.toLocaleString(), icon: "⏳" },
+                      { label: "Revenue", value: `MK ${overview.totalRevenue.toLocaleString()}`, icon: "💰" },
                     ].map((stat) => (
                       <div key={stat.label} className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                         <div className="flex items-center justify-between mb-2">
@@ -353,7 +353,7 @@ export default function AdminPage() {
                     <tbody>
                       {users.map((u) => (
                         <tr key={u.id} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
-                          <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">{u.full_name || "â€”"}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">{u.full_name || "—"}</td>
                           <td className="py-3 px-4"><StatusBadge status={u.role} /></td>
                           <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{new Date(u.created_at).toLocaleDateString()}</td>
                           <td className="py-3 px-4">
@@ -396,7 +396,7 @@ export default function AdminPage() {
                           <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">MK {e.price.toLocaleString()}</td>
                           <td className="py-3 px-4"><StatusBadge status={e.status} /></td>
                           <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{e.booking_count}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">â˜… {e.rating}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">★ {e.rating}</td>
                           <td className="py-3 px-4">
                             <div className="flex gap-1">
                               {e.status !== "published" && (
@@ -430,8 +430,8 @@ export default function AdminPage() {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="text-body-sm font-medium text-[#F1F5F9]">{r.user?.full_name || "Anonymous"}</span>
-                            <span className="text-caption text-[#64748B]">Â·</span>
-                            <span className="text-caption text-[#64748B]">{'â˜…'.repeat(r.rating)}{'â˜†'.repeat(5 - r.rating)}</span>
+                            <span className="text-caption text-[#64748B]">·</span>
+                            <span className="text-caption text-[#64748B]">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
                           </div>
                           <p className="text-caption text-[#64748B] mb-1">{r.experience?.title || "Unknown experience"}</p>
                           {r.body && <p className="text-body-sm text-[#94A3B8] mt-1">{r.body}</p>}
@@ -479,8 +479,8 @@ export default function AdminPage() {
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
                               <span className="text-body-sm font-medium text-[#F1F5F9]">{r.user?.full_name || "Anonymous"}</span>
-                              <span className="text-caption text-[#64748B]">Â·</span>
-                              <span className="text-caption text-[#64748B]">{'â˜…'.repeat(r.rating)}{'â˜†'.repeat(5 - r.rating)}</span>
+                              <span className="text-caption text-[#64748B]">·</span>
+                              <span className="text-caption text-[#64748B]">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
                             </div>
                             <p className="text-caption text-[#64748B] mb-1">{r.experience?.title || "Unknown experience"}</p>
                             {r.body && <p className="text-body-sm text-[#94A3B8] mt-1 line-clamp-2">{r.body}</p>}
@@ -499,7 +499,7 @@ export default function AdminPage() {
                                 : "bg-white/[0.06] text-[#94A3B8] hover:bg-[#1A2332]"
                             }`}
                           >
-                            {featured ? "â˜… Featured" : "â˜† Feature"}
+                            {featured ? "★ Featured" : "☆ Feature"}
                           </button>
                         </div>
                       </div>
@@ -526,7 +526,7 @@ export default function AdminPage() {
                       {bookings.map((b) => (
                         <tr key={b.id} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
                           <td className="py-3 px-4 text-body-sm text-[#F1F5F9] font-mono">{b.id.slice(0, 8)}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">{b.experience?.title || "â€”"}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">{b.experience?.title || "—"}</td>
                           <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{b.experience_date}</td>
                           <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{b.guests_count}</td>
                           <td className="py-3 px-4 text-body-sm text-[#F1F5F9] font-medium">MK {b.total_price.toLocaleString()}</td>
@@ -548,10 +548,10 @@ export default function AdminPage() {
                   {/* Stats */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
-                      { label: "Total Cards", value: giftCards.length, icon: "ðŸŽ" },
-                      { label: "Active", value: giftCards.filter(g => g.status === "active").length, icon: "âœ…" },
-                      { label: "Partially Redeemed", value: giftCards.filter(g => g.status === "partially_redeemed").length, icon: "ðŸ”„" },
-                      { label: "Redeemed", value: giftCards.filter(g => g.status === "redeemed").length, icon: "âœ”ï¸" },
+                      { label: "Total Cards", value: giftCards.length, icon: "🎁" },
+                      { label: "Active", value: giftCards.filter(g => g.status === "active").length, icon: "✅" },
+                      { label: "Partially Redeemed", value: giftCards.filter(g => g.status === "partially_redeemed").length, icon: "🔄" },
+                      { label: "Redeemed", value: giftCards.filter(g => g.status === "redeemed").length, icon: "✔️" },
                     ].map((stat) => (
                       <div key={stat.label} className="p-4 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                         <div className="flex items-center justify-between mb-1">
@@ -597,10 +597,10 @@ export default function AdminPage() {
                   {/* Stats */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
-                      { label: "Total Partners", value: partners.length, icon: "ðŸ¤" },
-                      { label: "Active", value: partners.filter(p => p.status === "active").length, icon: "âœ…" },
-                      { label: "Pending", value: partners.filter(p => p.status === "pending").length, icon: "â³" },
-                      { label: "Suspended", value: partners.filter(p => p.status === "suspended").length, icon: "â›”" },
+                      { label: "Total Partners", value: partners.length, icon: "🤝" },
+                      { label: "Active", value: partners.filter(p => p.status === "active").length, icon: "✅" },
+                      { label: "Pending", value: partners.filter(p => p.status === "pending").length, icon: "⏳" },
+                      { label: "Suspended", value: partners.filter(p => p.status === "suspended").length, icon: "⛔" },
                     ].map((stat) => (
                       <div key={stat.label} className="p-4 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                         <div className="flex items-center justify-between mb-1">
@@ -651,10 +651,10 @@ export default function AdminPage() {
                   {/* Summary Cards */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
-                      { label: "Total Revenue", value: `MK ${financials.totalRevenue.toLocaleString()}`, icon: "ðŸ’°", accent: "text-emerald-400" },
-                      { label: "Pending Payouts", value: `MK ${financials.pendingPayouts.toLocaleString()}`, icon: "â³", accent: "text-amber-400" },
-                      { label: "Completed Payouts", value: `MK ${financials.completedPayouts.toLocaleString()}`, icon: "âœ…", accent: "text-blue-400" },
-                      { label: "Platform Fees", value: `MK ${financials.platformFee.toLocaleString()}`, icon: "ðŸ“Š", accent: "text-purple-400" },
+                      { label: "Total Revenue", value: `MK ${financials.totalRevenue.toLocaleString()}`, icon: "💰", accent: "text-emerald-400" },
+                      { label: "Pending Payouts", value: `MK ${financials.pendingPayouts.toLocaleString()}`, icon: "⏳", accent: "text-amber-400" },
+                      { label: "Completed Payouts", value: `MK ${financials.completedPayouts.toLocaleString()}`, icon: "✅", accent: "text-blue-400" },
+                      { label: "Platform Fees", value: `MK ${financials.platformFee.toLocaleString()}`, icon: "📊", accent: "text-purple-400" },
                     ].map((stat) => (
                       <div key={stat.label} className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                         <div className="flex items-center justify-between mb-2">

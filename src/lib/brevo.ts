@@ -1,4 +1,4 @@
-﻿// â”€â”€â”€ Brevo (Sendinblue) Transactional Email Service â”€â”€â”€
+// â”€â”€â”€ Brevo (Sendinblue) Transactional Email Service â”€â”€â”€
 // Server-side only. Do NOT import in client components.
 
 const BREVO_API = "https://api.brevo.com/v3/smtp/email";
