@@ -43,7 +43,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-semibold text-body-sm mb-4">for Experions</h4>
+            <h4 className="text-white font-semibold text-body-sm mb-4">For Experions</h4>
             <ul className="space-y-2.5 text-body-sm text-[#CBD5E1]">
               <li><Link href="/" className="hover:text-white transition-colors duration-200">Discover</Link></li>
               <li><Link href="/gift" className="hover:text-white transition-colors duration-200">Gift Cards</Link></li>

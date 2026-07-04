@@ -62,7 +62,7 @@ const MOCK_NOTIFICATIONS: AppNotification[] = [
     time: "1d ago",
     timestamp: Date.now() - 86400000,
     read: false,
-    actionLabel: "for Experions",
+    actionLabel: "For Experions",
     actionHref: "/experiences",
   },
   {
