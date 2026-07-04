@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -34,7 +34,7 @@ export function useAuthGuard({
   });
 
   const verify = useCallback(async () => {
-    const token = localStorage.getItem("experio-auth-token");
+    const token = localStorage.getItem("momento-auth-token");
     if (!token) {
       setState({ allowed: false, loading: false, user: null });
       router.replace(redirectTo);
@@ -80,7 +80,7 @@ export function useAuthGuard({
 
       setState({ allowed: true, loading: false, user });
     } catch {
-      // Network error — don't redirect, let the UI handle it
+      // Network error â€” don't redirect, let the UI handle it
       setState({ allowed: false, loading: false, user: null });
     }
   }, [requiredRole, redirectTo, router]);

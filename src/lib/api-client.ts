@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 const BASE_URL = "";
 
@@ -11,7 +11,7 @@ type RequestOptions = {
 
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem("experio-auth-token");
+  return localStorage.getItem("momento-auth-token");
 }
 
 async function request<T>(path: string, opts: RequestOptions = {}): Promise<T> {
@@ -52,7 +52,7 @@ async function request<T>(path: string, opts: RequestOptions = {}): Promise<T> {
   return data;
 }
 
-// ─── Auth ───
+// â”€â”€â”€ Auth â”€â”€â”€
 
 export async function login(email: string, password: string) {
   return request<{ user: unknown; session: { access_token: string } }>("/api/auth/login", {
@@ -78,7 +78,7 @@ export async function getMe() {
   }>("/api/auth/me");
 }
 
-// ─── Experiences ───
+// â”€â”€â”€ Experiences â”€â”€â”€
 
 export type ExperienceFilters = {
   page?: number;
@@ -107,7 +107,7 @@ export async function getExperience(id: string) {
   return request<unknown>(`/api/experiences/${id}`);
 }
 
-// ─── Bookings ───
+// â”€â”€â”€ Bookings â”€â”€â”€
 
 export type BookingFilters = {
   page?: number;
@@ -141,7 +141,7 @@ export async function cancelBooking(id: string) {
   return request<unknown>(`/api/bookings/${id}/cancel`, { method: "POST" });
 }
 
-// ─── Saved ───
+// â”€â”€â”€ Saved â”€â”€â”€
 
 export async function getSaved(filters: { collection_id?: string; page?: number; limit?: number } = {}) {
   return request<{ saved: unknown[]; total: number }>("/api/saved", {
@@ -160,7 +160,7 @@ export async function deleteSaved(id: string) {
   return request<unknown>(`/api/saved/${id}`, { method: "DELETE" });
 }
 
-// ─── Partner ───
+// â”€â”€â”€ Partner â”€â”€â”€
 
 export async function getPartnerProfile() {
   return request<unknown>("/api/partners/me");
@@ -174,7 +174,7 @@ export async function getPartnerBookings() {
   return request<unknown>("/api/bookings/partner");
 }
 
-// ─── Gift Cards ───
+// â”€â”€â”€ Gift Cards â”€â”€â”€
 
 export async function getGiftCards() {
   return request<unknown>("/api/gift-cards");
@@ -189,7 +189,7 @@ export async function createGiftCard(data: {
   return request<unknown>("/api/gift-cards", { method: "POST", body: data });
 }
 
-// ─── AI Concierge ───
+// â”€â”€â”€ AI Concierge â”€â”€â”€
 
 export async function getConciergeSuggestions(query: string) {
   return request<{ explanation: string; results: unknown[] }>("/api/ai", {

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { sendGiftViaEmail } from "./delivery-email";
 
@@ -33,7 +33,7 @@ export interface GiftCardFull {
   expiresAt: string;
 }
 
-const STORAGE_KEY = "experio-gift-cards";
+const STORAGE_KEY = "momento-gift-cards";
 
 function generateCode(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -110,7 +110,7 @@ export function sendGiftCard(card: GiftCardFull): void {
 
 function sendViaWhatsApp(card: GiftCardFull): void {
   const message = encodeURIComponent(
-    `🎁 You've received an Experio Gift Card from ${card.senderName}!\n\n` +
+    `ðŸŽ You've Received a Momento Gift Card from ${card.senderName}!\n\n` +
     `Amount: ${card.currency} ${card.amount.toLocaleString()}\n` +
     (card.message ? `Message: "${card.message}"\n\n` : "\n") +
     `Code: ${card.code}\n\n` +
@@ -136,7 +136,7 @@ function sendViaEmail(card: GiftCardFull): void {
 
 function sendViaSMS(card: GiftCardFull): void {
   const message = encodeURIComponent(
-    `🎁 Experio Gift Card from ${card.senderName}! Code: ${card.code}. Redeem: ${window.location.origin}/gift/redeem?code=${card.code}`
+    `ðŸŽ Momento Gift Card from ${card.senderName}! Code: ${card.code}. Redeem: ${window.location.origin}/gift/redeem?code=${card.code}`
   );
   window.open(`sms:${card.recipientContact}?body=${message}`, "_blank");
 }

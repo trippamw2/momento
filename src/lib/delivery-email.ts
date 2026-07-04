@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 interface EmailParams {
   recipientEmail: string;
@@ -18,7 +18,7 @@ interface EmailResult {
 
 async function sendGiftCardEmail(params: EmailParams): Promise<EmailResult> {
   try {
-    const token = localStorage.getItem("experio-auth-token");
+    const token = localStorage.getItem("momento-auth-token");
     if (!token) return { success: false, error: "Not authenticated" };
 
     const res = await fetch("/api/email/send", {
@@ -72,22 +72,22 @@ export async function sendGiftViaEmail(card: {
 
   // Fallback: open mailto link
   console.warn("Email API failed, falling back to mailto link:", result.error);
-  const origin = typeof window !== "undefined" ? window.location.origin : "https://experio.life";
-  const subject = encodeURIComponent(`You've received an Experio Gift Card from ${card.senderName}!`);
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://momento.life";
+  const subject = encodeURIComponent(`You've Received a Momento Gift Card from ${card.senderName}!`);
   const body = encodeURIComponent(
     `Hi ${card.recipientName},\n\n` +
-    `${card.senderName} has sent you an Experio Gift Card!\n` +
-    (card.occasion ? `🎉 ${card.occasion}\n\n` : "\n") +
-    `━━━━━━━━━━━━━━━━━━━━\n` +
+    `${card.senderName} has sent you an Momento Gift Card!\n` +
+    (card.occasion ? `ðŸŽ‰ ${card.occasion}\n\n` : "\n") +
+    `â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n` +
     `Amount: ${card.currency} ${card.amount.toLocaleString()}\n` +
     `Code: ${card.code}\n` +
-    `━━━━━━━━━━━━━━━━━━━━\n\n` +
+    `â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n\n` +
     (card.message ? `"${card.message}"\n\n` : "") +
     `Redeem your gift here:\n` +
     `${origin}/gift/redeem?code=${card.code}\n\n` +
     `This gift card expires one year from the date of issue.\n\n` +
     `Live The Moment,\n` +
-    `Experio`
+    `Momento`
   );
   window.open(`mailto:${card.recipientContact}?subject=${subject}&body=${body}`, "_blank");
 }
@@ -109,7 +109,7 @@ export async function sendBookingConfirmationEmail(params: {
   partnerName: string;
 }): Promise<EmailResult> {
   try {
-    const token = localStorage.getItem("experio-auth-token");
+    const token = localStorage.getItem("momento-auth-token");
     if (!token) return { success: false, error: "Not authenticated" };
 
     const res = await fetch("/api/email/send", {
@@ -140,7 +140,7 @@ export async function sendBookingCancellationEmail(params: {
   refundStatus: string;
 }): Promise<EmailResult> {
   try {
-    const token = localStorage.getItem("experio-auth-token");
+    const token = localStorage.getItem("momento-auth-token");
     if (!token) return { success: false, error: "Not authenticated" };
 
     const res = await fetch("/api/email/send", {

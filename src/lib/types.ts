@@ -1,4 +1,4 @@
-export type Mood =
+﻿export type Mood =
   | "Romantic"
   | "Relaxed"
   | "Social"
@@ -8,7 +8,7 @@ export type Mood =
   | "Celebratory"
   | "Creative";
 
-/** @deprecated Use ExperioCategory instead. Kept for backward compatibility. */
+/** @deprecated Use MomentoCategory instead. Kept for backward compatibility. */
 export type V2Category =
   | "Date Night"
   | "Pool & Chill"
@@ -16,7 +16,7 @@ export type V2Category =
   | "Brunch & Dining"
   | "Staycation";
 
-export type ExperioCategory =
+export type MomentoCategory =
   | "Date"
   | "Chill"
   | "Celebrate"
@@ -54,7 +54,7 @@ export interface Experience {
   bestTimeToVisit?: string;
   rating: number;
   reviewCount: number;
-  category: ExperioCategory;
+  category: MomentoCategory;
   featured: boolean;
   includes: string[];
   capacity: number;
@@ -90,7 +90,7 @@ export interface DiscoveryRail {
 
 export const PRICE_RANGES = [
   { label: "All", value: "all" },
-  { label: "≤ 50K", value: "0-50000" },
+  { label: "â‰¤ 50K", value: "0-50000" },
   { label: "50K-100K", value: "50000-100000" },
   { label: "100K+", value: "100000-9999999" },
 ] as const;
@@ -112,7 +112,7 @@ export interface SavedState {
   collections: Collection[];
 }
 
-// ─── API Response Types ───
+// â”€â”€â”€ API Response Types â”€â”€â”€
 
 export interface GiftCard {
   id: string;

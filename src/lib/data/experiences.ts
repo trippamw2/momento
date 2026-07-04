@@ -1,4 +1,4 @@
-import { Experience, Mood, NavItem, DiscoveryRailKey, Review, ExperioCategory } from "../types";
+﻿import { Experience, Mood, NavItem, DiscoveryRailKey, Review, MomentoCategory } from "../types";
 import { haversineDistance, formatDistance, AFRICAN_CITY_COORDS } from "../geo";
 
 export const moods: { label: Mood; description: string; accent: string }[] = [
@@ -141,7 +141,7 @@ function getGalleryImages(category: string): string[] {
 }
 
 function getPartner(title: string): string {
-  return partners[title] || `${title} by Experio`;
+  return partners[title] || `${title} by Momento`;
 }
 
 function getIncludes(category: string): string[] {
@@ -191,7 +191,7 @@ interface RawExperience {
   bestTimeToVisit?: string;
   rating: number;
   reviewCount: number;
-  category: ExperioCategory;
+  category: MomentoCategory;
   featured: boolean;
   galleryCategory: string;
 }
@@ -201,7 +201,7 @@ const rawExperiences: RawExperience[] = [
     id: "sunset-cruise",
     title: "Sunset Cruise",
     subtitle: "Lake Malawi at Golden Hour",
-    description: "Sail across Lake Malawi as the sun sets with champagne, canapés, and live acoustic music. Watch the sky turn gold over the water.",
+    description: "Sail across Lake Malawi as the sun sets with champagne, canapÃ©s, and live acoustic music. Watch the sky turn gold over the water.",
     image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80",
     price: 55000,
     currency: "MWK",
@@ -363,7 +363,7 @@ const rawExperiences: RawExperience[] = [
     id: "wine-tasting",
     title: "Wine & Dine",
     subtitle: "Vintage Evenings",
-    description: "A guided wine tasting experience paired with gourmet canapés at Blantyre's exclusive vineyard estate. Sip, savour, repeat.",
+    description: "A guided wine tasting experience paired with gourmet canapÃ©s at Blantyre's exclusive vineyard estate. Sip, savour, repeat.",
     image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&q=80",
     price: 40000,
     currency: "MWK",

@@ -1,6 +1,6 @@
-"use client";
+﻿"use client";
 
-// ─── Types ───
+// â”€â”€â”€ Types â”€â”€â”€
 
 export type PaymentMethod = "mpamba" | "airtel-money" | "card";
 
@@ -12,9 +12,9 @@ export interface PaymentMethodInfo {
 }
 
 export const PAYMENT_METHODS: PaymentMethodInfo[] = [
-  { id: "mpamba", name: "M-Pamba", icon: "📱", description: "Pay with TNM M-Pamba" },
-  { id: "airtel-money", name: "Airtel Money", icon: "📲", description: "Pay with Airtel Money" },
-  { id: "card", name: "Card Payment", icon: "💳", description: "Visa / Mastercard" },
+  { id: "mpamba", name: "M-Pamba", icon: "ðŸ“±", description: "Pay with TNM M-Pamba" },
+  { id: "airtel-money", name: "Airtel Money", icon: "ðŸ“²", description: "Pay with Airtel Money" },
+  { id: "card", name: "Card Payment", icon: "ðŸ’³", description: "Visa / Mastercard" },
 ];
 
 export interface PaymentRequest {
@@ -35,9 +35,9 @@ export interface PaymentResult {
   timestamp: number;
 }
 
-// ─── Mock Payment Processing ───
+// â”€â”€â”€ Mock Payment Processing â”€â”€â”€
 
-const PAYMENT_STORAGE_KEY = "experio-payments";
+const PAYMENT_STORAGE_KEY = "momento-payments";
 
 export function processPayment(request: PaymentRequest): Promise<PaymentResult> {
   return new Promise((resolve) => {
@@ -66,7 +66,7 @@ export function processPayment(request: PaymentRequest): Promise<PaymentResult> 
   });
 }
 
-// ─── Payment History ───
+// â”€â”€â”€ Payment History â”€â”€â”€
 
 export interface SavedPayment extends PaymentResult {
   experienceId: string;
@@ -94,7 +94,7 @@ export function getPaymentHistory(): SavedPayment[] {
   }
 }
 
-// ─── Formatting ───
+// â”€â”€â”€ Formatting â”€â”€â”€
 
 export function formatCurrency(amount: number, currency: string = "MK"): string {
   return `${currency} ${amount.toLocaleString()}`;

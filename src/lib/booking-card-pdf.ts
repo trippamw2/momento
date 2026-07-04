@@ -1,4 +1,4 @@
-import jsPDF from "jspdf";
+﻿import jsPDF from "jspdf";
 
 export interface BookingPdfData {
   bookingRef: string;
@@ -44,7 +44,7 @@ export function generateBookingPDF(data: BookingPdfData): Blob {
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(18);
   doc.setFont("helvetica", "bold");
-  doc.text("EXPERIO", mg + 2, 22);
+  doc.text("Momento", mg + 2, 22);
 
   doc.setFontSize(7);
   doc.setFont("helvetica", "normal");
@@ -150,7 +150,7 @@ export function generateBookingPDF(data: BookingPdfData): Blob {
   doc.setTextColor(100, 116, 139);
   doc.setFontSize(6);
   doc.setFont("helvetica", "normal");
-  doc.text("LIVE THE MOMENT — Experio", mg + 2, h - 8);
+  doc.text("LIVE THE MOMENT — Momento", mg + 2, h - 8);
   doc.text(`Issued ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}`, w - mg - 2, h - 8, { align: "right" });
 
   return doc.output("blob");

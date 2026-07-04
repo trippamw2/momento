@@ -1,6 +1,6 @@
-"use client";
+﻿"use client";
 
-// ─── Types ───
+// â”€â”€â”€ Types â”€â”€â”€
 
 export type NotificationType =
   | "booking_confirmed"
@@ -28,7 +28,7 @@ export interface AppNotification {
   actionHref?: string;
 }
 
-// ─── Mock Notification Data ───
+// â”€â”€â”€ Mock Notification Data â”€â”€â”€
 
 const MOCK_NOTIFICATIONS: AppNotification[] = [
   {
@@ -62,7 +62,7 @@ const MOCK_NOTIFICATIONS: AppNotification[] = [
     time: "1d ago",
     timestamp: Date.now() - 86400000,
     read: false,
-    actionLabel: "For Experions",
+    actionLabel: "For Explorers",
     actionHref: "/experiences",
   },
   {
@@ -123,9 +123,9 @@ const MOCK_NOTIFICATIONS: AppNotification[] = [
   },
 ];
 
-// ─── Storage ───
+// â”€â”€â”€ Storage â”€â”€â”€
 
-const STORAGE_KEY = "experio-notifications";
+const STORAGE_KEY = "momento-notifications";
 
 function loadNotifications(): AppNotification[] {
   if (typeof window === "undefined") return [];
@@ -142,7 +142,7 @@ function saveNotifications(notifications: AppNotification[]) {
   } catch { /* ignore */ }
 }
 
-// ─── API ───
+// â”€â”€â”€ API â”€â”€â”€
 
 export function getNotifications(): AppNotification[] {
   return loadNotifications().sort((a, b) => b.timestamp - a.timestamp);
@@ -173,7 +173,7 @@ export function addNotification(notification: AppNotification): void {
   saveNotifications(notifications.slice(0, 50)); // keep max 50
 }
 
-// ─── Presets for hooks to call ───
+// â”€â”€â”€ Presets for hooks to call â”€â”€â”€
 
 export function createBookingConfirmedNotification(
   experienceTitle: string,

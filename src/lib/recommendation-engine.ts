@@ -1,10 +1,10 @@
-"use client";
+﻿"use client";
 
 import { Experience } from "./types";
 import { haversineDistance } from "./geo";
 import type { Coordinates } from "./geo";
 
-// ─── Types ───
+// â”€â”€â”€ Types â”€â”€â”€
 
 export interface UserInteraction {
   id: string;
@@ -22,11 +22,11 @@ export interface DiscoveryRail {
   isPersonalized?: boolean;
 }
 
-// ─── Storage ───
+// â”€â”€â”€ Storage â”€â”€â”€
 
 const KEYS = {
-  INTERACTIONS: "experio-interactions",
-  CATEGORY_AFFINITY: "experio-category-affinity",
+  INTERACTIONS: "momento-interactions",
+  CATEGORY_AFFINITY: "momento-category-affinity",
 } as const;
 
 function loadInteractions(): UserInteraction[] {
@@ -45,7 +45,7 @@ function saveInteractions(interactions: UserInteraction[]) {
   } catch (e) { console.warn("Failed to save interactions:", e); }
 }
 
-// ─── Tracking ───
+// â”€â”€â”€ Tracking â”€â”€â”€
 
 const WEIGHT_MAP: Record<UserInteraction["type"], number> = {
   viewed: 1,
@@ -88,7 +88,7 @@ export function trackGifted(experienceId: string) {
   trackInteraction(experienceId, "gifted");
 }
 
-// ─── Analytics helpers ───
+// â”€â”€â”€ Analytics helpers â”€â”€â”€
 
 function getUserCategoryAffinity(experiences: Experience[]): Record<string, number> {
   const interactions = loadInteractions();
@@ -121,7 +121,7 @@ function getAllInteractedIds(): Set<string> {
   return new Set(loadInteractions().map((i) => i.experienceId));
 }
 
-// ─── Time-based bonuses ───
+// â”€â”€â”€ Time-based bonuses â”€â”€â”€
 
 function getTimeOfDayBonus(): Record<string, number> {
   const hour = new Date().getHours();
@@ -138,7 +138,7 @@ function getDayOfWeekBonus(): Record<string, number> {
   return { Chill: 1 };
 }
 
-// ─── Scored ranking ───
+// â”€â”€â”€ Scored ranking â”€â”€â”€
 
 function scoreExperiences(
   experiences: Experience[],
@@ -186,7 +186,7 @@ function scoreExperiences(
   return scored.map((s) => s.exp);
 }
 
-// ─── Public Rail Generators ───
+// â”€â”€â”€ Public Rail Generators â”€â”€â”€
 
 export function getPersonalizedRails(
   allExperiences: Experience[],
@@ -344,7 +344,7 @@ export function getBasedOnHistory(
   ).slice(0, limit);
 }
 
-// ─── Category-based recommendations ───
+// â”€â”€â”€ Category-based recommendations â”€â”€â”€
 
 export function getRecommendedCategories(experiences: Experience[]): string[] {
   const timeBonus = getTimeOfDayBonus();
