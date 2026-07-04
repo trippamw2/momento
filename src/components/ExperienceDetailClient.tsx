@@ -8,148 +8,13 @@ import { trackView, trackBooked, trackSaved } from "@/lib/recommendation-engine"
 import { calculatePoints, calculateTier, addPointsLocally, TIER_MAP } from "@/lib/loyalty-engine";
 import { sendBookingConfirmationEmail } from "@/lib/delivery-email";
 
+import BookingCalendar from "./BookingCalendar";
+import GuestSelector from "./GuestSelector";
+import BookingConfirmed from "./BookingConfirmed";
+import ReviewCard from "./ReviewCard";
 import ContentRail from "./ContentRail";
 import AuthModal from "./AuthModal";
 import ReviewForm from "./ReviewForm";
-
-// ─── Constants ───
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-// ─── Star Rating Display ───
-function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "md" }) {
-  const cls = size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4";
-  return (
-    <div className="flex items-center gap-0.5">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <svg key={star} className={`${cls} ${star <= Math.round(rating) ? "text-yellow-400" : "text-[#e0e0e0]"}`} fill="currentColor" viewBox="0 0 20 20">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-        </svg>
-      ))}
-    </div>
-  );
-}
-
-// ─── Calendar ───
-function Calendar({ selectedDate, onSelect }: { selectedDate: Date | null; onSelect: (d: Date) => void }) {
-  const today = useMemo(() => new Date(), []);
-  const [month, setMonth] = useState(today.getMonth());
-  const [year, setYear] = useState(today.getFullYear());
-
-  const firstDayOfWeek = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const unavailable = useMemo(() => {
-    const set = new Set<number>();
-    for (let d = 1; d <= daysInMonth; d++) {
-      if ((d * 7 + month * 13 + year * 31) % 10 > 6) set.add(d);
-    }
-    return set;
-  }, [daysInMonth, month, year]);
-
-  const prevMonth = () => {
-    if (month === 0) { setMonth(11); setYear((y) => y - 1); }
-    else setMonth((m) => m - 1);
-  };
-  const nextMonth = () => {
-    if (month === 11) { setMonth(0); setYear((y) => y + 1); }
-    else setMonth((m) => m + 1);
-  };
-
-  const isPast = (d: number) =>
-    year < today.getFullYear() ||
-    (year === today.getFullYear() && month < today.getMonth()) ||
-    (year === today.getFullYear() && month === today.getMonth() && d < today.getDate());
-
-  const cells: (number | null)[] = Array(firstDayOfWeek).fill(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
-
-  return (
-    <div className="bg-[#111827] rounded-xl p-4 border border-white/[0.1]">
-      <div className="flex items-center justify-between mb-4">
-        <button onClick={prevMonth} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors text-[#94A3B8]">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-        </button>
-        <span className="text-body-sm font-semibold text-white">{MONTHS[month]} {year}</span>
-        <button onClick={nextMonth} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors text-[#94A3B8]">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-        </button>
-      </div>
-      <div className="grid grid-cols-7 gap-1 mb-2">
-        {DAYS.map((d) => (
-          <div key={d} className="text-center text-caption text-[#94A3B8] font-medium py-1">{d}</div>
-        ))}
-      </div>
-      <div className="grid grid-cols-7 gap-1">
-        {cells.map((d, i) => {
-          if (d === null) return <div key={`empty-${i}`} />;
-          const disabled = isPast(d) || unavailable.has(d);
-          const selected = selectedDate?.getDate() === d && selectedDate?.getMonth() === month && selectedDate?.getFullYear() === year;
-          return (
-            <button
-              key={d}
-              disabled={disabled}
-              onClick={() => onSelect(new Date(year, month, d))}
-              className={`w-full aspect-square rounded-lg text-caption font-medium flex items-center justify-center transition-all ${
-                selected
-                  ? "bg-[#FF0F73] text-white shadow-[0_2px_8px_rgba(255, 15, 115, 0.25)]"
-                  : disabled
-                    ? "text-white/20 line-through cursor-not-allowed"
-                    : "text-[#CBD5E1] hover:bg-white/5 hover:text-white"
-              }`}
-            >
-              {d}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-// ─── GuestSelector ───
-function GuestSelector({ value, onChange, maxGuests }: { value: number; onChange: (v: number) => void; maxGuests: number }) {
-  return (
-    <div className="flex items-center justify-between p-3 rounded-xl bg-[#111827] border border-white/[0.1]">
-      <span className="text-body-sm text-white font-medium">Guests</span>
-      <div className="flex items-center gap-3">
-        <button
-          onClick={() => onChange(Math.max(1, value - 1))}
-          disabled={value <= 1}
-          className="w-8 h-8 rounded-full flex items-center justify-center bg-white/5 text-white hover:bg-white/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>
-        </button>
-        <span className="w-6 text-center text-body font-semibold text-white">{value}</span>
-        <button
-          onClick={() => onChange(value + 1)}
-          disabled={value >= maxGuests}
-          className="w-8 h-8 rounded-full flex items-center justify-center bg-white/5 text-white hover:bg-white/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ─── Review Card ───
-function ReviewCard({ review }: { review: Experience["reviews"][number] }) {
-  return (
-    <div className="p-5 rounded-2xl bg-[#111827] border border-white/[0.1]">
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <Image src={review.avatar} alt={review.author} width={40} height={40} className="rounded-full bg-white/10 ring-2 ring-[#111827]" />
-          <div>
-            <p className="text-body-sm font-semibold text-white">{review.author}</p>
-            <p className="text-caption text-[#94A3B8]">{review.date}</p>
-          </div>
-        </div>
-        <StarRating rating={review.rating} size="sm" />
-      </div>
-      <p className="text-body-sm text-[#CBD5E1] leading-relaxed">{review.text}</p>
-    </div>
-  );
-}
 
 // ─── Props ───
 interface Props {
@@ -285,47 +150,14 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
   // ─── Booking Confirmed State ───
   if (bookingDone) {
     return (
-      <div className="pt-24 pb-16 min-h-screen flex items-center justify-center bg-[#05070B]">
-        <div className="text-center max-w-md mx-auto px-4">
-          <div className="w-20 h-20 rounded-full bg-[#FF0F73] flex items-center justify-center mx-auto mb-6 shadow-[0_4px_16px_rgba(255, 15, 115, 0.2)]">
-            <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-          </div>
-          <h1 className="text-display-sm font-bold text-white mb-3">Booking Confirmed!</h1>
-          <p className="text-[#CBD5E1] text-body-lg mb-2">{exp.title}</p>
-          <p className="text-body-sm text-[#94A3B8] mb-1">{bookedDate} · {guests} guest{guests > 1 ? "s" : ""}</p>
-          <p className="text-heading-md font-bold text-white mb-8">MK {(exp.price * guests).toLocaleString()}</p>
-          {/* Loyalty Points Earned */}
-          {earnedPoints > 0 && (
-            <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-[#FF0F73]/10 to-[#FF7A1A]/10 border border-[#FF0F73]/20">
-              <p className="text-body-sm font-bold text-[#F1F5F9] mb-1">
-                🎉 You earned {earnedPoints.toLocaleString()} points!
-              </p>
-              {tierUpgrade ? (
-                <p className="text-caption text-emerald-400 font-medium">
-                  🎊 You&apos;ve been upgraded to {tierUpgrade}!
-                </p>
-              ) : (
-                <p className="text-caption text-[#CBD5E1]">
-                  Keep booking to unlock more rewards and higher tiers.
-                </p>
-              )}
-            </div>
-          )}
-
-          <p className="text-caption text-[#94A3B8] mb-6">Check your email for the full confirmation and receipt.</p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/bookings" className="px-8 py-3 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255, 15, 115, 0.25)] transition-all">
-              View My Bookings
-            </Link>
-            <Link href="/loyalty" className="px-8 py-3 rounded-xl bg-[#111827] text-white font-semibold text-body-sm border border-white/[0.1] hover:bg-white/5 transition-all">
-              View Rewards
-            </Link>
-            <Link href="/" className="px-8 py-3 rounded-xl bg-[#111827] text-white font-semibold text-body-sm border border-white/[0.1] hover:bg-white/5 transition-all">
-              Discover More
-            </Link>
-          </div>
-        </div>
-      </div>
+      <BookingConfirmed
+        title={exp.title}
+        bookedDate={bookedDate}
+        guests={guests}
+        totalPrice={exp.price * guests}
+        earnedPoints={earnedPoints}
+        tierUpgrade={tierUpgrade}
+      />
     );
   }
 
@@ -572,7 +404,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               {/* Review Cards */}
               <div className="space-y-4">
                 {exp.reviews.map((review) => (
-                  <ReviewCard key={review.id} review={review} />
+                  <ReviewCard key={review.id} author={review.author} avatar={review.avatar} rating={review.rating} date={review.date} text={review.text} />
                 ))}
               </div>
 
@@ -668,7 +500,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 {/* Calendar */}
                 <div>
                   <p className="text-body-sm font-semibold text-white mb-2">Select date</p>
-                  <Calendar selectedDate={selectedDate} onSelect={setSelectedDate} />
+                  <BookingCalendar selectedDate={selectedDate} onSelect={setSelectedDate} />
                 </div>
 
                 {/* Guest Selector */}
