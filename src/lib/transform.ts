@@ -1,4 +1,5 @@
 import { Experience, Review } from "./types";
+import { getIntentionsForExperience } from "./intentions";
 
 const CITY_MAP: Record<string, string> = {
   "Cape Maclear": "Lilongwe",
@@ -52,6 +53,15 @@ export function transformExperience(raw: Record<string, unknown>): Experience {
     text: (r.text as string) ?? "",
   }));
 
+  const parsedMood = moods.map((m) => m.moods?.label).filter(Boolean) as Experience["mood"];
+  const rawIntentions = raw.intentions as Experience["intentions"] | undefined;
+  const intentions: Experience["intentions"] = rawIntentions?.length
+    ? rawIntentions
+    : getIntentionsForExperience({
+        category: (raw.category as Experience["category"]) ?? "Date Night",
+        mood: parsedMood,
+      });
+
   return {
     id: raw.id as string,
     title: raw.title as string,
@@ -66,7 +76,9 @@ export function transformExperience(raw: Record<string, unknown>): Experience {
     city,
     distance: (raw.distance as string) ?? "",
     duration: (raw.duration as string) ?? "",
-    mood: moods.map((m) => m.moods?.label).filter(Boolean) as Experience["mood"],
+    mood: parsedMood,
+    intentions,
+    emotionalHeadline: (raw.emotionalHeadline as string) ?? undefined,
     rating: (raw.rating as number) ?? 0,
     reviewCount: (raw.review_count as number) ?? reviews.length,
     category: (raw.category as Experience["category"]) ?? "Date Night",
