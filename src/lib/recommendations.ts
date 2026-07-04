@@ -95,23 +95,17 @@ function updateCategoryScore(experienceId: string) {
 
 function getTimeOfDayBonus(): Record<string, number> {
   const hour = new Date().getHours();
-  // Morning (6-11): brunch, pool
-  if (hour >= 6 && hour < 12) return { "Brunch & Dining": 3, "Pool & Chill": 1 };
-  // Afternoon (12-16): pool, spa
-  if (hour >= 12 && hour < 17) return { "Pool & Chill": 2, "Spa & Wellness": 2, "Brunch & Dining": 1 };
-  // Evening (17-21): date night, staycation
-  if (hour >= 17 && hour < 22) return { "Date Night": 3, "Staycation": 2, "Brunch & Dining": 1 };
-  // Late night (22-5): staycation
-  return { "Staycation": 2, "Date Night": 1 };
+  if (hour >= 6 && hour < 12) return { Celebrate: 3, Chill: 1 };
+  if (hour >= 12 && hour < 17) return { Chill: 2, Celebrate: 1 };
+  if (hour >= 17 && hour < 22) return { Date: 3, Escape: 2, Celebrate: 1 };
+  return { Escape: 2, Date: 1 };
 }
 
 function getDayOfWeekBonus(): Record<string, number> {
   const day = new Date().getDay();
-  // Weekend (Fri-Sat evening, Sun midday)
-  if (day === 5 || day === 6) return { "Date Night": 2, "Staycation": 2, "Pool & Chill": 1 };
-  if (day === 0) return { "Brunch & Dining": 3, "Pool & Chill": 2 };
-  // Weekday: midweek chill
-  return { "Spa & Wellness": 1, "Pool & Chill": 1 };
+  if (day === 5 || day === 6) return { Date: 2, Escape: 2, Chill: 1 };
+  if (day === 0) return { Celebrate: 3, Chill: 2 };
+  return { Chill: 1 };
 }
 
 // ─── Public API ───
