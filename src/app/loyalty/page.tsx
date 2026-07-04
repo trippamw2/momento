@@ -45,7 +45,7 @@ export default function LoyaltyPage() {
     })
       .then((res) => (res.ok ? res.json() : null))
       .then((d) => setData(d))
-      .catch(() => {})
+      .catch((err) => console.error("Loyalty points fetch failed:", err))
       .finally(() => setLoading(false));
   }, []);
 

@@ -65,7 +65,7 @@ export default function ExperienceCard({ experience: exp, size = "md", distance 
     e.preventDefault();
     e.stopPropagation();
     if (navigator.share) {
-      navigator.share({ title: exp.title, url: `${window.location.origin}/experiences/${exp.id}` }).catch(() => {});
+      navigator.share({ title: exp.title, url: `${window.location.origin}/experiences/${exp.id}` }).catch((err) => console.warn("Share failed:", err));
     } else {
       navigator.clipboard.writeText(`${window.location.origin}/experiences/${exp.id}`).then(() => {
         setShareFeedback(true);

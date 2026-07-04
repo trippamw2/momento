@@ -39,7 +39,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
       width: 150,
       margin: 1,
       color: { dark: "#1a1a2e", light: "#ffffff" },
-    }).then(setQrDataUrl).catch(() => {});
+    }).then(setQrDataUrl).catch((err) => console.error("QR code generation failed:", err));
   }, [booking.bookingRef]);
 
   // Live countdown for upcoming bookings
@@ -179,7 +179,6 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
   const handleCancelConfirm = useCallback(() => {
     setCancelled(true);
     setShowCancelConfirm(false);
-    booking.status = "cancelled";
     onCancel?.();
   }, [onCancel]);
 

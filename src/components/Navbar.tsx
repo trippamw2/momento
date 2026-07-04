@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
@@ -246,10 +247,13 @@ export default function Navbar() {
           <div className="md:hidden fixed inset-x-0 top-18 bottom-0 z-[998] overflow-y-auto">
             {/* Cinematic background image */}
             <div className="absolute inset-0">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=85"
                 alt=""
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="100vw"
+                unoptimized
               />
               {/* Dark gradient overlay for readability */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/60 to-black/50" />

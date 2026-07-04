@@ -131,7 +131,7 @@ export default function DiscoveryFeed() {
                   <button
                     onClick={() => {
                       if (navigator.share) {
-                        navigator.share({ title: exp.title, url: `${window.location.origin}/experiences/${exp.id}` }).catch(() => {});
+                        navigator.share({ title: exp.title, url: `${window.location.origin}/experiences/${exp.id}` }).catch((err) => console.warn("Share failed:", err));
                       }
                     }}
                     className="px-4 py-2.5 rounded-xl border border-white/[0.15] text-white/80 text-body-sm font-medium hover:bg-white/[0.06] transition-all"

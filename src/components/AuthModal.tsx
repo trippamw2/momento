@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 interface AuthModalProps {
   onClose: () => void;
@@ -306,9 +307,9 @@ export default function AuthModal({ onClose }: AuthModalProps) {
               <div>
                 <label className="block text-caption text-[#6a6a6a] mb-1.5 font-medium">Profile image (optional)</label>
                 <div className="flex items-center gap-3">
-                  <div className="w-14 h-14 rounded-full bg-[#f5f2ef] border border-[#ebebeb] flex items-center justify-center overflow-hidden shrink-0">
+                  <div className="w-14 h-14 rounded-full bg-[#f5f2ef] border border-[#ebebeb] flex items-center justify-center overflow-hidden shrink-0 relative">
                     {avatarPreview ? (
-                      <img src={avatarPreview} alt="" className="w-full h-full object-cover" />
+                      <Image src={avatarPreview} alt="" fill className="object-cover" unoptimized />
                     ) : (
                       <svg className="w-6 h-6 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                     )}

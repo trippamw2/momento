@@ -3,6 +3,7 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Experience } from "@/lib/types";
 import { trackView, trackBooked, trackSaved } from "@/lib/recommendation-engine";
 import { calculatePoints, calculateTier, addPointsLocally, TIER_MAP } from "@/lib/loyalty-engine";
@@ -40,17 +41,20 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
   const [giftError, setGiftError] = useState("");
   const [earnedPoints, setEarnedPoints] = useState(0);
   const [tierUpgrade, setTierUpgrade] = useState<string | null>(null);
+  const [bookingRef, setBookingRef] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [contactPhone, setContactPhone] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const [contactError, setContactError] = useState("");
+  const router = useRouter();
 
   // Track view on mount
   useEffect(() => { trackView(exp.id); }, [exp.id]);
 
   const handleShare = useCallback(() => {
     if (navigator.share) {
-      navigator.share({ title: exp.title, url: window.location.href }).catch(() => {});
+      navigator.share({ title: exp.title, url: window.location.href }).catch((err) => console.warn("Share failed:", err));
     } else {
       navigator.clipboard.writeText(window.location.href).then(() => {
         setShareFeedback(true);
@@ -61,6 +65,12 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
 
   const handleBookNow = async () => {
     if (!selectedDate) return;
+    // Require at least one contact method
+    if (!contactPhone.trim() && !contactEmail.trim()) {
+      setContactError("Please provide a phone number or email address");
+      return;
+    }
+    setContactError("");
     const token = localStorage.getItem("experio-auth-token");
     if (!token) { setAuthOpen(true); return; }
     setBooking(true);
@@ -81,6 +91,8 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
       const data = await res.json();
       if (res.ok) {
         trackBooked(exp.id);
+        const ref = data?.id || data?.booking?.id || `BK-${Date.now()}`;
+        setBookingRef(ref);
         setBookedDate(selectedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }));
         setBookingDone(true);
 
@@ -99,7 +111,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
             bookingId: data?.id || data?.booking?.id || `BK-${Date.now()}`,
             location: exp.location,
             partnerName: exp.partner,
-          }).catch(() => {}); // Silently handle email failures
+          }).catch((err) => console.warn("Confirmation email failed:", err));
         }
 
         // Award loyalty points
@@ -145,7 +157,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
     }
   };
 
-  const gotoNearby = () => { window.location.href = "/experiences?nearby=true"; };
+  const gotoNearby = () => { router.push("/experiences?nearby=true"); };
 
   // ─── Booking Confirmed State ───
   if (bookingDone) {
@@ -157,6 +169,10 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
         totalPrice={exp.price * guests}
         earnedPoints={earnedPoints}
         tierUpgrade={tierUpgrade}
+        experienceDate={selectedDate?.toISOString()}
+        location={exp.location}
+        duration={exp.duration}
+        bookingRef={bookingRef}
       />
     );
   }
@@ -521,21 +537,31 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
 
                 {/* Contact Fields */}
                 <div className="space-y-2">
-                  <p className="text-body-sm font-semibold text-white mb-1">Contact (optional)</p>
+                  <p className="text-body-sm font-semibold text-white mb-1">Contact <span className="text-[#FF0F73]">*</span></p>
                   <input
                     type="tel"
                     value={contactPhone}
-                    onChange={(e) => setContactPhone(e.target.value)}
+                    onChange={(e) => { setContactPhone(e.target.value); if (contactError) setContactError(""); }}
                     placeholder="Phone number"
-                    className="w-full px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF0F73] transition-all"
+                    className={`w-full px-3 py-2 rounded-lg bg-[#0A0E17] border text-white text-caption placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF0F73] transition-all ${
+                      contactError && !contactPhone.trim() && !contactEmail.trim() ? "border-red-500/50" : "border-white/[0.1]"
+                    }`}
                   />
                   <input
                     type="email"
                     value={contactEmail}
-                    onChange={(e) => setContactEmail(e.target.value)}
+                    onChange={(e) => { setContactEmail(e.target.value); if (contactError) setContactError(""); }}
                     placeholder="Email address"
-                    className="w-full px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF0F73] transition-all"
+                    className={`w-full px-3 py-2 rounded-lg bg-[#0A0E17] border text-white text-caption placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF0F73] transition-all ${
+                      contactError && !contactPhone.trim() && !contactEmail.trim() ? "border-red-500/50" : "border-white/[0.1]"
+                    }`}
                   />
+                  {contactError && (
+                    <p className="text-caption text-red-500 flex items-center gap-1">
+                      <svg className="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" /></svg>
+                      {contactError}
+                    </p>
+                  )}
                 </div>
 
                 {/* Gift Card */}

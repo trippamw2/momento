@@ -194,7 +194,7 @@ export default function BookingsPage() {
           const api = (data.bookings || []).map(mapApiBooking);
           if (api.length > 0) setBookings(api);
         })
-        .catch(() => {})
+        .catch((err) => console.error("Bookings fetch failed:", err))
         .finally(() => setLoadingApi(false));
     }
   }, []);
@@ -214,7 +214,7 @@ export default function BookingsPage() {
           const api = (data.bookings || []).map(mapApiBooking);
           if (api.length > 0) setBookings(api);
         })
-        .catch(() => {})
+        .catch((err) => console.error("Bookings re-fetch failed:", err))
         .finally(() => setLoadingApi(false));
     }
   }, []);

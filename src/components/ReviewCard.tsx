@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 interface ReviewCardProps {
   author: string;
@@ -17,9 +18,9 @@ export default function ReviewCard({ author, avatar, rating, date, text, classNa
   return (
     <div className={`p-4 rounded-2xl bg-[#0A0E17] border border-white/[0.06] ${className}`}>
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] flex items-center justify-center text-white text-caption font-bold shrink-0">
+        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] flex items-center justify-center text-white text-caption font-bold shrink-0 relative">
           {avatar && !imgError ? (
-            <img src={avatar} alt={author} className="w-full h-full rounded-full object-cover" onError={() => setImgError(true)} />
+            <Image src={avatar} alt={author} fill className="rounded-full object-cover" onError={() => setImgError(true)} unoptimized />
           ) : (
             <span>{author.charAt(0).toUpperCase()}</span>
           )}

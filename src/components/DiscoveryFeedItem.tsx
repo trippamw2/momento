@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Experience } from "@/lib/types";
 import { trackView, trackSaved, trackShared, trackGifted } from "@/lib/recommendation-engine";
 
@@ -21,6 +22,7 @@ export default function DiscoveryFeedItem({
   onBook,
   isSaved,
 }: DiscoveryFeedItemProps) {
+  const router = useRouter();
   const [imgLoaded, setImgLoaded] = useState(false);
   const [shareFeedback, setShareFeedback] = useState(false);
 
@@ -62,7 +64,7 @@ export default function DiscoveryFeedItem({
       e.stopPropagation();
       e.preventDefault();
       trackGifted(exp.id);
-      window.location.href = `/gift?experience=${exp.id}`;
+      router.push(`/gift?experience=${exp.id}`);
     },
     [exp.id]
   );

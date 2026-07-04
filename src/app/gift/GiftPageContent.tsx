@@ -77,7 +77,7 @@ export default function GiftPageContent() {
         width: 200,
         margin: 1,
         color: { dark: "#1a1a2e", light: "#ffffff" },
-      }).then(setQrDataUrl).catch(() => {});
+      }).then(setQrDataUrl).catch((err) => console.error("QR code generation failed:", err));
     }
   }, [sent, redemptionCode]);
 

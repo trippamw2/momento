@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo, useRef } from "react";
 import HeroSection from "@/components/HeroSection";
 import ContentRail from "@/components/ContentRail";
+import Image from "next/image";
 import Link from "next/link";
 import { getExperiences } from "@/lib/api-client";
 import { transformExperience } from "@/lib/transform";
@@ -178,7 +179,7 @@ export default function Home() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {items.map((exp) => (
           <Link key={exp.id} href={`/experiences/${exp.id}`} className="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#1A2332]">
-            <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+            <Image src={exp.image} alt={exp.title} fill className="object-cover transition-transform duration-500 group-hover:scale-110" sizes="(max-width: 768px) 100vw, 33vw" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
               <p className="text-white text-body-sm font-bold line-clamp-1">{exp.title}</p>
@@ -206,7 +207,7 @@ export default function Home() {
   const FeaturedCard = ({ exp }: { exp: Experience }) => (
     <Link href={`/experiences/${exp.id}`} className="block mx-4 sm:mx-8 mb-10 group">
       <div className="relative aspect-[21/9] max-h-[420px] rounded-2xl overflow-hidden bg-[#0a0a0a]">
-        <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        <Image src={exp.image} alt={exp.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 50vw" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-caption text-white/90 font-semibold mb-3">
