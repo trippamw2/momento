@@ -17,11 +17,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
     title: "Experio — Curated Experiences in Malawi",
   description:
-    "Discover unforgettable experiences curated for every mood across Malawi. Romantic dinners, wellness retreats, adventures, and more — live the moment.",
+    "Discover unforgettable experiences curated for every feeling — romantic dates, laid-back chill spots, celebrations, and escapes across Malawi. Live Life.",
   openGraph: {
   title: "Experio — Curated Experiences in Malawi",
     description:
-      "Discover unforgettable experiences curated for every mood across Malawi. Romantic dinners, wellness retreats, adventures, and more — live the moment.",
+      "Discover unforgettable experiences curated for every feeling — romantic dates, laid-back chill spots, celebrations, and escapes across Malawi. Live Life.",
     siteName: "Experio",
     type: "website",
     images: [{ url: "/experio-logo.png", width: 512, height: 512 }],

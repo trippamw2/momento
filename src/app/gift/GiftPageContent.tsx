@@ -12,7 +12,7 @@ import { sendGiftViaWhatsApp } from "@/lib/delivery-whatsapp";
 import { sendGiftViaEmail } from "@/lib/delivery-email";
 import { downloadGiftPDF } from "@/lib/gift-card-pdf";
 
-const categories = ["All", "Date Night", "Pool & Chill", "Spa & Wellness", "Brunch & Dining", "Staycation"];
+const categories = ["All", "Date", "Chill", "Celebrate", "Escape"];
 const locations = ["All", "Lilongwe", "Blantyre"];
 
 const giftIdeas = experiences.slice(0, 5);

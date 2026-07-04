@@ -22,11 +22,10 @@ const RAILS: { key: string; title: string; filter: (e: Experience) => boolean }[
   { key: "popular", title: "Popular Around You", filter: (_e: Experience) => true },
   { key: "weekend", title: "Perfect For This Weekend", filter: (e: Experience) => parseInt(e.duration) > 0 && parseInt(e.duration) <= 4 },
   { key: "most-saved", title: "Most Saved", filter: () => true },
-  { key: "date-night", title: "Date Night", filter: (e: Experience) => e.category === "Date Night" },
-  { key: "pool-chill", title: "Pool & Chill", filter: (e: Experience) => e.category === "Pool & Chill" },
-  { key: "spa-wellness", title: "Spa & Wellness", filter: (e: Experience) => e.category === "Spa & Wellness" },
-  { key: "brunch-dining", title: "Brunch & Dining", filter: (e: Experience) => e.category === "Brunch & Dining" },
-  { key: "staycation", title: "Staycations", filter: (e: Experience) => e.category === "Staycation" },
+  { key: "date", title: "Date Ideas", filter: (e: Experience) => e.category === "Date" },
+  { key: "chill", title: "Chill Vibes", filter: (e: Experience) => e.category === "Chill" },
+  { key: "celebrate", title: "Celebrate", filter: (e: Experience) => e.category === "Celebrate" },
+  { key: "escape", title: "Weekend Escapes", filter: (e: Experience) => e.category === "Escape" },
   { key: "staff-picks", title: "Staff Picks", filter: (e: Experience) => e.rating >= 4.8 },
   { key: "affordable", title: "Affordable Experiences", filter: (e: Experience) => e.price <= 50000 },
   { key: "personalized", title: "Just For You", filter: () => true },
@@ -34,8 +33,8 @@ const RAILS: { key: string; title: string; filter: (e: Experience) => boolean }[
 
 const RAIL_ORDER = [
   "trending", "personalized", "nearby", "popular", "weekend", "most-saved",
-  "date-night", "pool-chill", "spa-wellness", "brunch-dining",
-  "staycation", "staff-picks", "affordable",
+  "date", "chill", "celebrate", "escape",
+  "staff-picks", "affordable",
 ];
 
 function shuffle<T>(arr: T[]): T[] {
@@ -359,15 +358,15 @@ export default function Home() {
         {/* ─── Featured Experience ─── */}
         {featured && <FeaturedCard exp={featured} />}
 
-        {/* ─── Date Night & Pool Chill ─── */}
-        <SectionDivider title="Date Night & Pool & Chill" />
+        {/* ─── Date & Chill ─── */}
+        <SectionDivider title="Date & Chill" />
         
-        {railsMap['date-night'] && (
-          <ContentRail title={railsMap['date-night'].title} experiences={railsMap['date-night'].experiences} viewAllHref="/experiences" />
+        {railsMap.date && (
+          <ContentRail title={railsMap.date.title} experiences={railsMap.date.experiences} viewAllHref="/experiences" />
         )}
         
-        {railsMap['pool-chill'] && (
-          <GridCards title={railsMap['pool-chill'].title} items={railsMap['pool-chill'].experiences} />
+        {railsMap.chill && (
+          <GridCards title={railsMap.chill.title} items={railsMap.chill.experiences} />
         )}
 
         {/* ─── Social Proof ─── */}
@@ -398,19 +397,15 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ─── Spa, Brunch & Staycation ─── */}
-        <SectionDivider title="Spa, Brunch & Staycations" />
+        {/* ─── Celebrate & Escape ─── */}
+        <SectionDivider title="Celebrate & Escape" />
         
-        {railsMap['spa-wellness'] && (
-          <ContentRail title={railsMap['spa-wellness'].title} experiences={railsMap['spa-wellness'].experiences} viewAllHref="/experiences" />
+        {railsMap.celebrate && (
+          <ContentRail title={railsMap.celebrate.title} experiences={railsMap.celebrate.experiences} viewAllHref="/experiences" />
         )}
         
-        {railsMap['brunch-dining'] && (
-          <ContentRail title={railsMap['brunch-dining'].title} experiences={railsMap['brunch-dining'].experiences} viewAllHref="/experiences" />
-        )}
-        
-        {railsMap.staycation && (
-          <ContentRail title={railsMap.staycation.title} experiences={railsMap.staycation.experiences} viewAllHref="/experiences" />
+        {railsMap.escape && (
+          <ContentRail title={railsMap.escape.title} experiences={railsMap.escape.experiences} viewAllHref="/experiences" />
         )}
 
         {/* ─── Gift A Moment ─── */}

@@ -122,8 +122,8 @@ export default function SavedPageContent() {
     switch (sidebarTab) {
       case "all": return savedExperiences;
       case "favorites": return savedExperiences.filter((e) => e.rating >= 4.8);
-      case "want-to-try": return savedExperiences.filter((e) => e.category === "Date Night" || e.mood.includes("Active"));
-      case "events": return savedExperiences.filter((e) => e.category === "Staycation" || e.category === "Brunch & Dining");
+      case "want-to-try": return savedExperiences.filter((e) => e.category === "Date" || e.mood.includes("Active"));
+      case "events": return savedExperiences.filter((e) => e.category === "Escape" || e.category === "Celebrate");
       case "gift-ideas": return savedExperiences.filter((e) => e.mood.includes("Luxurious") || e.mood.includes("Romantic"));
       case "recently-viewed": return recentlyViewedMock.map((rv) => experiences.find((e) => e.id === rv.id)).filter(Boolean) as Experience[];
       default: return savedExperiences;
@@ -136,8 +136,8 @@ export default function SavedPageContent() {
     switch (key) {
       case "all": return savedExperiences.length;
       case "favorites": return savedExperiences.filter((e) => e.rating >= 4.8).length;
-      case "want-to-try": return savedExperiences.filter((e) => e.category === "Date Night" || e.mood.includes("Active")).length;
-      case "events": return savedExperiences.filter((e) => e.category === "Staycation" || e.category === "Brunch & Dining").length;
+      case "want-to-try": return savedExperiences.filter((e) => e.category === "Date" || e.mood.includes("Active")).length;
+      case "events": return savedExperiences.filter((e) => e.category === "Escape" || e.category === "Celebrate").length;
       case "gift-ideas": return savedExperiences.filter((e) => e.mood.includes("Luxurious") || e.mood.includes("Romantic")).length;
       case "recently-viewed": return recentlyViewedMock.length;
       default: return 0;
