@@ -189,8 +189,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           {/* Role Selection (signup only) */}
           {mode === "signup" && (
             <div className="mb-6">
-              <h2 className="text-heading-lg font-bold text-[#222222] mb-1">Join Experio</h2>
-              <p className="text-caption text-[#6a6a6a] mb-4">Choose how you&apos;ll use Experio</p>
+              <h2 className="text-heading-lg font-bold text-[#222222] mb-1">Join Momento</h2>
+              <p className="text-caption text-[#6a6a6a] mb-4">Choose how you&apos;ll use Momento</p>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
@@ -201,7 +201,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                       : "border-[#ebebeb] bg-[#fafafa] hover:border-[#FF0F73]/30"
                   }`}
                 >
-                  <p className="text-body-sm font-semibold text-[#222222]">Customer</p>
+                  <p className="text-body-sm font-semibold text-[#222222]">Experion</p>
                   <p className="text-caption text-[#6a6a6a] mt-0.5">Discover &amp; book experiences</p>
                 </button>
                 <button
@@ -213,7 +213,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                       : "border-[#ebebeb] bg-[#fafafa] hover:border-[#F82D7B]/30"
                   }`}
                 >
-                  <p className="text-body-sm font-semibold text-[#222222]">Host</p>
+                  <p className="text-body-sm font-semibold text-[#222222]">Partner</p>
                   <p className="text-caption text-[#6a6a6a] mt-0.5">List &amp; manage experiences</p>
                 </button>
               </div>
@@ -347,7 +347,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
               ) : mode === "login" ? (
                 "Sign In"
               ) : signupRole === "partner" ? (
-                "Create Host Account"
+                "Create Partner Account"
               ) : (
                 "Create Account"
               )}
