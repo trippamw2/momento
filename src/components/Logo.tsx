@@ -18,11 +18,10 @@ export default function Logo({ size = "md", showTagline = false }: LogoProps) {
       <Image
         src="/experio-logo.png"
         alt="Experio"
-        width={1717}
-        height={916}
+        width={600}
+        height={320}
         className={`w-full h-auto ${sizeClasses[size]} transition-transform duration-300 group-hover:scale-105`}
         priority
-        unoptimized
       />
       {showTagline && (
         <span className="text-xs sm:text-sm text-[#94A3B8] tracking-[0.15em] uppercase mt-0.5 hidden sm:block">
