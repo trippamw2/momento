@@ -28,7 +28,7 @@ export default function Logo({ size = "md", showTagline = false }: LogoProps) {
       />
       {showTagline && (
         <span className={`${s.tagline} text-[#94A3B8] tracking-[0.15em] uppercase mt-0.5 hidden sm:block`}>
-          LIVE THE MOMENT
+          Live Life.
         </span>
       )}
     </Link>

@@ -3,13 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const MOODS = [
-  { emoji: "❤️", label: "Romantic", description: "Perfect for two" },
-  { emoji: "😌", label: "Relax", description: "Unwind and recharge" },
-  { emoji: "🎉", label: "Celebrate", description: "Make it special" },
-  { emoji: "🌴", label: "Escape", description: "Get away from it all" },
-  { emoji: "✨", label: "Treat Myself", description: "You deserve it" },
-  { emoji: "🍽", label: "Food & Drink", description: "Taste the moment" },
+const CATEGORIES = [
+  { emoji: "❤️", label: "Date", description: "Romantic dinners & sunset spots" },
+  { emoji: "🌿", label: "Chill", description: "Coffee shops, spas & cafés" },
+  { emoji: "🎉", label: "Celebrate", description: "Birthdays, nightlife & dining" },
+  { emoji: "🌍", label: "Escape", description: "Weekend getaways & adventures" },
 ];
 
 export default function HeroSection() {
@@ -35,7 +33,7 @@ export default function HeroSection() {
         {/* Premium badge */}
         <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#111827]/90 border border-white/[0.1] text-[#CBD5E1] text-caption font-semibold mb-6 sm:mb-8 backdrop-blur-md shadow-sm tracking-wide uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-[#FF0F73] animate-pulse" />
-          Curated Experiences Across Africa
+          Live Life.
         </div>
 
         {/* Hero heading */}
@@ -46,26 +44,25 @@ export default function HeroSection() {
           </span>
         </h1>
 
-        <p className="text-[#CBD5E1] text-body-lg sm:text-heading-md max-w-xl mx-auto mb-10 sm:mb-12 leading-relaxed font-medium">
-          Discover unforgettable experiences curated for every mood — from romantic dinners to weekend adventures.
+          <p className="text-[#CBD5E1] text-body-lg sm:text-heading-md max-w-xl mx-auto mb-10 sm:mb-12 leading-relaxed font-medium">
+          What are you in the mood for? Browse curated experiences across Malawi.
         </p>
 
-        {/* Mood grid with emojis */}
-        <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 max-w-4xl mx-auto">
-          {MOODS.map((mood) => (
+        {/* Category grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 max-w-2xl mx-auto">
+          {CATEGORIES.map((cat) => (
             <Link
-              key={mood.label}
-              href={`/experiences?mood=${mood.label.toLowerCase().replace(/\s+/g, "-")}`}
+              key={cat.label}
+              href={`/experiences?category=${cat.label.toLowerCase()}`}
               className="group relative overflow-hidden rounded-xl p-3 sm:p-4 bg-[#111827] border border-white/[0.1] hover:border-[#FF0F73]/40 text-white transition-all duration-300 hover:shadow-[0_0_20px_rgba(255, 15, 115, 0.15)] hover:-translate-y-1"
             >
               <div className="relative z-10 flex flex-col items-center gap-1 text-center">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#1A2332] border-2 border-white/[0.1] flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-110">
-                  <span className="text-lg sm:text-xl">{mood.emoji}</span>
+                  <span className="text-lg sm:text-xl">{cat.emoji}</span>
                 </div>
-                <span className="text-caption sm:text-body-sm font-bold leading-tight text-white">{mood.label}</span>
-                <span className="text-[10px] sm:text-caption text-[#94A3B8] leading-snug">{mood.description}</span>
+                <span className="text-caption sm:text-body-sm font-bold leading-tight text-white">{cat.label}</span>
+                <span className="text-[10px] sm:text-caption text-[#94A3B8] leading-snug">{cat.description}</span>
               </div>
-              {/* Hover accent */}
               <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Link>
           ))}

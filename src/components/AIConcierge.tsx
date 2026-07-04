@@ -61,12 +61,12 @@ export default function AIConcierge() {
   };
 
   const suggestions = [
-    "I want a romantic date night",
-    "Something relaxing",
-    "Planning a birthday",
-    "On a budget, under 50k",
-    "Fun for the whole family",
-    "I want an adventure",
+    "I'm feeling romantic 🌹",
+    "I want somewhere quiet ☕",
+    "Surprise me! ✨",
+    "I have MWK 50,000 💰",
+    "I only have two hours ⏰",
+    "What's nearby? 📍",
   ];
 
   return (
@@ -78,7 +78,7 @@ export default function AIConcierge() {
           </div>
           <div>
             <p className="text-body font-semibold text-white">AI Concierge</p>
-            <p className="text-caption text-[#6B7280]">Tell me what you&apos;re looking for</p>
+            <p className="text-caption text-[#6B7280]">Ask me anything — I'll find your perfect experience</p>
           </div>
         </div>
 
