@@ -12,11 +12,10 @@ const DEFAULT_PARTNER_ID = "00000000-0000-4000-a000-000000000001";
 const DEFAULT_PARTNER_USER_ID = "00000000-0000-4000-a000-000000000000";
 
 const CATEGORIES = [
-  { name: "Date Night", slug: "date-night", description: "Perfect experiences for two", icon: "🌹", sort_order: 1 },
-  { name: "Pool & Chill", slug: "pool-chill", description: "Relaxed poolside fun", icon: "🏊", sort_order: 2 },
-  { name: "Spa & Wellness", slug: "spa-wellness", description: "Relaxation and self-care", icon: "🧘", sort_order: 3 },
-  { name: "Brunch & Dining", slug: "brunch-dining", description: "Curated culinary experiences", icon: "🍽️", sort_order: 4 },
-  { name: "Staycation", slug: "staycation", description: "Getaways and overnight stays", icon: "🌴", sort_order: 5 },
+  { name: "Date", slug: "date", description: "Romantic dinners & sunset spots", icon: "❤️", sort_order: 1 },
+  { name: "Chill", slug: "chill", description: "Coffee shops, spas & cafés", icon: "🌿", sort_order: 2 },
+  { name: "Celebrate", slug: "celebrate", description: "Birthdays, nightlife & dining", icon: "🎉", sort_order: 3 },
+  { name: "Escape", slug: "escape", description: "Weekend getaways & adventures", icon: "🌍", sort_order: 4 },
 ];
 
 export async function POST() {

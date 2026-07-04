@@ -25,7 +25,8 @@ function buildExperiencesContext(expList: typeof experiences): string {
       (e) =>
         `[ID:${e.id}] ${e.title} — ${e.subtitle}. ${e.description.slice(0, 120)}... ` +
         `Category: ${e.category}. Mood: ${e.mood.join(", ")}. ` +
-        `Location: ${e.location}. Price: MK ${e.price.toLocaleString()}. Rating: ${e.rating}/5.`
+        `Location: ${e.location}. Price: MK ${e.price.toLocaleString()}. Rating: ${e.rating}/5.` +
+        (e.bestTimeToVisit ? ` Best time: ${e.bestTimeToVisit}.` : "")
     )
     .join("\n");
 }
@@ -38,8 +39,7 @@ async function callGemini(query: string, apiKey: string, model: string): Promise
     const geminiUrl = `${GEMINI_API_BASE}/${model}:generateContent?key=${apiKey}`;
     const experienceCatalog = buildExperiencesContext(experiences);
 
-    const prompt = `You are an AI concierge for Experio, a premium experience booking platform in Malawi. 
-Your job is to understand what the user is looking for and recommend the best matching experiences from the catalog below.
+    const prompt = `You are an AI lifestyle companion for Experio.life — an experience discovery platform that helps people answer "What do you feel like doing today?" Your job is to understand what the user is looking for and recommend the best matching experiences from the catalog below.
 
 USER QUERY: "${query}"
 
