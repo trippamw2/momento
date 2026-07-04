@@ -6,12 +6,11 @@ import { useAuthGuard } from "@/lib/use-auth-guard";
 import { findNearestCity } from "@/lib/geo";
 import { useGeolocation } from "@/lib/use-geolocation";
 
-const V2_CATEGORIES = [
-  "Date Night",
-  "Pool & Chill",
-  "Spa & Wellness",
-  "Brunch & Dining",
-  "Staycation",
+const EXPERIO_CATEGORIES = [
+  "Date",
+  "Chill",
+  "Celebrate",
+  "Escape",
 ] as const;
 
 export default function ListExperiencePage() {
@@ -244,7 +243,7 @@ export default function ListExperiencePage() {
               }`}
             >
               <option value="" disabled>Select a category</option>
-              {V2_CATEGORIES.map((cat) => (
+              {EXPERIO_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
