@@ -85,7 +85,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
 
         if (data.session?.access_token) {
           localStorage.setItem("momento-auth-token", data.session.access_token);
-          localStorage.setItem("momento-user-role", data.user?.user_metadata?.role || "user");
+          localStorage.setItem("momento-user-role", data.role || data.user?.user_metadata?.role || "user");
         }
         onClose();
         window.location.reload();
@@ -181,7 +181,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   return (
     <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md" onClick={onClose}>
       <div
-        className="w-full max-w-md rounded-3xl bg-white shadow-[0_16px_48px_rgba(0,0,0,0.12)] border border-[#ebebeb] overflow-hidden animate-[slideUp_0.3s_cubic-bezier(0.16,1,0.3,1)]"
+        className="w-full max-w-md rounded-3xl bg-[#111827] border border-white/[0.08] overflow-hidden animate-[slideUp_0.3s_cubic-bezier(0.16,1,0.3,1)]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="h-1.5 bg-gradient-to-r from-[#FF0F73] via-[#FFA22C] to-[#F82D7B]" />
@@ -190,32 +190,32 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           {/* Role Selection (signup only) */}
           {mode === "signup" && (
             <div className="mb-6">
-              <h2 className="text-heading-lg font-bold text-[#222222] mb-1">Join Momento</h2>
-              <p className="text-caption text-[#6a6a6a] mb-4">Choose how you&apos;ll use Momento</p>
+              <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-1">Join Momento</h2>
+              <p className="text-caption text-[#CBD5E1] mb-4">Choose how you&apos;ll use Momento</p>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => setSignupRole("user")}
                   className={`p-4 rounded-xl border-2 text-left transition-all ${
                     signupRole === "user"
-                      ? "border-[#FF0F73] bg-[#FFF0F5]"
-                      : "border-[#ebebeb] bg-[#fafafa] hover:border-[#FF0F73]/30"
+                      ? "border-[#FF0F73] bg-[#FF0F73]/10"
+                      : "border-white/[0.1] bg-[#1E293B] hover:border-[#FF0F73]/30"
                   }`}
                 >
-                  <p className="text-body-sm font-semibold text-[#222222]">Explorer</p>
-                  <p className="text-caption text-[#6a6a6a] mt-0.5">Discover &amp; book experiences</p>
+                  <p className="text-body-sm font-semibold text-[#F1F5F9]">Explorer</p>
+                  <p className="text-caption text-[#CBD5E1] mt-0.5">Discover &amp; book experiences</p>
                 </button>
                 <button
                   type="button"
                   onClick={() => setSignupRole("partner")}
                   className={`p-4 rounded-xl border-2 text-left transition-all ${
                     signupRole === "partner"
-                      ? "border-[#F82D7B] bg-[#F5F0FF]"
-                      : "border-[#ebebeb] bg-[#fafafa] hover:border-[#F82D7B]/30"
+                      ? "border-[#F82D7B] bg-[#F82D7B]/10"
+                      : "border-white/[0.1] bg-[#1E293B] hover:border-[#F82D7B]/30"
                   }`}
                 >
-                  <p className="text-body-sm font-semibold text-[#222222]">Partner</p>
-                  <p className="text-caption text-[#6a6a6a] mt-0.5">List &amp; manage experiences</p>
+                  <p className="text-body-sm font-semibold text-[#F1F5F9]">Partner</p>
+                  <p className="text-caption text-[#CBD5E1] mt-0.5">List &amp; manage experiences</p>
                 </button>
               </div>
             </div>
@@ -224,10 +224,10 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           {mode === "login" && (
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-heading-lg font-bold text-[#222222]">Welcome back</h2>
-                <p className="text-caption text-[#6a6a6a] mt-0.5">Sign in to continue discovering</p>
+                <h2 className="text-heading-lg font-bold text-[#F1F5F9]">Welcome back</h2>
+                <p className="text-caption text-[#CBD5E1] mt-0.5">Sign in to continue discovering</p>
               </div>
-              <button onClick={onClose} className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-[#f5f2ef] text-[#6a6a6a] transition-colors shrink-0">
+              <button onClick={onClose} className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-[#0A0E17] text-[#CBD5E1] transition-colors shrink-0">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -242,10 +242,10 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                   placeholder="Full name"
                   value={name}
                   onChange={(e) => { setName(e.target.value); if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: "" })); }}
-                  className={`w-full px-4 py-3 rounded-xl bg-[#f5f2ef] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-1 transition-all ${
+                  className={`w-full px-4 py-3 rounded-xl bg-[#0A0E17] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-1 transition-all ${
                     fieldErrors.name
                       ? "border border-[#c13515] focus:border-[#c13515] focus:ring-[#c13515]/20"
-                      : "border border-[#ebebeb] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
+                      : "border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
                   }`}
                 />
                 {fieldErrors.name && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.name}</p>}
@@ -259,10 +259,10 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: "" })); }}
-                className={`w-full px-4 py-3 rounded-xl bg-[#f5f2ef] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-1 transition-all ${
+                className={`w-full px-4 py-3 rounded-xl bg-[#0A0E17] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-1 transition-all ${
                   fieldErrors.email
                     ? "border border-[#c13515] focus:border-[#c13515] focus:ring-[#c13515]/20"
-                    : "border border-[#ebebeb] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
+                    : "border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
                 }`}
               />
               {fieldErrors.email && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.email}</p>}
@@ -275,10 +275,10 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: "" })); }}
-                className={`w-full px-4 py-3 rounded-xl bg-[#f5f2ef] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-1 transition-all ${
+                className={`w-full px-4 py-3 rounded-xl bg-[#0A0E17] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-1 transition-all ${
                   fieldErrors.password
                     ? "border border-[#c13515] focus:border-[#c13515] focus:ring-[#c13515]/20"
-                    : "border border-[#ebebeb] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
+                    : "border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
                 }`}
               />
               {fieldErrors.password && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.password}</p>}
@@ -292,10 +292,10 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                   placeholder="Phone number (optional)"
                   value={phone}
                   onChange={(e) => { setPhone(e.target.value); if (fieldErrors.phone) setFieldErrors((prev) => ({ ...prev, phone: "" })); }}
-                  className={`w-full px-4 py-3 rounded-xl bg-[#f5f2ef] text-[#222222] text-body-sm placeholder:text-[#929292] focus:outline-none focus:ring-1 transition-all ${
+                  className={`w-full px-4 py-3 rounded-xl bg-[#0A0E17] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-1 transition-all ${
                     fieldErrors.phone
                       ? "border border-[#c13515] focus:border-[#c13515] focus:ring-[#c13515]/20"
-                      : "border border-[#ebebeb] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
+                      : "border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
                   }`}
                 />
                 {fieldErrors.phone && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.phone}</p>}
@@ -305,17 +305,17 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             {/* Profile Image (host only) */}
             {mode === "signup" && signupRole === "partner" && (
               <div>
-                <label className="block text-caption text-[#6a6a6a] mb-1.5 font-medium">Profile image (optional)</label>
+                <label className="block text-caption text-[#CBD5E1] mb-1.5 font-medium">Profile image (optional)</label>
                 <div className="flex items-center gap-3">
-                  <div className="w-14 h-14 rounded-full bg-[#f5f2ef] border border-[#ebebeb] flex items-center justify-center overflow-hidden shrink-0 relative">
+                  <div className="w-14 h-14 rounded-full bg-[#0A0E17] border border-white/[0.1] flex items-center justify-center overflow-hidden shrink-0 relative">
                     {avatarPreview ? (
                       <Image src={avatarPreview} alt="" fill className="object-cover" unoptimized />
                     ) : (
-                      <svg className="w-6 h-6 text-[#929292]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                      <svg className="w-6 h-6 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                     )}
                   </div>
                   <label className="flex-1 cursor-pointer">
-                    <div className="px-4 py-2.5 rounded-xl border border-[#ebebeb] bg-[#fafafa] text-body-sm text-[#6a6a6a] hover:border-[#F82D7B]/30 hover:text-[#F82D7B] transition-all text-center">
+                    <div className="px-4 py-2.5 rounded-xl border border-white/[0.1] bg-[#1E293B] text-body-sm text-[#CBD5E1] hover:border-[#F82D7B]/30 hover:text-[#F82D7B] transition-all text-center">
                       {avatarFile ? avatarFile.name : "Choose image"}
                     </div>
                     <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
@@ -356,7 +356,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           </form>
 
           <div className="mt-5 text-center">
-            <p className="text-body-sm text-[#6a6a6a]">
+            <p className="text-body-sm text-[#CBD5E1]">
               {mode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
               <button
                 onClick={() => switchMode(mode === "login" ? "signup" : "login")}

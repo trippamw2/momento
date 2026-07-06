@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "./supabase-server";
+import { createAdminClient } from "./supabase-admin";
 
 export function json(data: unknown, status = 200) {
   return NextResponse.json(data, { status });
@@ -44,7 +45,9 @@ export async function getUser(request: Request): Promise<AuthUser | null> {
   const { data: { user }, error } = await supabase.auth.getUser(token);
   if (error || !user) return null;
 
-  const { data: profile } = await supabase
+  // Use admin client to bypass RLS on the users table
+  const admin = createAdminClient();
+  const { data: profile } = await admin
     .from("users")
     .select("role")
     .eq("id", user.id)
@@ -53,7 +56,7 @@ export async function getUser(request: Request): Promise<AuthUser | null> {
   return {
     id: user.id,
     email: user.email ?? "",
-    role: profile?.role ?? "user",
+    role: profile?.role ?? user.user_metadata?.role ?? "user",
   };
 }
 

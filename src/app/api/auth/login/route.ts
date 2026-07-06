@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 import { badRequest, unauthorized, handleRouteError } from "@/lib/api-helpers";
 
 export async function POST(request: Request) {
@@ -24,7 +25,19 @@ export async function POST(request: Request) {
       return unauthorized(error.message);
     }
 
-    const response = NextResponse.json({ user: data.user, session: data.session });
+    // Query the users table for the correct role (bypass RLS with admin client)
+    let role = "user";
+    if (data.user) {
+      const admin = createAdminClient();
+      const { data: profile } = await admin
+        .from("users")
+        .select("role")
+        .eq("id", data.user.id)
+        .single();
+      role = profile?.role ?? data.user.user_metadata?.role ?? "user";
+    }
+
+    const response = NextResponse.json({ user: data.user, session: data.session, role });
 
     if (data.session?.access_token) {
       response.cookies.set("momento-auth-token", data.session.access_token, {
@@ -34,7 +47,7 @@ export async function POST(request: Request) {
         path: "/",
         maxAge: 60 * 60 * 24 * 7,
       });
-      response.cookies.set("momento-user-role", data.user?.user_metadata?.role || "user", {
+      response.cookies.set("momento-user-role", role, {
         httpOnly: false,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",

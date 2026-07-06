@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 const protectedPaths = [
   "/api/bookings",
@@ -75,7 +76,11 @@ export async function proxy(request: NextRequest) {
   }
 
   if (isAdminRoute || isAdminPage || isPartnerRoute) {
-    const { data: profile } = await supabase
+    // Use admin client to bypass RLS on the users view
+    const adminClient = createClient(supabaseUrl, serviceRoleKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { data: profile } = await adminClient
       .from("users")
       .select("role")
       .eq("id", user.id)
