@@ -176,7 +176,7 @@ export default function BookingsPage() {
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>("all");
   const [authOpen, setAuthOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
-  const [bookings, setBookings] = useState<Booking[]>(mockBookings);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [loadingApi, setLoadingApi] = useState(false);
 
   // Detect auth state and fetch real bookings
@@ -219,8 +219,24 @@ export default function BookingsPage() {
     }
   }, []);
 
-  // Handle booking cancel: update local state
-  const handleCancel = useCallback((bookingId: string) => {
+  // Handle booking cancel: call API then update local state
+  const handleCancel = useCallback(async (bookingId: string) => {
+    const token = localStorage.getItem("momento-auth-token");
+    if (!token) return;
+    try {
+      const res = await fetch(`/api/bookings/${bookingId}/cancel`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: "Cancelled by user" }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        console.error("Cancel failed:", data.error);
+        return;
+      }
+    } catch (err) {
+      console.error("Cancel API call failed, falling back to local state:", err);
+    }
     setBookings((prev) =>
       prev.map((b) =>
         b.id === bookingId ? { ...b, status: "cancelled" as const } : b
