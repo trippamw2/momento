@@ -55,16 +55,16 @@ async function request<T>(path: string, opts: RequestOptions = {}): Promise<T> {
 // â”€â”€â”€ Auth â”€â”€â”€
 
 export async function login(email: string, password: string) {
-  return request<{ user: unknown; session: { access_token: string } }>("/api/auth/login", {
+  return request<{ user: unknown; session: { access_token: string }; role: string }>("/api/auth/login", {
     method: "POST",
     body: { email, password },
   });
 }
 
-export async function signup(email: string, password: string, fullName?: string) {
+export async function signup(email: string, password: string, fullName?: string, role?: string, phone?: string) {
   return request<{ user: unknown; session: { access_token: string } }>("/api/auth/signup", {
     method: "POST",
-    body: { email, password, full_name: fullName },
+    body: { email, password, full_name: fullName, role: role ?? "user", phone: phone ?? null },
   });
 }
 

@@ -57,8 +57,17 @@ export default function Navbar() {
     { label: "Memories", href: "/bookings" },
   ];
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    const token = localStorage.getItem("momento-auth-token");
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+    } catch { /* still clear local state */ }
     localStorage.removeItem("momento-auth-token");
+    localStorage.removeItem("momento-user-role");
+    localStorage.removeItem("momento-signup-role");
     setSignedIn(false);
     setProfileOpen(false);
     window.location.reload();
@@ -74,7 +83,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-18">
             {/* Left: Logo + Nav */}
             <div className="flex items-center gap-8">
-              <Logo size="lg" />
+              <Logo size="sm" />
 
               <nav className="hidden md:flex items-center gap-0.5">
                 {navItems.map((item) => {

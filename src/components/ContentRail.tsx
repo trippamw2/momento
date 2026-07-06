@@ -38,7 +38,7 @@ export default function ContentRail({ title, experiences, viewAllHref, subtitle,
           </span>
         </div>
       )}
-      <div className="flex gap-3 sm:gap-4 overflow-x-auto px-4 sm:px-8 pb-4 hide-scrollbar snap-x snap-mandatory">
+      <div className="flex gap-2 sm:gap-3 overflow-x-auto px-4 sm:px-8 pb-4 hide-scrollbar snap-x snap-mandatory">
         {experiences.map((exp) => (
           <ExperienceCard key={exp.id} experience={exp} size="md" />
         ))}

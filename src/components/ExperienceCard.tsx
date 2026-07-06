@@ -122,7 +122,7 @@ export default function ExperienceCard({ experience: exp, size = "md", distance 
         </div>
 
         {/* Bottom Content */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+        <div className="absolute bottom-0 left-0 right-0 p-3 z-10">
           {/* Rating row */}
           <div className="flex items-center gap-1.5 mb-1.5">
             <span className="text-yellow-400 text-[11px]">â˜…</span>
@@ -141,9 +141,6 @@ export default function ExperienceCard({ experience: exp, size = "md", distance 
           
           <h3 className="text-white font-bold text-body-sm leading-tight line-clamp-1 tracking-tight">{exp.title}</h3>
           <p className="text-white/50 text-caption mt-0.5 line-clamp-1">{exp.subtitle}</p>
-          {exp.emotionalHeadline && (
-            <p className="text-white/40 text-[10px] mt-0.5 italic line-clamp-1">"{exp.emotionalHeadline}"</p>
-          )}
 
           {/* What's included - compact preview */}
           {exp.includes && exp.includes.length > 0 && (
@@ -167,15 +164,8 @@ export default function ExperienceCard({ experience: exp, size = "md", distance 
             <span className="text-caption text-white/40">{exp.duration}</span>
           </div>
 
-          {exp.bestTimeToVisit && (
-            <div className="flex items-center gap-1 mt-1.5">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
-              <span className="text-caption text-white/40">Best: {exp.bestTimeToVisit}</span>
-            </div>
-          )}
-
           {/* CTA Buttons - always visible on mobile, show on hover for desktop */}
-          <div className="flex items-center gap-1.5 mt-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 translate-y-0 md:translate-y-3 md:group-hover:translate-y-0">
+          <div className="flex items-center gap-1.5 mt-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 translate-y-0 md:translate-y-3 md:group-hover:translate-y-0">
             <Link
               href={`/experiences/${exp.id}`}
               onClick={(e) => { e.stopPropagation(); trackBooked(exp.id); }}
