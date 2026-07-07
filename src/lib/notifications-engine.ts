@@ -1,6 +1,6 @@
 "use client";
 
-// â”€â”€â”€ Types â”€â”€â”€
+// ─── Types ───
 
 export type NotificationType =
   | "booking_confirmed"
@@ -28,7 +28,7 @@ export interface AppNotification {
   actionHref?: string;
 }
 
-// â”€â”€â”€ Mock Notification Data â”€â”€â”€
+// ─── Mock Notification Data ───
 
 const MOCK_NOTIFICATIONS: AppNotification[] = [
   {
@@ -123,7 +123,7 @@ const MOCK_NOTIFICATIONS: AppNotification[] = [
   },
 ];
 
-// â”€â”€â”€ Storage â”€â”€â”€
+// ─── Storage ───
 
 const STORAGE_KEY = "momento-notifications";
 
@@ -142,7 +142,7 @@ function saveNotifications(notifications: AppNotification[]) {
   } catch { /* ignore */ }
 }
 
-// â”€â”€â”€ API â”€â”€â”€
+// ─── API ───
 
 export function getNotifications(): AppNotification[] {
   return loadNotifications().sort((a, b) => b.timestamp - a.timestamp);
@@ -173,7 +173,7 @@ export function addNotification(notification: AppNotification): void {
   saveNotifications(notifications.slice(0, 50)); // keep max 50
 }
 
-// â”€â”€â”€ Presets for hooks to call â”€â”€â”€
+// ─── Presets for hooks to call ───
 
 export function createBookingConfirmedNotification(
   experienceTitle: string,

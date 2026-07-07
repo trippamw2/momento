@@ -1,6 +1,6 @@
 "use client";
 
-// â”€â”€â”€ Configuration â”€â”€â”€
+// ─── Configuration ───
 
 export interface LoyaltyConfig {
   pointsPerBooking: number;   // points per MK 1,000 spent
@@ -22,7 +22,7 @@ export const DEFAULT_CONFIG: LoyaltyConfig = {
   birthdayBonus: 500,
 };
 
-// â”€â”€â”€ Tiers â”€â”€â”€
+// ─── Tiers ───
 
 export interface TierConfig {
   name: TierName;
@@ -42,7 +42,7 @@ export const TIERS: TierConfig[] = [
     minPoints: 0,
     color: "#8B6914",
     colorEnd: "#C49B2A",
-    icon: "ðŸ¥‰",
+    icon: "🥉",
     multiplier: 1,
     benefits: ["Welcome bonus", "Birthday reward"],
   },
@@ -51,7 +51,7 @@ export const TIERS: TierConfig[] = [
     minPoints: 500,
     color: "#9CA3AF",
     colorEnd: "#D1D5DB",
-    icon: "ðŸ¥ˆ",
+    icon: "🥈",
     multiplier: 1.2,
     benefits: ["Welcome bonus", "Birthday reward", "5% discount on bookings"],
   },
@@ -60,7 +60,7 @@ export const TIERS: TierConfig[] = [
     minPoints: 2000,
     color: "#F59E0B",
     colorEnd: "#FCD34D",
-    icon: "ðŸ¥‡",
+    icon: "🥇",
     multiplier: 1.5,
     benefits: ["Welcome bonus", "Birthday reward x2", "5% discount", "Priority booking", "Exclusive experiences"],
   },
@@ -69,7 +69,7 @@ export const TIERS: TierConfig[] = [
     minPoints: 5000,
     color: "#06B6D4",
     colorEnd: "#67E8F9",
-    icon: "ðŸ’Ž",
+    icon: "💎",
     multiplier: 2,
     benefits: ["Welcome bonus", "Birthday reward x3", "10% discount", "Priority access", "Exclusive experiences", "Dedicated concierge"],
   },
@@ -78,7 +78,7 @@ export const TIERS: TierConfig[] = [
     minPoints: 20000,
     color: "#A855F7",
     colorEnd: "#D8B4FE",
-    icon: "ðŸ‘‘",
+    icon: "👑",
     multiplier: 3,
     benefits: ["Welcome bonus", "Birthday reward x5", "15% discount", "VIP-only experiences", "Personal concierge", "Event invites", "Early access"],
   },
@@ -88,7 +88,7 @@ export const TIER_MAP: Record<TierName, TierConfig> = Object.fromEntries(
   TIERS.map((t) => [t.name, t])
 ) as Record<TierName, TierConfig>;
 
-// â”€â”€â”€ Achievements â”€â”€â”€
+// ─── Achievements ───
 
 export interface Achievement {
   id: string;
@@ -136,89 +136,89 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     id: "first_booking",
     name: "First Adventure",
     description: "Book your first experience",
-    icon: "ðŸŽ‰",
+    icon: "🎉",
     check: (s) => ({ unlocked: s.totalBookings >= 1, progress: Math.min(100, (s.totalBookings / 1) * 100), current: s.totalBookings, requirement: 1 }),
   },
   {
     id: "five_bookings",
     name: "Explorer",
     description: "Book 5 experiences",
-    icon: "ðŸ§­",
+    icon: "🧭",
     check: (s) => ({ unlocked: s.totalBookings >= 5, progress: Math.min(100, (s.totalBookings / 5) * 100), current: s.totalBookings, requirement: 5 }),
   },
   {
     id: "ten_bookings",
     name: "Adventurer",
     description: "Book 10 experiences",
-    icon: "ðŸ†",
+    icon: "🏆",
     check: (s) => ({ unlocked: s.totalBookings >= 10, progress: Math.min(100, (s.totalBookings / 10) * 100), current: s.totalBookings, requirement: 10 }),
   },
   {
     id: "big_spender",
     name: "Big Spender",
     description: "Spend MK 500,000 total on experiences",
-    icon: "ðŸ’°",
+    icon: "💰",
     check: (s) => ({ unlocked: s.totalSpent >= 500000, progress: Math.min(100, (s.totalSpent / 500000) * 100), current: s.totalSpent, requirement: 500000 }),
   },
   {
     id: "reviewer",
     name: "Critic",
     description: "Leave 3 reviews",
-    icon: "âœï¸",
+    icon: "✍️",
     check: (s) => ({ unlocked: s.totalReviews >= 3, progress: Math.min(100, (s.totalReviews / 3) * 100), current: s.totalReviews, requirement: 3 }),
   },
   {
     id: "globetrotter",
     name: "Globetrotter",
     description: "Book experiences in 3 different cities",
-    icon: "ðŸŒ",
+    icon: "🌍",
     check: (s) => ({ unlocked: s.citiesVisited.length >= 3, progress: Math.min(100, (s.citiesVisited.length / 3) * 100), current: s.citiesVisited.length, requirement: 3 }),
   },
   {
     id: "variety",
     name: "Variety Seeker",
     description: "Try 4 different experience categories",
-    icon: "ðŸŽ¯",
+    icon: "🎯",
     check: (s) => ({ unlocked: s.categories.length >= 4, progress: Math.min(100, (s.categories.length / 4) * 100), current: s.categories.length, requirement: 4 }),
   },
   {
     id: "streak_3",
     name: "Weekend Warrior",
     description: "Book 3 consecutive weekends",
-    icon: "ðŸ”¥",
+    icon: "🔥",
     check: (s) => ({ unlocked: s.consecutiveBookings >= 3, progress: Math.min(100, (s.consecutiveBookings / 3) * 100), current: s.consecutiveBookings, requirement: 3 }),
   },
   {
     id: "gifter",
     name: "Generous Soul",
     description: "Send 5 gift cards",
-    icon: "ðŸŽ",
+    icon: "🎁",
     check: (s) => ({ unlocked: s.totalGifts >= 5, progress: Math.min(100, (s.totalGifts / 5) * 100), current: s.totalGifts, requirement: 5 }),
   },
   {
     id: "referrer",
     name: "Influencer",
     description: "Refer 3 friends",
-    icon: "ðŸ¤",
+    icon: "🤝",
     check: (s) => ({ unlocked: s.totalReferrals >= 3, progress: Math.min(100, (s.totalReferrals / 3) * 100), current: s.totalReferrals, requirement: 3 }),
   },
   {
     id: "birthday",
     name: "Birthday Booker",
     description: "Book an experience on your birthday",
-    icon: "ðŸŽ‚",
+    icon: "🎂",
     check: (s) => ({ unlocked: s.birthdayBooked, progress: s.birthdayBooked ? 100 : 0, current: s.birthdayBooked ? 1 : 0, requirement: 1 }),
   },
   {
     id: "vip_tier",
     name: "VIP Status",
     description: "Reach VIP tier",
-    icon: "ðŸ‘‘",
+    icon: "👑",
     check: (s) => ({ unlocked: false, progress: 0, current: 0, requirement: 20000 }),
   },
 ];
 
-// â”€â”€â”€ User Loyalty State â”€â”€â”€
+// ─── User Loyalty State ───
 
 export interface UserLoyalty {
   userId: string;
@@ -233,7 +233,7 @@ export interface UserLoyalty {
   totalAchievementCount: number;
 }
 
-// â”€â”€â”€ Engine Functions â”€â”€â”€
+// ─── Engine Functions ───
 
 export function calculateTier(lifetimePoints: number): { tier: TierName; nextTier: TierName | null; progress: number; pointsToNext: number } {
   const sorted = [...TIERS].sort((a, b) => b.minPoints - a.minPoints);
@@ -278,7 +278,7 @@ export function buildUserLoyalty(
   };
 }
 
-// â”€â”€â”€ LocalStorage persistence (MVP) â”€â”€â”€
+// ─── LocalStorage persistence (MVP) ───
 
 const STORAGE_KEY = "momento-loyalty";
 
@@ -308,7 +308,7 @@ export function addPointsLocally(amount: number, reason: string): { points: numb
   return updated;
 }
 
-// â”€â”€â”€ Points earning helpers â”€â”€â”€
+// ─── Points earning helpers ───
 
 export function getTierConfig(tier: TierName): TierConfig {
   return TIER_MAP[tier] || TIER_MAP.bronze;
@@ -323,7 +323,7 @@ export function formatPoints(amount: number): string {
   return amount.toLocaleString();
 }
 
-// â”€â”€â”€ Streak Tracking â”€â”€â”€
+// ─── Streak Tracking ───
 
 export function calculateStreak(): { current: number; longest: number; lastBookingDate: string | null } {
   try {
@@ -396,10 +396,10 @@ export function calculateStreak(): { current: number; longest: number; lastBooki
 
 export function getStreakMilestones(): { weeks: number; label: string; icon: string }[] {
   return [
-    { weeks: 1, label: "First Step", icon: "ðŸŒ±" },
-    { weeks: 3, label: "Weekend Warrior", icon: "ðŸ”¥" },
+    { weeks: 1, label: "First Step", icon: "🌱" },
+    { weeks: 3, label: "Weekend Warrior", icon: "🔥" },
     { weeks: 5, label: "Regular Explorer", icon: "â­" },
-    { weeks: 8, label: "Dedicated Adventurer", icon: "ðŸŒŸ" },
-    { weeks: 12, label: "Loyal Legend", icon: "ðŸ‘‘" },
+    { weeks: 8, label: "Dedicated Adventurer", icon: "🌟" },
+    { weeks: 12, label: "Loyal Legend", icon: "👑" },
   ];
 }

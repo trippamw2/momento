@@ -4,7 +4,7 @@ import { Experience } from "./types";
 import { haversineDistance } from "./geo";
 import type { Coordinates } from "./geo";
 
-// â”€â”€â”€ Types â”€â”€â”€
+// ─── Types ───
 
 export interface UserInteraction {
   id: string;
@@ -22,7 +22,7 @@ export interface DiscoveryRail {
   isPersonalized?: boolean;
 }
 
-// â”€â”€â”€ Storage â”€â”€â”€
+// ─── Storage ───
 
 const KEYS = {
   INTERACTIONS: "momento-interactions",
@@ -45,7 +45,7 @@ function saveInteractions(interactions: UserInteraction[]) {
   } catch (e) { console.warn("Failed to save interactions:", e); }
 }
 
-// â”€â”€â”€ Tracking â”€â”€â”€
+// ─── Tracking ───
 
 const WEIGHT_MAP: Record<UserInteraction["type"], number> = {
   viewed: 1,
@@ -88,7 +88,7 @@ export function trackGifted(experienceId: string) {
   trackInteraction(experienceId, "gifted");
 }
 
-// â”€â”€â”€ Analytics helpers â”€â”€â”€
+// ─── Analytics helpers ───
 
 function getUserCategoryAffinity(experiences: Experience[]): Record<string, number> {
   const interactions = loadInteractions();
@@ -121,7 +121,7 @@ function getAllInteractedIds(): Set<string> {
   return new Set(loadInteractions().map((i) => i.experienceId));
 }
 
-// â”€â”€â”€ Time-based bonuses â”€â”€â”€
+// ─── Time-based bonuses ───
 
 function getTimeOfDayBonus(): Record<string, number> {
   const hour = new Date().getHours();
@@ -138,7 +138,7 @@ function getDayOfWeekBonus(): Record<string, number> {
   return { Chill: 1 };
 }
 
-// â”€â”€â”€ Scored ranking â”€â”€â”€
+// ─── Scored ranking ───
 
 function scoreExperiences(
   experiences: Experience[],
@@ -186,7 +186,7 @@ function scoreExperiences(
   return scored.map((s) => s.exp);
 }
 
-// â”€â”€â”€ Public Rail Generators â”€â”€â”€
+// ─── Public Rail Generators ───
 
 export function getPersonalizedRails(
   allExperiences: Experience[],
@@ -344,7 +344,7 @@ export function getBasedOnHistory(
   ).slice(0, limit);
 }
 
-// â”€â”€â”€ Category-based recommendations â”€â”€â”€
+// ─── Category-based recommendations ───
 
 export function getRecommendedCategories(experiences: Experience[]): string[] {
   const timeBonus = getTimeOfDayBonus();

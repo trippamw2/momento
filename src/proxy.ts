@@ -46,7 +46,7 @@ export async function proxy(request: NextRequest) {
   const isAdminRoute = adminPaths.some((p) => pathname.startsWith(p));
   const isAdminPage = adminPagePaths.some((p) => pathname.startsWith(p));
 
-  // Admin page routes â€” redirect to home if not admin
+  // Admin page routes — redirect to home if not admin
   if (isAdminPage) {
     const authCookie = request.cookies.get("momento-auth-token");
     const roleCookie = request.cookies.get("momento-user-role");

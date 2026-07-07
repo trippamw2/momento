@@ -92,7 +92,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         return;
       }
 
-      // â”€â”€â”€ Signup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ─── Signup ──────────────────────────────────────────
 
       const res = await fetch("/api/auth/signup", {
         method: "POST",

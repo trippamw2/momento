@@ -70,7 +70,7 @@ export async function POST(request: Request) {
     });
 
     if (signInError || !signIn.session) {
-      // User was created but we can't log them in â€” tell them to sign in manually
+      // User was created but we can't log them in — tell them to sign in manually
       return NextResponse.json(
         { user: createData.user, session: null, message: "Account created. Please sign in." },
         { status: 201 }

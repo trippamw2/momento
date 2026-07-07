@@ -77,11 +77,11 @@ export async function sendGiftViaEmail(card: {
   const body = encodeURIComponent(
     `Hi ${card.recipientName},\n\n` +
     `${card.senderName} has sent you an Momento Gift Card!\n` +
-    (card.occasion ? `ðŸŽ‰ ${card.occasion}\n\n` : "\n") +
-    `â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n` +
+    (card.occasion ? `🎉 ${card.occasion}\n\n` : "\n") +
+    `━━━━━━━━━━━━━━━━━━━━\n` +
     `Amount: ${card.currency} ${card.amount.toLocaleString()}\n` +
     `Code: ${card.code}\n` +
-    `â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n\n` +
+    `━━━━━━━━━━━━━━━━━━━━\n\n` +
     (card.message ? `"${card.message}"\n\n` : "") +
     `Redeem your gift here:\n` +
     `${origin}/gift/redeem?code=${card.code}\n\n` +

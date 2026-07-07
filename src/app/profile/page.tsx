@@ -191,16 +191,16 @@ export default function ProfilePage() {
     );
   }
 
-  // Partner â†’ show PartnerDashboard
+  // Partner → show PartnerDashboard
   if (user?.role === "partner" || user?.role === "admin") {
     return <PartnerDashboard />;
   }
 
-  // Authenticated user â†’ show user profile
+  // Authenticated user → show user profile
   if (user) {
     return <UserProfile user={user} />;
   }
 
-  // Guest â†’ show welcome page
+  // Guest → show welcome page
   return <GuestProfile />;
 }

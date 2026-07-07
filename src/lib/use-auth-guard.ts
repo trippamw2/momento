@@ -80,7 +80,7 @@ export function useAuthGuard({
 
       setState({ allowed: true, loading: false, user });
     } catch {
-      // Network error â€” don't redirect, let the UI handle it
+      // Network error — don't redirect, let the UI handle it
       setState({ allowed: false, loading: false, user: null });
     }
   }, [requiredRole, redirectTo, router]);

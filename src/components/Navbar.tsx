@@ -251,7 +251,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile menu â€” cinematic lifestyle overlay */}
+        {/* Mobile menu — cinematic lifestyle overlay */}
         {menuOpen && (
           <div className="md:hidden fixed inset-x-0 top-18 bottom-0 z-[998] overflow-y-auto">
             {/* Cinematic background image */}
@@ -373,7 +373,7 @@ export default function Navbar() {
                 onClick={() => setNotifOpen(false)}
                 className="block mt-3 text-center text-caption font-semibold text-[#FF0F73] hover:text-[#FF0F73]/80 pt-2 border-t border-white/[0.08] transition-colors"
               >
-                View All Notifications â†’
+                View All Notifications →
               </Link>
             )}
           </div>

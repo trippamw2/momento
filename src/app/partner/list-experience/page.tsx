@@ -99,7 +99,7 @@ export default function ListExperiencePage() {
         },
         body: JSON.stringify({
           title: form.title,
-          subtitle: form.subtitle || `${form.title} â€” A Momento Experience`,
+          subtitle: form.subtitle || `${form.title} — A Momento Experience`,
           description: form.description,
           price: parseInt(form.price),
           duration: form.duration,
@@ -331,7 +331,7 @@ export default function ListExperiencePage() {
                 <p className="text-caption text-[#64748B] mt-1 animate-pulse">Detecting your location via GPS...</p>
               )}
               {geo.position && form.location && (
-                <p className="text-caption text-[#FF0F73] mt-1">ðŸ“ Auto-detected</p>
+                <p className="text-caption text-[#FF0F73] mt-1">📍 Auto-detected</p>
               )}
             </div>
             <div>

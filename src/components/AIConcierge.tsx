@@ -61,12 +61,12 @@ export default function AIConcierge() {
   };
 
   const suggestions = [
-    "I'm feeling romantic ðŸŒ¹",
-    "I want somewhere quiet â˜•",
-    "Surprise me! âœ¨",
-    "I have MWK 50,000 ðŸ’°",
+    "I'm feeling romantic 🌹",
+    "I want somewhere quiet ☕",
+    "Surprise me! ✨",
+    "I have MWK 50,000 💰",
     "I only have two hours â°",
-    "What's nearby? ðŸ“",
+    "What's nearby? 📍",
   ];
 
   return (
@@ -78,7 +78,7 @@ export default function AIConcierge() {
           </div>
           <div>
             <p className="text-body font-semibold text-white">AI Concierge</p>
-            <p className="text-caption text-[#6B7280]">Ask me anything â€” I'll find your perfect experience</p>
+            <p className="text-caption text-[#6B7280]">Ask me anything — I'll find your perfect experience</p>
           </div>
         </div>
 
@@ -100,7 +100,7 @@ export default function AIConcierge() {
               {thinking ? (
                 <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
               ) : (
-                <span className="text-body font-bold text-white">â†’</span>
+                <span className="text-body font-bold text-white">→</span>
               )}
             </button>
           </div>
@@ -151,7 +151,7 @@ export default function AIConcierge() {
                           className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-[#FF0F73]/60"
                         >
                           <span className="text-caption font-bold" style={{ color: saved ? "#FF0F73" : "white" }}>
-                            {saved ? "â™¥" : "â™¡"}
+                            {saved ? "♥" : "♡"}
                           </span>
                         </button>
                         <div className="absolute bottom-0 left-0 right-0 p-2.5">

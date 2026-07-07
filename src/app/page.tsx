@@ -197,24 +197,10 @@ export default function Home() {
                 </span>
               )}
               <p className="text-white text-body-sm font-bold line-clamp-1">{exp.title}</p>
-              <p className="text-white/40 text-caption line-clamp-1 mt-0.5">
-                <svg className="w-3 h-3 inline mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                {exp.location}
-              </p>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-yellow-400 text-xs">★ {exp.rating}</span>
-                <span className="text-white/50 text-caption">MK {exp.price.toLocaleString()}</span>
+              <div className="flex items-center justify-between mt-1.5">
+                <span className="text-white/50 text-[10px]">MK {exp.price.toLocaleString()}</span>
+                <span className="text-yellow-400/80 text-[10px]">&#9733; {exp.rating}</span>
               </div>
-              {/* What's included - compact */}
-              {exp.includes && exp.includes.length > 0 && (
-                <div className="mt-1 flex flex-wrap gap-1">
-                  {exp.includes.slice(0, 2).map((item, i) => (
-                    <span key={i} className="text-[8px] text-emerald-300/60 bg-emerald-400/5 px-1 py-0.5 rounded-full border border-emerald-400/10 leading-none">
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              )}
             </div>
           </Link>
         ))}
@@ -249,27 +235,13 @@ export default function Home() {
             )}
           </div>
           <h2 className="text-heading-xl sm:text-display-sm font-bold text-white mb-2 leading-tight">{exp.title}</h2>
-          <p className="text-white/70 text-body-sm sm:text-body max-w-xl line-clamp-2">{exp.subtitle}</p>
-          <div className="flex items-center gap-3 mt-2 text-white/60 text-caption">
-            <span className="flex items-center gap-1">
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-              {exp.location}
-            </span>
-            <span className="flex items-center gap-1">★ {exp.rating}</span>
+          <div className="flex items-center gap-3 mt-2 text-white/50 text-caption">
+            <span className="flex items-center gap-1">{exp.location}</span>
+            <span>&middot;</span>
             <span>MK {exp.price.toLocaleString()}</span>
-            <span>{exp.duration}</span>
+            <span>&middot;</span>
+            <span className="flex items-center gap-1">&#9733; {exp.rating}</span>
           </div>
-          {/* What's included */}
-          {exp.includes && exp.includes.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mt-2">
-              {exp.includes.slice(0, 3).map((item, i) => (
-                <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-caption text-emerald-300/70 bg-emerald-400/10 border border-emerald-400/20">
-                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
-                  {item}
-                </span>
-              ))}
-            </div>
-          )}
         </div>
       </div>
     </Link>
