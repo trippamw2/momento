@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import QRCode from "qrcode";
@@ -238,6 +238,19 @@ export default function GiftPageContent() {
       ctx.font = "12px sans-serif";
       ctx.fillText(senderName, 20, 248);
 
+      // Gift message
+      if (message) {
+        ctx.fillStyle = "rgba(255,255,255,0.25)";
+        ctx.font = "9px sans-serif";
+        ctx.textAlign = "left";
+        ctx.fillText("MESSAGE", 20, 268);
+        ctx.fillStyle = "rgba(255,255,255,0.5)";
+        ctx.font = "italic 10px sans-serif";
+        const maxW = Math.min(rect.width - 140, 200);
+        const truncated = message.length > 80 ? message.slice(0, 77) + "..." : message;
+        ctx.fillText(truncated, 20, 283, maxW);
+      }
+
       // QR Code
       if (qrDataUrl) {
         const qrImg = new window.Image();
@@ -298,6 +311,16 @@ export default function GiftPageContent() {
     setScheduleDate(tomorrow());
   };
 
+  // Compute which step the user is on for the progress indicator
+  const currentStep = useMemo(() => {
+    if (sent) return 4;
+    if (tab === "cards" && selectedCard !== null || tab === "experiences" && selectedExp !== null) {
+      if (recipientName.trim() && senderName.trim()) return 3; // Ready to send
+      return 2; // Personalize
+    }
+    return 1; // Choose
+  }, [sent, tab, selectedCard, selectedExp, recipientName, senderName]);
+
   const scheduleLabel = sendMode === "schedule" && scheduleDate
     ? new Date(scheduleDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
     : null;
@@ -306,6 +329,46 @@ export default function GiftPageContent() {
     <div className="pt-20 pb-16">
       {/* ─── Hero ─── */}
       <GiftHero />
+
+      {/* ─── Step Progress Indicator ─── */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-8 -mt-4 mb-6">
+        <div className="flex items-center justify-center gap-0">
+          {processSteps.map((step, i) => {
+            const stepNum = i + 1;
+            const isActive = currentStep === stepNum;
+            const isCompleted = currentStep > stepNum;
+            return (
+              <div key={step.step} className="flex items-center">
+                <div className="flex items-center gap-2">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
+                    isCompleted
+                      ? "bg-[#FF0F73] text-white shadow-[0_2px_8px_rgba(255,15,115,0.3)]"
+                      : isActive
+                        ? "bg-[#FF0F73] text-white shadow-[0_2px_8px_rgba(255,15,115,0.3)]"
+                        : "bg-[#1A2332] text-[#64748B] border border-white/[0.08]"
+                  }`}>
+                    {isCompleted ? (
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                    ) : (
+                      step.step
+                    )}
+                  </div>
+                  <span className={`text-caption font-medium hidden sm:inline ${
+                    isCompleted || isActive ? "text-[#F1F5F9]" : "text-[#64748B]"
+                  }`}>
+                    {step.title}
+                  </span>
+                </div>
+                {i < processSteps.length - 1 && (
+                  <div className={`w-8 sm:w-16 h-px mx-2 transition-colors duration-300 ${
+                    isCompleted ? "bg-[#FF0F73]" : "bg-white/[0.08]"
+                  }`} />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-14">
         {/* ─── Experience Finder ─── */}
