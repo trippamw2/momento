@@ -16,6 +16,7 @@ import ReviewCard from "./ReviewCard";
 import ContentRail from "./ContentRail";
 import AuthModal from "./AuthModal";
 import ReviewForm from "./ReviewForm";
+import LocationMap from "./LocationMap";
 
 // ─── Props ───
 interface Props {
@@ -225,7 +226,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
       {/* ════════════════════════════════════════════ */}
       <section id="hero-gallery" className="relative">
         <div className="relative h-[55vh] sm:h-[70vh] md:h-[80vh] overflow-hidden">
-          {exp.images.map((img, i) => (
+          {exp.images.slice(0, 5).map((img, i) => (
             <Image
               key={i}
               src={img}
@@ -275,7 +276,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
             </div>
           </div>
 
-          {/* "Show all photos" button */}
+          {/* "Show all photos" button - only shown when more than 5 exist */}
           {exp.images.length > 5 && (
             <button
               onClick={() => { setActiveImage(0); document.getElementById("hero-gallery")?.scrollIntoView({ behavior: "smooth" }); }}
@@ -289,7 +290,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
         {/* Thumbnail strip */}
         <div className="absolute bottom-4 left-4 sm:left-8 right-4 sm:right-8 z-30 pointer-events-none">
           <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1 pointer-events-auto">
-            {exp.images.map((img, i) => (
+            {exp.images.slice(0, 5).map((img, i) => (
               <button
                 key={i}
                 onClick={() => setActiveImage(i)}
@@ -333,8 +334,8 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               <div className="flex items-center gap-1.5 text-body-sm text-[#CBD5E1]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                 {exp.location}
-                {exp.city && <><span className="text-[#94A3B8]">Â·</span><span className="text-[#94A3B8]">{exp.city}</span></>}
-                {exp.distance && <><span className="text-[#94A3B8]">Â·</span><span className="text-[#94A3B8]">{exp.distance}</span></>}
+                {exp.city && <><span className="text-[#94A3B8]">·</span><span className="text-[#94A3B8]">{exp.city}</span></>}
+                {exp.distance && <><span className="text-[#94A3B8]">·</span><span className="text-[#94A3B8]">{exp.distance}</span></>}
               </div>
               <div className="flex items-center gap-1.5 text-body-sm text-[#CBD5E1]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -416,7 +417,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 <h2 className="text-heading-md font-bold text-white flex items-center gap-2">
                   <span className="text-yellow-400 text-heading">★</span>
                   <span>{exp.rating}</span>
-                  <span className="text-[#94A3B8] font-normal text-body-sm">Â· {allReviews.length} reviews</span>
+                  <span className="text-[#94A3B8] font-normal text-body-sm">· {allReviews.length} reviews</span>
                 </h2>
                 {/* Sort Controls */}
                 <div className="flex items-center gap-1 bg-white/[0.04] rounded-lg p-0.5 border border-white/[0.06]">
@@ -495,17 +496,12 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   Find nearby
                 </button>
               </div>
-              <div className="rounded-xl overflow-hidden border border-white/[0.1] h-64 relative">
-                <iframe
-                  src={`https://www.openstreetmap.org/export/embed.html?bbox=${exp.coordinates.lng - 0.05}%2C${exp.coordinates.lat - 0.05}%2C${exp.coordinates.lng + 0.05}%2C${exp.coordinates.lat + 0.05}&layer=mapnik&marker=${exp.coordinates.lat}%2C${exp.coordinates.lng}`}
-                  className="w-full h-full border-0"
-                  title="Location map"
-                  loading="lazy"
-                />
-                <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-md text-caption text-[#CBD5E1] border border-white/[0.1]">
-                  📍 {exp.location} · {exp.city}
-                </div>
-              </div>
+              <LocationMap
+                lat={exp.coordinates.lat}
+                lng={exp.coordinates.lng}
+                location={exp.location}
+                city={exp.city}
+              />
             </div>
 
             {/* Mobile Actions */}
