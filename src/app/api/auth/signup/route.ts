@@ -5,10 +5,11 @@ import { badRequest, serverError, handleRouteError } from "@/lib/api-helpers";
 
 export async function POST(request: Request) {
   try {
-    const { email, password, full_name, phone, role, avatar_url } = await request.json();
+    const { email, password, full_name, phone, role, avatar_url, birthdate } = await request.json();
 
     if (!email || !password) return badRequest("Email and password are required");
     if (password.length < 6) return badRequest("Password must be at least 6 characters");
+    if (birthdate && isNaN(Date.parse(birthdate))) return badRequest("Invalid birthdate format");
 
     const validatedRole: "user" | "partner" = role === "partner" ? "partner" : "user";
 
@@ -32,6 +33,7 @@ export async function POST(request: Request) {
       phone: phone ?? null,
       avatar_url: avatar_url ?? null,
       role: validatedRole,
+      birthdate: birthdate ?? null,
     });
 
     if (profileError) {

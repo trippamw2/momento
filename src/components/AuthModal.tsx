@@ -31,6 +31,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [birthdate, setBirthdate] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -57,6 +58,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
     else if (password.length < 6) errors.password = "Password must be at least 6 characters";
 
     if (phone && !/^\+?[\d\s\-()]{7,15}$/.test(phone)) errors.phone = "Invalid phone number";
+    if (birthdate && isNaN(Date.parse(birthdate))) errors.birthdate = "Invalid date";
 
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
@@ -102,6 +104,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           password,
           full_name: name,
           phone: phone || null,
+          birthdate: birthdate || null,
           role: signupRole,
         }),
       });
@@ -299,6 +302,24 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                   }`}
                 />
                 {fieldErrors.phone && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.phone}</p>}
+              </div>
+            )}
+
+            {/* Birthdate (signup only) */}
+            {mode === "signup" && (
+              <div>
+                <input
+                  type="date"
+                  placeholder="Date of birth"
+                  value={birthdate}
+                  onChange={(e) => { setBirthdate(e.target.value); if (fieldErrors.birthdate) setFieldErrors((prev) => ({ ...prev, birthdate: "" })); }}
+                  className={`w-full px-4 py-3 rounded-xl bg-[#0A0E17] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-1 transition-all ${
+                    fieldErrors.birthdate
+                      ? "border border-[#c13515] focus:border-[#c13515] focus:ring-[#c13515]/20"
+                      : "border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20"
+                  }`}
+                />
+                {fieldErrors.birthdate && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.birthdate}</p>}
               </div>
             )}
 
