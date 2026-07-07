@@ -16,7 +16,7 @@ const guidelines = [
   {
     title: "Transparent Reviews",
     desc: "Every review comes from a confirmed booking. We do not allow fake or incentivized reviews, and our moderation team actively monitors for abuse.",
-    icon: "â­",
+    icon: "⭐",
   },
   {
     title: "24/7 Support",

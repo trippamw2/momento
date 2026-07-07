@@ -398,7 +398,7 @@ export function getStreakMilestones(): { weeks: number; label: string; icon: str
   return [
     { weeks: 1, label: "First Step", icon: "🌱" },
     { weeks: 3, label: "Weekend Warrior", icon: "🔥" },
-    { weeks: 5, label: "Regular Explorer", icon: "â­" },
+    { weeks: 5, label: "Regular Explorer", icon: "⭐" },
     { weeks: 8, label: "Dedicated Adventurer", icon: "🌟" },
     { weeks: 12, label: "Loyal Legend", icon: "👑" },
   ];
