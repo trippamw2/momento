@@ -3,9 +3,10 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { experiences, defaultCollections, defaultSavedIds, recentlyViewedMock } from "@/lib/data";
+import { experiences, defaultCollections, defaultSavedIds } from "@/lib/data";
 import { Experience } from "@/lib/types";
 import { trackSaved } from "@/lib/recommendation-engine";
+import { getRecentlyViewed, RecentlyViewedItem } from "@/lib/recently-viewed";
 
 interface Collection {
   id: string;
@@ -44,6 +45,20 @@ function saveState(state: SavedState) {
   } catch (e) { console.warn("Failed to save state:", e); }
 }
 
+function loadFavorites(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem("experio-favorites");
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveFavorites(ids: string[]) {
+  if (typeof window === "undefined") return;
+  try { localStorage.setItem("experio-favorites", JSON.stringify(ids)); }
+  catch { /* silently fail */ }
+}
+
 type SidebarTab = "all" | "favorites" | "want-to-try" | "events" | "gift-ideas" | "recently-viewed";
 
 const sidebarItems: { key: SidebarTab; label: string }[] = [
@@ -60,8 +75,11 @@ export default function SavedPageContent() {
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>("all");
   const [creatingCollection, setCreatingCollection] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [favoriteIds, setFavoriteIds] = useState<string[]>(loadFavorites);
 
   useEffect(() => { saveState(state); }, [state]);
+  useEffect(() => { saveFavorites(favoriteIds); }, [favoriteIds]);
 
   const savedExperiences = useMemo(
     () => experiences.filter((e) => state.savedIds.includes(e.id)),
@@ -119,15 +137,29 @@ export default function SavedPageContent() {
   }, []);
 
   const getFilteredExperiences = (): Experience[] => {
+    let list: Experience[];
     switch (sidebarTab) {
-      case "all": return savedExperiences;
-      case "favorites": return savedExperiences.filter((e) => e.rating >= 4.8);
-      case "want-to-try": return savedExperiences.filter((e) => e.category === "Date" || e.mood.includes("Active"));
-      case "events": return savedExperiences.filter((e) => e.category === "Escape" || e.category === "Celebrate");
-      case "gift-ideas": return savedExperiences.filter((e) => e.mood.includes("Luxurious") || e.mood.includes("Romantic"));
-      case "recently-viewed": return recentlyViewedMock.map((rv) => experiences.find((e) => e.id === rv.id)).filter(Boolean) as Experience[];
-      default: return savedExperiences;
+      case "all": list = savedExperiences; break;
+      case "favorites": list = experiences.filter((e) => favoriteIds.includes(e.id)); break;
+      case "want-to-try": list = savedExperiences.filter((e) => e.category === "Date" || e.mood.includes("Active")); break;
+      case "events": list = savedExperiences.filter((e) => e.category === "Escape" || e.category === "Celebrate"); break;
+      case "gift-ideas": list = savedExperiences.filter((e) => e.mood.includes("Luxurious") || e.mood.includes("Romantic")); break;
+      case "recently-viewed": {
+        const rv = getRecentlyViewed();
+        list = rv.map((item) => experiences.find((e) => e.id === item.id)).filter(Boolean) as Experience[];
+        break;
+      }
+      default: list = savedExperiences;
     }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter((e) =>
+        e.title.toLowerCase().includes(q) ||
+        e.subtitle.toLowerCase().includes(q) ||
+        e.location.toLowerCase().includes(q)
+      );
+    }
+    return list;
   };
 
   const displayed = getFilteredExperiences();
@@ -135,11 +167,11 @@ export default function SavedPageContent() {
   const getSidebarCount = (key: SidebarTab): number => {
     switch (key) {
       case "all": return savedExperiences.length;
-      case "favorites": return savedExperiences.filter((e) => e.rating >= 4.8).length;
+      case "favorites": return experiences.filter((e) => favoriteIds.includes(e.id)).length;
       case "want-to-try": return savedExperiences.filter((e) => e.category === "Date" || e.mood.includes("Active")).length;
       case "events": return savedExperiences.filter((e) => e.category === "Escape" || e.category === "Celebrate").length;
       case "gift-ideas": return savedExperiences.filter((e) => e.mood.includes("Luxurious") || e.mood.includes("Romantic")).length;
-      case "recently-viewed": return recentlyViewedMock.length;
+      case "recently-viewed": return getRecentlyViewed().length;
       default: return 0;
     }
   };
@@ -212,7 +244,7 @@ export default function SavedPageContent() {
               <h1 className="text-heading-xl font-bold text-[#F1F5F9]">{pageTitle}</h1>
               <p className="text-[#94A3B8] text-body-sm mt-0.5">
                 {isRecentlyTab
-                  ? `${recentlyViewedMock.length} recently viewed`
+                  ? `${getRecentlyViewed().length} recently viewed`
                   : `${displayed.length} experience${displayed.length !== 1 ? "s" : ""}`
                 }
               </p>
@@ -227,6 +259,25 @@ export default function SavedPageContent() {
             )}
           </div>
 
+          {/* ─── Search Bar ─── */}
+          {!isRecentlyTab && savedExperiences.length > 0 && (
+            <div className="relative mb-4 max-w-md">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Search saved experiences..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-8 py-2.5 rounded-xl bg-[#1A2332] border border-white/[0.08] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B]/60 focus:outline-none focus:border-[#FF0F73] focus:ring-1 focus:ring-[#FF0F73]/30 transition-all"
+              />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-text-secondary text-xs">✕</button>
+              )}
+            </div>
+          )}
+
           {/* ─── Saved / Filtered Grid ─── */}
           {displayed.length > 0 ? (
             <>
@@ -237,6 +288,10 @@ export default function SavedPageContent() {
                     experience={exp}
                     isSaved={state.savedIds.includes(exp.id)}
                     onToggleSave={() => toggleSave(exp.id)}
+                    isFavorited={favoriteIds.includes(exp.id)}
+                    onToggleFavorite={() => setFavoriteIds((prev) =>
+                      prev.includes(exp.id) ? prev.filter((id) => id !== exp.id) : [...prev, exp.id]
+                    )}
                     collections={state.collections}
                     onAddToCollection={(colId) => addToCollection(exp.id, colId)}
                   />
@@ -316,7 +371,7 @@ export default function SavedPageContent() {
               )}
 
               {/* ─── Recently Viewed Section ─── */}
-              {!isRecentlyTab && (
+              {!isRecentlyTab && getRecentlyViewed().length > 0 && (
                 <section className="mb-10">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-heading-md font-bold text-[#F1F5F9]">Recently Viewed</h2>
@@ -328,7 +383,7 @@ export default function SavedPageContent() {
                     </button>
                   </div>
                   <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
-                    {recentlyViewedMock.slice(0, 6).map((rv) => {
+                    {getRecentlyViewed().slice(0, 6).map((rv) => {
                       const exp = experiences.find((e) => e.id === rv.id);
                       if (!exp) return null;
                       return (
@@ -399,12 +454,16 @@ function SavedCard({
   experience: exp,
   isSaved,
   onToggleSave,
+  isFavorited,
+  onToggleFavorite,
   collections,
   onAddToCollection,
 }: {
   experience: Experience;
   isSaved: boolean;
   onToggleSave: () => void;
+  isFavorited: boolean;
+  onToggleFavorite: () => void;
   collections: Collection[];
   onAddToCollection: (colId: string) => void;
 }) {
@@ -436,6 +495,17 @@ function SavedCard({
               {exp.city}
             </span>
           </div>
+
+          {/* Star / Favorite Toggle */}
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleFavorite(); }}
+            className="absolute top-2.5 right-12 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center hover:bg-yellow-500/60 transition-all duration-200 z-10"
+            title={isFavorited ? "Remove from favorites" : "Add to favorites"}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill={isFavorited ? "#FBBF24" : "none"} stroke={isFavorited ? "#FBBF24" : "white"} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          </button>
 
           {/* Heart / Save Toggle */}
           <button
