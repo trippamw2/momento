@@ -11,7 +11,7 @@ export default function TrackRedeem() {
     if (!trackCode.trim()) return;
     setTracking(true);
     try {
-      const token = localStorage.getItem("momento-auth-token");
+      const token = localStorage.getItem("experio-auth-token");
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
       const res = await fetch(`/api/gift-cards/check?code=${encodeURIComponent(trackCode)}`, { headers });
@@ -32,7 +32,7 @@ export default function TrackRedeem() {
     <section className="max-w-3xl mx-auto" id="redeem">
       <div className="text-center mb-8">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#FF0F73]/10 to-[#FF7A1A]/10 border border-[#FF0F73]/20 text-[#FF0F73] text-caption font-semibold mb-4">
-          <span>ðŸŽ¯</span> Gift Cards
+          <span>🎯</span> Gift Cards
         </div>
         <h2 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Track &amp; Redeem</h2>
         <p className="text-[#CBD5E1] text-body-lg max-w-lg mx-auto">
@@ -105,10 +105,10 @@ export default function TrackRedeem() {
           <p className="text-caption font-semibold text-[#CBD5E1] mb-3 uppercase tracking-wider">Status Timeline</p>
           <div className="grid grid-cols-4 gap-3">
             {[
-              { step: "Purchased", icon: "ðŸ›’", done: true, desc: "Card issued" },
-              { step: "Delivered", icon: "ðŸ“¨", done: true, desc: "Sent to recipient" },
-              { step: "Viewed", icon: "ðŸ‘€", done: trackResult?.found, desc: "Code checked" },
-              { step: "Redeemed", icon: "âœ…", done: trackResult?.status === "redeemed", desc: "Experience booked" },
+              { step: "Purchased", icon: "🛒", done: true, desc: "Card issued" },
+              { step: "Delivered", icon: "📨", done: true, desc: "Sent to recipient" },
+              { step: "Viewed", icon: "👀", done: trackResult?.found, desc: "Code checked" },
+              { step: "Redeemed", icon: "✅", done: trackResult?.status === "redeemed", desc: "Experience booked" },
             ].map((s) => (
               <div key={s.step} className={`text-center p-4 rounded-2xl transition-all border ${
                 s.done

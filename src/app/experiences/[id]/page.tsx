@@ -12,13 +12,25 @@ function getMockExperience(id: string) {
 async function tryFetchExperience(id: string) {
   try {
     const supabase = createServerClient();
-    const { data: raw, error } = await supabase
+
+    // First try lookup by UUID (primary key)
+    let { data: raw, error } = await supabase
       .from("experiences")
       .select("*, partner:partner_id(business_name, business_logo, business_description, business_city, business_phone, business_email), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
       .eq("id", id)
       .single();
 
-    if (error || !raw) return null;
+    // If not found by UUID, try by slug (for AI Concierge links etc.)
+    if (error || !raw) {
+      const { data: slugResult } = await supabase
+        .from("experiences")
+        .select("*, partner:partner_id(business_name, business_logo, business_description, business_city, business_phone, business_email), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
+        .eq("slug", id)
+        .single();
+      if (slugResult) raw = slugResult;
+    }
+
+    if (error && !raw) return null;
 
     const { data: reviews } = await supabase
       .from("reviews")

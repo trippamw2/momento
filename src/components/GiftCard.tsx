@@ -46,7 +46,7 @@ export const GIFT_CARD_VARIANTS = [
   },
   {
     id: "signature",
-    label: "Momento Signature",
+    label: "Experio Signature",
     gradient: "from-[#FF0F73] via-[#FF5B3A] to-[#FFA22C]",
     accent: "from-[#FF0F73] to-[#FF7A1A]",
     textColor: "text-white",
@@ -116,9 +116,9 @@ export default function GiftCard({
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <div className={`w-8 h-5 rounded bg-gradient-to-br ${variant.chipColor} shadow-inner`} />
-                <span className={`text-[10px] font-bold uppercase tracking-widest ${variant.textColorSecondary}`}>
-                  Momento
-                </span>
+                  <span className={`text-[10px] font-bold uppercase tracking-widest ${variant.textColorSecondary}`}>
+                    Experio
+                  </span>
               </div>
             </div>
             <p className={`text-lg font-bold ${variant.textColor} mb-1`}>{valueLabel}</p>
@@ -175,7 +175,7 @@ export default function GiftCard({
                 </div>
               </div>
               <div className="text-right">
-                <p className={`text-[10px] font-semibold uppercase tracking-[0.15em] ${variant.textColorSecondary}`}>Momento</p>
+                <p className={`text-[10px] font-semibold uppercase tracking-[0.15em] ${variant.textColorSecondary}`}>Experio</p>
                 <p className={`text-[8px] ${variant.textColorSecondary} opacity-70`}>Gift Card</p>
               </div>
             </div>
