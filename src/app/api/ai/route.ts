@@ -87,8 +87,8 @@ function dbExpToExperience(db: DbExperience): Experience {
   const cat = db.category as MomentoCategory;
   const images = GALLERY_SETS[cat] || GALLERY_SETS.Date;
   const coords = COORDINATES[db.location] || COORDINATES.Lilongwe;
-  return {
-    id: db.slug,
+    return {
+      id: db.slug || db.id,
     title: db.title,
     subtitle: db.subtitle,
     description: db.description,

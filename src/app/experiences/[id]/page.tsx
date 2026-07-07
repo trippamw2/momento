@@ -6,7 +6,13 @@ import { transformExperience } from "@/lib/transform";
 import { experiences as mockExperiences } from "@/lib/data";
 
 function getMockExperience(id: string) {
-  return mockExperiences.find((e) => e.id === id);
+  // Direct match by id
+  const direct = mockExperiences.find((e) => e.id === id);
+  if (direct) return direct;
+  // Fallback: if id is a UUID (DB slug fallback) or unknown, try matching by
+  // extracting the slug-like tail or by title slug
+  const slugified = id.replace(/^.*[/#]/, "").toLowerCase().replace(/\s+/g, "-");
+  return mockExperiences.find((e) => e.id === slugified) ?? null;
 }
 
 async function tryFetchExperience(id: string) {
