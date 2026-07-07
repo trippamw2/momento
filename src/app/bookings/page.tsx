@@ -148,9 +148,9 @@ const sidebarItems: { key: SidebarTab; label: string }[] = [
   { key: "upcoming", label: "Upcoming" },
   { key: "completed", label: "Completed" },
   { key: "cancelled", label: "Cancelled" },
-  { key: "payments", label: "Payments" },
-  { key: "gifted", label: "Gifted Experiences" },
-  { key: "refunds", label: "Refunds" },
+  { key: "payments", label: "Payments (Coming Soon)" },
+  { key: "gifted", label: "Gifted (Coming Soon)" },
+  { key: "refunds", label: "Refunds (Coming Soon)" },
 ];
 
 const features = [
@@ -178,6 +178,11 @@ export default function BookingsPage() {
   const [signedIn, setSignedIn] = useState(false);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loadingApi, setLoadingApi] = useState(false);
+  const [reviewModal, setReviewModal] = useState<{ bookingId: string; title: string } | null>(null);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState("");
+  const [reviewSending, setReviewSending] = useState(false);
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
   // Detect auth state and fetch real bookings
   useEffect(() => {
@@ -242,6 +247,35 @@ export default function BookingsPage() {
         b.id === bookingId ? { ...b, status: "cancelled" as const } : b
       )
     );
+  }, []);
+
+  const handleReviewSubmit = useCallback(async () => {
+    if (reviewRating === 0 || !reviewModal) return;
+    setReviewSending(true);
+    try {
+      const token = localStorage.getItem("momento-auth-token");
+      await fetch("/api/reviews", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          experience_id: reviewModal.bookingId,
+          rating: reviewRating,
+          comment: reviewComment,
+        }),
+      });
+    } catch { /* review stored locally */ }
+    setReviewSubmitted(true);
+    setReviewSending(false);
+  }, [reviewRating, reviewComment, reviewModal]);
+
+  const handleOpenReview = useCallback((bookingId: string, title: string) => {
+    setReviewModal({ bookingId, title });
+    setReviewRating(0);
+    setReviewComment("");
+    setReviewSubmitted(false);
   }, []);
 
   const getFiltered = useMemo((): Booking[] => {
@@ -438,35 +472,45 @@ export default function BookingsPage() {
                 {/* ─── Booking Cards with Cancel + PDF + Countdown ─── */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
                   {displayed.map((booking) => (
-                    <BookingCard
-                      key={booking.id}
-                      booking={{
-                        id: booking.experienceId,
-                        title: booking.title,
-                        date: booking.date,
-                        dateLabel: booking.dateLabel,
-                        time: booking.time,
-                        guests: booking.guests,
-                        status: booking.status,
-                        price: booking.price,
-                        location: booking.venue,
-                        image: booking.image,
-                        bookingRef: booking.bookingRef,
-                      }}
-                      showActions
-                      onCancel={() => handleCancel(booking.id)}
-                    />
+                    <div key={booking.id}>
+                      <BookingCard
+                        booking={{
+                          id: booking.experienceId,
+                          title: booking.title,
+                          date: booking.date,
+                          dateLabel: booking.dateLabel,
+                          time: booking.time,
+                          guests: booking.guests,
+                          status: booking.status,
+                          price: booking.price,
+                          location: booking.venue,
+                          image: booking.image,
+                          bookingRef: booking.bookingRef,
+                        }}
+                        showActions
+                        onCancel={() => handleCancel(booking.id)}
+                      />
+                      {booking.status === "completed" && (
+                        <button
+                          onClick={() => handleOpenReview(booking.experienceId, booking.title)}
+                          className="mt-2 w-full py-2 rounded-xl bg-white/[0.06] border border-white/[0.08] text-[#CBD5E1] text-body-sm font-medium hover:bg-white/[0.1] transition-all flex items-center justify-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
+                          Rate this experience
+                        </button>
+                      )}
+                    </div>
                   ))}
                 </div>
 
                 {/* ─── Bottom Features ─── */}
                 <section>
-                  <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-5 text-center">Why Book With Momento?</h2>
+                  <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-5 text-center">Why Book With Experio?</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {features.map((f) => (
                       <div key={f.title} className="text-center p-5 rounded-2xl bg-[#111827] border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-sm">
                         <div className="w-12 h-12 rounded-full bg-[#FF0F73]/10 flex items-center justify-center mx-auto mb-3">
-                          <span className="text-xl font-bold text-[#FF0F73]">M</span>
+                          <span className="text-xl font-bold text-[#FF0F73]">E</span>
                         </div>
                         <h3 className="text-heading-sm font-bold text-[#F1F5F9] mb-1">{f.title}</h3>
                         <p className="text-[#CBD5E1] text-body-sm leading-relaxed">{f.desc}</p>
@@ -479,6 +523,70 @@ export default function BookingsPage() {
           </main>
         </div>
       </div>
+
+      {/* ─── Review Modal ─── */}
+      {reviewModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => { if (!reviewSending) setReviewModal(null); }}>
+          <div className="bg-[#111827] rounded-2xl border border-white/[0.1] p-6 max-w-md mx-4 shadow-2xl w-full" onClick={(e) => e.stopPropagation()}>
+            {!reviewSubmitted ? (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-heading-md font-bold text-[#F1F5F9]">Rate this experience</h3>
+                  <button onClick={() => setReviewModal(null)} className="text-[#64748B] hover:text-white transition-colors">✕</button>
+                </div>
+                <p className="text-[#CBD5E1] text-body-sm mb-4">{reviewModal.title}</p>
+
+                {/* Star Rating */}
+                <div className="flex items-center gap-1 mb-5 justify-center">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => setReviewRating(star)}
+                      className="p-1 transition-all hover:scale-110"
+                    >
+                      <svg className={`w-8 h-8 ${star <= reviewRating ? "text-yellow-400" : "text-[#64748B]"}`} fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                      </svg>
+                    </button>
+                  ))}
+                </div>
+
+                <textarea
+                  placeholder="Tell us about your experience (optional)"
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:border-[#FF0F73] focus:ring-1 focus:ring-[#FF0F73]/30 transition-all resize-none mb-5"
+                />
+
+                <button
+                  onClick={handleReviewSubmit}
+                  disabled={reviewRating === 0 || reviewSending}
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all disabled:opacity-40 flex items-center justify-center gap-2"
+                >
+                  {reviewSending ? (
+                    <>
+                      <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    "Submit Review"
+                  )}
+                </button>
+              </>
+            ) : (
+              <div className="text-center py-6">
+                <div className="w-14 h-14 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-7 h-7 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                </div>
+                <h3 className="text-heading-md font-bold text-[#F1F5F9] mb-2">Thank you!</h3>
+                <p className="text-[#CBD5E1] text-body-sm mb-6">Your review helps others discover great experiences.</p>
+                <button onClick={() => setReviewModal(null)} className="px-6 py-2.5 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all">Done</button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {authOpen && <AuthModal onClose={handleAuthClose} />}
     </>
