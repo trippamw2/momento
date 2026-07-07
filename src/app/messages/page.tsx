@@ -56,7 +56,7 @@ export default function MessagesPage() {
   const [inputText, setInputText] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const pollRef = useRef<ReturnType<typeof setInterval>>();
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Fetch conversations
   useEffect(() => {
