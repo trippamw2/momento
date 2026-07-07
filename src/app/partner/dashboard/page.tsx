@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuthGuard } from "@/lib/use-auth-guard";
+import CheckInModal from "@/components/CheckInModal";
 
 interface DashboardStats {
   totalExperiences: number;
@@ -52,6 +53,7 @@ export default function PartnerDashboardPage() {
   const [stats] = useState<DashboardStats>(MOCK_STATS);
   const [bookings] = useState<RecentBooking[]>(MOCK_BOOKINGS);
   const { allowed: isPartner, loading: authLoading } = useAuthGuard({ requiredRole: "partner" });
+  const [checkInOpen, setCheckInOpen] = useState(false);
   const [experiences, setExperiences] = useState<PartnerExperience[]>([]);
   const [experiencesLoading, setExperiencesLoading] = useState(true);
   const [experiencesError, setExperiencesError] = useState("");
@@ -234,6 +236,20 @@ export default function PartnerDashboardPage() {
             <div className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5">
               <h2 className="text-heading-sm font-bold text-[#F1F5F9] mb-4">Quick Actions</h2>
               <div className="space-y-2">
+                <button
+                  onClick={() => setCheckInOpen(true)}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/[0.05] transition-colors group text-left"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-lg group-hover:bg-emerald-500/20 transition-colors">
+                    <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-body-sm font-semibold text-[#F1F5F9]">Customer Check-In</p>
+                    <p className="text-caption text-[#94A3B8]">Scan or search bookings</p>
+                  </div>
+                </button>
                 <Link
                   href="/partner/list-experience"
                   className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/[0.05] transition-colors group"
@@ -336,7 +352,7 @@ export default function PartnerDashboardPage() {
                     <p className="text-body-sm font-semibold text-[#F1F5F9] truncate">{exp.name}</p>
                     <p className="text-caption text-[#94A3B8] flex items-center gap-2">
                       <span>{exp.bookings} bookings</span>
-                      <span>Â·</span>
+                      <span>·</span>
                       <span className="flex items-center gap-0.5">
                         {exp.rating} <span className="text-yellow-500">★</span>
                       </span>
@@ -356,6 +372,8 @@ export default function PartnerDashboardPage() {
           </div>
         </div>
       </div>
+
+      {checkInOpen && <CheckInModal onClose={() => setCheckInOpen(false)} />}
     </div>
   );
 }
