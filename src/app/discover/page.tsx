@@ -2,12 +2,13 @@
 
 import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Experience } from "@/lib/types";
+import { Experience, Mood } from "@/lib/types";
 import { getExperiences } from "@/lib/api-client";
 import { transformExperience } from "@/lib/transform";
 import { experiences as mockExperiences } from "@/lib/data";
 import { getPersonalizedRails } from "@/lib/recommendation-engine";
 import DiscoveryFeedItem from "@/components/DiscoveryFeedItem";
+import { trackRecentlyViewed } from "@/lib/recently-viewed";
 
 function loadSaved(): string[] {
   if (typeof window === "undefined") return [];
@@ -27,8 +28,18 @@ export default function DiscoverPage() {
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [savedIds, setSavedIds] = useState<string[]>([]);
+  const [toast, setToast] = useState<{ message: string; visible: boolean }>({ message: "", visible: false });
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+  const showToast = useCallback((message: string) => {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    setToast({ message, visible: true });
+    toastTimerRef.current = setTimeout(() => setToast((prev) => ({ ...prev, visible: false })), 2000);
+  }, []);
 
   // Load experiences
   useEffect(() => {
@@ -105,15 +116,18 @@ export default function DiscoverPage() {
         } catch {}
         return updated;
       });
+      showToast(next ? "Saved to your list!" : "Removed from your list");
     },
-    []
+    [showToast]
   );
 
   const handleBook = useCallback(
     (id: string) => {
-      router.push(`/experiences/${id}`);
+      trackRecentlyViewed(id);
+      showToast("Opening booking...");
+      setTimeout(() => router.push(`/experiences/${id}`), 300);
     },
-    [router]
+    [router, showToast]
   );
 
   if (loading) {
@@ -152,6 +166,50 @@ export default function DiscoverPage() {
     >
       {/* Spacer so first item content isn't hidden behind fixed header */}
       <div className="snap-none h-16 sm:h-18" />
+
+      {/* ─── Compact Search Bar ─── */}
+      {searchOpen && (
+        <div className="snap-none fixed top-16 left-0 right-0 z-30 px-4 py-2 bg-[#05070B]/95 backdrop-blur-md border-b border-white/[0.06]">
+          <div className="relative max-w-md mx-auto">
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search experiences..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoFocus
+              className="w-full pl-10 pr-8 py-2.5 rounded-xl bg-[#1A2332] border border-white/[0.08] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B]/60 focus:outline-none focus:border-[#FF0F73]"
+            />
+            {searchQuery && (
+              <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white text-xs">✕</button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ─── Search Toggle ─── */}
+      <button
+        onClick={() => setSearchOpen(!searchOpen)}
+        className="snap-none fixed top-[18px] right-4 z-30 w-9 h-9 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center hover:bg-white/20 transition-all"
+        aria-label="Search"
+      >
+        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </button>
+
+      {/* ─── Toast ─── */}
+      <div className={`snap-none fixed top-20 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
+        toast.visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"
+      }`}>
+        <div className="px-4 py-2.5 rounded-full bg-[#111827] border border-white/[0.1] shadow-xl text-[#F1F5F9] text-body-sm font-medium flex items-center gap-2">
+          <svg className="w-4 h-4 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          {toast.message}
+        </div>
+      </div>
+
       {feedExperiences.map((exp, index) => (
         <div
           key={exp.id}

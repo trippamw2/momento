@@ -10,6 +10,7 @@ import { useGeolocation, getDistance, formatDist } from "@/lib/use-geolocation";
 import { AFRICAN_CITY_COORDS, findNearestCity } from "@/lib/geo";
 import { experiences as mockExperiences } from "@/lib/data";
 import ExperienceCard from "@/components/ExperienceCard";
+import { trackRecentlyViewed } from "@/lib/recently-viewed";
 
 const ITEMS_PER_PAGE = 8;
 const LOAD_MORE = 4;
@@ -102,6 +103,7 @@ export default function ExperiencesPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [filters, setFilters] = useState<FilterState>(() => initialState(searchParams));
+  const [sortBy, setSortBy] = useState<string>("recommended");
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [loading, setLoading] = useState(false);
   const [allExperiences, setAllExperiences] = useState<Experience[]>([]);
@@ -164,19 +166,34 @@ export default function ExperiencesPageContent() {
     return ["All", ...new Set(allExperiences.map((e) => e.location))] as string[];
   }, [allExperiences]);
 
-  const filtered = useMemo(
-    () =>
-      filterExperiences(allExperiences, {
-        search: filters.search,
-        category: filters.category,
-        mood: filters.mood,
-        priceRange: filters.price,
-        location: filters.location,
-        nearby: filters.nearby,
-        userLocation: filters.nearby ? geo.position ?? undefined : undefined,
-      }),
-    [allExperiences, filters, geo.position]
-  );
+  const filtered = useMemo(() => {
+    let result = filterExperiences(allExperiences, {
+      search: filters.search,
+      category: filters.category,
+      mood: filters.mood,
+      priceRange: filters.price,
+      location: filters.location,
+      nearby: filters.nearby,
+      userLocation: filters.nearby ? geo.position ?? undefined : undefined,
+    });
+    // Apply sort
+    switch (sortBy) {
+      case "price-asc":
+        result = [...result].sort((a, b) => a.price - b.price);
+        break;
+      case "price-desc":
+        result = [...result].sort((a, b) => b.price - a.price);
+        break;
+      case "rating":
+        result = [...result].sort((a, b) => b.rating - a.rating);
+        break;
+      case "newest":
+        result = [...result].reverse();
+        break;
+      // "recommended" = default order
+    }
+    return result;
+  }, [allExperiences, filters, geo.position, sortBy]);
 
   const visibleExperiences = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
   const hasMore = visibleCount < filtered.length;
@@ -339,6 +356,20 @@ export default function ExperiencesPageContent() {
             <svg className={`w-3.5 h-3.5 ${geo.loading ? "animate-pulse" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
             {geo.loading ? "Locating..." : geo.position && filters.nearby ? "📍 Near You" : "Nearby"}
           </button>
+
+          <span className="text-[#64748B] text-caption hidden sm:inline select-none">|</span>
+
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="px-3 py-1.5 rounded-full text-caption font-medium bg-[#1A2332] text-[#CBD5E1] border border-white/[0.08] focus:outline-none focus:border-[#FF0F73]/50 appearance-none cursor-pointer hover:bg-white/[0.05] transition-colors"
+          >
+            <option value="recommended">Sort: Recommended</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="rating">Rating</option>
+            <option value="newest">Newest</option>
+          </select>
         </div>
 
         {visibleExperiences.length > 0 ? (
@@ -355,7 +386,9 @@ export default function ExperiencesPageContent() {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {visibleExperiences.map((exp) => (
-                <ExperienceCard key={exp.id} experience={exp} size="sm" />
+                <div key={exp.id} onClick={() => trackRecentlyViewed(exp.id)}>
+                  <ExperienceCard experience={exp} size="sm" />
+                </div>
               ))}
             </div>
           </>
