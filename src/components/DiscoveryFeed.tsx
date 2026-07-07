@@ -103,9 +103,9 @@ export default function DiscoveryFeed() {
                     <span className="text-yellow-400 text-body-sm font-medium">★</span>
                     <span className="text-white/80 text-body-sm font-medium">{exp.rating}</span>
                   </div>
-                  <span className="text-white/50">Â·</span>
+                  <span className="text-white/50">·</span>
                   <span className="text-white/60 text-body-sm">{exp.location}</span>
-                  <span className="text-white/50">Â·</span>
+                  <span className="text-white/50">·</span>
                   <span className="text-white font-semibold text-heading-sm">MK {exp.price.toLocaleString()}</span>
                 </div>
 

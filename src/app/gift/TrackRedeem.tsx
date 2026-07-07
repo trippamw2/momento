@@ -93,7 +93,7 @@ export default function TrackRedeem() {
                 </p>
                 <p className={`text-caption mt-0.5 ${trackResult.found ? "text-emerald-300" : "text-red-300"}`}>
                   {trackResult.found
-                    ? `This card is ${trackResult.status} Â· ${trackResult.value}`
+                    ? `This card is ${trackResult.status} · ${trackResult.value}`
                     : "Please check the code and try again. Codes are format: MOMO-XXXXXXXX"}
                 </p>
               </div>

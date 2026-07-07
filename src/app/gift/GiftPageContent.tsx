@@ -445,7 +445,7 @@ export default function GiftPageContent() {
                         <div className="flex items-center gap-1.5 mb-1">
                           <span className="text-yellow-400 text-[11px]">★</span>
                           <span className="text-caption text-white/80 font-medium">{exp.rating}</span>
-                          <span className="text-caption text-white/30">Â·</span>
+                          <span className="text-caption text-white/30">·</span>
                           <span className="text-caption text-white/50">{exp.reviewCount}</span>
                         </div>
                         <h4 className="text-white font-semibold text-body-sm leading-tight">{exp.title}</h4>

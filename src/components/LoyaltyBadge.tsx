@@ -68,7 +68,7 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
               {tier.name.charAt(0).toUpperCase() + tier.name.slice(1)} Member
             </p>
             <p className="text-caption text-[#94A3B8]">
-              {formatPoints(data.balance)} points Â· {formatPoints(data.lifetime_points)} lifetime
+              {formatPoints(data.balance)} points · {formatPoints(data.lifetime_points)} lifetime
             </p>
           </div>
         </div>
