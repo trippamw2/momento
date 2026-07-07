@@ -11,7 +11,7 @@ export default function TrackRedeem() {
     if (!trackCode.trim()) return;
     setTracking(true);
     try {
-      const token = localStorage.getItem("experio-auth-token");
+      const token = localStorage.getItem("momento-auth-token");
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
       const res = await fetch(`/api/gift-cards/check?code=${encodeURIComponent(trackCode)}`, { headers });

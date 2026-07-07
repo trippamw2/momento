@@ -82,7 +82,7 @@ export default function GiftPageContent() {
   }, [sent, redemptionCode]);
 
   const handleSend = async () => {
-    const token = localStorage.getItem("experio-auth-token");
+    const token = localStorage.getItem("momento-auth-token");
     if (!token) {
       setGiftError("Please sign in to send a gift");
       return;

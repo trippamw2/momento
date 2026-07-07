@@ -114,10 +114,10 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
       const data = await res.json();
       if (res.ok) {
         trackBooked(exp.id);
-        const ref = data?.id || data?.booking?.id || `BK-${Date.now()}`;
-        setBookingRef(ref);
-        setBookedDate(selectedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }));
-        setBookingDone(true);
+
+        // Award loyalty points (fire and forget)
+        const pts = calculatePoints(exp.price * guests);
+        addPointsLocally(pts, "booking");
 
         // Send booking confirmation email (async, non-blocking)
         const emailTarget = contactEmail || data?.user?.email || "";
@@ -131,22 +131,15 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
             guests: guests,
             totalPrice: exp.price * guests,
             currency: exp.currency,
-            bookingId: data?.id || data?.booking?.id || `BK-${Date.now()}`,
+            bookingId: data.id,
             location: exp.location,
             partnerName: exp.partner,
           }).catch((err) => console.warn("Confirmation email failed:", err));
         }
 
-        // Award loyalty points
-        const pts = calculatePoints(exp.price * guests);
-        setEarnedPoints(pts);
-        const updated = addPointsLocally(pts, "booking");
-        const prevTier = calculateTier(updated.lifetimePoints - pts).tier;
-        const newTier = calculateTier(updated.lifetimePoints).tier;
-        if (newTier !== prevTier) {
-          const tc = TIER_MAP[newTier];
-          setTierUpgrade(`${tc.icon} ${tc.name.charAt(0).toUpperCase() + tc.name.slice(1)}`);
-        }
+        // Redirect to booking detail page for payment
+        router.push(`/bookings/${data.id}`);
+        return;
       }
     } catch (e) {
       console.error("Booking failed", e);
