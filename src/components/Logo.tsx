@@ -7,20 +7,20 @@ interface LogoProps {
 }
 
 const sizeClasses = {
-  sm: "max-w-[140px] sm:max-w-[180px]",
-  md: "max-w-[200px] sm:max-w-[260px]",
-  lg: "max-w-[280px] sm:max-w-[340px]",
+  sm: "h-5",
+  md: "h-7",
+  lg: "h-10",
 };
 
 export default function Logo({ size = "md", showTagline = false }: LogoProps) {
   return (
     <Link href="/" className="flex items-center gap-2.5 group">
       <Image
-        src="/momento-logo.png"
-        alt="Momento"
-        width={600}
-        height={320}
-        className={`w-full h-auto ${sizeClasses[size]} transition-transform duration-300 group-hover:scale-105`}
+        src="/experio-logo.svg"
+        alt="Experio"
+        width={120}
+        height={36}
+        className={`w-auto ${sizeClasses[size]} transition-transform duration-300 group-hover:scale-105`}
         priority
       />
       {showTagline && (
