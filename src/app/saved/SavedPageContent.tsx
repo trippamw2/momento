@@ -45,6 +45,49 @@ function saveState(state: SavedState) {
   } catch (e) { console.warn("Failed to save state:", e); }
 }
 
+// API sync helpers
+async function apiSave(experienceId: string): Promise<string | null> {
+  try {
+    const token = localStorage.getItem("momento-auth-token");
+    if (!token) return null;
+    const res = await fetch("/api/saved", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ experience_id: experienceId }),
+    });
+    if (res.ok) { const d = await res.json(); return d.id || null; }
+  } catch { /* offline fallback */ }
+  return null;
+}
+
+async function apiUnsave(savedId: string): Promise<boolean> {
+  try {
+    const token = localStorage.getItem("momento-auth-token");
+    if (!token) return false;
+    const res = await fetch(`/api/saved/${savedId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.ok;
+  } catch { /* offline fallback */ }
+  return false;
+}
+
+async function apiFetchSaved(): Promise<string[]> {
+  try {
+    const token = localStorage.getItem("momento-auth-token");
+    if (!token) return [];
+    const res = await fetch("/api/saved?limit=100", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) {
+      const d = await res.json();
+      return (d.saved || []).map((s: { experience_id: string }) => s.experience_id);
+    }
+  } catch { /* offline fallback */ }
+  return [];
+}
+
 function loadFavorites(): string[] {
   if (typeof window === "undefined") return [];
   try {
@@ -77,6 +120,21 @@ export default function SavedPageContent() {
   const [newCollectionName, setNewCollectionName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [favoriteIds, setFavoriteIds] = useState<string[]>(loadFavorites);
+  const [savedIdMap, setSavedIdMap] = useState<Record<string, string>>({});
+
+  // Sync saved items from DB on mount
+  useEffect(() => {
+    const syncFromDB = async () => {
+      const dbIds = await apiFetchSaved();
+      if (dbIds.length > 0) {
+        setState(prev => ({
+          ...prev,
+          savedIds: [...new Set([...prev.savedIds, ...dbIds])],
+        }));
+      }
+    };
+    syncFromDB();
+  }, []);
 
   useEffect(() => { saveState(state); }, [state]);
   useEffect(() => { saveFavorites(favoriteIds); }, [favoriteIds]);
@@ -86,17 +144,22 @@ export default function SavedPageContent() {
     [state.savedIds]
   );
 
-  const toggleSave = useCallback((id: string) => {
-    setState((prev) => {
-      const exists = prev.savedIds.includes(id);
-      // Track the save/unsave
-      trackSaved(id, !exists);
-      return {
-        ...prev,
-        savedIds: exists ? prev.savedIds.filter((s) => s !== id) : [...prev.savedIds, id],
-      };
-    });
-  }, []);
+  const toggleSave = useCallback(async (id: string) => {
+    const exists = state.savedIds.includes(id);
+    trackSaved(id, !exists);
+    setState((prev) => ({
+      ...prev,
+      savedIds: exists ? prev.savedIds.filter((s) => s !== id) : [...prev.savedIds, id],
+    }));
+    // Sync to DB
+    if (exists) {
+      const savedId = savedIdMap[id];
+      if (savedId) await apiUnsave(savedId);
+    } else {
+      const dbId = await apiSave(id);
+      if (dbId) setSavedIdMap(prev => ({ ...prev, [id]: dbId }));
+    }
+  }, [state.savedIds, savedIdMap]);
 
   const addToCollection = useCallback((experienceId: string, collectionId: string) => {
     setState((prev) => ({

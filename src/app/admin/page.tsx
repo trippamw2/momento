@@ -156,8 +156,12 @@ export default function AdminPage() {
           const d = await apiFetch("/api/admin/reviews?limit=50&status=approved");
           if (d) {
             setTestimonials(d.reviews || []);
-            const saved = JSON.parse(localStorage.getItem("momento-featured-testimonials") || "[]");
-            setFeaturedIds(saved);
+            // Load featured IDs from platform_settings instead of localStorage
+            try {
+              const settings = await apiFetch("/api/admin/settings");
+              const featuredSetting = (settings?.settings || []).find((s: { key: string }) => s.key === "featured_testimonials");
+              setFeaturedIds(featuredSetting ? JSON.parse(featuredSetting.value) : []);
+            } catch { setFeaturedIds([]); }
           }
           break;
         }
@@ -483,12 +487,22 @@ export default function AdminPage() {
                             {r.body && <p className="text-body-sm text-[#94A3B8] mt-1 line-clamp-2">{r.body}</p>}
                           </div>
                           <button
-                            onClick={() => {
+                            onClick={async () => {
                               const next = featured
                                 ? featuredIds.filter((id) => id !== r.id)
                                 : [...featuredIds, r.id];
                               setFeaturedIds(next);
-                              localStorage.setItem("momento-featured-testimonials", JSON.stringify(next));
+                              // Persist to platform_settings via API
+                              try {
+                                const token = getToken();
+                                if (token) {
+                                  await fetch("/api/admin/settings", {
+                                    method: "PUT",
+                                    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+                                    body: JSON.stringify({ key: "featured_testimonials", value: JSON.stringify(next) }),
+                                  });
+                                }
+                              } catch { /* ignore */ }
                             }}
                             className={`px-3 py-1.5 rounded-lg text-caption font-medium transition-all flex-shrink-0 ${
                               featured

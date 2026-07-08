@@ -31,6 +31,8 @@ export default function DiscoverPage() {
   const [toast, setToast] = useState<{ message: string; visible: boolean }>({ message: "", visible: false });
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [nearMe, setNearMe] = useState(false);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
@@ -56,6 +58,17 @@ export default function DiscoverPage() {
   useEffect(() => {
     setSavedIds(loadSaved());
   }, []);
+
+  // Request geolocation when Near Me toggled on
+  useEffect(() => {
+    if (nearMe && !userLocation) {
+      navigator.geolocation?.getCurrentPosition(
+        (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        () => setNearMe(false), // permission denied
+        { timeout: 10000 }
+      );
+    }
+  }, [nearMe, userLocation]);
 
   // Track scroll position to determine active item
   useEffect(() => {
@@ -88,12 +101,23 @@ export default function DiscoverPage() {
   }, [currentIndex, experiences.length]);
 
   const feedExperiences = useMemo(() => {
-    if (experiences.length === 0) return [];
+    let list = experiences;
+    // Filter by proximity if Near Me is active
+    if (nearMe && userLocation) {
+      list = experiences.filter((exp) => {
+        if (!exp.coordinates) return false;
+        const R = 6371;
+        const dLat = ((exp.coordinates.lat - userLocation.lat) * Math.PI) / 180;
+        const dLng = ((exp.coordinates.lng - userLocation.lng) * Math.PI) / 180;
+        const a = Math.sin(dLat / 2) ** 2 + Math.cos((userLocation.lat * Math.PI) / 180) * Math.cos((exp.coordinates.lat * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+        return 2 * R * Math.asin(Math.sqrt(a)) < 15;
+      });
+    }
+    if (list.length === 0) return [];
 
     // Try personalized rails first
-    const rails = getPersonalizedRails(experiences);
+    const rails = getPersonalizedRails(list, userLocation ?? undefined);
     if (rails.length > 0) {
-      // Use the recommended rail as the primary feed
       const recommended = rails.find((r) => r.key === "recommended");
       if (recommended && recommended.experiences.length >= 5) {
         return recommended.experiences;
@@ -101,8 +125,8 @@ export default function DiscoverPage() {
     }
 
     // Fallback: sort by rating
-    return [...experiences].sort((a, b) => b.rating - a.rating);
-  }, [experiences]);
+    return [...list].sort((a, b) => b.rating - a.rating);
+  }, [experiences, nearMe, userLocation]);
 
   const handleSaveToggle = useCallback(
     (id: string, next: boolean) => {
@@ -198,6 +222,23 @@ export default function DiscoverPage() {
         <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
+      </button>
+
+      {/* ─── Near Me Toggle ─── */}
+      <button
+        onClick={() => setNearMe((prev) => !prev)}
+        className={`snap-none fixed top-[18px] right-16 z-30 h-9 px-3 rounded-full backdrop-blur-md border flex items-center justify-center gap-1.5 text-caption font-medium transition-all ${
+          nearMe
+            ? "bg-[#FF0F73]/20 border-[#FF0F73]/40 text-[#FF0F73]"
+            : "bg-black/50 border-white/15 text-white hover:bg-white/20"
+        }`}
+        aria-label="Near Me"
+      >
+        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        Near Me
       </button>
 
       {/* ─── Toast ─── */}

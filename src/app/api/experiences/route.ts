@@ -34,9 +34,51 @@ export async function GET(request: Request) {
     }
     if (params.city) query = query.ilike("location", `%${params.city}%`);
 
-    const sortField = params.sort ?? "created_at";
-    const sortDir = params.order === "asc" ? { ascending: true } : { ascending: false };
-    query = query.order(sortField as string, sortDir);
+    // Geolocation filter
+    if (params.lat && params.lng) {
+      const lat = parseFloat(params.lat);
+      const lng = parseFloat(params.lng);
+      const radiusKm = parseFloat(params.radius_km ?? "25");
+      if (!isNaN(lat) && !isNaN(lng) && !isNaN(radiusKm)) {
+        // Haversine filter: experiences with lat/lng within radius
+        const earthRadiusKm = 6371;
+        const latRad = (lat * Math.PI) / 180;
+        const lngRad = (lng * Math.PI) / 180;
+        // Use Supabase RPC or raw filter for distance
+        // For now, use a bounding box pre-filter then refine
+        const latDelta = radiusKm / earthRadiusKm * (180 / Math.PI);
+        const lngDelta = radiusKm / (earthRadiusKm * Math.cos(latRad)) * (180 / Math.PI);
+        query = query
+          .gte("latitude", lat - latDelta)
+          .lte("latitude", lat + latDelta)
+          .gte("longitude", lng - lngDelta)
+          .lte("longitude", lng + lngDelta)
+          .not("latitude", "is", null)
+          .not("longitude", "is", null);
+      }
+    }
+
+    // Sorting
+    const sort = params.sort ?? "newest";
+    switch (sort) {
+      case "price_asc":
+        query = query.order("price", { ascending: true });
+        break;
+      case "price_desc":
+        query = query.order("price", { ascending: false });
+        break;
+      case "rating":
+        query = query.order("rating", { ascending: false });
+        break;
+      case "popular":
+        query = query.order("booking_count", { ascending: false });
+        break;
+      case "newest":
+      default:
+        query = query.order("created_at", { ascending: false });
+        break;
+    }
+
     query = query.range(offset, offset + limit - 1);
 
     const { data, count, error } = await query;
