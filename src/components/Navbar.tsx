@@ -21,19 +21,19 @@ export default function Navbar() {
   const [signedIn, setSignedIn] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [notifList, setNotifList] = useState<ReturnType<typeof getNotifications>>([]);
+  const [notifList, setNotifList] = useState<ReturnType<typeof getNotifications> extends Promise<infer R> ? R : never>([]);
 
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("momento-auth-token") : null;
     const role = typeof window !== "undefined" ? localStorage.getItem("momento-user-role") : null;
     setSignedIn(!!token);
     setUserRole(role);
-    setUnreadCount(getUnreadCount());
+    getUnreadCount().then(setUnreadCount);
   }, []);
 
   useEffect(() => {
     if (notifOpen) {
-      setNotifList(getNotifications().slice(0, 5));
+      getNotifications().then((list) => setNotifList(list.slice(0, 5)));
     }
   }, [notifOpen]);
 

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { getGiftCardByCode, GiftCardFull } from "@/lib/gift-engine";
+import { getGiftCardByCode, type GiftCardFull } from "@/lib/gift-engine";
 import { experiences } from "@/lib/data";
 
 export default function GiftRedeemPage() {
@@ -32,7 +32,7 @@ function RedeemContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
-  const handleCheck = useCallback((searchCode?: string) => {
+  const handleCheck = useCallback(async (searchCode?: string) => {
     const lookupCode = searchCode || code;
     if (!lookupCode.trim()) return;
 
@@ -40,19 +40,16 @@ function RedeemContent() {
     setNotFound(false);
     setChecked(false);
 
-    // Small delay to simulate network
-    setTimeout(() => {
-      const result = getGiftCardByCode(lookupCode.trim().toUpperCase());
-      if (result) {
-        setCard(result);
-        setNotFound(false);
-      } else {
-        setCard(null);
-        setNotFound(true);
-      }
-      setChecked(true);
-      setChecking(false);
-    }, 400);
+    const result = await getGiftCardByCode(lookupCode.trim());
+    if (result) {
+      setCard(result);
+      setNotFound(false);
+    } else {
+      setCard(null);
+      setNotFound(true);
+    }
+    setChecked(true);
+    setChecking(false);
   }, [code]);
 
   const handleSubmit = (e: React.FormEvent) => {

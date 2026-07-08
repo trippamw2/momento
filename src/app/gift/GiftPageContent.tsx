@@ -7,7 +7,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import QRCode from "qrcode";
 import { experiences } from "@/lib/data";
 import GiftCard, { GIFT_CARD_VARIANTS } from "@/components/GiftCard";
-import { createGiftCard, sendGiftCard } from "@/lib/gift-engine";
+import { sendGiftCard } from "@/lib/gift-engine";
 import { downloadGiftPDF } from "@/lib/gift-card-pdf";
 import GiftHero from "./GiftHero";
 import TrackRedeem from "./TrackRedeem";
@@ -118,50 +118,31 @@ export default function GiftPageContent() {
       const data = await res.json();
       if (res.ok && data.code) {
         setRedemptionCode(data.code);
-        // Save locally via gift engine
-        const giftCard = createGiftCard({
-          amount: selectedValue,
-          recipientName,
-          recipientContact,
-          senderName,
-          message: message || undefined,
-          deliveryMethod: delivery,
-          occasion: occasion || undefined,
-          scheduleDate: sendMode === "schedule" ? scheduleDate : undefined,
-        });
-        if (sendMode === "now") sendGiftCard(giftCard);
+        // Trigger WhatsApp delivery if sending now (email handled server-side by webhook)
+        if (sendMode === "now" && delivery === "whatsapp") {
+          sendGiftCard({
+            id: data.gift_card_id || "",
+            code: data.code,
+            amount: selectedValue,
+            balance: selectedValue,
+            currency: "MWK",
+            recipientName,
+            recipientContact,
+            senderName,
+            message: message || undefined,
+            deliveryMethod: delivery,
+            occasion: occasion || undefined,
+            status: "active",
+            createdAt: new Date().toISOString(),
+            expiresAt: new Date(Date.now() + 365 * 86400000).toISOString(),
+          });
+        }
         setSent(true);
       } else {
-        // Fallback: create gift card directly
-        const fallback = createGiftCard({
-          amount: selectedValue,
-          recipientName,
-          recipientContact,
-          senderName,
-          message: message || undefined,
-          deliveryMethod: delivery,
-          occasion: occasion || undefined,
-          scheduleDate: sendMode === "schedule" ? scheduleDate : undefined,
-        });
-        setRedemptionCode(fallback.code);
-        if (sendMode === "now") sendGiftCard(fallback);
-        setSent(true);
+        setGiftError("Payment was processed but gift card creation failed. Please contact support.");
       }
     } catch {
-      // Fallback
-      const fallback = createGiftCard({
-        amount: selectedValue,
-        recipientName,
-        recipientContact,
-        senderName,
-        message: message || undefined,
-        deliveryMethod: delivery,
-        occasion: occasion || undefined,
-        scheduleDate: sendMode === "schedule" ? scheduleDate : undefined,
-      });
-      setRedemptionCode(fallback.code);
-      if (sendMode === "now") sendGiftCard(fallback);
-      setSent(true);
+      setGiftError("Network error processing payment return. Please try again.");
     } finally {
       setSending(false);
     }
@@ -243,46 +224,37 @@ export default function GiftPageContent() {
       let code: string;
       if (res.ok) {
         const data = await res.json();
-        code = data.code || `MOMO-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+        code = data.code || "";
       } else {
-        code = `MOMO-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+        setGiftError("Failed to create gift card. Please try again.");
+        return;
       }
 
-      // Also create locally via gift engine
-      const giftCard = createGiftCard({
-        amount: selectedValue,
-        recipientName,
-        recipientContact,
-        senderName,
-        message: message || undefined,
-        deliveryMethod: delivery,
-        occasion: occasion || undefined,
-        scheduleDate: sendMode === "schedule" ? scheduleDate : undefined,
-      });
+      setRedemptionCode(code);
 
-      setRedemptionCode(giftCard.code);
-
-      // Trigger delivery if sending now
-      if (sendMode === "now") {
-        sendGiftCard(giftCard);
+      // Trigger WhatsApp delivery if sending now (email handled server-side)
+      if (sendMode === "now" && delivery === "whatsapp") {
+        sendGiftCard({
+          id: "",
+          code,
+          amount: selectedValue,
+          balance: selectedValue,
+          currency: "MWK",
+          recipientName,
+          recipientContact,
+          senderName,
+          message: message || undefined,
+          deliveryMethod: delivery,
+          occasion: occasion || undefined,
+          status: "active",
+          createdAt: new Date().toISOString(),
+          expiresAt: new Date(Date.now() + 365 * 86400000).toISOString(),
+        });
       }
 
       setSent(true);
     } catch {
-      // Fallback to mock create
-      const fallback = createGiftCard({
-        amount: selectedValue,
-        recipientName,
-        recipientContact,
-        senderName,
-        message: message || undefined,
-        deliveryMethod: delivery,
-        occasion: occasion || undefined,
-        scheduleDate: sendMode === "schedule" ? scheduleDate : undefined,
-      });
-      setRedemptionCode(fallback.code);
-      if (sendMode === "now") sendGiftCard(fallback);
-      setSent(true);
+      setGiftError("Network error. Please try again.");
     } finally {
       setSending(false);
     }

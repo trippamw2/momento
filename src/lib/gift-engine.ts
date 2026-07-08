@@ -1,6 +1,6 @@
 "use client";
 
-import { sendGiftViaEmail } from "./delivery-email";
+// ─── Types ───
 
 export interface GiftCardCreate {
   amount: number;
@@ -33,84 +33,50 @@ export interface GiftCardFull {
   expiresAt: string;
 }
 
-const STORAGE_KEY = "experio-gift-cards";
+// ─── Helpers ───
 
-function generateCode(): string {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let code = "MOMO-";
-  for (let i = 0; i < 8; i++) {
-    if (i === 4) code += "-";
-    code += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return code;
+function getToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("momento-auth-token");
 }
 
-function generateId(): string {
-  return `gift_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-}
-
-function loadCards(): GiftCardFull[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveCards(cards: GiftCardFull[]): void {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
-}
-
-export function createGiftCard(request: GiftCardCreate): GiftCardFull {
-  const now = new Date();
-  const expiresAt = new Date();
-  expiresAt.setFullYear(expiresAt.getFullYear() + 1);
-
-  const code = generateCode();
-
-  const card: GiftCardFull = {
-    id: generateId(),
-    code,
-    amount: request.amount,
-    balance: request.amount,
-    currency: "MWK",
-    recipientName: request.recipientName,
-    recipientContact: request.recipientContact,
-    senderName: request.senderName,
-    message: request.message,
-    deliveryMethod: request.deliveryMethod,
-    scheduleDate: request.scheduleDate,
-    occasion: request.occasion,
-    design: request.design,
-    status: request.scheduleDate ? "scheduled" : "active",
-    createdAt: now.toISOString(),
-    expiresAt: expiresAt.toISOString(),
+/** Map a DB gift card row to the GiftCardFull shape used by UI */
+function mapGiftCard(row: Record<string, unknown>): GiftCardFull {
+  return {
+    id: String(row.id),
+    code: String(row.code),
+    amount: Number(row.amount),
+    balance: Number(row.balance),
+    currency: String(row.currency || "MWK"),
+    recipientName: String(row.recipient_name || ""),
+    recipientContact: String(row.recipient_email || row.recipient_phone || ""),
+    senderName: String(row.sender_name || ""),
+    message: row.message ? String(row.message) : undefined,
+    deliveryMethod: String(row.delivery_method || "email"),
+    scheduleDate: row.schedule_date ? String(row.schedule_date) : undefined,
+    occasion: row.occasion ? String(row.occasion) : undefined,
+    design: row.design ? String(row.design) : undefined,
+    status: String(row.status) as GiftCardFull["status"],
+    createdAt: String(row.created_at),
+    expiresAt: String(row.expires_at),
   };
-
-  const cards = loadCards();
-  cards.push(card);
-  saveCards(cards);
-
-  return card;
 }
+
+// ─── Delivery helpers (WhatsApp/SMS still use browser) ───
 
 export function sendGiftCard(card: GiftCardFull): void {
   if (card.deliveryMethod === "whatsapp") {
     sendViaWhatsApp(card);
-  } else if (card.deliveryMethod === "email") {
-    sendViaEmail(card);
   } else if (card.deliveryMethod === "sms") {
     sendViaSMS(card);
   }
-  // "print" is handled by PDF download
+  // "email" is handled server-side by Brevo in the webhook
+  // "print" is handled by PDF download in the UI
 }
 
 function sendViaWhatsApp(card: GiftCardFull): void {
   const message = encodeURIComponent(
-    `🎁 You've Received an Experio Gift Card from ${card.senderName}!\n\n` +
+    `🎁 You've Received a Momento Gift Card from ${card.senderName}!\n\n` +
     `Amount: ${card.currency} ${card.amount.toLocaleString()}\n` +
     (card.message ? `Message: "${card.message}"\n\n` : "\n") +
     `Code: ${card.code}\n\n` +
@@ -120,90 +86,55 @@ function sendViaWhatsApp(card: GiftCardFull): void {
   window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
 }
 
-function sendViaEmail(card: GiftCardFull): void {
-  // Use Brevo transactional email API for reliable delivery
-  sendGiftViaEmail({
-    code: card.code,
-    amount: card.amount,
-    currency: card.currency,
-    recipientName: card.recipientName,
-    recipientContact: card.recipientContact,
-    senderName: card.senderName,
-    message: card.message,
-    occasion: card.occasion,
-  });
-}
-
 function sendViaSMS(card: GiftCardFull): void {
   const message = encodeURIComponent(
-    `🎁 Experio Gift Card from ${card.senderName}! Code: ${card.code}. Redeem: ${window.location.origin}/gift/redeem?code=${card.code}`
+    `🎁 Momento Gift Card from ${card.senderName}! Code: ${card.code}. Redeem: ${window.location.origin}/gift/redeem?code=${card.code}`
   );
   window.open(`sms:${card.recipientContact}?body=${message}`, "_blank");
 }
 
-export function getGiftCardByCode(code: string): GiftCardFull | null {
-  const cards = loadCards();
-  return cards.find((c) => c.code.toUpperCase() === code.toUpperCase()) ?? null;
-}
+// ─── API Functions ───
 
-export function redeemGiftCard(code: string, amount: number): boolean {
-  const cards = loadCards();
-  const idx = cards.findIndex((c) => c.code.toUpperCase() === code.toUpperCase());
-  if (idx === -1) return false;
-
-  const card = cards[idx];
-  if (card.status === "redeemed" || card.status === "expired") return false;
-  if (card.balance < amount) return false;
-
-  card.balance -= amount;
-  if (card.balance <= 0) {
-    card.status = "redeemed";
-    card.balance = 0;
+/**
+ * Check a gift card by code via the real API.
+ * Returns the mapped GiftCardFull or null if not found.
+ */
+export async function getGiftCardByCode(code: string): Promise<GiftCardFull | null> {
+  try {
+    const res = await fetch(`/api/gift-cards/check?code=${encodeURIComponent(code)}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.giftCard ? mapGiftCard(data.giftCard) : null;
+  } catch {
+    return null;
   }
-  cards[idx] = card;
-  saveCards(cards);
-  return true;
 }
 
-export function getSentGiftCards(): GiftCardFull[] {
-  return loadCards().sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+/**
+ * Get all gift cards sent by the authenticated user via the real API.
+ */
+export async function getSentGiftCards(): Promise<GiftCardFull[]> {
+  const token = getToken();
+  if (!token) return [];
+
+  try {
+    const res = await fetch("/api/gift-cards?limit=50", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.giftCards || []).map(mapGiftCard);
+  } catch {
+    return [];
+  }
 }
 
-export function getScheduledGiftCards(): GiftCardFull[] {
-  return loadCards().filter((c) => c.status === "scheduled");
-}
-
-export function cancelScheduledGift(giftId: string): boolean {
-  const cards = loadCards();
-  const idx = cards.findIndex((c) => c.id === giftId);
-  if (idx === -1 || cards[idx].status !== "scheduled") return false;
-  cards.splice(idx, 1);
-  saveCards(cards);
-  return true;
-}
-
-export function processScheduledGifts(): void {
-  const cards = loadCards();
-  const now = new Date().getTime();
-  let changed = false;
-
-  const updated = cards.map((card) => {
-    if (card.status === "scheduled" && card.scheduleDate) {
-      const scheduleTime = new Date(card.scheduleDate).getTime();
-      if (scheduleTime <= now) {
-        changed = true;
-        return { ...card, status: "active" as const };
-      }
-    }
-    // Expire cards older than 1 year
-    if (card.status === "active" && new Date(card.expiresAt).getTime() <= now) {
-      changed = true;
-      return { ...card, status: "expired" as const };
-    }
-    return card;
-  });
-
-  if (changed) saveCards(updated);
+/**
+ * Cancel a scheduled gift card.
+ * NOTE: There is no cancel API endpoint yet, so this returns false.
+ * The UI should handle this gracefully.
+ */
+export async function cancelScheduledGift(giftId: string): Promise<boolean> {
+  // TODO: Create a cancel API endpoint if scheduled gifts are implemented
+  return false;
 }

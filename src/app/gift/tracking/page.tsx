@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { getSentGiftCards, cancelScheduledGift, GiftCardFull } from "@/lib/gift-engine";
+import { getSentGiftCards, cancelScheduledGift, type GiftCardFull } from "@/lib/gift-engine";
 import { sendGiftViaWhatsApp } from "@/lib/delivery-whatsapp";
 import { sendGiftViaEmail } from "@/lib/delivery-email";
 import { downloadGiftPDF } from "@/lib/gift-card-pdf";
@@ -28,9 +28,13 @@ export default function GiftTrackingPage() {
   const [filter, setFilter] = useState<FilterTab>("all");
   const [confirmCancel, setConfirmCancel] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setGifts(getSentGiftCards());
+    getSentGiftCards().then((cards) => {
+      setGifts(cards);
+      setLoading(false);
+    });
   }, []);
 
   const showToast = useCallback((msg: string) => {
@@ -38,11 +42,13 @@ export default function GiftTrackingPage() {
     setTimeout(() => setToast(null), 3000);
   }, []);
 
-  const handleCancelScheduled = useCallback((giftId: string) => {
-    const ok = cancelScheduledGift(giftId);
+  const handleCancelScheduled = useCallback(async (giftId: string) => {
+    const ok = await cancelScheduledGift(giftId);
     if (ok) {
-      setGifts(getSentGiftCards());
+      setGifts((prev) => prev.filter((g) => g.id !== giftId));
       showToast("Scheduled gift cancelled");
+    } else {
+      showToast("Could not cancel — feature not yet supported");
     }
     setConfirmCancel(null);
   }, [showToast]);
@@ -70,6 +76,18 @@ export default function GiftTrackingPage() {
   }, []);
 
   const filtered = filter === "all" ? gifts : gifts.filter((g) => g.status === filter);
+
+  if (loading) {
+    return (
+      <div className="pt-20 pb-16 min-h-screen">
+        <div className="max-w-4xl mx-auto px-4 sm:px-8">
+          <div className="flex items-center justify-center py-20">
+            <div className="w-8 h-8 rounded-full border-2 border-[#FF0F73]/30 border-t-[#FF0F73] animate-spin" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-20 pb-16 min-h-screen">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { getNotifications, markAsRead, markAllAsRead, type AppNotification } from "@/lib/notifications-engine";
 
@@ -8,6 +8,8 @@ const NOTIF_ICONS: Record<string, string> = {
   booking_confirmed: "✅",
   booking_cancelled: "❌",
   booking_reminder: "⏰",
+  payment_success: "💰",
+  gift_card_purchased: "🎁",
   points_earned: "⭐",
   tier_upgrade: "🏆",
   gift_received: "🎁",
@@ -19,19 +21,41 @@ const NOTIF_ICONS: Record<string, string> = {
 };
 
 export default function NotificationsPage() {
-  const [notifications, setNotifications] = useState<AppNotification[]>(() => getNotifications());
+  const [notifications, setNotifications] = useState<AppNotification[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getNotifications().then((n) => {
+      setNotifications(n);
+      setLoading(false);
+    });
+  }, []);
 
   const unreadCount = useMemo(() => notifications.filter((n) => !n.read).length, [notifications]);
 
-  const handleMarkRead = (id: string) => {
-    markAsRead(id);
-    setNotifications(getNotifications());
+  const handleMarkRead = async (id: string) => {
+    await markAsRead(id);
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+    );
   };
 
-  const handleMarkAllRead = () => {
-    markAllAsRead();
-    setNotifications(getNotifications());
+  const handleMarkAllRead = async () => {
+    await markAllAsRead();
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   };
+
+  if (loading) {
+    return (
+      <main className="pt-24 pb-16 min-h-screen">
+        <div className="max-w-3xl mx-auto px-4 sm:px-8">
+          <div className="flex items-center justify-center py-20">
+            <div className="w-8 h-8 rounded-full border-2 border-[#FF0F73]/30 border-t-[#FF0F73] animate-spin" />
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="pt-24 pb-16 min-h-screen">
