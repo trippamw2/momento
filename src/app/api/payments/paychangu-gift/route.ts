@@ -1,5 +1,4 @@
 import { getUser, json, handleRouteError, badRequest } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 const PAYCHANGU_API = process.env.PAYCHANGU_API_URL || "https://api.paychangu.com";
@@ -10,43 +9,54 @@ export async function POST(request: Request) {
     const user = await getUser(request);
     if (!user) return json({ error: "Unauthorized" }, 401);
 
-    const { booking_id } = await request.json();
-    if (!booking_id) return badRequest("booking_id is required");
+    const body = await request.json();
+    const { amount, recipient_name, recipient_email, sender_name, message, delivery_method, occasion, design, schedule_date } = body;
 
-    const supabase = createServerClient();
-
-    const { data: booking, error } = await supabase
-      .from("bookings")
-      .select("*, experience:experience_id(title, slug, price, currency, location)")
-      .eq("id", booking_id)
-      .single();
-
-    if (error || !booking) return json({ error: "Booking not found" }, 404);
-    if (booking.user_id !== user.id) return json({ error: "Forbidden" }, 403);
-    if (booking.status !== "pending") return json({ error: "Booking is already processed" }, 400);
+    if (!amount || amount < 1000) {
+      return badRequest("Minimum gift card amount is 1,000 MWK");
+    }
+    if (!recipient_name?.trim()) {
+      return badRequest("Recipient name is required");
+    }
 
     const origin = request.headers.get("origin") || "http://localhost:3000";
-    // Webhook URL for server-to-server payment confirmation
-    const webhookUrl = `${origin}/api/payments/paychangu-webhook`;
-    const returnUrl = `${origin}/bookings/${booking_id}?payment=success`;
-    const cancelUrl = `${origin}/bookings/${booking_id}?payment=cancelled`;
+
+    // Generate a tx_ref that identifies this as a gift card payment
+    const txRef = `MOMO-GIFT-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+
+    const callbackUrl = `${origin}/api/payments/paychangu-webhook`;
+    const returnUrl = `${origin}/gift?payment=success&tx_ref=${txRef}`;
+    const cancelUrl = `${origin}/gift?payment=cancelled`;
+
+    // Store gift card details as metadata — the gift card will be created on webhook confirmation
+    const giftMetadata = {
+      type: "gift_card",
+      gift_details: {
+        amount,
+        recipient_name,
+        recipient_email: recipient_email || null,
+        sender_name: sender_name || user.email,
+        message: message || null,
+        delivery_method: delivery_method || "email",
+        occasion: occasion || null,
+        design: design || null,
+        schedule_date: schedule_date || null,
+      },
+    };
 
     if (PAYCHANGU_SECRET_KEY) {
       // Real PayChangu API integration
       const payload = {
-        amount: booking.total_price,
-        currency: booking.currency || "MWK",
-        email: user.email || booking.contact_email,
+        amount,
+        currency: "MWK",
+        email: user.email,
         first_name: user.email?.split("@")[0] || "Guest",
         last_name: "",
-        callback_url: webhookUrl,
+        callback_url: callbackUrl,
         return_url: returnUrl,
         cancellation_url: cancelUrl,
-        tx_ref: `MOMO-${booking_id.slice(0, 8).toUpperCase()}`,
-        meta: {
-          booking_id,
-          experience_title: booking.experience?.title || "",
-        },
+        tx_ref: txRef,
+        meta: giftMetadata,
       };
 
       const paychanguRes = await fetch(`${PAYCHANGU_API}/payment/initiate`, {
@@ -66,40 +76,43 @@ export async function POST(request: Request) {
         return json({ error: "Payment service error. Please try again." }, 502);
       }
 
-      // Record the payment in the payments table
+      // Record the payment
       const admin = createAdminClient();
       await admin.from("payments").insert({
-        booking_id,
         user_id: user.id,
-        amount: booking.total_price,
-        currency: booking.currency || "MWK",
+        amount,
+        currency: "MWK",
         method: "paychangu",
         provider: "paychangu",
-        provider_reference: paychanguData.data.tx_ref || payload.tx_ref,
+        provider_reference: txRef,
         status: "pending",
-        metadata: { checkout_url: paychanguData.data.checkout_url },
+        metadata: {
+          ...giftMetadata,
+          checkout_url: paychanguData.data.checkout_url,
+        },
       });
 
       return json({ checkout_url: paychanguData.data.checkout_url });
     }
 
     // Fallback: simulate PayChangu checkout for development
-    const txRef = `MOMO-${booking_id.slice(0, 8).toUpperCase()}`;
     const admin = createAdminClient();
     await admin.from("payments").insert({
-      booking_id,
       user_id: user.id,
-      amount: booking.total_price,
-      currency: booking.currency || "MWK",
+      amount,
+      currency: "MWK",
       method: "paychangu",
       provider: "paychangu",
       provider_reference: txRef,
       status: "pending",
-      metadata: { checkout_url: returnUrl, webhook_url: webhookUrl },
+      metadata: {
+        ...giftMetadata,
+        checkout_url: returnUrl,
+      },
     });
 
-    // Return a mock checkout URL that simulates payment on the callback page
-    return json({ checkout_url: `${origin}/bookings/${booking_id}?payment=initiated&tx_ref=${txRef}` });
+    // In dev fallback, we redirect to the return URL directly which simulates a webhook call
+    return json({ checkout_url: `${origin}/gift?payment=initiated&tx_ref=${txRef}` });
   } catch (error) {
     return handleRouteError(error);
   }
