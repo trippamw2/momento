@@ -1,5 +1,6 @@
 import { json, handleRouteError } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
+import { sendBookingConfirmation, sendGiftCardEmail } from "@/lib/brevo";
 
 /**
  * PayChangu Webhook Handler
@@ -66,6 +67,13 @@ export async function POST(request: Request) {
     // CASE 1: Booking payment
     // ─────────────────────────────────────────
     if (payment.booking_id) {
+      // Fetch full booking + user + experience details for email
+      const { data: booking } = await admin
+        .from("bookings")
+        .select("*, users(email, full_name), experiences(title, location, partners(business_name))")
+        .eq("id", payment.booking_id)
+        .maybeSingle();
+
       const { error: bookingError } = await admin
         .from("bookings")
         .update({
@@ -88,6 +96,28 @@ export async function POST(request: Request) {
         body: "Your booking has been confirmed.",
         data: { booking_id: payment.booking_id, payment_id: payment.id },
       });
+
+      // Send Brevo confirmation email
+      if (booking?.users?.email) {
+        const exp = booking.experiences as Record<string, unknown> | null;
+        const partner = exp?.partners as Record<string, unknown> | null;
+        const emailResult = await sendBookingConfirmation({
+          email: booking.users.email,
+          guestName: booking.users.full_name || "Guest",
+          experienceTitle: (exp?.title as string) || "Experience",
+          experienceDate: booking.booking_date || "",
+          experienceTime: (booking.time_slot as string) || "",
+          guests: booking.guests_count || 1,
+          totalPrice: booking.total_amount || payment.amount,
+          currency: booking.currency || "MWK",
+          bookingId: booking.id,
+          location: (exp?.location as string) || "",
+          partnerName: (partner?.business_name as string) || "",
+        });
+        if (!emailResult.success) {
+          console.error("Failed to send booking confirmation email:", emailResult.error);
+        }
+      }
 
       return json({ ok: true, message: "Booking confirmed" });
     }
@@ -152,6 +182,23 @@ export async function POST(request: Request) {
         body: `Your gift card of MWK ${payment.amount.toLocaleString()} has been paid and is ready to send.`,
         data: { gift_card_id: giftCard.id, code },
       });
+
+      // Send Brevo gift card email to recipient if email provided
+      if (giftDetails.recipient_email) {
+        const emailResult = await sendGiftCardEmail({
+          recipientEmail: giftDetails.recipient_email as string,
+          recipientName: (giftDetails.recipient_name as string) || "Friend",
+          senderName: (giftDetails.sender_name as string) || "Someone",
+          amount: payment.amount,
+          currency: payment.currency || "MWK",
+          code,
+          message: giftDetails.message as string | undefined,
+          occasion: giftDetails.occasion as string | undefined,
+        });
+        if (!emailResult.success) {
+          console.error("Failed to send gift card email:", emailResult.error);
+        }
+      }
 
       console.log(`Gift card ${code} created from webhook payment ${payment.id}`);
 

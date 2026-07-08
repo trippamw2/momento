@@ -23,22 +23,14 @@ interface RecentBooking {
   status: "confirmed" | "completed" | "cancelled";
 }
 
-const MOCK_STATS: DashboardStats = {
-  totalExperiences: 4,
-  activeExperiences: 3,
-  totalBookings: 28,
-  totalEarnings: 1850000,
-  averageRating: 4.6,
-  reviewCount: 24,
+const DEFAULT_STATS: DashboardStats = {
+  totalExperiences: 0,
+  activeExperiences: 0,
+  totalBookings: 0,
+  totalEarnings: 0,
+  averageRating: 0,
+  reviewCount: 0,
 };
-
-const MOCK_BOOKINGS: RecentBooking[] = [
-  { id: "b1", experienceTitle: "Sunset Wine Tasting at Cape Maclear", guestName: "Alice M.", date: "2026-06-24", amount: 120000, status: "completed" },
-  { id: "b2", experienceTitle: "Lilongwe Street Food Tour", guestName: "Bob K.", date: "2026-06-25", amount: 45000, status: "confirmed" },
-  { id: "b3", experienceTitle: "Zomba Plateau Hike", guestName: "Chiara N.", date: "2026-06-26", amount: 60000, status: "confirmed" },
-  { id: "b4", experienceTitle: "Lake Malawi Snorkeling Adventure", guestName: "David P.", date: "2026-06-22", amount: 85000, status: "completed" },
-  { id: "b5", experienceTitle: "Sunset Wine Tasting at Cape Maclear", guestName: "Eve T.", date: "2026-06-28", amount: 120000, status: "cancelled" },
-];
 
 interface PartnerExperience {
   id: string;
@@ -50,13 +42,70 @@ interface PartnerExperience {
 }
 
 export default function PartnerDashboardPage() {
-  const [stats] = useState<DashboardStats>(MOCK_STATS);
-  const [bookings] = useState<RecentBooking[]>(MOCK_BOOKINGS);
+  const [stats, setStats] = useState<DashboardStats>(DEFAULT_STATS);
+  const [bookings, setBookings] = useState<RecentBooking[]>([]);
+  const [statsLoading, setStatsLoading] = useState(true);
   const { allowed: isPartner, loading: authLoading } = useAuthGuard({ requiredRole: "partner" });
   const [checkInOpen, setCheckInOpen] = useState(false);
   const [experiences, setExperiences] = useState<PartnerExperience[]>([]);
   const [experiencesLoading, setExperiencesLoading] = useState(true);
   const [experiencesError, setExperiencesError] = useState("");
+
+  useEffect(() => {
+    if (authLoading || !isPartner) return;
+
+    const fetchDashboardData = async () => {
+      try {
+        const token = localStorage.getItem("momento-auth-token");
+        if (!token) return;
+
+        // Fetch partner bookings to compute stats
+        const res = await fetch("/api/partners/bookings?limit=50", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const bookingList = data.bookings || [];
+
+          // Compute stats from real bookings
+          const totalBookings = bookingList.length;
+          const completedBookings = bookingList.filter((b: Record<string, unknown>) => b.status === "completed");
+          const totalEarnings = completedBookings.reduce((sum: number, b: Record<string, unknown>) => sum + Number(b.total_amount || 0), 0);
+          const confirmedBookings = bookingList.filter((b: Record<string, unknown>) => b.status === "confirmed");
+
+          setStats({
+            totalExperiences: experiences.length || 0,
+            activeExperiences: experiences.filter(e => e.status === "active").length || 0,
+            totalBookings,
+            totalEarnings,
+            averageRating: 0,
+            reviewCount: 0,
+          });
+
+          // Map bookings to RecentBooking format
+          const mappedBookings: RecentBooking[] = bookingList.slice(0, 5).map((b: Record<string, unknown>) => {
+            const exp = b.experiences as Record<string, unknown> | null;
+            const user = b.users as Record<string, unknown> | null;
+            return {
+              id: String(b.id || ""),
+              experienceTitle: String(exp?.title || "Unknown Experience"),
+              guestName: String(user?.full_name || b.guest_name || "Guest"),
+              date: String(b.booking_date || b.created_at || ""),
+              amount: Number(b.total_amount || 0),
+              status: (b.status as "confirmed" | "completed" | "cancelled") || "confirmed",
+            };
+          });
+          setBookings(mappedBookings);
+        }
+      } catch (e) {
+        console.error("Failed to fetch partner dashboard stats:", e);
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, [authLoading, isPartner, experiences]);
 
   useEffect(() => {
     const fetchExperiences = async () => {

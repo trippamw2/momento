@@ -104,31 +104,10 @@ export default function AdminPage() {
   const [featuredIds, setFeaturedIds] = useState<string[]>([]);
   const [bookings, setBookings] = useState<BookingRow[]>([]);
 
-  // Mock data for new sections (will be replaced with API data)
-  const [giftCards] = useState([
-    { code: "MOMO-GC-001", amount: 100000, balance: 100000, status: "active", buyer: "John D.", recipient: "Jane D.", created: "2026-06-01" },
-    { code: "MOMO-GC-002", amount: 250000, balance: 125000, status: "partially_redeemed", buyer: "Mary K.", recipient: "Peter K.", created: "2026-05-28" },
-    { code: "MOMO-GC-003", amount: 300000, balance: 0, status: "redeemed", buyer: "Alice M.", recipient: "Bob M.", created: "2026-05-15" },
-    { code: "MOMO-GC-004", amount: 100000, balance: 100000, status: "expired", buyer: "Sam W.", recipient: "Sarah W.", created: "2025-12-01" },
-    { code: "MOMO-GC-005", amount: 50000, balance: 50000, status: "active", buyer: "Tom B.", recipient: "Harry B.", created: "2026-06-10" },
-  ]);
-
-  const [partners] = useState([
-    { id: "p1", name: "Lake Malawi Tours", owner: "Mike C.", experiences: 3, revenue: 450000, status: "active", joined: "2026-01-15" },
-    { id: "p2", name: "Blantyre Kitchen Co.", owner: "Grace M.", experiences: 2, revenue: 320000, status: "active", joined: "2026-02-20" },
-    { id: "p3", name: "Vintage Lounge", owner: "Chimwemwe B.", experiences: 1, revenue: 185000, status: "pending", joined: "2026-06-05" },
-    { id: "p4", name: "Lilongwe Adventures", owner: "Andrew K.", experiences: 4, revenue: 580000, status: "active", joined: "2026-01-10" },
-    { id: "p5", name: "Safari Nights", owner: "Fiona L.", experiences: 2, revenue: 0, status: "suspended", joined: "2026-03-01" },
-  ]);
-
-  const [financials] = useState({
-    totalRevenue: 2850000,
-    monthlyRevenue: [{ month: "Jan", amount: 320000 }, { month: "Feb", amount: 410000 }, { month: "Mar", amount: 380000 }, { month: "Apr", amount: 520000 }, { month: "May", amount: 680000 }, { month: "Jun", amount: 540000 }],
-    pendingPayouts: 425000,
-    completedPayouts: 2100000,
-    platformFee: 285000,
-    refundedAmount: 45000,
-  });
+  // Real data states (replacing mock data)
+  const [giftCards, setGiftCards] = useState<Array<{ id: string; code: string; amount: number; balance: number; status: string; recipient_name: string | null; sender_name: string | null; created_at: string }>>([]);
+  const [partnersList, setPartnersList] = useState<Array<{ id: string; business_name: string; verification_status: string; is_active: boolean; user: { full_name: string | null } | null; created_at: string }>>([]);
+  const [financials, setFinancials] = useState<{ totalRevenue: number; monthlyRevenue: Array<{ month: string; amount: number }>; pendingPayouts: number; completedPayouts: number; platformFee: number; refundedAmount: number } | null>(null);
 
   const getToken = useCallback(() => localStorage.getItem("momento-auth-token"), []);
 
@@ -156,22 +135,22 @@ export default function AdminPage() {
           break;
         }
         case "users": {
-          const d = await apiFetch("/api/users?limit=50");
+          const d = await apiFetch("/api/admin/users?limit=50");
           if (d) setUsers(d.users || []);
           break;
         }
         case "experiences": {
-          const d = await apiFetch("/api/experiences?limit=50");
+          const d = await apiFetch("/api/admin/experiences?limit=50");
           if (d) setExperiences(d.experiences || []);
           break;
         }
         case "reviews": {
-          const d = await apiFetch("/api/reviews?limit=50");
+          const d = await apiFetch("/api/admin/reviews?limit=50");
           if (d) setReviews(d.reviews || []);
           break;
         }
         case "testimonials": {
-          const d = await apiFetch("/api/reviews?limit=50&status=approved");
+          const d = await apiFetch("/api/admin/reviews?limit=50&status=approved");
           if (d) {
             setTestimonials(d.reviews || []);
             const saved = JSON.parse(localStorage.getItem("momento-featured-testimonials") || "[]");
@@ -180,8 +159,23 @@ export default function AdminPage() {
           break;
         }
         case "bookings": {
-          const d = await apiFetch("/api/bookings?limit=50");
+          const d = await apiFetch("/api/admin/bookings?limit=50");
           if (d) setBookings(d.bookings || []);
+          break;
+        }
+        case "gift-cards": {
+          const d = await apiFetch("/api/admin/gift-cards?limit=50");
+          if (d) setGiftCards(d.giftCards || []);
+          break;
+        }
+        case "partners": {
+          const d = await apiFetch("/api/admin/partners?limit=50");
+          if (d) setPartnersList(d.partners || []);
+          break;
+        }
+        case "financials": {
+          const d = await apiFetch("/api/admin/financials");
+          if (d) setFinancials(d);
           break;
         }
       }
@@ -568,7 +562,7 @@ export default function AdminPage() {
                     <table className="w-full min-w-[800px]">
                       <thead>
                         <tr className="border-b border-white/[0.08]">
-                          {["Code", "Amount", "Balance", "Status", "Buyer", "Recipient", "Created"].map((h) => (
+                          {["Code", "Amount", "Balance", "Status", "Sender", "Recipient", "Created"].map((h) => (
                             <th key={h} className="py-3 px-4 text-left text-caption text-[#64748B] font-medium">{h}</th>
                           ))}
                         </tr>
@@ -580,11 +574,14 @@ export default function AdminPage() {
                             <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">MK {gc.amount.toLocaleString()}</td>
                             <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">MK {gc.balance.toLocaleString()}</td>
                             <td className="py-3 px-4"><StatusBadge status={gc.status} /></td>
-                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{gc.buyer}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{gc.recipient}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{gc.created}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{gc.sender_name || "—"}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{gc.recipient_name || "—"}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{new Date(gc.created_at).toLocaleDateString()}</td>
                           </tr>
                         ))}
+                        {giftCards.length === 0 && (
+                          <tr><td colSpan={7} className="py-8 text-center text-caption text-[#64748B]">No gift cards found</td></tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -597,10 +594,10 @@ export default function AdminPage() {
                   {/* Stats */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
-                      { label: "Total Partners", value: partners.length, icon: "🤝" },
-                      { label: "Active", value: partners.filter(p => p.status === "active").length, icon: "✅" },
-                      { label: "Pending", value: partners.filter(p => p.status === "pending").length, icon: "⏳" },
-                      { label: "Suspended", value: partners.filter(p => p.status === "suspended").length, icon: "⛔" },
+                      { label: "Total Partners", value: partnersList.length, icon: "🤝" },
+                      { label: "Active", value: partnersList.filter(p => p.verification_status === "verified" && p.is_active).length, icon: "✅" },
+                      { label: "Pending", value: partnersList.filter(p => p.verification_status === "pending").length, icon: "⏳" },
+                      { label: "Suspended", value: partnersList.filter(p => !p.is_active).length, icon: "⛔" },
                     ].map((stat) => (
                       <div key={stat.label} className="p-4 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                         <div className="flex items-center justify-between mb-1">
@@ -617,20 +614,19 @@ export default function AdminPage() {
                     <table className="w-full min-w-[800px]">
                       <thead>
                         <tr className="border-b border-white/[0.08]">
-                          {["Partner", "Owner", "Experiences", "Revenue", "Status", "Joined", "Actions"].map((h) => (
+                          {["Partner", "Owner", "Status", "Verification", "Joined", "Actions"].map((h) => (
                             <th key={h} className="py-3 px-4 text-left text-caption text-[#64748B] font-medium">{h}</th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
-                        {partners.map((p) => (
+                        {partnersList.map((p) => (
                           <tr key={p.id} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
-                            <td className="py-3 px-4 text-body-sm text-[#F1F5F9] font-medium">{p.name}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{p.owner}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{p.experiences}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">MK {p.revenue.toLocaleString()}</td>
-                            <td className="py-3 px-4"><StatusBadge status={p.status} /></td>
-                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{p.joined}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#F1F5F9] font-medium">{p.business_name || "—"}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{p.user?.full_name || "—"}</td>
+                            <td className="py-3 px-4"><StatusBadge status={p.is_active ? "active" : "suspended"} /></td>
+                            <td className="py-3 px-4"><StatusBadge status={p.verification_status} /></td>
+                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{new Date(p.created_at).toLocaleDateString()}</td>
                             <td className="py-3 px-4">
                               <div className="flex gap-1">
                                 <button className="px-2 py-1 rounded-lg bg-emerald-900/30 text-emerald-400 hover:bg-emerald-800/40">View</button>
@@ -639,6 +635,9 @@ export default function AdminPage() {
                             </td>
                           </tr>
                         ))}
+                        {partnersList.length === 0 && (
+                          <tr><td colSpan={6} className="py-8 text-center text-caption text-[#64748B]">No partners found</td></tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -648,58 +647,64 @@ export default function AdminPage() {
               {/* Financials */}
               {section === "financials" && (
                 <div className="space-y-6">
-                  {/* Summary Cards */}
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    {[
-                      { label: "Total Revenue", value: `MK ${financials.totalRevenue.toLocaleString()}`, icon: "💰", accent: "text-emerald-400" },
-                      { label: "Pending Payouts", value: `MK ${financials.pendingPayouts.toLocaleString()}`, icon: "⏳", accent: "text-amber-400" },
-                      { label: "Completed Payouts", value: `MK ${financials.completedPayouts.toLocaleString()}`, icon: "✅", accent: "text-blue-400" },
-                      { label: "Platform Fees", value: `MK ${financials.platformFee.toLocaleString()}`, icon: "📊", accent: "text-purple-400" },
-                    ].map((stat) => (
-                      <div key={stat.label} className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-2xl">{stat.icon}</span>
-                        </div>
-                        <p className={`text-heading-sm font-bold ${stat.accent}`}>{stat.value}</p>
-                        <p className="text-caption text-[#64748B]">{stat.label}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Monthly Revenue Chart */}
-                  <div className="rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm p-5">
-                    <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-4">Monthly Revenue (2026)</h3>
-                    <div className="flex items-end gap-3 h-40">
-                      {financials.monthlyRevenue.map((m) => {
-                        const maxRevenue = Math.max(...financials.monthlyRevenue.map(r => r.amount));
-                        const height = (m.amount / maxRevenue) * 100;
-                        return (
-                          <div key={m.month} className="flex-1 flex flex-col items-center gap-1">
-                            <span className="text-[10px] text-[#94A3B8] font-medium">MK {(m.amount / 1000).toFixed(0)}k</span>
-                            <div
-                              className="w-full rounded-lg bg-gradient-to-t from-[#FF0F73] via-[#A855F7] to-[#6366F1] transition-all duration-500 hover:opacity-80"
-                              style={{ height: `${height}%` }}
-                            />
-                            <span className="text-[10px] text-[#64748B]">{m.month}</span>
+                  {financials ? (
+                    <>
+                      {/* Summary Cards */}
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        {[
+                          { label: "Total Revenue", value: `MK ${financials.totalRevenue.toLocaleString()}`, icon: "💰", accent: "text-emerald-400" },
+                          { label: "Pending Payouts", value: `MK ${financials.pendingPayouts.toLocaleString()}`, icon: "⏳", accent: "text-amber-400" },
+                          { label: "Completed Payouts", value: `MK ${financials.completedPayouts.toLocaleString()}`, icon: "✅", accent: "text-blue-400" },
+                          { label: "Platform Fees", value: `MK ${financials.platformFee.toLocaleString()}`, icon: "📊", accent: "text-purple-400" },
+                        ].map((stat) => (
+                          <div key={stat.label} className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-2xl">{stat.icon}</span>
+                            </div>
+                            <p className={`text-heading-sm font-bold ${stat.accent}`}>{stat.value}</p>
+                            <p className="text-caption text-[#64748B]">{stat.label}</p>
                           </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+                        ))}
+                      </div>
 
-                  {/* Additional Metrics */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
-                      <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-2">Refunds</h3>
-                      <p className="text-heading-sm font-bold text-red-400">MK {financials.refundedAmount.toLocaleString()}</p>
-                      <p className="text-caption text-[#64748B]">Total refunded amount</p>
-                    </div>
-                    <div className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
-                      <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-2">Net Revenue</h3>
-                      <p className="text-heading-sm font-bold text-[#F1F5F9]">MK {(financials.totalRevenue - financials.refundedAmount).toLocaleString()}</p>
-                      <p className="text-caption text-[#64748B]">After refunds</p>
-                    </div>
-                  </div>
+                      {/* Monthly Revenue Chart */}
+                      <div className="rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm p-5">
+                        <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-4">Monthly Revenue (2026)</h3>
+                        <div className="flex items-end gap-3 h-40">
+                          {financials.monthlyRevenue.map((m) => {
+                            const maxRevenue = Math.max(...financials.monthlyRevenue.map(r => r.amount));
+                            const height = maxRevenue > 0 ? (m.amount / maxRevenue) * 100 : 0;
+                            return (
+                              <div key={m.month} className="flex-1 flex flex-col items-center gap-1">
+                                <span className="text-[10px] text-[#94A3B8] font-medium">MK {(m.amount / 1000).toFixed(0)}k</span>
+                                <div
+                                  className="w-full rounded-lg bg-gradient-to-t from-[#FF0F73] via-[#A855F7] to-[#6366F1] transition-all duration-500 hover:opacity-80"
+                                  style={{ height: `${height}%` }}
+                                />
+                                <span className="text-[10px] text-[#64748B]">{m.month}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Additional Metrics */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
+                          <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-2">Refunds</h3>
+                          <p className="text-heading-sm font-bold text-red-400">MK {financials.refundedAmount.toLocaleString()}</p>
+                          <p className="text-caption text-[#64748B]">Total refunded amount</p>
+                        </div>
+                        <div className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
+                          <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-2">Net Revenue</h3>
+                          <p className="text-heading-sm font-bold text-[#F1F5F9]">MK {(financials.totalRevenue - financials.refundedAmount).toLocaleString()}</p>
+                          <p className="text-caption text-[#64748B]">After refunds</p>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-center py-12 text-caption text-[#64748B]">Loading financial data...</div>
+                  )}
                 </div>
               )}
 
