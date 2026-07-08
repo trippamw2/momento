@@ -57,8 +57,40 @@ export async function GET(request: Request) {
 
     const refundedAmount = (refundedPayments ?? []).reduce((sum, p) => sum + p.amount, 0);
 
-    // Platform fee (10%)
-    const platformFee = totalRevenue * 0.1;
+    // Get configurable commission rate from platform_settings
+    let commissionPercent = 10;
+    try {
+      const { data: setting } = await admin
+        .from("platform_settings")
+        .select("value")
+        .eq("key", "platform_commission_percent")
+        .single();
+      if (setting?.value) commissionPercent = parseInt(String(setting.value)) || 10;
+    } catch {
+      // Use default 10% if setting not found
+    }
+
+    // Platform fee using configurable rate
+    const platformFee = totalRevenue * (commissionPercent / 100);
+
+    // Get real payout stats from payouts table
+    let totalPaidOut = 0;
+    let pendingPayoutRequests = 0;
+    try {
+      const { data: completedPayouts } = await admin
+        .from("payouts")
+        .select("amount")
+        .eq("status", "completed");
+      totalPaidOut = (completedPayouts ?? []).reduce((sum: number, p: { amount: number }) => sum + p.amount, 0);
+
+      const { data: pendingPayoutsReq } = await admin
+        .from("payouts")
+        .select("amount")
+        .eq("status", "pending");
+      pendingPayoutRequests = (pendingPayoutsReq ?? []).reduce((sum: number, p: { amount: number }) => sum + p.amount, 0);
+    } catch {
+      // Payouts table may not exist yet
+    }
 
     return json({
       totalRevenue,
@@ -66,7 +98,10 @@ export async function GET(request: Request) {
       pendingPayouts,
       completedPayouts: totalRevenue - pendingPayouts - refundedAmount,
       platformFee,
+      commissionPercent,
       refundedAmount,
+      totalPaidOut,
+      pendingPayoutRequests,
       period,
     });
   } catch (error) {

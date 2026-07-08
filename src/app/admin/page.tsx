@@ -4,8 +4,10 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthGuard } from "@/lib/use-auth-guard";
+import AdminSettingsSection from "./AdminSettingsSection";
+import AdminPayoutsSection from "./AdminPayoutsSection";
 
-type Section = "overview" | "users" | "experiences" | "reviews" | "testimonials" | "bookings" | "settings" | "gift-cards" | "partners" | "financials";
+type Section = "overview" | "users" | "experiences" | "reviews" | "testimonials" | "bookings" | "settings" | "gift-cards" | "partners" | "financials" | "payouts";
 
 interface OverviewData {
   totalUsers: number;
@@ -65,6 +67,7 @@ const NAV: { key: Section; label: string; icon: string }[] = [
   { key: "gift-cards", label: "Gift Cards", icon: "🎁" },
   { key: "partners", label: "Partners", icon: "🤝" },
   { key: "financials", label: "Financials", icon: "💰" },
+  { key: "payouts", label: "Payouts", icon: "💸" },
   { key: "settings", label: "Settings", icon: "⚙️" },
 ];
 
@@ -710,24 +713,12 @@ export default function AdminPage() {
 
               {/* Settings */}
               {section === "settings" && (
-                <div className="space-y-4">
-                  <div className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
-                    <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-3">Platform Info</h3>
-                    <div className="space-y-2 text-body-sm text-[#94A3B8]">
-                      <p>Version: 1.0.0</p>
-                      <p>Environment: {process.env.NODE_ENV}</p>
-                      <p>Database: Supabase (PostgreSQL)</p>
-                      <p>Auth: Supabase Auth</p>
-                    </div>
-                  </div>
-                  <div className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
-                    <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-3">Admin Actions</h3>
-                    <div className="flex flex-wrap gap-2">
-                      <button onClick={() => switchSection("users")} className="px-4 py-2 rounded-xl bg-[#05070B] text-body-sm text-[#94A3B8] hover:bg-[#1A2332] transition-all border border-white/[0.08]">Manage Users</button>
-                      <button onClick={() => switchSection("reviews")} className="px-4 py-2 rounded-xl bg-[#05070B] text-body-sm text-[#94A3B8] hover:bg-[#1A2332] transition-all border border-white/[0.08]">Moderate Reviews</button>
-                    </div>
-                  </div>
-                </div>
+                <AdminSettingsSection />
+              )}
+
+              {/* Payouts */}
+              {section === "payouts" && (
+                <AdminPayoutsSection />
               )}
             </>
           )}

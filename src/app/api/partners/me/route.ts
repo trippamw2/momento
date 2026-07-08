@@ -48,7 +48,11 @@ export async function PATCH(request: Request) {
     const allowedFields = [
       "business_name", "business_description", "business_logo", "business_cover",
       "business_email", "business_phone", "business_website", "business_address",
+      "business_city", "business_country",
       "categories", "payout_method", "payout_details",
+      "bank_name", "bank_account_number", "bank_account_name",
+      "id_document_type", "id_document_url",
+      "onboarding_completed", "onboarding_step",
     ];
 
     const filtered: Record<string, unknown> = {};
