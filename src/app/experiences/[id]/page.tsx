@@ -38,10 +38,12 @@ async function tryFetchExperience(id: string) {
 
     if (error && !raw) return null;
 
+    const expId = raw.id;
+
     const { data: reviews } = await supabase
       .from("reviews")
       .select("*, user:user_id(full_name, avatar_url)")
-      .eq("experience_id", id)
+      .eq("experience_id", expId)
       .eq("status", "approved")
       .order("created_at", { ascending: false })
       .limit(20);
@@ -54,13 +56,13 @@ async function tryFetchExperience(id: string) {
           .from("experiences")
           .select("id")
           .limit(10)
-          .neq("id", id)
+          .neq("id", expId)
           .eq("status", "published")
       : await supabase
           .from("experiences")
           .select("id")
           .limit(10)
-          .neq("id", id)
+          .neq("id", expId)
           .eq("status", "published");
 
     const similarIds = (moodExps ?? []).map((e: { id: string }) => e.id);
