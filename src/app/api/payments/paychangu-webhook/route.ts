@@ -126,6 +126,19 @@ export async function POST(request: Request) {
     // CASE 2: Gift card payment
     // ─────────────────────────────────────────
     if (metadata.type === "gift_card") {
+      // Idempotency check: if this payment already has a gift_card_id, return the existing card
+      if (payment.gift_card_id) {
+        const { data: existingCard } = await admin
+          .from("gift_cards")
+          .select("*")
+          .eq("id", payment.gift_card_id)
+          .single();
+        if (existingCard) {
+          console.log(`Webhook: gift card ${existingCard.code} already exists for payment ${payment.id}, skipping creation`);
+          return json({ ok: true, message: "Gift card already exists", code: existingCard.code, gift_card_id: existingCard.id });
+        }
+      }
+
       const giftDetails = metadata.gift_details as Record<string, unknown> || {};
 
       // Generate unique gift card code
