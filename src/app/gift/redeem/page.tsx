@@ -144,7 +144,7 @@ function RedeemContent() {
 
                   <div className="text-center mb-5">
                     <p className="text-3xl font-bold text-[#F1F5F9]">{card.currency} {card.amount.toLocaleString()}</p>
-                    {card.occasion && <p className="text-caption text-[#FF0F73] mt-1">🎉 {card.occasion}</p>}
+                    {card.occasion && <p className="text-caption text-[#FF0F73] mt-1">&#183; {card.occasion}</p>}
                   </div>
 
                   {/* Balance Bar */}
