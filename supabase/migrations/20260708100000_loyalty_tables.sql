@@ -1,20 +1,18 @@
 -- ============================================================================
--- MOMENTO — Loyalty Tables
+-- MOMENTO — Loyalty Tables (idempotent, compatible with existing schema)
+-- ============================================================================
+-- Note: loyalty_points + loyalty_transactions already exist from
+-- 20260624140000_loyalty_triggers.sql AND loyalty_history exists as a VIEW.
+-- This migration:
+--   1. Drops VIEW loyalty_history, creates TABLE instead
+--   2. Migrates existing loyalty_transactions into loyalty_history
+--   3. Adds RLS to loyalty_transactions + loyalty_history
+--   4. Updates the existing handle_new_user() signup trigger to seed 100 pts
 -- ============================================================================
 
--- Loyalty points table
-CREATE TABLE IF NOT EXISTS loyalty_points (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  balance INTEGER NOT NULL DEFAULT 0,
-  lifetime_points INTEGER NOT NULL DEFAULT 0,
-  tier TEXT DEFAULT 'bronze' CHECK (tier IN ('bronze', 'silver', 'gold', 'platinum', 'vip')),
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now(),
-  UNIQUE(user_id)
-);
+-- 1. LOYALTY HISTORY TABLE (replaces existing VIEW)
+DROP VIEW IF EXISTS public.loyalty_history CASCADE;
 
--- Loyalty history table
 CREATE TABLE IF NOT EXISTS loyalty_history (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
@@ -26,42 +24,85 @@ CREATE TABLE IF NOT EXISTS loyalty_history (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE INDEX idx_loyalty_points_user ON loyalty_points(user_id);
-CREATE INDEX idx_loyalty_history_user ON loyalty_history(user_id);
-CREATE INDEX idx_loyalty_history_created ON loyalty_history(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_loyalty_history_user ON loyalty_history(user_id);
+CREATE INDEX IF NOT EXISTS idx_loyalty_history_created ON loyalty_history(created_at DESC);
 
--- RLS
-ALTER TABLE loyalty_points ENABLE ROW LEVEL SECURITY;
+-- 2. MIGRATE existing loyalty_transactions into loyalty_history
+INSERT INTO loyalty_history (user_id, points, type, description, created_at)
+SELECT
+  lt.user_id, lt.points,
+  CASE lt.type
+    WHEN 'earn'   THEN 'earned'
+    WHEN 'redeem' THEN 'redeemed'
+    WHEN 'bonus'  THEN 'bonus'
+    WHEN 'expire' THEN 'expired'
+    ELSE 'earned'
+  END,
+  COALESCE(lt.description, 'Migrated from loyalty_transactions'),
+  lt.created_at
+FROM loyalty_transactions lt
+WHERE NOT EXISTS (
+  SELECT 1 FROM loyalty_history lh
+  WHERE lh.user_id = lt.user_id AND lh.points = lt.points AND lh.created_at = lt.created_at
+)
+ON CONFLICT DO NOTHING;
+
+-- 3. RLS for loyalty_history
 ALTER TABLE loyalty_history ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "loyalty_points_select_own" ON loyalty_points
-  FOR SELECT USING (user_id = auth.uid());
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'loyalty_history_select_own' AND tablename = 'loyalty_history') THEN
+    CREATE POLICY "loyalty_history_select_own" ON loyalty_history FOR SELECT USING (user_id = auth.uid());
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'loyalty_history_insert_admin' AND tablename = 'loyalty_history') THEN
+    CREATE POLICY "loyalty_history_insert_admin" ON loyalty_history FOR INSERT WITH CHECK (public.is_admin());
+  END IF;
+END $$;
 
-CREATE POLICY "loyalty_points_insert_own" ON loyalty_points
-  FOR INSERT WITH CHECK (user_id = auth.uid());
+-- 4. Enable RLS on loyalty_transactions (was missing from prev migration)
+ALTER TABLE loyalty_transactions ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "loyalty_points_update_own" ON loyalty_points
-  FOR UPDATE USING (user_id = auth.uid());
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'loyalty_transactions_select_own' AND tablename = 'loyalty_transactions') THEN
+    CREATE POLICY "loyalty_transactions_select_own" ON loyalty_transactions FOR SELECT USING (user_id = auth.uid());
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'loyalty_transactions_insert_system' AND tablename = 'loyalty_transactions') THEN
+    CREATE POLICY "loyalty_transactions_insert_system" ON loyalty_transactions FOR INSERT WITH CHECK (true);
+  END IF;
+END $$;
 
-CREATE POLICY "loyalty_history_select_own" ON loyalty_history
-  FOR SELECT USING (user_id = auth.uid());
+-- 5. Add missing columns to loyalty_points
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'loyalty_points' AND column_name = 'created_at') THEN
+    ALTER TABLE loyalty_points ADD COLUMN created_at TIMESTAMPTZ DEFAULT now();
+  END IF;
+END $$;
 
-CREATE POLICY "loyalty_history_insert_admin" ON loyalty_history
-  FOR INSERT WITH CHECK (public.is_admin());
-
--- Seed: Auto-create loyalty points on user signup via trigger
-CREATE OR REPLACE FUNCTION public.handle_new_user_loyalty()
+-- 6. UPDATE the existing signup trigger to seed 100 bonus points
+--    (Existing handle_new_user() function inserts loyalty_points with 0.
+--     We replace it to also insert loyalty_history and grant 100 bonus.)
+CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
+  INSERT INTO public.profiles (id, full_name, role)
+  VALUES (NEW.id, NEW.raw_user_meta_data->>'full_name', COALESCE(NEW.raw_user_meta_data->>'role', 'user'));
+
+  INSERT INTO public.notification_preferences (user_id)
+  VALUES (NEW.id);
+
   INSERT INTO public.loyalty_points (user_id, balance, lifetime_points, tier)
   VALUES (NEW.id, 100, 100, 'bronze')
-  ON CONFLICT (user_id) DO NOTHING;
+  ON CONFLICT (user_id) DO UPDATE SET
+    balance = GREATEST(loyalty_points.balance, 100),
+    lifetime_points = GREATEST(loyalty_points.lifetime_points, 100);
+
+  INSERT INTO public.loyalty_history (user_id, points, type, description)
+  VALUES (NEW.id, 100, 'bonus', 'Welcome bonus — 100 points')
+  ON CONFLICT DO NOTHING;
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Trigger on profiles insert
-CREATE OR REPLACE TRIGGER on_profile_created_loyalty
-  AFTER INSERT ON public.profiles
-  FOR EACH ROW
-  EXECUTE FUNCTION public.handle_new_user_loyalty();
