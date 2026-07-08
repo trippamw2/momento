@@ -608,21 +608,6 @@ export default function GiftPageContent() {
           </div>
         </section>
 
-        {/* ─── Gifting Process ─── */}
-        <section>
-          <h2 className="text-heading-xl font-bold text-[#F1F5F9] mb-8 text-center">How It Works</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto">
-            {processSteps.map((item) => (
-              <div key={item.step} className="text-center p-6 rounded-2xl bg-[#111827] border border-white/[0.08] relative shadow-sm">
-                <div className="w-14 h-14 rounded-full bg-[#FF0F73] flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)]">
-                  <span className="text-2xl font-bold text-white">{item.step}</span>
-                </div>
-                <h3 className="text-heading-sm font-bold text-[#F1F5F9] mb-1">{item.title}</h3>
-                <p className="text-[#CBD5E1] text-body-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* ─── Interactive Gift Form ─── */}
         <section className="max-w-4xl mx-auto">
@@ -663,7 +648,8 @@ export default function GiftPageContent() {
                     : "bg-white/[0.05] text-[#64748B] border border-white/[0.08] hover:text-[#CBD5E1]"
                 }`}
               >
-                ⚡ Send Now
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                Send Now
               </button>
               <button
                 onClick={() => setSendMode("schedule")}
@@ -673,7 +659,8 @@ export default function GiftPageContent() {
                     : "bg-white/[0.05] text-[#64748B] border border-white/[0.08] hover:text-[#CBD5E1]"
                 }`}
               >
-                📅 Schedule for Later
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                Schedule for Later
               </button>
             </div>
 
@@ -823,10 +810,13 @@ export default function GiftPageContent() {
                       </span>
                     </div>
                     {occasion && (
-                      <p className="text-caption text-[#CBD5E1] mt-2">🎉 {occasion}</p>
+                      <p className="text-caption text-[#CBD5E1] mt-2">&#183; {occasion}</p>
                     )}
                     {sendMode === "schedule" && scheduleLabel && (
-                      <p className="text-caption text-[#FF0F73] mt-1">📅 Delivering {scheduleLabel}</p>
+                      <p className="text-caption text-[#FF0F73] mt-1 flex items-center gap-1">
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        Delivering {scheduleLabel}
+                      </p>
                     )}
                     {message && (
                       <p className="text-caption text-[#CBD5E1] mt-1 italic line-clamp-1">&ldquo;{message}&rdquo;</p>
@@ -876,7 +866,7 @@ export default function GiftPageContent() {
                   <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 </div>
                 <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-1">
-                  {sendMode === "schedule" ? "Gift Scheduled! 🎉" : "Gift Sent! 🎉"}
+                  {sendMode === "schedule" ? "Gift Scheduled!" : "Gift Sent!"}
                 </h2>
                 <p className="text-[#CBD5E1] text-body-sm mb-6">
                   {sendMode === "schedule"
