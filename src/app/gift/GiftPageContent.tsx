@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import QRCode from "qrcode";
 import { experiences } from "@/lib/data";
 import GiftCard, { GIFT_CARD_VARIANTS } from "@/components/GiftCard";
@@ -51,6 +52,8 @@ function tomorrow(): string {
 }
 
 export default function GiftPageContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const [occasion, setOccasion] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>("cards");
@@ -62,6 +65,8 @@ export default function GiftPageContent() {
   const [senderName, setSenderName] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState("");
   const [sent, setSent] = useState(false);
   const [redemptionCode, setRedemptionCode] = useState("");
   const [qrDataUrl, setQrDataUrl] = useState("");
@@ -80,6 +85,131 @@ export default function GiftPageContent() {
       }).then(setQrDataUrl).catch((err) => console.error("QR code generation failed:", err));
     }
   }, [sent, redemptionCode]);
+
+  // Handle payment return: when redirected back from PayChangu with payment status
+  useEffect(() => {
+    const paymentStatus = searchParams.get("payment");
+    const txRef = searchParams.get("tx_ref");
+    if (!paymentStatus || !txRef) return;
+
+    if (paymentStatus === "success" || paymentStatus === "initiated") {
+      // In dev mode, simulate webhook by calling it from the client
+      processPaymentReturn(txRef);
+    }
+    // Clean up the URL params so refresh doesn't re-trigger
+    router.replace("/gift", { scroll: false });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function processPaymentReturn(txRef: string) {
+    setSending(true);
+    try {
+      // Call the webhook endpoint to process the payment and create the gift card
+      const res = await fetch("/api/payments/paychangu-webhook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: "success",
+          reference: txRef,
+          event_type: "api.charge.payment",
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.code) {
+        setRedemptionCode(data.code);
+        // Save locally via gift engine
+        const giftCard = createGiftCard({
+          amount: selectedValue,
+          recipientName,
+          recipientContact,
+          senderName,
+          message: message || undefined,
+          deliveryMethod: delivery,
+          occasion: occasion || undefined,
+          scheduleDate: sendMode === "schedule" ? scheduleDate : undefined,
+        });
+        if (sendMode === "now") sendGiftCard(giftCard);
+        setSent(true);
+      } else {
+        // Fallback: create gift card directly
+        const fallback = createGiftCard({
+          amount: selectedValue,
+          recipientName,
+          recipientContact,
+          senderName,
+          message: message || undefined,
+          deliveryMethod: delivery,
+          occasion: occasion || undefined,
+          scheduleDate: sendMode === "schedule" ? scheduleDate : undefined,
+        });
+        setRedemptionCode(fallback.code);
+        if (sendMode === "now") sendGiftCard(fallback);
+        setSent(true);
+      }
+    } catch {
+      // Fallback
+      const fallback = createGiftCard({
+        amount: selectedValue,
+        recipientName,
+        recipientContact,
+        senderName,
+        message: message || undefined,
+        deliveryMethod: delivery,
+        occasion: occasion || undefined,
+        scheduleDate: sendMode === "schedule" ? scheduleDate : undefined,
+      });
+      setRedemptionCode(fallback.code);
+      if (sendMode === "now") sendGiftCard(fallback);
+      setSent(true);
+    } finally {
+      setSending(false);
+    }
+  }
+
+  const handleContinueToPayment = async () => {
+    const token = localStorage.getItem("momento-auth-token");
+    if (!token) {
+      setGiftError("Please sign in to send a gift");
+      return;
+    }
+
+    setPaying(true);
+    setPayError("");
+    setGiftError("");
+
+    try {
+      const res = await fetch("/api/payments/paychangu-gift", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          amount: selectedValue,
+          recipient_name: recipientName,
+          recipient_email: delivery === "email" ? recipientContact : undefined,
+          sender_name: senderName,
+          message: message || undefined,
+          delivery_method: delivery,
+          occasion: occasion || undefined,
+          schedule_date: sendMode === "schedule" ? scheduleDate : undefined,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.checkout_url) {
+        // Redirect to PayChangu checkout
+        window.location.href = data.checkout_url;
+      } else {
+        setPayError(data?.error || "Failed to initiate payment");
+      }
+    } catch {
+      setPayError("Network error. Please try again.");
+    } finally {
+      setPaying(false);
+    }
+  };
 
   const handleSend = async () => {
     const token = localStorage.getItem("momento-auth-token");
@@ -738,23 +868,33 @@ export default function GiftPageContent() {
                     </div>
                   )}
 
-                  <button
-                    onClick={handleSend}
-                    disabled={!canSend || sending}
-                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    {sending ? (
-                      <>
-                        <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                        Sending...
-                      </>
-                    ) : (
-                      <>
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
-                        {sendMode === "schedule" ? "Schedule Gift" : `Send ${tab === "cards" ? "Gift Card" : "Experience"}`}
-                      </>
-                    )}
-                  </button>
+                  {payError && (
+                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 flex items-start gap-2.5 mb-4">
+                      <svg className="w-4 h-4 text-red-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                      <p className="text-body-sm text-red-300">{payError}</p>
+                    </div>
+                  )}
+
+                  <div className="space-y-2">
+                    <button
+                      onClick={handleContinueToPayment}
+                      disabled={!canSend || paying}
+                      className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {paying ? (
+                        <>
+                          <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                          Connecting to PayChangu...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+                          Continue to Payment — MK {selectedValue.toLocaleString()}
+                        </>
+                      )}
+                    </button>
+                    <p className="text-caption text-[#64748B] text-center">You will be redirected to PayChangu to complete payment</p>
+                  </div>
                 </div>
               </>
             ) : (
