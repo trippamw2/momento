@@ -32,7 +32,8 @@ export default function TrackRedeem() {
     <section className="max-w-3xl mx-auto" id="redeem">
       <div className="text-center mb-8">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#FF0F73]/10 to-[#FF7A1A]/10 border border-[#FF0F73]/20 text-[#FF0F73] text-caption font-semibold mb-4">
-          <span>🎯</span> Gift Cards
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          Gift Cards
         </div>
         <h2 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Track &amp; Redeem</h2>
         <p className="text-[#CBD5E1] text-body-lg max-w-lg mx-auto">
@@ -104,18 +105,18 @@ export default function TrackRedeem() {
         <div className="mt-2">
           <p className="text-caption font-semibold text-[#CBD5E1] mb-3 uppercase tracking-wider">Status Timeline</p>
           <div className="grid grid-cols-4 gap-3">
-            {[
-              { step: "Purchased", icon: "🛒", done: true, desc: "Card issued" },
-              { step: "Delivered", icon: "📨", done: true, desc: "Sent to recipient" },
-              { step: "Viewed", icon: "👀", done: trackResult?.found, desc: "Code checked" },
-              { step: "Redeemed", icon: "✅", done: trackResult?.status === "redeemed", desc: "Experience booked" },
-            ].map((s) => (
-              <div key={s.step} className={`text-center p-4 rounded-2xl transition-all border ${
-                s.done
-                  ? "bg-[#111827] border-emerald-500/20 shadow-sm"
-                  : "bg-white/[0.03] border-white/[0.06]"
-              }`}>
-                <span className={`text-2xl block mb-2 ${s.done ? "" : "opacity-30 grayscale"}`}>{s.icon}</span>
+              {[
+                { step: "Purchased", icon: <svg key="cart" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>, done: true, desc: "Card issued" },
+                { step: "Delivered", icon: <svg key="mail" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>, done: true, desc: "Sent to recipient" },
+                { step: "Viewed", icon: <svg key="eye" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>, done: trackResult?.found, desc: "Code checked" },
+                { step: "Redeemed", icon: <svg key="check" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>, done: trackResult?.status === "redeemed", desc: "Experience booked" },
+              ].map((s) => (
+                <div key={s.step} className={`text-center p-4 rounded-2xl transition-all border ${
+                  s.done
+                    ? "bg-[#111827] border-emerald-500/20 shadow-sm"
+                    : "bg-white/[0.03] border-white/[0.06]"
+                }`}>
+                  <div className={`flex items-center justify-center mb-2 ${s.done ? "text-emerald-400" : "text-[#64748B] opacity-30 grayscale"}`}>{s.icon}</div>
                 <p className={`text-caption font-bold ${s.done ? "text-[#F1F5F9]" : "text-[#64748B]"}`}>{s.step}</p>
                 <p className={`text-caption mt-0.5 ${s.done ? "text-emerald-400" : "text-[#64748B]"}`}>{s.desc}</p>
               </div>
