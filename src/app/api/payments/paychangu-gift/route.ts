@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       const cancelUrl = `${origin}/gift?payment=cancelled`;
 
       try {
-        const paychanguRes = await fetch(`${PAYCHANGU_API}/payment/initiate`, {
+        const paychanguRes = await fetch(`${PAYCHANGU_API}/payment`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -47,6 +47,10 @@ export async function POST(request: Request) {
             return_url: returnUrl,
             cancellation_url: cancelUrl,
             tx_ref: txRef,
+            customization: {
+              title: "Gift Card Purchase",
+              description: `Gift card for ${recipient_name}`,
+            },
             meta: {
               type: "gift_card",
               gift_details: {
@@ -57,7 +61,6 @@ export async function POST(request: Request) {
                 message: message || null,
                 delivery_method: delivery_method || "email",
                 occasion: occasion || null,
-                schedule_date: schedule_date || null,
               },
             },
           }),

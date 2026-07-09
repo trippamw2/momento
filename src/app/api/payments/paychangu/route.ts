@@ -49,38 +49,46 @@ export async function POST(request: Request) {
         },
       };
 
-      const paychanguRes = await fetch(`${PAYCHANGU_API}/payment/initiate`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${PAYCHANGU_SECRET_KEY}`,
-        },
-        body: JSON.stringify(payload),
-      });
+      try {
+        const paychanguRes = await fetch(`${PAYCHANGU_API}/payment`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${PAYCHANGU_SECRET_KEY}`,
+          },
+          body: JSON.stringify({
+            ...payload,
+            customization: {
+              title: "Experience Booking",
+              description: booking?.experience?.title || "Booking payment",
+            },
+          }),
+        });
 
-      const paychanguData = await paychanguRes.json();
+        const paychanguData = await paychanguRes.json();
 
-      if (!paychanguRes.ok || !paychanguData?.data?.checkout_url) {
-        console.error("PayChangu error:", paychanguData);
-        return json({ error: "Payment service error. Please try again." }, 502);
+        if (paychanguRes.ok && paychanguData?.data?.checkout_url) {
+          const admin = createAdminClient();
+          await admin.from("payments").insert({
+            booking_id,
+            user_id: user.id,
+            amount: booking.total_price,
+            currency: booking.currency || "MWK",
+            method: "paychangu",
+            provider: "paychangu",
+            provider_reference: paychanguData.data.data?.tx_ref || payload.tx_ref,
+            status: "pending",
+            metadata: { checkout_url: paychanguData.data.checkout_url },
+          });
+
+          return json({ checkout_url: paychanguData.data.checkout_url });
+        }
+
+        console.warn("PayChangu API error, falling back:", paychanguData);
+      } catch (payErr) {
+        console.warn("PayChangu API call failed, falling back:", payErr);
       }
-
-      // Record the payment in the payments table
-      const admin = createAdminClient();
-      await admin.from("payments").insert({
-        booking_id,
-        user_id: user.id,
-        amount: booking.total_price,
-        currency: booking.currency || "MWK",
-        method: "paychangu",
-        provider: "paychangu",
-        provider_reference: paychanguData.data.tx_ref || payload.tx_ref,
-        status: "pending",
-        metadata: { checkout_url: paychanguData.data.checkout_url },
-      });
-
-      return json({ checkout_url: paychanguData.data.checkout_url });
     }
 
     // Fallback: simulate PayChangu checkout for development
