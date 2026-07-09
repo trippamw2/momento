@@ -1,10 +1,10 @@
-import { getUser, json, handleRouteError, parseBody, getQueryParams } from "@/lib/api-helpers";
+﻿import { getUser, json, handleRouteError, parseBody, getQueryParams } from "@/lib/api-helpers";
 import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 function generateCode(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let code = "MOMO-";
+  let code = "XPRO-";
   for (let i = 0; i < 8; i++) {
     if (i === 4) code += "-";
     code += chars[Math.floor(Math.random() * chars.length)];

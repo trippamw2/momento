@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef } from "react";
 import Image from "next/image";
@@ -58,7 +58,7 @@ export default function ReviewForm({ experienceId, onSubmitted, onCancel }: Revi
 
     // Save to localStorage for persistence
     try {
-      const key = `MOMENTO-reviews-${experienceId}`;
+      const key = `EXPERIO-reviews-${experienceId}`;
       const existing = JSON.parse(localStorage.getItem(key) || "[]");
       existing.unshift({
         id: `rev-${Date.now()}`,
@@ -83,7 +83,7 @@ export default function ReviewForm({ experienceId, onSubmitted, onCancel }: Revi
   if (submitted) {
     return (
       <div className="p-6 rounded-2xl bg-[#111827] border border-white/[0.08] text-center">
-        <div className="text-3xl mb-3">🎉</div>
+        <div className="text-3xl mb-3">ðŸŽ‰</div>
         <h3 className="text-body font-semibold text-white mb-1">Thank you for your review!</h3>
         <p className="text-caption text-[#94A3B8]">Your feedback helps other explorers.</p>
       </div>
@@ -152,7 +152,7 @@ export default function ReviewForm({ experienceId, onSubmitted, onCancel }: Revi
                 className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-black/70 text-white text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                 aria-label="Remove photo"
               >
-                ✕
+                âœ•
               </button>
             </div>
           ))}

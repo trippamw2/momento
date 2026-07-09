@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 import { badRequest, unauthorized, handleRouteError } from "@/lib/api-helpers";
@@ -40,14 +40,14 @@ export async function POST(request: Request) {
     const response = NextResponse.json({ user: data.user, session: data.session, role });
 
     if (data.session?.access_token) {
-      response.cookies.set("momento-auth-token", data.session.access_token, {
+      response.cookies.set("experio-auth-token", data.session.access_token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
         maxAge: 60 * 60 * 24 * 7,
       });
-      response.cookies.set("momento-user-role", role, {
+      response.cookies.set("experio-user-role", role, {
         httpOnly: false,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",

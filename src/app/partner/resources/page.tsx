@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useAuthGuard } from "@/lib/use-auth-guard";
@@ -7,32 +7,32 @@ const resources = [
   {
     title: "Hosting Guide",
     desc: "Best practices for creating unforgettable guest experiences, from setting expectations to going the extra mile.",
-    icon: "📖",
+    icon: "ðŸ“–",
   },
   {
     title: "Pricing Tips",
     desc: "Learn how to price your experience competitively while ensuring a great value proposition for guests.",
-    icon: "💰",
+    icon: "ðŸ’°",
   },
   {
     title: "Photography Guide",
     desc: "Tips for capturing high-quality photos that showcase your experience and attract more bookings.",
-    icon: "📸",
+    icon: "ðŸ“¸",
   },
   {
     title: "Safety Checklist",
     desc: "Essential safety protocols and best practices to ensure every guest has a safe and enjoyable experience.",
-    icon: "✅",
+    icon: "âœ…",
   },
   {
     title: "Marketing Tools",
     desc: "Promote your experiences with custom links, social media templates, and seasonal campaign ideas.",
-    icon: "📣",
+    icon: "ðŸ“£",
   },
   {
     title: "Partner Dashboard",
     desc: "Manage your listings, view analytics, and track earnings through your partner dashboard.",
-    icon: "📊",
+    icon: "ðŸ“Š",
     link: "/profile",
   },
 ];
@@ -81,7 +81,7 @@ export default function PartnerResourcesPage() {
         <div className="mb-12">
           <h1 className="text-display-sm font-bold text-[#F1F5F9] mb-3">Partner Resources</h1>
           <p className="text-[#94A3B8] text-body-lg max-w-lg">
-            Everything you need to succeed as an Momento host — from getting started to growing your business.
+            Everything you need to succeed as an Experio host â€” from getting started to growing your business.
           </p>
         </div>
 
@@ -121,7 +121,7 @@ export default function PartnerResourcesPage() {
             Our partner support team is here to help you every step of the way.
           </p>
           <a
-            href="mailto:partners@momento.life"
+            href="mailto:partners@experio.life"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all duration-300"
           >
             Contact Partner Support

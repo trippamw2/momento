@@ -1,13 +1,13 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
 
 const CATEGORIES = [
-  { emoji: "❤️", label: "Date", description: "Romantic dinners & sunset spots" },
-  { emoji: "🌿", label: "Chill", description: "Coffee shops, spas & cafés" },
-  { emoji: "🎉", label: "Celebrate", description: "Birthdays, nightlife & dining" },
-  { emoji: "🌍", label: "Escape", description: "Weekend getaways & adventures" },
+  { emoji: "â¤ï¸", label: "Date", description: "Romantic dinners & sunset spots" },
+  { emoji: "ðŸŒ¿", label: "Chill", description: "Coffee shops, spas & cafÃ©s" },
+  { emoji: "ðŸŽ‰", label: "Celebrate", description: "Birthdays, nightlife & dining" },
+  { emoji: "ðŸŒ", label: "Escape", description: "Weekend getaways & adventures" },
 ];
 
 export default function HeroSection() {

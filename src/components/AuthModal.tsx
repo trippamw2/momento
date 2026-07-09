@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -14,9 +14,9 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   const [mode, setMode] = useState<AuthMode>("login");
   const [signupRole, setSignupRole] = useState<SignupRole>(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("momento-signup-role");
+      const saved = localStorage.getItem("experio-signup-role");
       if (saved === "partner") {
-        localStorage.removeItem("momento-signup-role");
+        localStorage.removeItem("experio-signup-role");
         return "partner";
       }
     }
@@ -86,15 +86,15 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         }
 
         if (data.session?.access_token) {
-          localStorage.setItem("momento-auth-token", data.session.access_token);
-          localStorage.setItem("momento-user-role", data.role || data.user?.user_metadata?.role || "user");
+          localStorage.setItem("experio-auth-token", data.session.access_token);
+          localStorage.setItem("experio-user-role", data.role || data.user?.user_metadata?.role || "user");
         }
         onClose();
         window.location.reload();
         return;
       }
 
-      // ─── Signup ──────────────────────────────────────────
+      // â”€â”€â”€ Signup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
       const res = await fetch("/api/auth/signup", {
         method: "POST",
@@ -123,8 +123,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         return;
       }
 
-      localStorage.setItem("momento-auth-token", data.session.access_token);
-      localStorage.setItem("momento-user-role", signupRole);
+      localStorage.setItem("experio-auth-token", data.session.access_token);
+      localStorage.setItem("experio-user-role", signupRole);
 
       // Upload avatar if provided
       if (avatarFile) {
@@ -193,8 +193,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           {/* Role Selection (signup only) */}
           {mode === "signup" && (
             <div className="mb-6">
-              <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-1">Join Momento</h2>
-              <p className="text-caption text-[#CBD5E1] mb-4">Choose how you&apos;ll use Momento</p>
+              <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-1">Join Experio</h2>
+              <p className="text-caption text-[#CBD5E1] mb-4">Choose how you&apos;ll use Experio</p>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"

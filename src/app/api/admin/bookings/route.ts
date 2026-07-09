@@ -1,4 +1,4 @@
-import { getUser, json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
+﻿import { getUser, json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {

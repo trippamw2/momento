@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 
@@ -34,7 +34,7 @@ export default function AdminPayoutsSection() {
   const [statusFilter, setStatusFilter] = useState("");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  const getToken = () => localStorage.getItem("momento-auth-token");
+  const getToken = () => localStorage.getItem("experio-auth-token");
 
   const fetchPayouts = useCallback(async () => {
     setLoading(true);
@@ -81,10 +81,10 @@ export default function AdminPayoutsSection() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: "Pending", value: payouts.filter(p => p.status === "pending").length, icon: "⏳", color: "text-amber-400" },
-          { label: "Approved", value: payouts.filter(p => p.status === "approved").length, icon: "✅", color: "text-blue-400" },
-          { label: "Completed", value: payouts.filter(p => p.status === "completed").length, icon: "💰", color: "text-emerald-400" },
-          { label: "Rejected", value: payouts.filter(p => p.status === "rejected").length, icon: "⛔", color: "text-red-400" },
+          { label: "Pending", value: payouts.filter(p => p.status === "pending").length, icon: "â³", color: "text-amber-400" },
+          { label: "Approved", value: payouts.filter(p => p.status === "approved").length, icon: "âœ…", color: "text-blue-400" },
+          { label: "Completed", value: payouts.filter(p => p.status === "completed").length, icon: "ðŸ’°", color: "text-emerald-400" },
+          { label: "Rejected", value: payouts.filter(p => p.status === "rejected").length, icon: "â›”", color: "text-red-400" },
         ].map((stat) => (
           <div key={stat.label} className="p-4 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
             <div className="flex items-center justify-between mb-1">
@@ -130,15 +130,15 @@ export default function AdminPayoutsSection() {
               {payouts.map((p) => (
                 <tr key={p.id} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
                   <td className="py-3 px-4">
-                    <p className="text-body-sm text-[#F1F5F9] font-medium">{p.partner?.business_name || "—"}</p>
-                    <p className="text-caption text-[#64748B]">{p.partner?.user?.full_name || "—"}</p>
+                    <p className="text-body-sm text-[#F1F5F9] font-medium">{p.partner?.business_name || "â€”"}</p>
+                    <p className="text-caption text-[#64748B]">{p.partner?.user?.full_name || "â€”"}</p>
                   </td>
                   <td className="py-3 px-4 text-body-sm font-semibold text-[#F1F5F9]">MK {p.amount.toLocaleString()}</td>
-                  <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{p.payout_method || "—"}</td>
+                  <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{p.payout_method || "â€”"}</td>
                   <td className="py-3 px-4">
-                    <p className="text-caption text-[#94A3B8]">{p.bank_name || "—"}</p>
-                    <p className="text-caption text-[#64748B]">{p.account_number || "—"}</p>
-                    <p className="text-caption text-[#64748B]">{p.account_name || "—"}</p>
+                    <p className="text-caption text-[#94A3B8]">{p.bank_name || "â€”"}</p>
+                    <p className="text-caption text-[#64748B]">{p.account_number || "â€”"}</p>
+                    <p className="text-caption text-[#64748B]">{p.account_name || "â€”"}</p>
                   </td>
                   <td className="py-3 px-4">
                     <span className={`px-2 py-0.5 rounded-full text-caption font-medium capitalize ${STATUS_COLORS[p.status] || "bg-gray-800 text-gray-300"}`}>

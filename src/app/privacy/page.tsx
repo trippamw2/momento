@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -69,7 +69,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-heading-sm font-bold text-[#222222] mb-3">9. Contact</h2>
             <p>
-              For privacy-related inquiries, contact us at <a href="mailto:privacy@momento.life" className="text-[#FF0F73] hover:underline">privacy@momento.life</a>.
+              For privacy-related inquiries, contact us at <a href="mailto:privacy@experio.life" className="text-[#FF0F73] hover:underline">privacy@experio.life</a>.
             </p>
           </section>
         </div>

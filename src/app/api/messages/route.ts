@@ -1,4 +1,4 @@
-import { getUser, json, handleRouteError, badRequest } from "@/lib/api-helpers";
+﻿import { getUser, json, handleRouteError, badRequest } from "@/lib/api-helpers";
 import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 

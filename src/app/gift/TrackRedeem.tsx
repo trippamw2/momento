@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -11,7 +11,7 @@ export default function TrackRedeem() {
     if (!trackCode.trim()) return;
     setTracking(true);
     try {
-      const token = localStorage.getItem("momento-auth-token");
+      const token = localStorage.getItem("experio-auth-token");
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
       const res = await fetch(`/api/gift-cards/check?code=${encodeURIComponent(trackCode)}`, { headers });
@@ -45,7 +45,7 @@ export default function TrackRedeem() {
           <div className="relative flex-1">
             <input
               type="text"
-              placeholder="Enter gift card code (e.g. MOMO-XXXXXXXX)"
+              placeholder="Enter gift card code (e.g. XPRO-XXXXXXXX)"
               value={trackCode}
               onChange={(e) => setTrackCode(e.target.value.toUpperCase())}
               className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body placeholder:text-[#64748B] focus:outline-none focus:border-[#FF0F73] focus:ring-1 focus:ring-[#FF0F73]/20 transition-all font-mono tracking-wider"
@@ -72,8 +72,8 @@ export default function TrackRedeem() {
         {trackResult && (
           <div className={`p-5 rounded-2xl border mb-6 transition-all ${
             trackResult.found
-              ? "bg-emerald-500/10 border-emerald-500/20"
-              : "bg-red-500/10 border-red-500/20"
+              ? "bg-gradient-to-br from-emerald-500/8 to-emerald-400/5 border-emerald-500/20"
+              : "bg-gradient-to-br from-red-500/8 to-red-400/5 border-red-500/20"
           }`}>
             <div className="flex items-start gap-3">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
@@ -87,13 +87,26 @@ export default function TrackRedeem() {
               </div>
               <div className="flex-1">
                 <p className={`text-body-sm font-bold ${trackResult.found ? "text-emerald-400" : "text-red-400"}`}>
-                  {trackResult.found ? "Gift Card Found!" : "Code Not Found"}
+                  {trackResult.found ? "âœ¨ Gift Card Found!" : "Code Not Found"}
                 </p>
                 <p className={`text-caption mt-0.5 ${trackResult.found ? "text-emerald-300" : "text-red-300"}`}>
                   {trackResult.found
-                    ? `This card is ${trackResult.status} · ${trackResult.value}`
-                    : "Please check the code and try again. Codes are format: MOMO-XXXXXXXX"}
+                    ? `Status: ${trackResult.status === "active" ? "Active" : trackResult.status} Â· Value: ${trackResult.value}`
+                    : "Please check the code and try again. Codes are format: XPRO-XXXXXXXX"}
                 </p>
+                {trackResult.found && (
+                  <div className="flex items-center gap-2 mt-3">
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${
+                      trackResult.status === "active"
+                        ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                        : trackResult.status === "redeemed"
+                          ? "bg-purple-500/10 border-purple-500/20 text-purple-400"
+                          : "bg-blue-500/10 border-blue-500/20 text-blue-400"
+                    }`}>
+                      {trackResult.status}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>

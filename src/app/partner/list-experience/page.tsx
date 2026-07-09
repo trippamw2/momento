@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
@@ -6,7 +6,7 @@ import { useAuthGuard } from "@/lib/use-auth-guard";
 import { findNearestCity } from "@/lib/geo";
 import { useGeolocation } from "@/lib/use-geolocation";
 
-const MOMENTO_CATEGORIES = [
+const Experio_CATEGORIES = [
   "Date",
   "Chill",
   "Celebrate",
@@ -83,7 +83,7 @@ export default function ListExperiencePage() {
     setError("");
     setSubmitting(true);
 
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     if (!token) {
       setError("Please sign in as a partner to list an experience.");
       setSubmitting(false);
@@ -99,7 +99,7 @@ export default function ListExperiencePage() {
         },
         body: JSON.stringify({
           title: form.title,
-          subtitle: form.subtitle || `${form.title} — A Momento Experience`,
+          subtitle: form.subtitle || `${form.title} â€” A Experio Experience`,
           description: form.description,
           price: parseInt(form.price),
           duration: form.duration,
@@ -188,7 +188,7 @@ export default function ListExperiencePage() {
         <div className="mb-8">
           <h1 className="text-display-sm font-bold text-[#F1F5F9] mb-2">List Your Experience</h1>
           <p className="text-[#94A3B8] text-body-lg">
-            Share your unique experience with the Momento community. Fill out the details below and our team will review your listing.
+            Share your unique experience with the Experio community. Fill out the details below and our team will review your listing.
           </p>
         </div>
 
@@ -243,7 +243,7 @@ export default function ListExperiencePage() {
               }`}
             >
               <option value="" disabled>Select a category</option>
-              {MOMENTO_CATEGORIES.map((cat) => (
+              {Experio_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
@@ -331,7 +331,7 @@ export default function ListExperiencePage() {
                 <p className="text-caption text-[#64748B] mt-1 animate-pulse">Detecting your location via GPS...</p>
               )}
               {geo.position && form.location && (
-                <p className="text-caption text-[#FF0F73] mt-1">📍 Auto-detected</p>
+                <p className="text-caption text-[#FF0F73] mt-1">ðŸ“ Auto-detected</p>
               )}
             </div>
             <div>

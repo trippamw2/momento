@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
@@ -42,7 +42,7 @@ export default function CheckInModal({ onClose }: Props) {
     setBooking(null);
     setCheckedIn(false);
 
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     try {
       const res = await fetch(
         `/api/bookings/partner?search=${encodeURIComponent(searchQuery.trim())}`,
@@ -64,7 +64,7 @@ export default function CheckInModal({ onClose }: Props) {
   const handleCheckIn = async () => {
     if (!booking) return;
     setCheckingIn(true);
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     try {
       const res = await fetch(`/api/bookings/${booking.id}/confirm`, {
         method: "POST",
@@ -95,7 +95,7 @@ export default function CheckInModal({ onClose }: Props) {
     setBooking(null);
     setCheckedIn(false);
 
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     try {
       const res = await fetch(
         `/api/bookings/partner?ref=${encodeURIComponent(bookingRef.trim())}`,
@@ -145,7 +145,7 @@ export default function CheckInModal({ onClose }: Props) {
               value={bookingRef}
               onChange={(e) => setBookingRef(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") handleQuickRef(); }}
-              placeholder="Enter booking reference (e.g. MOMO-BK-001)"
+              placeholder="Enter booking reference (e.g. XPRO-BK-001)"
               className="flex-1 px-4 py-3 rounded-xl bg-[#0A0E17] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-1 border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20 transition-all font-mono"
             />
             <button
@@ -287,9 +287,9 @@ export default function CheckInModal({ onClose }: Props) {
                           Checking in...
                         </>
                       ) : booking.status === "completed" ? (
-                        "✓ Already Checked In"
+                        "âœ“ Already Checked In"
                       ) : booking.status === "cancelled" ? (
-                        "✕ Booking Cancelled"
+                        "âœ• Booking Cancelled"
                       ) : (
                         <>
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

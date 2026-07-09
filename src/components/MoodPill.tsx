@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Mood } from "@/lib/types";
 

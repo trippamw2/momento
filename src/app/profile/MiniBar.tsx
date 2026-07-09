@@ -1,4 +1,4 @@
-export default function MiniBar({ data, height = 40 }: { data: number[]; height?: number }) {
+﻿export default function MiniBar({ data, height = 40 }: { data: number[]; height?: number }) {
   const max = Math.max(...data);
   return (
     <div className="flex items-end gap-1.5" style={{ height }}>

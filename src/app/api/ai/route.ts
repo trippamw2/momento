@@ -1,6 +1,6 @@
-import { json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
+﻿import { json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
-import type { Experience, Mood, MomentoCategory } from "@/lib/types";
+import type { Experience, Mood, ExperioCategory } from "@/lib/types";
 
 const GEMINI_MODEL = "gemini-2.0-flash";
 const GEMINI_MODEL_FALLBACK = "gemini-1.5-flash";
@@ -84,7 +84,7 @@ const PARTNER_NAMES: Record<string, string> = {
 };
 
 function dbExpToExperience(db: DbExperience): Experience {
-  const cat = db.category as MomentoCategory;
+  const cat = db.category as ExperioCategory;
   const images = GALLERY_SETS[cat] || GALLERY_SETS.Date;
   const coords = COORDINATES[db.location] || COORDINATES.Lilongwe;
     return {
@@ -96,7 +96,7 @@ function dbExpToExperience(db: DbExperience): Experience {
     images,
     price: db.price,
     currency: db.currency,
-    partner: PARTNER_NAMES[db.title] || `${db.title} by Momento`,
+    partner: PARTNER_NAMES[db.title] || `${db.title} by Experio`,
     location: db.location,
     city: db.location,
     distance: "",
@@ -134,7 +134,7 @@ function buildExperiencesContext(expList: DbExperience[]): string {
   return expList
     .map(
       (e) =>
-        `[ID:${e.slug}] ${e.title} — ${e.subtitle}. ${(e.description || "").slice(0, 120)}... ` +
+        `[ID:${e.slug}] ${e.title} â€” ${e.subtitle}. ${(e.description || "").slice(0, 120)}... ` +
         `Category: ${e.category}. Mood: ${(e.tags || []).join(", ")}. ` +
         `Location: ${e.location}. Price: MK ${Number(e.price).toLocaleString()}. Rating: ${e.rating}/5.`
     )
@@ -149,7 +149,7 @@ async function callGemini(query: string, apiKey: string, model: string, expList:
     const geminiUrl = `${GEMINI_API_BASE}/${model}:generateContent?key=${apiKey}`;
     const experienceCatalog = buildExperiencesContext(expList);
 
-    const prompt = `You are an AI lifestyle companion for Momento.life — an experience discovery platform that helps people answer "What do you feel like doing today?" Your job is to understand what the user is looking for and recommend the best matching experiences from the catalog below.
+    const prompt = `You are an AI lifestyle companion for Experio.life â€” an experience discovery platform that helps people answer "What do you feel like doing today?" Your job is to understand what the user is looking for and recommend the best matching experiences from the catalog below.
 
 USER QUERY: "${query}"
 
@@ -169,7 +169,7 @@ Rules:
 - If the user mentions a location, prefer experiences in that city.
 - If nothing matches well, select the closest options and explain honestly.
 - The "explanation" must be in natural, warm language. Do NOT list IDs or technical details.
-- Use the ID (slug) values exactly as shown (e.g., "momento-sunset-cruise"), not short codes.
+- Use the ID (slug) values exactly as shown (e.g., "EXPERIO-sunset-cruise"), not short codes.
 - Keep resultIds to at most 5 IDs.`;
 
     const res = await fetch(geminiUrl, {
@@ -268,7 +268,7 @@ export async function GET(request: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      // No API key — fall back to keyword matching against DB data
+      // No API key â€” fall back to keyword matching against DB data
       return json(keywordFallback(query, dbExperiences));
     }
 
@@ -315,7 +315,7 @@ export async function GET(request: Request) {
       return json({ explanation, results, query });
     }
 
-    // Gemini failed — fall back to keyword-based matching
+    // Gemini failed â€” fall back to keyword-based matching
     console.warn("Gemini unavailable, using keyword fallback for:", query);
     return json(keywordFallback(query, dbExperiences));
   } catch (error) {

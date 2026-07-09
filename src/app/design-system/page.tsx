@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Logo from "@/components/Logo";
 import Button from "@/components/Button";
 import MoodPill from "@/components/MoodPill";
@@ -46,7 +46,7 @@ export default function DesignSystemPage() {
           Inspired by Netflix, Airbnb, and Apple.
         </p>
 
-        {/* ── Logo System ── */}
+        {/* â”€â”€ Logo System â”€â”€ */}
         <Section title="Logo System">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 p-8 rounded-2xl bg-surface-secondary border border-border-default">
             <div className="text-center">
@@ -85,13 +85,13 @@ export default function DesignSystemPage() {
               </div>
               <div>
                 <span className="text-xs text-text-tertiary">Accent</span>
-                <p className="gradient-text font-medium">Hot Pink → Sunset Orange</p>
+                <p className="gradient-text font-medium">Hot Pink â†’ Sunset Orange</p>
               </div>
             </div>
           </div>
         </Section>
 
-        {/* ── Color System ── */}
+        {/* â”€â”€ Color System â”€â”€ */}
         <Section title="Color System">
           <h3 className="text-heading-md font-semibold text-text-primary mb-4">Brand Colors</h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
@@ -126,7 +126,7 @@ export default function DesignSystemPage() {
           </div>
         </Section>
 
-        {/* ── Typography System ── */}
+        {/* â”€â”€ Typography System â”€â”€ */}
         <Section title="Typography System">
           <div className="p-8 rounded-2xl bg-surface-secondary border border-border-default mb-6">
             <p className="text-caption text-text-tertiary mb-6 uppercase tracking-widest">Serif (Logo & Headlines)</p>
@@ -143,48 +143,48 @@ export default function DesignSystemPage() {
           </div>
 
           <div className="p-8 rounded-2xl bg-surface-secondary border border-border-default mb-6">
-            <p className="text-caption text-text-tertiary mb-6 uppercase tracking-widest">Sans-Serif (UI) — Geist</p>
+            <p className="text-caption text-text-tertiary mb-6 uppercase tracking-widest">Sans-Serif (UI) â€” Geist</p>
             <div className="space-y-5">
               <div>
-                <p className="text-xs text-text-tertiary mb-1">Heading XL / 2rem — Bold</p>
+                <p className="text-xs text-text-tertiary mb-1">Heading XL / 2rem â€” Bold</p>
                 <p className="text-heading-xl font-bold text-text-primary">Featured Experiences</p>
               </div>
               <div>
-                <p className="text-xs text-text-tertiary mb-1">Heading LG / 1.5rem — Bold</p>
+                <p className="text-xs text-text-tertiary mb-1">Heading LG / 1.5rem â€” Bold</p>
                 <p className="text-heading-lg font-bold text-text-primary">Romantic Moments</p>
               </div>
               <div>
-                <p className="text-xs text-text-tertiary mb-1">Body / 1rem — Regular</p>
+                <p className="text-xs text-text-tertiary mb-1">Body / 1rem â€” Regular</p>
                 <p className="text-body text-text-secondary max-w-xl">
                   Discover, book, gift and enjoy unforgettable experiences curated for every mood and occasion.
                 </p>
               </div>
               <div>
-                <p className="text-xs text-text-tertiary mb-1">Body SM / 0.875rem — Medium</p>
+                <p className="text-xs text-text-tertiary mb-1">Body SM / 0.875rem â€” Medium</p>
                 <p className="text-body-sm font-medium text-text-primary">Pool & Lunch</p>
               </div>
               <div>
                 <p className="text-xs text-text-tertiary mb-1">Caption / 0.75rem</p>
-                <p className="text-caption text-text-secondary">4 hours • Lilongwe</p>
+                <p className="text-caption text-text-secondary">4 hours â€¢ Lilongwe</p>
               </div>
               <div>
-                <p className="text-xs text-text-tertiary mb-1">Overline / 0.6875rem — Uppercase, 0.1em spacing</p>
+                <p className="text-xs text-text-tertiary mb-1">Overline / 0.6875rem â€” Uppercase, 0.1em spacing</p>
                 <p className="overline text-brand-hot-pink">Malawi&apos;s Premium Experience Marketplace</p>
               </div>
             </div>
           </div>
         </Section>
 
-        {/* ── Gradients ── */}
+        {/* â”€â”€ Gradients â”€â”€ */}
         <Section title="Gradient System">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             <div className="p-8 rounded-2xl gradient-brand text-center">
               <p className="text-white font-semibold text-body-sm">Brand</p>
-              <p className="text-white/60 text-caption mt-1">#ff2d87 → #ff6b2b</p>
+              <p className="text-white/60 text-caption mt-1">#ff2d87 â†’ #ff6b2b</p>
             </div>
             <div className="p-8 rounded-2xl gradient-warm text-center">
               <p className="text-white font-semibold text-body-sm">Warm</p>
-              <p className="text-white/60 text-caption mt-1">#ff6b2b → #ff2d87</p>
+              <p className="text-white/60 text-caption mt-1">#ff6b2b â†’ #ff2d87</p>
             </div>
             <div className="p-8 rounded-2xl gradient-ambient text-center border border-border-default">
               <p className="text-white font-semibold text-body-sm">Ambient</p>
@@ -200,9 +200,9 @@ export default function DesignSystemPage() {
           </div>
         </Section>
 
-        {/* ── Buttons ── */}
+        {/* â”€â”€ Buttons â”€â”€ */}
         <Section title="Button System">
-          <p className="text-body-sm text-text-secondary mb-6">5 variants × 3 sizes</p>
+          <p className="text-body-sm text-text-secondary mb-6">5 variants Ã— 3 sizes</p>
           <div className="space-y-6">
             {(["sm", "md", "lg"] as const).map((size) => (
               <div key={size}>
@@ -229,7 +229,7 @@ export default function DesignSystemPage() {
           </div>
         </Section>
 
-        {/* ── Mood Pills ── */}
+        {/* â”€â”€ Mood Pills â”€â”€ */}
         <Section title="Mood Pills">
           <div className="flex flex-wrap gap-3">
             {moods.map((mood) => (
@@ -243,7 +243,7 @@ export default function DesignSystemPage() {
           </div>
         </Section>
 
-        {/* ── Cards ── */}
+        {/* â”€â”€ Cards â”€â”€ */}
         <Section title="Card System">
           <p className="text-body-sm text-text-secondary mb-6">3:4 aspect ratio, gradient overlay, hover lift</p>
           <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar">
@@ -256,12 +256,12 @@ export default function DesignSystemPage() {
           </div>
         </Section>
 
-        {/* ── Content Rail ── */}
+        {/* â”€â”€ Content Rail â”€â”€ */}
         <Section title="Content Rails">
           <ContentRail title="Featured Experiences" experiences={experiences.slice(0, 4)} />
         </Section>
 
-        {/* ── Glass Effects ── */}
+        {/* â”€â”€ Glass Effects â”€â”€ */}
         <Section title="Glass & Blur">
           <div className="relative p-12 rounded-2xl overflow-hidden border border-border-default">
             <Image
@@ -285,7 +285,7 @@ export default function DesignSystemPage() {
           </div>
         </Section>
 
-        {/* ── Responsive Guidelines ── */}
+        {/* â”€â”€ Responsive Guidelines â”€â”€ */}
         <Section title="Responsive Guidelines">
           <div className="p-8 rounded-2xl bg-surface-secondary border border-border-default">
             <div className="space-y-6">
@@ -310,34 +310,34 @@ export default function DesignSystemPage() {
               <div>
                 <p className="text-body-sm font-medium text-text-primary mb-1">Content Rail Behavior</p>
                 <ul className="space-y-1.5 text-body-sm text-text-secondary">
-                  <li>• Mobile: horizontal scroll with snap points, 72 card width</li>
-                  <li>• Tablet: horizontal scroll, 72 card width, 16px padding</li>
-                  <li>• Desktop: horizontal scroll, 72 card width, 32px padding</li>
-                  <li>• Wide: horizontal scroll, 72 card width, 64px padding</li>
+                  <li>â€¢ Mobile: horizontal scroll with snap points, 72 card width</li>
+                  <li>â€¢ Tablet: horizontal scroll, 72 card width, 16px padding</li>
+                  <li>â€¢ Desktop: horizontal scroll, 72 card width, 32px padding</li>
+                  <li>â€¢ Wide: horizontal scroll, 72 card width, 64px padding</li>
                 </ul>
               </div>
 
               <div>
                 <p className="text-body-sm font-medium text-text-primary mb-1">Navbar</p>
                 <ul className="space-y-1.5 text-body-sm text-text-secondary">
-                  <li>• Mobile: hamburger menu, fullscreen overlay nav</li>
-                  <li>• Desktop: horizontal nav items, glass-strong background</li>
+                  <li>â€¢ Mobile: hamburger menu, fullscreen overlay nav</li>
+                  <li>â€¢ Desktop: horizontal nav items, glass-strong background</li>
                 </ul>
               </div>
 
               <div>
                 <p className="text-body-sm font-medium text-text-primary mb-1">Grid System</p>
                 <ul className="space-y-1.5 text-body-sm text-text-secondary">
-                  <li>• Experience grid: 2 cols mobile → 3 cols tablet → 4 cols desktop</li>
-                  <li>• Footer: 2 cols mobile → 4 cols desktop</li>
-                  <li>• Gift cards: 1 col mobile → 3 cols desktop</li>
+                  <li>â€¢ Experience grid: 2 cols mobile â†’ 3 cols tablet â†’ 4 cols desktop</li>
+                  <li>â€¢ Footer: 2 cols mobile â†’ 4 cols desktop</li>
+                  <li>â€¢ Gift cards: 1 col mobile â†’ 3 cols desktop</li>
                 </ul>
               </div>
             </div>
           </div>
         </Section>
 
-        {/* ── Design Tokens Summary ── */}
+        {/* â”€â”€ Design Tokens Summary â”€â”€ */}
         <Section title="Design Tokens">
           <div className="p-8 rounded-2xl bg-surface-secondary border border-border-default">
             <p className="text-body-sm text-text-secondary mb-4">

@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase-admin";
+﻿import { createAdminClient } from "@/lib/supabase-admin";
 import { experiences } from "@/lib/data";
 import { json, handleRouteError } from "@/lib/api-helpers";
 import { createHash } from "crypto";
@@ -12,10 +12,10 @@ const DEFAULT_PARTNER_ID = "00000000-0000-4000-a000-000000000001";
 const DEFAULT_PARTNER_USER_ID = "00000000-0000-4000-a000-000000000000";
 
 const CATEGORIES = [
-  { name: "Date", slug: "date", description: "Romantic dinners & sunset spots", icon: "❤️", sort_order: 1 },
-  { name: "Chill", slug: "chill", description: "Coffee shops, spas & cafés", icon: "🌿", sort_order: 2 },
-  { name: "Celebrate", slug: "celebrate", description: "Birthdays, nightlife & dining", icon: "🎉", sort_order: 3 },
-  { name: "Escape", slug: "escape", description: "Weekend getaways & adventures", icon: "🌍", sort_order: 4 },
+  { name: "Date", slug: "date", description: "Romantic dinners & sunset spots", icon: "â¤ï¸", sort_order: 1 },
+  { name: "Chill", slug: "chill", description: "Coffee shops, spas & cafÃ©s", icon: "ðŸŒ¿", sort_order: 2 },
+  { name: "Celebrate", slug: "celebrate", description: "Birthdays, nightlife & dining", icon: "ðŸŽ‰", sort_order: 3 },
+  { name: "Escape", slug: "escape", description: "Weekend getaways & adventures", icon: "ðŸŒ", sort_order: 4 },
 ];
 
 export async function POST() {
@@ -41,8 +41,8 @@ export async function POST() {
         const { error: userErr } = await admin.from("users").insert({
           id: DEFAULT_PARTNER_USER_ID,
           role: "partner",
-          full_name: "Momento Platform",
-          email: "platform@momento.mw",
+          full_name: "Experio Platform",
+          email: "platform@experio.mw",
           country: "Malawi",
           preferred_currency: "MWK",
         });
@@ -54,7 +54,7 @@ export async function POST() {
       const { error: partnerErr } = await admin.from("partners").insert({
         id: DEFAULT_PARTNER_ID,
         user_id: DEFAULT_PARTNER_USER_ID,
-        business_name: "Momento Platform",
+        business_name: "Experio Platform",
         business_description: "Curated experiences across Malawi",
         partner_type: "individual",
         countries: ["Malawi"],
@@ -93,7 +93,7 @@ export async function POST() {
 
     // 4. Seed experiences
     const experienceRows = experiences.map((exp) => {
-      const slug = `momento-${exp.id}`;
+      const slug = `EXPERIO-${exp.id}`;
       const catSlug = exp.category.toLowerCase().replace(/[\s&]+/g, "-");
       return {
         id: deterministicUUID(exp.id),

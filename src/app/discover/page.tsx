@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ import { trackRecentlyViewed } from "@/lib/recently-viewed";
 function loadSaved(): string[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem("momento-saved");
+    const raw = localStorage.getItem("experio-saved");
     if (!raw) return [];
     const state = JSON.parse(raw);
     return state.savedIds || [];
@@ -133,10 +133,10 @@ export default function DiscoverPage() {
       setSavedIds((prev) => {
         const updated = next ? [...prev, id] : prev.filter((s) => s !== id);
         try {
-          const raw = localStorage.getItem("momento-saved");
+          const raw = localStorage.getItem("experio-saved");
           const state = raw ? JSON.parse(raw) : { savedIds: [], collections: [] };
           state.savedIds = updated;
-          localStorage.setItem("momento-saved", JSON.stringify(state));
+          localStorage.setItem("experio-saved", JSON.stringify(state));
         } catch {}
         return updated;
       });
@@ -191,7 +191,7 @@ export default function DiscoverPage() {
       {/* Spacer so first item content isn't hidden behind fixed header */}
       <div className="snap-none h-16 sm:h-18" />
 
-      {/* ─── Compact Search Bar ─── */}
+      {/* â”€â”€â”€ Compact Search Bar â”€â”€â”€ */}
       {searchOpen && (
         <div className="snap-none fixed top-16 left-0 right-0 z-30 px-4 py-2 bg-[#05070B]/95 backdrop-blur-md border-b border-white/[0.06]">
           <div className="relative max-w-md mx-auto">
@@ -207,13 +207,13 @@ export default function DiscoverPage() {
               className="w-full pl-10 pr-8 py-2.5 rounded-xl bg-[#1A2332] border border-white/[0.08] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B]/60 focus:outline-none focus:border-[#FF0F73]"
             />
             {searchQuery && (
-              <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white text-xs">✕</button>
+              <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white text-xs">âœ•</button>
             )}
           </div>
         </div>
       )}
 
-      {/* ─── Search Toggle ─── */}
+      {/* â”€â”€â”€ Search Toggle â”€â”€â”€ */}
       <button
         onClick={() => setSearchOpen(!searchOpen)}
         className="snap-none fixed top-[18px] right-4 z-30 w-9 h-9 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center hover:bg-white/20 transition-all"
@@ -224,7 +224,7 @@ export default function DiscoverPage() {
         </svg>
       </button>
 
-      {/* ─── Near Me Toggle ─── */}
+      {/* â”€â”€â”€ Near Me Toggle â”€â”€â”€ */}
       <button
         onClick={() => setNearMe((prev) => !prev)}
         className={`snap-none fixed top-[18px] right-16 z-30 h-9 px-3 rounded-full backdrop-blur-md border flex items-center justify-center gap-1.5 text-caption font-medium transition-all ${
@@ -241,7 +241,7 @@ export default function DiscoverPage() {
         Near Me
       </button>
 
-      {/* ─── Toast ─── */}
+      {/* â”€â”€â”€ Toast â”€â”€â”€ */}
       <div className={`snap-none fixed top-20 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
         toast.visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"
       }`}>

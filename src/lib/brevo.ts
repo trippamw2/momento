@@ -1,9 +1,9 @@
-// ─── Brevo (Sendinblue) Transactional Email Service ───
+﻿// â”€â”€â”€ Brevo (Sendinblue) Transactional Email Service â”€â”€â”€
 // Server-side only. Do NOT import in client components.
 
 const BREVO_API = "https://api.brevo.com/v3/smtp/email";
 
-const SENDER = { name: "Momento", email: "noreply@momento.life" };
+const SENDER = { name: "Experio", email: "noreply@experio.life" };
 
 interface BrevoResponse {
   messageId: string;
@@ -50,7 +50,7 @@ async function sendEmail(params: {
   }
 }
 
-// ─── HTML Templates ───
+// â”€â”€â”€ HTML Templates â”€â”€â”€
 
 function baseLayout(title: string, bodyHtml: string): string {
   return `<!DOCTYPE html>
@@ -67,7 +67,7 @@ function baseLayout(title: string, bodyHtml: string): string {
         <table role="presentation" width="100%" style="max-width:560px;">
           <tr>
             <td style="padding-bottom:24px;text-align:center;">
-              <span style="font-size:24px;font-weight:700;color:#FF0F73;">Momento</span>
+              <span style="font-size:24px;font-weight:700;color:#FF0F73;">Experio</span>
             </td>
           </tr>
           <tr>
@@ -78,10 +78,10 @@ function baseLayout(title: string, bodyHtml: string): string {
           <tr>
             <td style="padding-top:24px;text-align:center;">
               <p style="margin:0;font-size:12px;color:#6B7280;">
-                Live The Moment &mdash; Momento
+                Live The Moment &mdash; Experio
               </p>
               <p style="margin:8px 0 0;font-size:12px;color:#6B7280;">
-                This is an automated message from Momento. Please do not reply directly.
+                This is an automated message from Experio. Please do not reply directly.
               </p>
             </td>
           </tr>
@@ -106,7 +106,7 @@ function bookingConfirmedHtml(params: {
   partnerName: string;
 }): string {
   const body = `
-    <h1 style="margin:0 0 8px;font-size:22px;color:#ffffff;font-weight:600;">Booking Confirmed! 🎉</h1>
+    <h1 style="margin:0 0 8px;font-size:22px;color:#ffffff;font-weight:600;">Booking Confirmed! ðŸŽ‰</h1>
     <p style="margin:0 0 24px;font-size:14px;color:#94A3B8;">Hey ${params.guestName}, get ready for an unforgettable experience.</p>
 
     <div style="background-color:#1A2332;border-radius:12px;padding:20px;margin-bottom:24px;">
@@ -142,15 +142,15 @@ function bookingConfirmedHtml(params: {
       <p style="margin:0;font-size:16px;color:#FF0F73;font-weight:600;font-family:monospace;">${params.bookingId}</p>
     </div>
 
-    <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://momento.life"}/bookings" style="display:block;text-align:center;background:linear-gradient(135deg,#FF0F73,#F82D7B);color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;margin-bottom:24px;">
+    <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/bookings" style="display:block;text-align:center;background:linear-gradient(135deg,#FF0F73,#F82D7B);color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;margin-bottom:24px;">
       View My Booking
     </a>
 
     <p style="margin:0;font-size:12px;color:#6B7280;text-align:center;">
-      Need to make changes? Visit your <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://momento.life"}/bookings" style="color:#FF0F73;">bookings page</a>.
+      Need to make changes? Visit your <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/bookings" style="color:#FF0F73;">bookings page</a>.
     </p>
   `;
-  return baseLayout("Booking Confirmed - Momento", body);
+  return baseLayout("Booking Confirmed - Experio", body);
 }
 
 function giftCardReceivedHtml(params: {
@@ -163,10 +163,10 @@ function giftCardReceivedHtml(params: {
   occasion?: string;
 }): string {
   const body = `
-    <h1 style="margin:0 0 8px;font-size:22px;color:#ffffff;font-weight:600;">You've Received a Gift Card! 🎁</h1>
-    <p style="margin:0 0 24px;font-size:14px;color:#94A3B8;">Hi ${params.recipientName}, ${params.senderName} has sent you an Momento gift card!</p>
+    <h1 style="margin:0 0 8px;font-size:22px;color:#ffffff;font-weight:600;">You've Received a Gift Card! ðŸŽ</h1>
+    <p style="margin:0 0 24px;font-size:14px;color:#94A3B8;">Hi ${params.recipientName}, ${params.senderName} has sent you an Experio gift card!</p>
 
-    ${params.occasion ? `<p style="margin:0 0 16px;font-size:13px;color:#FF0F73;text-align:center;">🎉 ${params.occasion}</p>` : ""}
+    ${params.occasion ? `<p style="margin:0 0 16px;font-size:13px;color:#FF0F73;text-align:center;">ðŸŽ‰ ${params.occasion}</p>` : ""}
 
     <div style="background:linear-gradient(135deg,#FF0F73,#F82D7B);border-radius:12px;padding:24px;text-align:center;margin-bottom:20px;">
       <p style="margin:0 0 4px;font-size:12px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px;">Gift Card Value</p>
@@ -185,16 +185,16 @@ function giftCardReceivedHtml(params: {
       <p style="margin:0;font-size:18px;color:#FF0F73;font-weight:700;font-family:monospace;letter-spacing:2px;">${params.code}</p>
     </div>
 
-    <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://momento.life"}/gift/redeem?code=${params.code}" style="display:block;text-align:center;background:linear-gradient(135deg,#FF0F73,#F82D7B);color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;margin-bottom:16px;">
+    <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/gift/redeem?code=${params.code}" style="display:block;text-align:center;background:linear-gradient(135deg,#FF0F73,#F82D7B);color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;margin-bottom:16px;">
       Redeem Your Gift
     </a>
 
     <p style="margin:0;font-size:12px;color:#6B7280;text-align:center;">
       This gift card expires one year from the date of issue. <br/>
-      <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://momento.life"}/gift" style="color:#FF0F73;">Learn more about gift cards</a>
+      <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/gift" style="color:#FF0F73;">Learn more about gift cards</a>
     </p>
   `;
-  return baseLayout("Gift Card Received - Momento", body);
+  return baseLayout("Gift Card Received - Experio", body);
 }
 
 function bookingCancelledHtml(params: {
@@ -213,14 +213,14 @@ function bookingCancelledHtml(params: {
       <p style="margin:0;font-size:13px;color:#94A3B8;">${params.refundStatus}</p>
     </div>
 
-    <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://momento.life"}/experiences" style="display:block;text-align:center;background:linear-gradient(135deg,#FF0F73,#F82D7B);color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;">
+    <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://experio.life"}/experiences" style="display:block;text-align:center;background:linear-gradient(135deg,#FF0F73,#F82D7B);color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;">
       Explore More Experiences
     </a>
   `;
-  return baseLayout("Booking Cancelled - Momento", body);
+  return baseLayout("Booking Cancelled - Experio", body);
 }
 
-// ─── Public API ───
+// â”€â”€â”€ Public API â”€â”€â”€
 
 export async function sendBookingConfirmation(params: {
   email: string;
@@ -237,7 +237,7 @@ export async function sendBookingConfirmation(params: {
 }) {
   return sendEmail({
     to: [{ email: params.email, name: params.guestName }],
-    subject: `Booking Confirmed — ${params.experienceTitle} ✦ Momento`,
+    subject: `Booking Confirmed â€” ${params.experienceTitle} âœ¦ Experio`,
     htmlContent: bookingConfirmedHtml(params),
   });
 }
@@ -251,7 +251,7 @@ export async function sendBookingCancellation(params: {
 }) {
   return sendEmail({
     to: [{ email: params.email, name: params.guestName }],
-    subject: `Booking Cancelled — ${params.experienceTitle} ✦ Momento`,
+    subject: `Booking Cancelled â€” ${params.experienceTitle} âœ¦ Experio`,
     htmlContent: bookingCancelledHtml(params),
   });
 }
@@ -268,7 +268,7 @@ export async function sendGiftCardEmail(params: {
 }) {
   return sendEmail({
     to: [{ email: params.recipientEmail, name: params.recipientName }],
-    subject: `You've Received a Momento Gift Card from ${params.senderName}! 🎁`,
+    subject: `You've Received an Experio Gift Card from ${params.senderName}! ðŸŽ`,
     htmlContent: giftCardReceivedHtml(params),
   });
 }

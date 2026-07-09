@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -36,7 +36,7 @@ export default function CheckoutPage() {
     gift_card_code: "",
   });
 
-  const getToken = () => localStorage.getItem("momento-auth-token");
+  const getToken = () => localStorage.getItem("experio-auth-token");
 
   useEffect(() => {
     if (!experienceId) { setLoading(false); return; }
@@ -160,8 +160,8 @@ export default function CheckoutPage() {
             )}
             <div className="flex-1 min-w-0">
               <h2 className="text-heading-sm font-bold text-[#F1F5F9] truncate">{experience.title}</h2>
-              <p className="text-caption text-[#94A3B8]">{experience.location} · {experience.duration}</p>
-              <p className="text-body-sm text-[#94A3B8] mt-1">{date}{time ? ` at ${time}` : ""} · {guests} guest{guests > 1 ? "s" : ""}</p>
+              <p className="text-caption text-[#94A3B8]">{experience.location} Â· {experience.duration}</p>
+              <p className="text-body-sm text-[#94A3B8] mt-1">{date}{time ? ` at ${time}` : ""} Â· {guests} guest{guests > 1 ? "s" : ""}</p>
             </div>
           </div>
         </div>
@@ -201,14 +201,14 @@ export default function CheckoutPage() {
           <h3 className="text-heading-sm font-bold text-[#F1F5F9] mb-3">Gift Card (optional)</h3>
           <input value={form.gift_card_code} onChange={e => setForm(f => ({ ...f, gift_card_code: e.target.value.toUpperCase() }))}
             className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm font-mono focus:outline-none focus:border-[#FF0F73]"
-            placeholder="MOMO-XXXX-XXXX" />
+            placeholder="XPRO-XXXX-XXXX" />
         </div>
 
         {/* Price Summary */}
         <div className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5 mb-6">
           <div className="space-y-2">
             <div className="flex justify-between text-body-sm">
-              <span className="text-[#94A3B8]">MK {experience.price.toLocaleString()} × {guests} guest{guests > 1 ? "s" : ""}</span>
+              <span className="text-[#94A3B8]">MK {experience.price.toLocaleString()} Ã— {guests} guest{guests > 1 ? "s" : ""}</span>
               <span className="text-[#F1F5F9]">MK {totalPrice.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-body-sm">

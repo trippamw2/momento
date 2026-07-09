@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -13,14 +13,14 @@ export default function TermsPage() {
           <section>
             <h2 className="text-heading-sm font-bold text-[#222222] mb-3">1. Acceptance of Terms</h2>
             <p>
-              By accessing or using Momento (&quot;the Platform&quot;), you agree to be bound by these Terms of Service. If you do not agree, you may not use the Platform.
+              By accessing or using Experio (&quot;the Platform&quot;), you agree to be bound by these Terms of Service. If you do not agree, you may not use the Platform.
             </p>
           </section>
 
           <section>
             <h2 className="text-heading-sm font-bold text-[#222222] mb-3">2. Description of Service</h2>
             <p>
-              Momento is a marketplace that connects people with curated experiences. We facilitate bookings, payments, and communication between experience hosts and guests but are not a party to the experience itself.
+              Experio is a marketplace that connects people with curated experiences. We facilitate bookings, payments, and communication between experience hosts and guests but are not a party to the experience itself.
             </p>
           </section>
 
@@ -34,7 +34,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-heading-sm font-bold text-[#222222] mb-3">4. Bookings & Payments</h2>
             <p>
-              All bookings are subject to availability. Prices are displayed in Malawi Kwacha (MK) and include applicable taxes unless stated otherwise. Payment is due at the time of booking. Momento uses third-party payment processors and does not store full payment card details.
+              All bookings are subject to availability. Prices are displayed in Malawi Kwacha (MK) and include applicable taxes unless stated otherwise. Payment is due at the time of booking. Experio uses third-party payment processors and does not store full payment card details.
             </p>
           </section>
 
@@ -48,7 +48,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-heading-sm font-bold text-[#222222] mb-3">6. Host Obligations</h2>
             <p>
-              Hosts agree to provide experiences as described, maintain appropriate licenses and insurance, and comply with all applicable laws. Momento reserves the right to remove listings that violate these terms.
+              Hosts agree to provide experiences as described, maintain appropriate licenses and insurance, and comply with all applicable laws. Experio reserves the right to remove listings that violate these terms.
             </p>
           </section>
 
@@ -62,7 +62,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-heading-sm font-bold text-[#222222] mb-3">8. Limitation of Liability</h2>
             <p>
-              Momento provides the Platform on an &quot;as is&quot; basis. To the maximum extent permitted by law, Momento disclaims all warranties and shall not be liable for any damages arising from your use of the Platform or any experience booked through it.
+              Experio provides the Platform on an &quot;as is&quot; basis. To the maximum extent permitted by law, Experio disclaims all warranties and shall not be liable for any damages arising from your use of the Platform or any experience booked through it.
             </p>
           </section>
 
@@ -76,7 +76,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-heading-sm font-bold text-[#222222] mb-3">10. Contact</h2>
             <p>
-              For questions about these terms, contact us at <a href="mailto:legal@momento.life" className="text-[#FF0F73] hover:underline">legal@momento.life</a>.
+              For questions about these terms, contact us at <a href="mailto:legal@experio.life" className="text-[#FF0F73] hover:underline">legal@experio.life</a>.
             </p>
           </section>
         </div>

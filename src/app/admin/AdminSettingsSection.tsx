@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 
@@ -16,7 +16,7 @@ export default function AdminSettingsSection() {
   const [saving, setSaving] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<Record<string, string>>({});
 
-  const getToken = () => localStorage.getItem("momento-auth-token");
+  const getToken = () => localStorage.getItem("experio-auth-token");
 
   const fetchSettings = useCallback(async () => {
     try {

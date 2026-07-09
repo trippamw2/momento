@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -69,55 +69,55 @@ const mockBookings: Booking[] = [
     id: "b1", experienceId: "sunset-cruise", title: "Sunset Cruise", venue: "Cape Maclear Cruises",
     image: findMockImage("sunset-cruise") || FALLBACK_IMG,
     date: addDays(now, 3).toISOString(), dateLabel: formatDateLabel(addDays(now, 3)),
-    time: "4:00 PM", guests: 2, status: "upcoming", price: 55000, bookingRef: "MOMO-BK-001",
+    time: "4:00 PM", guests: 2, status: "upcoming", price: 55000, bookingRef: "XPRO-BK-001",
   },
   {
     id: "b2", experienceId: "pool-lunch", title: "Pool & Lunch", venue: "Lilongwe Club & Spa",
     image: findMockImage("pool-lunch") || FALLBACK_IMG,
     date: addDays(now, 7).toISOString(), dateLabel: formatDateLabel(addDays(now, 7)),
-    time: "10:00 AM", guests: 4, status: "upcoming", price: 45000, bookingRef: "MOMO-BK-002",
+    time: "10:00 AM", guests: 4, status: "upcoming", price: 45000, bookingRef: "XPRO-BK-002",
   },
   {
     id: "b3", experienceId: "spa-day", title: "Spa Day", venue: "Blantyre Wellness Collective",
     image: findMockImage("spa-day") || FALLBACK_IMG,
     date: addDays(now, -5).toISOString(), dateLabel: formatDateLabel(addDays(now, -5)),
-    time: "9:00 AM", guests: 1, status: "completed", price: 85000, bookingRef: "MOMO-BK-003",
+    time: "9:00 AM", guests: 1, status: "completed", price: 85000, bookingRef: "XPRO-BK-003",
   },
   {
     id: "b4", experienceId: "date-night", title: "Date Night", venue: "Lake Malawi Private Dining",
     image: findMockImage("date-night") || FALLBACK_IMG,
     date: addDays(now, -14).toISOString(), dateLabel: formatDateLabel(addDays(now, -14)),
-    time: "6:30 PM", guests: 2, status: "completed", price: 65000, bookingRef: "MOMO-BK-004",
+    time: "6:30 PM", guests: 2, status: "completed", price: 65000, bookingRef: "XPRO-BK-004",
   },
   {
     id: "b5", experienceId: "rooftop-dining", title: "Rooftop Dining", venue: "Skyline Dining Co.",
     image: findMockImage("rooftop-dining") || FALLBACK_IMG,
     date: addDays(now, 14).toISOString(), dateLabel: formatDateLabel(addDays(now, 14)),
-    time: "7:00 PM", guests: 2, status: "upcoming", price: 75000, bookingRef: "MOMO-BK-005",
+    time: "7:00 PM", guests: 2, status: "upcoming", price: 75000, bookingRef: "XPRO-BK-005",
   },
   {
     id: "b6", experienceId: "glamping-weekend", title: "Glamping Weekend", venue: "Bush & Lakeside Co.",
     image: findMockImage("glamping-weekend") || FALLBACK_IMG,
     date: addDays(now, -30).toISOString(), dateLabel: formatDateLabel(addDays(now, -30)),
-    time: "2:00 PM", guests: 2, status: "cancelled", price: 200000, bookingRef: "MOMO-BK-006",
+    time: "2:00 PM", guests: 2, status: "cancelled", price: 200000, bookingRef: "XPRO-BK-006",
   },
   {
     id: "b7", experienceId: "brunch-experience", title: "Brunch Experience", venue: "The Velvet Fork",
     image: findMockImage("brunch-experience") || FALLBACK_IMG,
     date: addDays(now, -60).toISOString(), dateLabel: formatDateLabel(addDays(now, -60)),
-    time: "11:00 AM", guests: 3, status: "completed", price: 35000, bookingRef: "MOMO-BK-007",
+    time: "11:00 AM", guests: 3, status: "completed", price: 35000, bookingRef: "XPRO-BK-007",
   },
   {
     id: "b8", experienceId: "private-beach-dinner", title: "Private Beach Dinner", venue: "Beachside Elegance",
     image: findMockImage("private-beach-dinner") || FALLBACK_IMG,
     date: addDays(now, 21).toISOString(), dateLabel: formatDateLabel(addDays(now, 21)),
-    time: "6:00 PM", guests: 2, status: "upcoming", price: 130000, bookingRef: "MOMO-BK-008",
+    time: "6:00 PM", guests: 2, status: "upcoming", price: 130000, bookingRef: "XPRO-BK-008",
   },
   {
     id: "b9", experienceId: "wellness-retreat", title: "Wellness Retreat", venue: "Salima Sanctuary",
     image: findMockImage("wellness-retreat") || FALLBACK_IMG,
     date: addDays(now, -20).toISOString(), dateLabel: formatDateLabel(addDays(now, -20)),
-    time: "8:00 AM", guests: 1, status: "cancelled", price: 150000, bookingRef: "MOMO-BK-009",
+    time: "8:00 AM", guests: 1, status: "cancelled", price: 150000, bookingRef: "XPRO-BK-009",
   },
 ];
 
@@ -137,7 +137,7 @@ function mapApiBooking(api: ApiBooking): Booking {
     guests: api.guests_count,
     status: (api.status === "pending" ? "upcoming" : api.status === "confirmed" ? "upcoming" : api.status) as Booking["status"],
     price: api.total_price,
-    bookingRef: api.booking_ref || `MOMO-${api.id.slice(0, 6).toUpperCase()}`,
+    bookingRef: api.booking_ref || `XPRO-${api.id.slice(0, 6).toUpperCase()}`,
   };
 }
 
@@ -186,7 +186,7 @@ export default function BookingsPage() {
 
   // Detect auth state and fetch real bookings
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("momento-auth-token") : null;
+    const token = typeof window !== "undefined" ? localStorage.getItem("experio-auth-token") : null;
     setSignedIn(!!token);
 
     if (token) {
@@ -207,7 +207,7 @@ export default function BookingsPage() {
   // Re-fetch when auth modal closes and user became signed in
   const handleAuthClose = useCallback(() => {
     setAuthOpen(false);
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     setSignedIn(!!token);
     if (token) {
       setLoadingApi(true);
@@ -226,7 +226,7 @@ export default function BookingsPage() {
 
   // Handle booking cancel: call API then update local state
   const handleCancel = useCallback(async (bookingId: string) => {
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     if (!token) return;
     try {
       const res = await fetch(`/api/bookings/${bookingId}/cancel`, {
@@ -253,7 +253,7 @@ export default function BookingsPage() {
     if (reviewRating === 0 || !reviewModal) return;
     setReviewSending(true);
     try {
-      const token = localStorage.getItem("momento-auth-token");
+      const token = localStorage.getItem("experio-auth-token");
       await fetch("/api/reviews", {
         method: "POST",
         headers: {
@@ -302,7 +302,7 @@ export default function BookingsPage() {
     <>
       <div className="pt-20 pb-16 min-h-screen">
         <div className="max-w-7xl mx-auto flex gap-0 sm:gap-6 px-0 sm:px-8">
-          {/* ─── Sidebar ─── */}
+          {/* â”€â”€â”€ Sidebar â”€â”€â”€ */}
           <aside className="hidden sm:flex flex-col w-56 flex-shrink-0 sticky top-24 self-start">
             <div className="bg-[#111827] border border-white/[0.08] rounded-2xl overflow-hidden shadow-sm">
               <div className="px-5 py-4 border-b border-white/[0.08]">
@@ -360,7 +360,7 @@ export default function BookingsPage() {
             </div>
           </div>
 
-          {/* ─── Main Content ─── */}
+          {/* â”€â”€â”€ Main Content â”€â”€â”€ */}
           <main className="flex-1 min-w-0 px-4 sm:px-0">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
@@ -420,7 +420,7 @@ export default function BookingsPage() {
             )}
 
             {!signedIn && !isSpecialTab ? (
-              /* ─── Empty / Sign-in State ─── */
+              /* â”€â”€â”€ Empty / Sign-in State â”€â”€â”€ */
               <div className="rounded-2xl bg-[#111827] border border-white/[0.08] p-8 sm:p-12 text-center mb-10">
                 <div className="w-16 h-16 rounded-full bg-white/[0.06] flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -440,7 +440,7 @@ export default function BookingsPage() {
                 </button>
               </div>
             ) : isSpecialTab ? (
-              /* ─── Special Tab Placeholders ─── */
+              /* â”€â”€â”€ Special Tab Placeholders â”€â”€â”€ */
               <div className="rounded-2xl bg-[#111827] border border-white/[0.08] p-8 sm:p-12 text-center mb-10">
                 <div className="w-16 h-16 rounded-full bg-white/[0.06] flex items-center justify-center mx-auto mb-4">
                   {sidebarTab === "payments" ? (
@@ -469,7 +469,7 @@ export default function BookingsPage() {
               </div>
             ) : (
               <>
-                {/* ─── Booking Cards with Cancel + PDF + Countdown ─── */}
+                {/* â”€â”€â”€ Booking Cards with Cancel + PDF + Countdown â”€â”€â”€ */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
                   {displayed.map((booking) => (
                     <div key={booking.id}>
@@ -503,7 +503,7 @@ export default function BookingsPage() {
                   ))}
                 </div>
 
-                {/* ─── Bottom Features ─── */}
+                {/* â”€â”€â”€ Bottom Features â”€â”€â”€ */}
                 <section>
                   <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-5 text-center">Why Book With Experio?</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -524,7 +524,7 @@ export default function BookingsPage() {
         </div>
       </div>
 
-      {/* ─── Review Modal ─── */}
+      {/* â”€â”€â”€ Review Modal â”€â”€â”€ */}
       {reviewModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => { if (!reviewSending) setReviewModal(null); }}>
           <div className="bg-[#111827] rounded-2xl border border-white/[0.1] p-6 max-w-md mx-4 shadow-2xl w-full" onClick={(e) => e.stopPropagation()}>
@@ -532,7 +532,7 @@ export default function BookingsPage() {
               <>
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-heading-md font-bold text-[#F1F5F9]">Rate this experience</h3>
-                  <button onClick={() => setReviewModal(null)} className="text-[#64748B] hover:text-white transition-colors">✕</button>
+                  <button onClick={() => setReviewModal(null)} className="text-[#64748B] hover:text-white transition-colors">âœ•</button>
                 </div>
                 <p className="text-[#CBD5E1] text-body-sm mb-4">{reviewModal.title}</p>
 

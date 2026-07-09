@@ -1,4 +1,4 @@
-import { json, badRequest, serverError, handleRouteError, getUser } from "@/lib/api-helpers";
+﻿import { json, badRequest, serverError, handleRouteError, getUser } from "@/lib/api-helpers";
 import { sendBookingConfirmation, sendBookingCancellation, sendGiftCardEmail, type SendEmailResult } from "@/lib/brevo";
 
 export async function POST(request: Request) {

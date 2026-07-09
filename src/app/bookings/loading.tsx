@@ -1,4 +1,4 @@
-export default function BookingsLoading() {
+﻿export default function BookingsLoading() {
   return (
     <div className="pt-20 pb-16 min-h-screen bg-[#05070B]">
       <div className="max-w-7xl mx-auto flex gap-6 px-8">

@@ -1,4 +1,4 @@
-import { getUser, json, handleRouteError, badRequest } from "@/lib/api-helpers";
+﻿import { getUser, json, handleRouteError, badRequest } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 const PAYCHANGU_API = process.env.PAYCHANGU_API_URL || "https://api.paychangu.com";
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
 
     // Try real PayChangu if configured
     if (PAYCHANGU_SECRET_KEY) {
-      const txRef = `MOMO-GIFT-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+      const txRef = `XPRO-GIFT-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
       const callbackUrl = `${origin}/api/payments/paychangu-webhook`;
       const returnUrl = `${origin}/gift?payment=success&tx_ref=${txRef}`;
       const cancelUrl = `${origin}/gift?payment=cancelled`;
@@ -144,7 +144,7 @@ export async function POST(request: Request) {
 async function generateUniqueCode(admin: ReturnType<typeof createAdminClient>): Promise<string> {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   for (let attempt = 0; attempt < 15; attempt++) {
-    let code = "MOMO-";
+    let code = "XPRO-";
     for (let i = 0; i < 8; i++) {
       if (i === 4) code += "-";
       code += chars[Math.floor(Math.random() * chars.length)];
@@ -156,5 +156,5 @@ async function generateUniqueCode(admin: ReturnType<typeof createAdminClient>): 
       .maybeSingle();
     if (!existing) return code;
   }
-  return `MOMO-${Date.now().toString(36).toUpperCase()}`;
+  return `XPRO-${Date.now().toString(36).toUpperCase()}`;
 }

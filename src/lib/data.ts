@@ -1,4 +1,4 @@
-// Barrel file — re-exports all data from module components.
+﻿// Barrel file â€” re-exports all data from module components.
 // Import paths remain unchanged (import { experiences } from "@/lib/data").
 
 export {

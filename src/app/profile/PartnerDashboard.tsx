@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo } from "react";
 import Image from "next/image";
@@ -60,7 +60,7 @@ const mockNotifications = [
   { id: "N1", title: "New booking received", desc: "Chimwemwe Banda booked Sunset Cruise", time: "12m ago", read: false },
   { id: "N2", title: "Review alert", desc: "New 5-star review on Spa Day", time: "2h ago", read: false },
   { id: "N3", title: "Payout processed", desc: "MK 845,000 sent to your account", time: "1d ago", read: false },
-  { id: "N4", title: "Experience suggestion", desc: "Pool & Lunch is trending — consider adding slots", time: "2d ago", read: true },
+  { id: "N4", title: "Experience suggestion", desc: "Pool & Lunch is trending â€” consider adding slots", time: "2d ago", read: true },
   { id: "N5", title: "Weekly report ready", desc: "Your performance summary for Jun 14-20", time: "3d ago", read: true },
   { id: "N6", title: "Cancellation notice", desc: "Rooftop Dining booking cancelled by guest", time: "4d ago", read: true },
 ];
@@ -100,7 +100,7 @@ export default function PartnerDashboard() {
 
   return (
     <div className="min-h-screen bg-[#f7f7f7] flex">
-      {/* ─── Sidebar ─── */}
+      {/* â”€â”€â”€ Sidebar â”€â”€â”€ */}
       <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-[#ebebeb] transform transition-transform duration-300 lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}>
@@ -110,7 +110,7 @@ export default function PartnerDashboard() {
               <span className="text-white font-bold text-body">M</span>
             </div>
             <div>
-              <p className="text-body-sm font-bold text-[#222222]">Momento</p>
+              <p className="text-body-sm font-bold text-[#222222]">Experio</p>
               <p className="text-caption text-[#929292]">Partner Dashboard</p>
             </div>
           </div>
@@ -149,13 +149,13 @@ export default function PartnerDashboard() {
         <div className="fixed inset-0 bg-black/50 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      {/* ─── Main Content ─── */}
+      {/* â”€â”€â”€ Main Content â”€â”€â”€ */}
       <main className="flex-1 lg:ml-64 min-h-screen">
         <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-[#ebebeb]">
           <div className="flex items-center justify-between px-4 sm:px-6 h-14">
             <div className="flex items-center gap-3">
               <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#f7f7f7] text-[#6a6a6a] font-bold text-heading">
-                ≡
+                â‰¡
               </button>
               <h1 className="text-heading-md font-bold text-[#222222] hidden sm:block">
                 {nav.find((n) => n.key === section)?.label}
@@ -183,7 +183,7 @@ export default function PartnerDashboard() {
         </header>
 
         <div className="p-4 sm:p-6 space-y-6">
-          {/* ─── OVERVIEW ─── */}
+          {/* â”€â”€â”€ OVERVIEW â”€â”€â”€ */}
           {section === "overview" && (
             <OverviewSection
               totalRevenue={totalRevenue}
@@ -196,7 +196,7 @@ export default function PartnerDashboard() {
             />
           )}
 
-          {/* ─── EXPERIENCES ─── */}
+          {/* â”€â”€â”€ EXPERIENCES â”€â”€â”€ */}
           {section === "experiences" && (
             <div>
               <div className="flex items-center justify-between mb-6">
@@ -223,14 +223,14 @@ export default function PartnerDashboard() {
                         <div className="flex items-start justify-between gap-2">
                           <div>
                             <h3 className="text-body-sm font-semibold text-[#222222] truncate">{exp.title}</h3>
-                            <p className="text-caption text-[#929292] mt-0.5">{exp.category} · {exp.location}</p>
+                            <p className="text-caption text-[#929292] mt-0.5">{exp.category} Â· {exp.location}</p>
                           </div>
                           <span className="text-caption font-medium text-[#222222] whitespace-nowrap">MK {exp.price.toLocaleString()}</span>
                         </div>
                         <div className="flex items-center gap-3 mt-2 text-caption text-[#929292]">
-                          <span>⭐ {exp.rating}</span>
-                          <span>📅 {expBookings.length} bookings</span>
-                          <span>💰 MK {revenue.toLocaleString()}</span>
+                          <span>â­ {exp.rating}</span>
+                          <span>ðŸ“… {expBookings.length} bookings</span>
+                          <span>ðŸ’° MK {revenue.toLocaleString()}</span>
                         </div>
                         <div className="flex gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button className="px-3 py-1 rounded-lg bg-[#f7f7f7] text-[#6a6a6a] text-caption hover:bg-[#f0f0f0] transition-colors">Edit</button>
@@ -246,7 +246,7 @@ export default function PartnerDashboard() {
             </div>
           )}
 
-          {/* ─── AVAILABILITY ─── */}
+          {/* â”€â”€â”€ AVAILABILITY â”€â”€â”€ */}
           {section === "availability" && (
             <div>
               <div className="flex items-center justify-between mb-6">
@@ -272,7 +272,7 @@ export default function PartnerDashboard() {
             </div>
           )}
 
-          {/* ─── BOOKINGS ─── */}
+          {/* â”€â”€â”€ BOOKINGS â”€â”€â”€ */}
           {section === "bookings" && (
             <div>
               <div className="flex items-center gap-3 mb-6 flex-wrap">
@@ -306,12 +306,12 @@ export default function PartnerDashboard() {
             </div>
           )}
 
-          {/* ─── CUSTOMER INSIGHTS ─── */}
+          {/* â”€â”€â”€ CUSTOMER INSIGHTS â”€â”€â”€ */}
           {section === "customers" && (
             <CustomerInsightsSection totalCustomers={totalCustomers} />
           )}
 
-          {/* ─── PAYOUTS ─── */}
+          {/* â”€â”€â”€ PAYOUTS â”€â”€â”€ */}
           {section === "payouts" && (
             <div>
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
@@ -358,7 +358,7 @@ export default function PartnerDashboard() {
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {[
-                    { label: "Bank Account", value: "First Capital Bank · 1234******8901" },
+                    { label: "Bank Account", value: "First Capital Bank Â· 1234******8901" },
                     { label: "Account Holder", value: "Lilongwe Co. Ltd" },
                     { label: "Tax ID", value: "MW-123456-789" },
                   ].map((info) => (
@@ -376,15 +376,15 @@ export default function PartnerDashboard() {
             </div>
           )}
 
-          {/* ─── REPORTS ─── */}
+          {/* â”€â”€â”€ REPORTS â”€â”€â”€ */}
           {section === "reports" && (
             <div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 {[
-                  { label: "Revenue Report", desc: "Monthly revenue breakdown with trends and forecasts", icon: "💰", color: "bg-[#FF0F73]" },
-                  { label: "Bookings Report", desc: "Booking volumes, status distribution, and peak periods", icon: "📅", color: "bg-purple-500" },
-                  { label: "Customer Report", desc: "Customer acquisition, retention, and lifetime value", icon: "👥", color: "bg-cyan-500" },
-                  { label: "Performance Report", desc: "Experience ratings, reviews, and popularity scores", icon: "⭐", color: "bg-amber-500" },
+                  { label: "Revenue Report", desc: "Monthly revenue breakdown with trends and forecasts", icon: "ðŸ’°", color: "bg-[#FF0F73]" },
+                  { label: "Bookings Report", desc: "Booking volumes, status distribution, and peak periods", icon: "ðŸ“…", color: "bg-purple-500" },
+                  { label: "Customer Report", desc: "Customer acquisition, retention, and lifetime value", icon: "ðŸ‘¥", color: "bg-cyan-500" },
+                  { label: "Performance Report", desc: "Experience ratings, reviews, and popularity scores", icon: "â­", color: "bg-amber-500" },
                 ].map((report) => (
                   <div key={report.label} className="p-5 rounded-xl bg-white border border-[#ebebeb] hover:border-[#dddddd] transition-all group shadow-sm">
                     <div className={`w-10 h-10 rounded-lg ${report.color} flex items-center justify-center mb-3`}>
@@ -443,7 +443,7 @@ export default function PartnerDashboard() {
             </div>
           )}
 
-          {/* ─── NOTIFICATIONS ─── */}
+          {/* â”€â”€â”€ NOTIFICATIONS â”€â”€â”€ */}
           {section === "notifications" && <NotificationsSection />}
         </div>
       </main>

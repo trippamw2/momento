@@ -1,4 +1,4 @@
-export default function GuestSelector({ value, onChange, maxGuests }: { value: number; onChange: (v: number) => void; maxGuests: number }) {
+﻿export default function GuestSelector({ value, onChange, maxGuests }: { value: number; onChange: (v: number) => void; maxGuests: number }) {
   return (
     <div className="flex items-center justify-between p-3 rounded-xl bg-[#111827] border border-white/[0.1]">
       <span className="text-body-sm text-white font-medium">Guests</span>

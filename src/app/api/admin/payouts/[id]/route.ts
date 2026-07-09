@@ -1,4 +1,4 @@
-import { getUser, json, handleRouteError } from "@/lib/api-helpers";
+﻿import { getUser, json, handleRouteError } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {

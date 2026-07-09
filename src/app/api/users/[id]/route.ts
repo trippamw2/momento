@@ -1,4 +1,4 @@
-import { requireAdmin, getUser, json, handleRouteError, parseBody } from "@/lib/api-helpers";
+﻿import { requireAdmin, getUser, json, handleRouteError, parseBody } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {

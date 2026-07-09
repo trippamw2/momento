@@ -1,5 +1,5 @@
-/**
- * Recently Viewed — tracks experience detail page visits in localStorage.
+﻿/**
+ * Recently Viewed â€” tracks experience detail page visits in localStorage.
  * Shared across Experiences, Saved, and Discover pages.
  */
 

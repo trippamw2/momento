@@ -1,4 +1,4 @@
-export const defaultCollections = [
+﻿export const defaultCollections = [
   { id: "date-ideas", name: "Date Ideas", experienceIds: [] },
   { id: "weekend-plans", name: "Weekend Plans", experienceIds: [] },
   { id: "spa-breaks", name: "Chill & Relax", experienceIds: [] },

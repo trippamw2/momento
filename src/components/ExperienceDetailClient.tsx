@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo, useCallback, useEffect } from "react";
 import Image from "next/image";
@@ -18,13 +18,13 @@ import AuthModal from "./AuthModal";
 import ReviewForm from "./ReviewForm";
 import LocationMap from "./LocationMap";
 
-// ─── Props ───
+// â”€â”€â”€ Props â”€â”€â”€
 interface Props {
   experience: Experience;
   similarExperiences: Experience[];
 }
 
-// ─── Main Component ───
+// â”€â”€â”€ Main Component â”€â”€â”€
 export default function ExperienceDetailClient({ experience: exp, similarExperiences }: Props) {
   const [activeImage, setActiveImage] = useState(0);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -58,7 +58,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
   const allReviews = useMemo(() => {
     const local: Review[] = [];
     try {
-      const key = `MOMENTO-reviews-${exp.id}`;
+      const key = `EXPERIO-reviews-${exp.id}`;
       const raw = localStorage.getItem(key);
       if (raw) local.push(...JSON.parse(raw));
     } catch { /* ignore */ }
@@ -94,7 +94,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
       return;
     }
     setContactError("");
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     if (!token) { setAuthOpen(true); return; }
     setBooking(true);
     try {
@@ -153,7 +153,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
     setGiftChecking(true);
     setGiftError("");
     try {
-      const token = localStorage.getItem("momento-auth-token");
+      const token = localStorage.getItem("experio-auth-token");
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
       const res = await fetch(`/api/gift-cards/check?code=${encodeURIComponent(giftCode)}`, { headers });
@@ -175,7 +175,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
 
   const gotoNearby = () => { router.push("/experiences?nearby=true"); };
 
-  // ─── Booking Confirmed State ───
+  // â”€â”€â”€ Booking Confirmed State â”€â”€â”€
   if (bookingDone) {
     return (
       <BookingConfirmed
@@ -193,7 +193,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
     );
   }
 
-  // ─── Ratings Breakdown ───
+  // â”€â”€â”€ Ratings Breakdown â”€â”€â”€
   const ratingBreakdown = useMemo(() => {
     const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
     exp.reviews.forEach((r) => {
@@ -209,14 +209,14 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
   const totalPrice = exp.price * guests;
   const finalPrice = Math.max(0, totalPrice - giftAmount);
 
-  // ─── Render ───
+  // â”€â”€â”€ Render â”€â”€â”€
   return (
     <div className="bg-ambient-warm min-h-screen">
       {authOpen && <AuthModal onClose={() => setAuthOpen(false)} />}
 
-      {/* ════════════════════════════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       {/* HERO GALLERY                                */}
-      {/* ════════════════════════════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <section id="hero-gallery" className="relative">
         <div className="relative h-[55vh] sm:h-[70vh] md:h-[80vh] overflow-hidden">
           {exp.images.slice(0, 5).map((img, i) => (
@@ -241,7 +241,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               href="/experiences"
               className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white text-body-sm font-medium border border-white/[0.15] hover:bg-white/20 transition-all"
             >
-              ← Back
+              â† Back
             </Link>
             <div className="flex items-center gap-2">
               <button
@@ -301,12 +301,12 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       {/* MAIN LAYOUT: Content + Sidebar              */}
-      {/* ════════════════════════════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:grid lg:grid-cols-3 lg:gap-10 relative -mt-8 sm:-mt-8 lg:-mt-8 z-20">
 
-        {/* ─── LEFT COLUMN: Content ─── */}
+        {/* â”€â”€â”€ LEFT COLUMN: Content â”€â”€â”€ */}
         <div className="lg:col-span-2">
           <div className="rounded-2xl border border-white/[0.1] p-5 sm:p-8 mb-6">
             {/* Mood Tags */}
@@ -327,15 +327,15 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               <div className="flex items-center gap-1.5 text-body-sm text-[#CBD5E1]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                 {exp.location}
-                {exp.city && <><span className="text-[#94A3B8]">·</span><span className="text-[#94A3B8]">{exp.city}</span></>}
-                {exp.distance && <><span className="text-[#94A3B8]">·</span><span className="text-[#94A3B8]">{exp.distance}</span></>}
+                {exp.city && <><span className="text-[#94A3B8]">Â·</span><span className="text-[#94A3B8]">{exp.city}</span></>}
+                {exp.distance && <><span className="text-[#94A3B8]">Â·</span><span className="text-[#94A3B8]">{exp.distance}</span></>}
               </div>
               <div className="flex items-center gap-1.5 text-body-sm text-[#CBD5E1]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 {exp.duration}
               </div>
               <div className="flex items-center gap-1.5 text-body-sm">
-                <span className="text-yellow-400">★</span>
+                <span className="text-yellow-400">â˜…</span>
                 <span className="text-white font-semibold">{exp.rating}</span>
                 <span className="text-[#94A3B8]">({exp.reviewCount} reviews)</span>
               </div>
@@ -352,7 +352,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 <div className="flex items-center gap-2">
                   <span className="text-caption text-[#94A3B8]">Guests:</span>
                   <div className="flex items-center gap-2">
-                    <button onClick={() => setGuests(Math.max(1, guests - 1))} disabled={guests <= 1} className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-white text-sm disabled:opacity-30 hover:bg-white/10">−</button>
+                    <button onClick={() => setGuests(Math.max(1, guests - 1))} disabled={guests <= 1} className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-white text-sm disabled:opacity-30 hover:bg-white/10">âˆ’</button>
                     <span className="w-5 text-center text-body-sm text-white font-medium">{guests}</span>
                     <button onClick={() => setGuests(Math.min(exp.capacity, guests + 1))} disabled={guests >= exp.capacity} className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-white text-sm disabled:opacity-30 hover:bg-white/10">+</button>
                   </div>
@@ -404,13 +404,13 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               </div>
             </div>
 
-            {/* ═══ Reviews Section ═══ */}
+            {/* â•â•â• Reviews Section â•â•â• */}
             <div className="mb-6 pt-4 border-t border-white/[0.1]">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-heading-md font-bold text-white flex items-center gap-2">
-                  <span className="text-yellow-400 text-heading">★</span>
+                  <span className="text-yellow-400 text-heading">â˜…</span>
                   <span>{exp.rating}</span>
-                  <span className="text-[#94A3B8] font-normal text-body-sm">· {allReviews.length} reviews</span>
+                  <span className="text-[#94A3B8] font-normal text-body-sm">Â· {allReviews.length} reviews</span>
                 </h2>
                 {/* Sort Controls */}
                 <div className="flex items-center gap-1 bg-white/[0.04] rounded-lg p-0.5 border border-white/[0.06]">
@@ -508,26 +508,26 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                       : "border-white/[0.1] text-[#CBD5E1] hover:bg-white/5 hover:text-white"
                   }`}
                 >
-                  {saved ? "♥ Saved" : "♡ Save"}
+                  {saved ? "â™¥ Saved" : "â™¡ Save"}
                 </button>
                 <Link
                   href={`/gift?exp=${exp.id}`}
                   className="px-4 py-3 rounded-xl border border-white/[0.1] text-[#CBD5E1] text-body-sm font-medium text-center hover:bg-white/5 hover:text-white transition-all"
                 >
-                  🎁 Gift
+                  ðŸŽ Gift
                 </Link>
                 <button
                   onClick={handleShare}
                   className="px-4 py-3 rounded-xl border border-white/[0.1] text-[#CBD5E1] text-body-sm font-medium hover:bg-white/5 hover:text-white transition-all"
                 >
-                  {shareFeedback ? "✓ Copied" : "↗ Share"}
+                  {shareFeedback ? "âœ“ Copied" : "â†— Share"}
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ─── RIGHT COLUMN: Sticky Booking Sidebar ─── */}
+        {/* â”€â”€â”€ RIGHT COLUMN: Sticky Booking Sidebar â”€â”€â”€ */}
         <div className="hidden lg:block">
           <div className="sticky top-24">
             <div className="bg-[#111827] rounded-2xl border border-white/[0.1]">
@@ -597,7 +597,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   <div className="flex gap-2">
                     <input
                       type="text"
-                      placeholder="MOMO-XXXXXXXX"
+                      placeholder="XPRO-XXXXXXXX"
                       value={giftCode}
                       onChange={(e) => { setGiftCode(e.target.value.toUpperCase()); setGiftApplied(false); setGiftError(""); }}
                       className="flex-1 px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption font-mono placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF0F73] transition-all"
@@ -608,7 +608,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                         onClick={() => { setGiftApplied(false); setGiftCode(""); setGiftAmount(0); setGiftError(""); }}
                         className="px-3 py-2 rounded-lg bg-emerald-500/20 text-emerald-400 text-caption font-semibold border border-emerald-500/30 hover:bg-emerald-500/30 transition-all whitespace-nowrap"
                       >
-                        ✓ Applied
+                        âœ“ Applied
                       </button>
                     ) : (
                       <button
@@ -628,7 +628,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 {/* Price Breakdown */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-body-sm text-[#CBD5E1]">
-                    <span>MK {exp.price.toLocaleString()} × {guests} {guests === 1 ? "guest" : "guests"}</span>
+                    <span>MK {exp.price.toLocaleString()} Ã— {guests} {guests === 1 ? "guest" : "guests"}</span>
                     <span>MK {totalPrice.toLocaleString()}</span>
                   </div>
                   {giftApplied && giftAmount > 0 && (
@@ -682,7 +682,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                     href={`/gift?exp=${exp.id}`}
                     className="py-2.5 rounded-xl border border-white/[0.1] text-[#CBD5E1] text-caption font-medium text-center hover:bg-white/5 hover:text-white transition-all flex items-center justify-center gap-1"
                   >
-                    🎁 Gift
+                    ðŸŽ Gift
                   </Link>
                   <button
                     onClick={handleShare}
@@ -700,9 +700,9 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
         </div>
       </div>
 
-      {/* ════════════════════════════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       {/* SIMILAR EXPERIENCES                          */}
-      {/* ════════════════════════════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <div className="mt-8 pb-12">
         <ContentRail
           title="Similar Experiences"

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -15,7 +15,7 @@ interface ExperienceCardProps {
 function loadSaved(): string[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem("momento-saved");
+    const raw = localStorage.getItem("experio-saved");
     if (!raw) return [];
     const state = JSON.parse(raw);
     return state.savedIds || [];
@@ -48,12 +48,12 @@ export default function ExperienceCard({
         ? current.filter((id: string) => id !== exp.id)
         : [...current, exp.id];
       try {
-        const raw = localStorage.getItem("momento-saved");
+        const raw = localStorage.getItem("experio-saved");
         const state = raw
           ? JSON.parse(raw)
           : { savedIds: [], collections: [] };
         state.savedIds = next;
-        localStorage.setItem("momento-saved", JSON.stringify(state));
+        localStorage.setItem("experio-saved", JSON.stringify(state));
       } catch (e) {
         console.warn("Failed to save toggle state:", e);
       }

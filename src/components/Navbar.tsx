@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -24,8 +24,8 @@ export default function Navbar() {
   const [notifList, setNotifList] = useState<ReturnType<typeof getNotifications> extends Promise<infer R> ? R : never>([]);
 
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("momento-auth-token") : null;
-    const role = typeof window !== "undefined" ? localStorage.getItem("momento-user-role") : null;
+    const token = typeof window !== "undefined" ? localStorage.getItem("experio-auth-token") : null;
+    const role = typeof window !== "undefined" ? localStorage.getItem("experio-user-role") : null;
     setSignedIn(!!token);
     setUserRole(role);
     getUnreadCount().then(setUnreadCount);
@@ -58,16 +58,16 @@ export default function Navbar() {
   ];
 
   const handleSignOut = async () => {
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     try {
       await fetch("/api/auth/logout", {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
     } catch { /* still clear local state */ }
-    localStorage.removeItem("momento-auth-token");
-    localStorage.removeItem("momento-user-role");
-    localStorage.removeItem("momento-signup-role");
+    localStorage.removeItem("experio-auth-token");
+    localStorage.removeItem("experio-user-role");
+    localStorage.removeItem("experio-signup-role");
     setSignedIn(false);
     setProfileOpen(false);
     window.location.reload();
@@ -140,7 +140,7 @@ export default function Navbar() {
               {signedIn && userRole !== "partner" && userRole !== "admin" && (
                 <button
                   onClick={() => {
-                    localStorage.setItem("momento-signup-role", "partner");
+                    localStorage.setItem("experio-signup-role", "partner");
                     setAuthOpen(true);
                   }}
                   className="px-4 py-2 rounded-xl text-body-sm font-semibold transition-all duration-200 bg-gradient-to-r from-[#F82D7B]/20 to-[#FF0F73]/20 text-[#F82D7B] hover:from-[#F82D7B]/30 hover:to-[#FF0F73]/30 hover:text-[#F82D7B] flex items-center gap-1.5 border border-[#F82D7B]/20 hover:border-[#F82D7B]/30"
@@ -251,7 +251,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile menu — cinematic lifestyle overlay */}
+        {/* Mobile menu â€” cinematic lifestyle overlay */}
         {menuOpen && (
           <div className="md:hidden fixed inset-x-0 top-18 bottom-0 z-[998] overflow-y-auto">
             {/* Cinematic background image */}
@@ -373,7 +373,7 @@ export default function Navbar() {
                 onClick={() => setNotifOpen(false)}
                 className="block mt-3 text-center text-caption font-semibold text-[#FF0F73] hover:text-[#FF0F73]/80 pt-2 border-t border-white/[0.08] transition-colors"
               >
-                View All Notifications →
+                View All Notifications â†’
               </Link>
             )}
           </div>

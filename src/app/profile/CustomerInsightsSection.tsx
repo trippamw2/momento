@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import MiniBar from "./MiniBar";
 
@@ -9,10 +9,10 @@ export default function CustomerInsightsSection({ totalCustomers }: { totalCusto
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {[
-          { label: "Total Customers", value: totalCustomers.toLocaleString(), trend: "62 this month", icon: "👥" },
-          { label: "Repeat Rate", value: "34%", trend: "+5% vs last month", icon: "🔄" },
-          { label: "Avg Booking Value", value: "MK 138,000", trend: "+8.2%", icon: "📊" },
-          { label: "Top Category", value: "Dining", trend: "42% of bookings", icon: "🏆" },
+          { label: "Total Customers", value: totalCustomers.toLocaleString(), trend: "62 this month", icon: "ðŸ‘¥" },
+          { label: "Repeat Rate", value: "34%", trend: "+5% vs last month", icon: "ðŸ”„" },
+          { label: "Avg Booking Value", value: "MK 138,000", trend: "+8.2%", icon: "ðŸ“Š" },
+          { label: "Top Category", value: "Dining", trend: "42% of bookings", icon: "ðŸ†" },
         ].map((s) => (
           <div key={s.label} className="p-5 rounded-xl bg-white border border-[#ebebeb] shadow-sm">
             <div className="flex items-center justify-between mb-3">

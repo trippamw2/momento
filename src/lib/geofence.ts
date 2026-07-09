@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import { haversineDistance, formatDistance, getTravelMode } from "./geo";
 import type { Coordinates } from "./geo";
 
-// ─── Types ───
+// â”€â”€â”€ Types â”€â”€â”€
 
 export interface GeofenceZone {
   id: string;
@@ -22,7 +22,7 @@ export interface GeofenceResult {
   isInside: boolean;
 }
 
-// ─── Mock Geofence Zones (Malawi) ───
+// â”€â”€â”€ Mock Geofence Zones (Malawi) â”€â”€â”€
 
 export const MOCK_GEOFENCE_ZONES: GeofenceZone[] = [
   {
@@ -41,7 +41,7 @@ export const MOCK_GEOFENCE_ZONES: GeofenceZone[] = [
   },
   {
     id: "lake-malawi-nkhata",
-    name: "Nkhata Bay · Lake Malawi",
+    name: "Nkhata Bay Â· Lake Malawi",
     center: { lat: -11.6077, lng: 34.2961 },
     radius: 3000,
     experienceIds: ["exp-8", "exp-9"],
@@ -62,7 +62,7 @@ export const MOCK_GEOFENCE_ZONES: GeofenceZone[] = [
   },
 ];
 
-// ─── Geofence Functions ───
+// â”€â”€â”€ Geofence Functions â”€â”€â”€
 
 /**
  * Check which geofence zones the user is currently inside or near.
@@ -108,7 +108,7 @@ export function getNearbyGeofenceExperiences(
   zones: GeofenceZone[] = MOCK_GEOFENCE_ZONES,
 ): { zone: GeofenceZone; matchedIds: string[]; distanceLabel: string }[] {
   if (!userLocation) {
-    // No GPS — return first zone's experiences as default
+    // No GPS â€” return first zone's experiences as default
     return zones.slice(0, 2).map((z) => ({
       zone: z,
       matchedIds: z.experienceIds.filter((id) => experienceIds.includes(id)),
@@ -148,7 +148,7 @@ export function getPopularInArea(
 }
 
 /**
- * Get a human-readable prompt like "You're near [Zone Name] — only X away!"
+ * Get a human-readable prompt like "You're near [Zone Name] â€” only X away!"
  */
 export function getGeofencePrompt(results: GeofenceResult[]): string | null {
   const nearestInside = results.find((r) => r.isInside);
@@ -158,7 +158,7 @@ export function getGeofencePrompt(results: GeofenceResult[]): string | null {
 
   const nearest = results[0];
   if (nearest && nearest.distanceKm < 5) {
-    return `${nearest.zone.name} is ${nearest.distanceLabel} away — explore what's near you!`;
+    return `${nearest.zone.name} is ${nearest.distanceLabel} away â€” explore what's near you!`;
   }
 
   return null;

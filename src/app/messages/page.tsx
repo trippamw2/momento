@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -60,7 +60,7 @@ export default function MessagesPage() {
 
   // Fetch conversations
   useEffect(() => {
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     if (!token) {
       router.push("/bookings");
       return;
@@ -78,7 +78,7 @@ export default function MessagesPage() {
   // Extract current user ID from first message or conversation
   useEffect(() => {
     if (!userId && messages.length > 0) {
-      const token = localStorage.getItem("momento-auth-token");
+      const token = localStorage.getItem("experio-auth-token");
       // Decode JWT to get user id (simple approach: fetch profile)
       fetch("/api/auth/me", {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -95,7 +95,7 @@ export default function MessagesPage() {
   useEffect(() => {
     if (!activeConv) return;
 
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     if (!token) return;
 
     const fetchMessages = () => {
@@ -133,7 +133,7 @@ export default function MessagesPage() {
   const handleSend = async () => {
     if (!inputText.trim() || !activeConv || sending) return;
 
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     if (!token) return;
 
     setSending(true);
@@ -188,7 +188,7 @@ export default function MessagesPage() {
             href="/bookings"
             className="text-body-sm text-[#64748B] hover:text-[#CBD5E1] transition-colors"
           >
-            ← Back to Bookings
+            â† Back to Bookings
           </Link>
         </div>
 

@@ -1,6 +1,6 @@
-"use client";
+﻿"use client";
 
-// ─── Types ───
+// â”€â”€â”€ Types â”€â”€â”€
 
 export type NotificationType =
   | "booking_confirmed"
@@ -30,11 +30,11 @@ export interface AppNotification {
   actionHref?: string;
 }
 
-// ─── Helpers ───
+// â”€â”€â”€ Helpers â”€â”€â”€
 
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem("momento-auth-token");
+  return localStorage.getItem("experio-auth-token");
 }
 
 function relativeTime(dateStr: string): string {
@@ -113,7 +113,7 @@ function deriveActionHref(type: string, data: Record<string, unknown>): string |
   }
 }
 
-// ─── API Functions ───
+// â”€â”€â”€ API Functions â”€â”€â”€
 
 export async function getNotifications(): Promise<AppNotification[]> {
   const token = getToken();
@@ -179,7 +179,7 @@ export async function markAllAsRead(): Promise<void> {
   } catch { /* ignore */ }
 }
 
-// ─── Preset creators (still synchronous — used for optimistic UI) ───
+// â”€â”€â”€ Preset creators (still synchronous â€” used for optimistic UI) â”€â”€â”€
 
 export function createBookingConfirmedNotification(
   experienceTitle: string,

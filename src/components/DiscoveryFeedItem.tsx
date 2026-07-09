@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback } from "react";
 import Image from "next/image";
@@ -107,7 +107,7 @@ export default function DiscoveryFeedItem({
       {/* Subtle brand glow */}
       <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#FF0F73]/5 via-transparent to-transparent" />
 
-      {/* ─── Bottom content ─── */}
+      {/* â”€â”€â”€ Bottom content â”€â”€â”€ */}
       <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-10 z-10">
         {/* Mood badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/15 text-caption text-white/90 font-semibold mb-3">
@@ -127,7 +127,7 @@ export default function DiscoveryFeedItem({
         {/* Meta row */}
         <div className="flex items-center gap-4 text-white/50 text-caption">
           <span className="flex items-center gap-1">
-            <span className="text-yellow-400">★</span> {exp.rating}
+            <span className="text-yellow-400">â˜…</span> {exp.rating}
           </span>
           <span>MK {exp.price.toLocaleString()}</span>
           <span>{exp.duration}</span>
@@ -135,7 +135,7 @@ export default function DiscoveryFeedItem({
         </div>
       </div>
 
-      {/* ─── Floating action buttons (right side) ─── */}
+      {/* â”€â”€â”€ Floating action buttons (right side) â”€â”€â”€ */}
       <div className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-4">
         {/* Save */}
         <button
@@ -219,7 +219,7 @@ export default function DiscoveryFeedItem({
         </button>
       </div>
 
-      {/* ─── Progress indicator (bottom-left) ─── */}
+      {/* â”€â”€â”€ Progress indicator (bottom-left) â”€â”€â”€ */}
       {isActive && (
         <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-8 z-20 flex items-center gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-[#FF0F73] animate-pulse" />

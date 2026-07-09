@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -56,7 +56,7 @@ export default function PartnerDashboardPage() {
 
     const fetchDashboardData = async () => {
       try {
-        const token = localStorage.getItem("momento-auth-token");
+        const token = localStorage.getItem("experio-auth-token");
         if (!token) return;
 
         // Fetch partner bookings to compute stats
@@ -110,7 +110,7 @@ export default function PartnerDashboardPage() {
   useEffect(() => {
     const fetchExperiences = async () => {
       try {
-        const token = localStorage.getItem("momento-auth-token");
+        const token = localStorage.getItem("experio-auth-token");
         if (!token) { setExperiencesLoading(false); return; }
         const res = await fetch("/api/experiences/partner", {
           headers: { Authorization: `Bearer ${token}` },
@@ -226,7 +226,7 @@ export default function PartnerDashboardPage() {
             <p className="text-caption text-[#94A3B8] font-medium mb-1">Average Rating</p>
             <p className="text-heading-xl font-bold text-[#F1F5F9] flex items-center gap-2">
               {stats.averageRating}
-              <span className="text-yellow-500 text-heading-sm">★</span>
+              <span className="text-yellow-500 text-heading-sm">â˜…</span>
             </p>
             <p className="text-caption text-[#94A3B8] mt-1">{stats.reviewCount} reviews</p>
           </div>
@@ -275,7 +275,7 @@ export default function PartnerDashboardPage() {
             </div>
             <div className="p-4 border-t border-white/[0.08] text-center">
               <button className="text-body-sm text-[#FF0F73] font-medium hover:underline">
-                View All Bookings →
+                View All Bookings â†’
               </button>
             </div>
           </div>
@@ -304,7 +304,7 @@ export default function PartnerDashboardPage() {
                   className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/[0.05] transition-colors group"
                 >
                   <div className="w-10 h-10 rounded-xl bg-[#FF0F73]/10 flex items-center justify-center text-lg group-hover:bg-[#FF0F73]/20 transition-colors">
-                    ➕
+                    âž•
                   </div>
                   <div>
                     <p className="text-body-sm font-semibold text-[#F1F5F9]">List New Experience</p>
@@ -330,7 +330,7 @@ export default function PartnerDashboardPage() {
                   className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/[0.05] transition-colors group"
                 >
                   <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-lg group-hover:bg-amber-100 transition-colors">
-                    📖
+                    ðŸ“–
                   </div>
                   <div>
                     <p className="text-body-sm font-semibold text-[#F1F5F9]">Partner Resources</p>
@@ -342,7 +342,7 @@ export default function PartnerDashboardPage() {
                   className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/[0.05] transition-colors group"
                 >
                   <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-lg group-hover:bg-purple-100 transition-colors">
-                    ⚙️
+                    âš™ï¸
                   </div>
                   <div>
                     <p className="text-body-sm font-semibold text-[#F1F5F9]">Profile Settings</p>
@@ -385,7 +385,7 @@ export default function PartnerDashboardPage() {
               href="/partner/list-experience"
               className="text-body-sm text-[#FF0F73] font-medium hover:underline"
             >
-              Manage All →
+              Manage All â†’
             </Link>
           </div>
           <div className="divide-y divide-[#dddddd]/50">
@@ -402,7 +402,7 @@ export default function PartnerDashboardPage() {
               <div className="p-8 text-center">
                 <p className="text-body-sm text-[#94A3B8] mb-2">You haven&apos;t listed any experiences yet.</p>
                 <Link href="/partner/list-experience" className="text-body-sm text-[#FF0F73] font-medium hover:underline">
-                  List your first experience →
+                  List your first experience â†’
                 </Link>
               </div>
             ) : experiences.map((exp, i) => (
@@ -415,9 +415,9 @@ export default function PartnerDashboardPage() {
                     <p className="text-body-sm font-semibold text-[#F1F5F9] truncate">{exp.name}</p>
                     <p className="text-caption text-[#94A3B8] flex items-center gap-2">
                       <span>{exp.bookings} bookings</span>
-                      <span>·</span>
+                      <span>Â·</span>
                       <span className="flex items-center gap-0.5">
-                        {exp.rating} <span className="text-yellow-500">★</span>
+                        {exp.rating} <span className="text-yellow-500">â˜…</span>
                       </span>
                     </p>
                   </div>
@@ -427,7 +427,7 @@ export default function PartnerDashboardPage() {
                   <span className={`text-caption font-medium ${
                     exp.status === "active" || exp.status === "published" ? "text-emerald-400" : "text-[#94A3B8]"
                   }`}>
-                    {exp.status === "active" || exp.status === "published" ? "● Live" : "○ Draft"}
+                    {exp.status === "active" || exp.status === "published" ? "â— Live" : "â—‹ Draft"}
                   </span>
                 </div>
               </div>

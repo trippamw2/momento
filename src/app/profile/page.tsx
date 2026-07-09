@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -50,7 +50,7 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
   const handleSave = async () => {
     setSaving(true);
     setSaveError("");
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     try {
       const res = await fetch("/api/auth/me", {
         method: "PUT",
@@ -81,16 +81,16 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
   };
 
   const handleSignOut = async () => {
-    const token = localStorage.getItem("momento-auth-token");
+    const token = localStorage.getItem("experio-auth-token");
     try {
       await fetch("/api/auth/logout", {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
     } catch { /* still clear local state */ }
-    localStorage.removeItem("momento-auth-token");
-    localStorage.removeItem("momento-user-role");
-    localStorage.removeItem("momento-signup-role");
+    localStorage.removeItem("experio-auth-token");
+    localStorage.removeItem("experio-user-role");
+    localStorage.removeItem("experio-signup-role");
     window.location.href = "/";
   };
 
@@ -170,12 +170,12 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
                 <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
                   <span className="text-[#94A3B8]">Phone</span>
                   <span className={`font-medium ${user.profile?.phone ? "text-[#F1F5F9]" : "text-[#64748B]"}`}>
-                    {user.profile?.phone || "—"}
+                    {user.profile?.phone || "â€”"}
                   </span>
                 </div>
                 <div className="flex justify-between py-2.5">
                   <span className="text-[#94A3B8]">Password</span>
-                  <span className="text-[#64748B]">••••••••</span>
+                  <span className="text-[#64748B]">â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢</span>
                 </div>
               </div>
             </div>
@@ -228,7 +228,7 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
                   >
                     <span className="w-8 h-8 rounded-lg bg-[#0A0E17] flex items-center justify-center shrink-0">
                       <span className="text-[#FF0F73] text-sm">
-                        {link.icon === "calendar" ? "📅" : link.icon === "chat" ? "💬" : link.icon === "heart" ? "♥" : link.icon === "gift" ? "🎁" : "⭐"}
+                        {link.icon === "calendar" ? "ðŸ“…" : link.icon === "chat" ? "ðŸ’¬" : link.icon === "heart" ? "â™¥" : link.icon === "gift" ? "ðŸŽ" : "â­"}
                       </span>
                     </span>
                     {link.label}
@@ -328,7 +328,7 @@ function GuestProfile() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
           </svg>
         </div>
-        <h1 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Welcome to Momento</h1>
+        <h1 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Welcome to Experio</h1>
         <p className="text-[#CBD5E1] text-body mb-8">
           Sign in to view your profile, manage bookings, and access partner tools.
         </p>
@@ -352,7 +352,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem("momento-auth-token");
+      const token = localStorage.getItem("experio-auth-token");
       if (!token) {
         setLoading(false);
         return;
@@ -366,7 +366,7 @@ export default function ProfilePage() {
           const data = await res.json();
           setUser(data);
         } else {
-          localStorage.removeItem("momento-auth-token");
+          localStorage.removeItem("experio-auth-token");
         }
       } catch {
         setError("Failed to load profile");
@@ -387,16 +387,16 @@ export default function ProfilePage() {
     );
   }
 
-  // Partner → show PartnerDashboard
+  // Partner â†’ show PartnerDashboard
   if (user?.role === "partner" || user?.role === "admin") {
     return <PartnerDashboard />;
   }
 
-  // Authenticated user → show user profile
+  // Authenticated user â†’ show user profile
   if (user) {
     return <UserProfile user={user} />;
   }
 
-  // Guest → show welcome page
+  // Guest â†’ show welcome page
   return <GuestProfile />;
 }

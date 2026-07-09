@@ -1,4 +1,4 @@
-import { json, handleRouteError } from "@/lib/api-helpers";
+﻿import { json, handleRouteError } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
 import { sendBookingConfirmation, sendGiftCardEmail } from "@/lib/brevo";
 
@@ -13,7 +13,7 @@ import { sendBookingConfirmation, sendGiftCardEmail } from "@/lib/brevo";
  * {
  *   "event_type": "api.charge.payment",
  *   "status": "success",
- *   "reference": "MOMO-XXXXXXXX",
+ *   "reference": "XPRO-XXXXXXXX",
  *   "charge_id": "...",
  *   "amount": 1000,
  *   ...
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
     // Only process completed payments
     if (status !== "success" && status !== "completed") {
-      return json({ ok: true, message: "Event ignored — not a success status" });
+      return json({ ok: true, message: "Event ignored â€” not a success status" });
     }
 
     if (!txRef) {
@@ -63,9 +63,9 @@ export async function POST(request: Request) {
 
     const metadata = (payment.metadata || {}) as Record<string, unknown>;
 
-    // ─────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // CASE 1: Booking payment
-    // ─────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if (payment.booking_id) {
       // Fetch full booking + user + experience details for email
       const { data: booking } = await admin
@@ -122,9 +122,9 @@ export async function POST(request: Request) {
       return json({ ok: true, message: "Booking confirmed" });
     }
 
-    // ─────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // CASE 2: Gift card payment
-    // ─────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if (metadata.type === "gift_card") {
       // Idempotency check: if this payment already has a gift_card_id, return the existing card
       if (payment.gift_card_id) {
@@ -218,7 +218,7 @@ export async function POST(request: Request) {
       return json({ ok: true, message: "Gift card created", code });
     }
 
-    // Unknown payment type — just acknowledge
+    // Unknown payment type â€” just acknowledge
     console.log("Webhook processed payment with no specific handler:", payment.id);
     return json({ ok: true, message: "Payment recorded" });
   } catch (error) {
@@ -234,7 +234,7 @@ export async function POST(request: Request) {
 async function generateUniqueCode(admin: ReturnType<typeof createAdminClient>): Promise<string> {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   for (let attempt = 0; attempt < 10; attempt++) {
-    let code = "MOMO-";
+    let code = "XPRO-";
     for (let i = 0; i < 8; i++) {
       if (i === 4) code += "-";
       code += chars[Math.floor(Math.random() * chars.length)];
@@ -247,5 +247,5 @@ async function generateUniqueCode(admin: ReturnType<typeof createAdminClient>): 
     if (!existing) return code;
   }
   // Fallback: add timestamp to ensure uniqueness
-  return `MOMO-${Date.now().toString(36).toUpperCase()}`;
+  return `XPRO-${Date.now().toString(36).toUpperCase()}`;
 }

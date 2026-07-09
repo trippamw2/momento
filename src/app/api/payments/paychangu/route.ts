@@ -1,4 +1,4 @@
-import { getUser, json, handleRouteError, badRequest } from "@/lib/api-helpers";
+﻿import { getUser, json, handleRouteError, badRequest } from "@/lib/api-helpers";
 import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         callback_url: webhookUrl,
         return_url: returnUrl,
         cancellation_url: cancelUrl,
-        tx_ref: `MOMO-${booking_id.slice(0, 8).toUpperCase()}`,
+        tx_ref: `XPRO-${booking_id.slice(0, 8).toUpperCase()}`,
         meta: {
           booking_id,
           experience_title: booking.experience?.title || "",
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
     }
 
     // Fallback: simulate PayChangu checkout for development
-    const txRef = `MOMO-${booking_id.slice(0, 8).toUpperCase()}`;
+    const txRef = `XPRO-${booking_id.slice(0, 8).toUpperCase()}`;
     const admin = createAdminClient();
     await admin.from("payments").insert({
       booking_id,
