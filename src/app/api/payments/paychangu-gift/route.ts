@@ -91,9 +91,6 @@ export async function POST(request: Request) {
     const expiresAt = new Date();
     expiresAt.setFullYear(expiresAt.getFullYear() + 1);
 
-    const status = schedule_date ? "scheduled" : "active";
-    const scheduledFor = schedule_date ? new Date(schedule_date).toISOString() : null;
-
     const { data: giftCard, error: gcError } = await admin
       .from("gift_cards")
       .insert({
@@ -108,8 +105,7 @@ export async function POST(request: Request) {
         balance: amount,
         delivery_method: delivery_method || "email",
         occasion: occasion || null,
-        status,
-        schedule_date: scheduledFor,
+        status: "active",
         expires_at: expiresAt.toISOString(),
       })
       .select()
