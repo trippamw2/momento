@@ -455,7 +455,7 @@ export default function GiftPageContent() {
       <GiftHero />
 
       {/* ─── How It Works ─── */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-8 -mt-8 relative z-10 mb-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-8 mt-12 relative z-10 mb-12">
         <h2 className="text-center text-heading-xl font-bold text-[#F1F5F9] mb-8">How It Works</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {processSteps.map((step, i) => {

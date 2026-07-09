@@ -25,15 +25,13 @@ export async function POST(request: Request) {
     if (createError) return badRequest(createError.message);
     if (!createData.user) return serverError("Failed to create user");
 
-    // Step 2: Insert into users table
-    const { error: profileError } = await admin.from("users").insert({
+    // Step 2: Insert into profiles table (matches schema.sql)
+    const { error: profileError } = await admin.from("profiles").insert({
       id: createData.user.id,
-      email: createData.user.email ?? email,
+      role: validatedRole,
       full_name: full_name ?? null,
       phone: phone ?? null,
       avatar_url: avatar_url ?? null,
-      role: validatedRole,
-      birthdate: birthdate ?? null,
     });
 
     if (profileError) {
@@ -41,9 +39,9 @@ export async function POST(request: Request) {
       return badRequest(profileError.message);
     }
 
-    // Step 3: If partner, create partner profile
+    // Step 3: If partner, create partner profile (matches schema: partner_profiles)
     if (validatedRole === "partner") {
-      const { error: partnerError } = await admin.from("partners").insert({
+      const { error: partnerError } = await admin.from("partner_profiles").insert({
         user_id: createData.user.id,
         business_name: full_name ? `${full_name}'s Experiences` : "New Partner",
         business_logo: avatar_url ?? null,

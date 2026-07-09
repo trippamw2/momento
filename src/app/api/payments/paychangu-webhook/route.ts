@@ -70,7 +70,7 @@ export async function POST(request: Request) {
       // Fetch full booking + user + experience details for email
       const { data: booking } = await admin
         .from("bookings")
-        .select("*, users(email, full_name), experiences(title, location, partners(business_name))")
+        .select("*, profiles(email, full_name), experiences(title, location, partner_profiles(business_name))")
         .eq("id", payment.booking_id)
         .maybeSingle();
 
@@ -98,12 +98,12 @@ export async function POST(request: Request) {
       });
 
       // Send Brevo confirmation email
-      if (booking?.users?.email) {
+      if (booking?.profiles?.email) {
         const exp = booking.experiences as Record<string, unknown> | null;
-        const partner = exp?.partners as Record<string, unknown> | null;
+        const partner = exp?.partner_profiles as Record<string, unknown> | null;
         const emailResult = await sendBookingConfirmation({
-          email: booking.users.email,
-          guestName: booking.users.full_name || "Guest",
+          email: booking.profiles.email,
+          guestName: booking.profiles.full_name || "Guest",
           experienceTitle: (exp?.title as string) || "Experience",
           experienceDate: booking.booking_date || "",
           experienceTime: (booking.time_slot as string) || "",

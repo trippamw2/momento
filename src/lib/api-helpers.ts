@@ -45,10 +45,10 @@ export async function getUser(request: Request): Promise<AuthUser | null> {
   const { data: { user }, error } = await supabase.auth.getUser(token);
   if (error || !user) return null;
 
-  // Use admin client to bypass RLS on the users table
+  // Use admin client to bypass RLS on the profiles table
   const admin = createAdminClient();
   const { data: profile } = await admin
-    .from("users")
+    .from("profiles")
     .select("role")
     .eq("id", user.id)
     .single();
