@@ -32,7 +32,6 @@ export default function TrackRedeem() {
     <section className="max-w-3xl mx-auto" id="redeem">
       <div className="text-center mb-8">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#FF0F73]/10 to-[#FF7A1A]/10 border border-[#FF0F73]/20 text-[#FF0F73] text-caption font-semibold mb-4">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
           Gift Cards
         </div>
         <h2 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Track &amp; Redeem</h2>
@@ -44,7 +43,6 @@ export default function TrackRedeem() {
       <div className="bg-[#111827] rounded-3xl border border-white/[0.08] p-6 sm:p-10 shadow-sm">
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="relative flex-1">
-            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
             <input
               type="text"
               placeholder="Enter gift card code (e.g. MOMO-XXXXXXXX)"
@@ -65,7 +63,6 @@ export default function TrackRedeem() {
               </>
             ) : (
               <>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                 Check Status
               </>
             )}
@@ -102,31 +99,10 @@ export default function TrackRedeem() {
           </div>
         )}
 
-        <div className="mt-2">
-          <p className="text-caption font-semibold text-[#CBD5E1] mb-3 uppercase tracking-wider">Status Timeline</p>
-          <div className="grid grid-cols-4 gap-3">
-              {[
-                { step: "Purchased", icon: <svg key="cart" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>, done: true, desc: "Card issued" },
-                { step: "Delivered", icon: <svg key="mail" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>, done: true, desc: "Sent to recipient" },
-                { step: "Viewed", icon: <svg key="eye" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>, done: trackResult?.found, desc: "Code checked" },
-                { step: "Redeemed", icon: <svg key="check" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>, done: trackResult?.status === "redeemed", desc: "Experience booked" },
-              ].map((s) => (
-                <div key={s.step} className={`text-center p-4 rounded-2xl transition-all border ${
-                  s.done
-                    ? "bg-[#111827] border-emerald-500/20 shadow-sm"
-                    : "bg-white/[0.03] border-white/[0.06]"
-                }`}>
-                  <div className={`flex items-center justify-center mb-2 ${s.done ? "text-emerald-400" : "text-[#64748B] opacity-30 grayscale"}`}>{s.icon}</div>
-                <p className={`text-caption font-bold ${s.done ? "text-[#F1F5F9]" : "text-[#64748B]"}`}>{s.step}</p>
-                <p className={`text-caption mt-0.5 ${s.done ? "text-emerald-400" : "text-[#64748B]"}`}>{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+
 
         <div className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-[#FF0F73]/5 to-[#FF7A1A]/5 border border-white/[0.08]">
           <div className="flex items-start gap-3">
-            <svg className="w-5 h-5 text-[#FF0F73] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             <p className="text-caption text-[#CBD5E1] leading-relaxed">
               <strong className="text-[#F1F5F9]">To redeem:</strong> When booking an experience, enter your gift card code at checkout to apply the value toward your purchase. Unused balance remains for future bookings.
             </p>

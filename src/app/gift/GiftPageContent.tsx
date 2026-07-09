@@ -182,6 +182,28 @@ export default function GiftPageContent() {
       if (res.ok && data.checkout_url) {
         // Redirect to PayChangu checkout
         window.location.href = data.checkout_url;
+      } else if (res.ok && data.code) {
+        // PayChangu unavailable — gift card created directly
+        setRedemptionCode(data.code);
+        if (sendMode === "now" && delivery === "whatsapp") {
+          sendGiftCard({
+            id: data.gift_card_id || "",
+            code: data.code,
+            amount: selectedValue,
+            balance: selectedValue,
+            currency: "MWK",
+            recipientName,
+            recipientContact,
+            senderName,
+            message: message || undefined,
+            deliveryMethod: delivery,
+            occasion: occasion || undefined,
+            status: "active",
+            createdAt: new Date().toISOString(),
+            expiresAt: new Date(Date.now() + 365 * 86400000).toISOString(),
+          });
+        }
+        setSent(true);
       } else {
         setPayError(data?.error || "Failed to initiate payment");
       }
@@ -433,7 +455,7 @@ export default function GiftPageContent() {
       <GiftHero />
 
       {/* ─── Step Progress Indicator ─── */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-8 -mt-4 mb-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-8 -mt-16 relative z-10 mb-6">
         <div className="flex items-center justify-center gap-0">
           {processSteps.map((step, i) => {
             const stepNum = i + 1;
@@ -648,7 +670,6 @@ export default function GiftPageContent() {
                     : "bg-white/[0.05] text-[#64748B] border border-white/[0.08] hover:text-[#CBD5E1]"
                 }`}
               >
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                 Send Now
               </button>
               <button
@@ -659,7 +680,6 @@ export default function GiftPageContent() {
                     : "bg-white/[0.05] text-[#64748B] border border-white/[0.08] hover:text-[#CBD5E1]"
                 }`}
               >
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 Schedule for Later
               </button>
             </div>
@@ -680,62 +700,6 @@ export default function GiftPageContent() {
 
             {!sent ? (
               <>
-                {/* Selection Grid */}
-                {tab === "cards" ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-8">
-                    {giftCardValues.map((card, i) => (
-                      <GiftCard
-                        key={i}
-                        valueLabel={card.label}
-                        description={card.desc}
-                        variantId={GIFT_CARD_VARIANTS[i].id}
-                        selected={selectedCard === i}
-                        onSelect={() => setSelectedCard(selectedCard === i ? null : i)}
-                        cardNumber={`•••• •••• •••• ${4829 + i * 100}`}
-                        expiry={`12/${27 + i}`}
-                        holderName="Your Gift"
-                        isCompact
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
-                    {experiences.slice(0, 6).map((exp) => (
-                      <button
-                        key={exp.id}
-                        onClick={() => setSelectedExp(selectedExp === exp.id ? null : exp.id)}
-                        className="group relative text-left"
-                      >
-                        <div className={`relative aspect-[4/3] rounded-xl overflow-hidden bg-white/[0.05] transition-all duration-200 ${
-                          selectedExp === exp.id ? "ring-2 ring-[#FF0F73] shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)]" : ""
-                        }`}>
-                          <Image
-                            src={exp.image}
-                            alt={exp.title}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width: 640px) 50vw, 33vw"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                          {selectedExp === exp.id && (
-                            <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#FF0F73] flex items-center justify-center z-10">
-                              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                            </div>
-                          )}
-                          <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#FF0F73] text-white text-[10px] font-medium">
-                            Gift
-                          </div>
-                          <div className="absolute bottom-0 left-0 right-0 p-2.5">
-                            <h3 className="text-white font-semibold text-body-sm leading-tight line-clamp-1">{exp.title}</h3>
-                            <p className="text-white/60 text-caption mt-0.5 line-clamp-1">{exp.subtitle}</p>
-                            <p className="text-white font-semibold text-body-sm mt-1">MK {exp.price.toLocaleString()}</p>
-                          </div>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                )}
-
                 {/* Recipient Form */}
                 <div className="max-w-lg mx-auto">
                   <div className="flex items-center justify-center gap-2 mb-5">
@@ -814,7 +778,6 @@ export default function GiftPageContent() {
                     )}
                     {sendMode === "schedule" && scheduleLabel && (
                       <p className="text-caption text-[#FF0F73] mt-1 flex items-center gap-1">
-                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                         Delivering {scheduleLabel}
                       </p>
                     )}
@@ -824,15 +787,13 @@ export default function GiftPageContent() {
                   </div>
 
                   {giftError && (
-                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 flex items-start gap-2.5 mb-4">
-                      <svg className="w-4 h-4 text-red-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 mb-4">
                       <p className="text-body-sm text-red-300">{giftError}</p>
                     </div>
                   )}
 
                   {payError && (
-                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 flex items-start gap-2.5 mb-4">
-                      <svg className="w-4 h-4 text-red-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 mb-4">
                       <p className="text-body-sm text-red-300">{payError}</p>
                     </div>
                   )}
@@ -850,7 +811,6 @@ export default function GiftPageContent() {
                         </>
                       ) : (
                         <>
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                           Continue to Payment — MK {selectedValue.toLocaleString()}
                         </>
                       )}
@@ -941,21 +901,18 @@ export default function GiftPageContent() {
                     disabled={!qrDataUrl}
                     className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all disabled:opacity-40 flex items-center gap-2"
                   >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     Download Card (PNG)
                   </button>
                   <button
                     onClick={handleDownloadPDF}
                     className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all flex items-center gap-2"
                   >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                     Download PDF
                   </button>
                   <button
                     onClick={() => { navigator.clipboard.writeText(redemptionCode); }}
                     className="px-6 py-2.5 rounded-xl bg-[#111827] border border-white/[0.08] text-[#CBD5E1] font-semibold text-body-sm hover:bg-white/[0.05] transition-all flex items-center gap-2"
                   >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                     Copy Code
                   </button>
                 </div>

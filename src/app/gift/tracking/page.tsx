@@ -130,7 +130,6 @@ export default function GiftTrackingPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setConfirmCancel(null)}>
             <div className="bg-[#111827] rounded-2xl border border-white/[0.1] p-6 max-w-sm mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
               <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
               </div>
               <h3 className="text-heading-md font-bold text-white text-center mb-2">Cancel Scheduled Gift?</h3>
               <p className="text-[#CBD5E1] text-body-sm text-center mb-6">This will permanently remove the scheduled delivery.</p>
@@ -157,7 +156,6 @@ export default function GiftTrackingPage() {
         {filtered.length === 0 ? (
           <div className="rounded-2xl bg-[#111827] border border-white/[0.08] p-12 text-center">
             <div className="w-16 h-16 rounded-full bg-white/[0.06] flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
             </div>
             <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-2">
               {filter === "all" ? "No gifts sent yet" : `No ${filter} gifts`}
@@ -170,7 +168,6 @@ export default function GiftTrackingPage() {
                 href="/gift"
                 className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                 Send a Gift
               </Link>
             )}
@@ -188,7 +185,6 @@ export default function GiftTrackingPage() {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-[#FF0F73]/10 flex items-center justify-center">
-                        <svg className="w-5 h-5 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
@@ -259,24 +255,20 @@ export default function GiftTrackingPage() {
                     {(gift.status === "active") && (
                       <>
                         <button onClick={() => handleResend(gift)} className="px-3 py-1.5 rounded-lg bg-white/[0.06] border border-white/[0.08] text-[#CBD5E1] text-caption font-medium hover:bg-white/[0.1] transition-all flex items-center gap-1.5">
-                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                           Resend {gift.deliveryMethod === "whatsapp" ? "WhatsApp" : "Email"}
                         </button>
                         <button onClick={() => handleDownloadPDF(gift)} className="px-3 py-1.5 rounded-lg bg-white/[0.06] border border-white/[0.08] text-[#CBD5E1] text-caption font-medium hover:bg-white/[0.1] transition-all flex items-center gap-1.5">
-                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                           Download PDF
                         </button>
                       </>
                     )}
                     {gift.status === "scheduled" && (
                       <button onClick={() => setConfirmCancel(gift.id)} className="px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-caption font-medium hover:bg-red-500/20 transition-all flex items-center gap-1.5">
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                         Cancel Schedule
                       </button>
                     )}
                     {gift.status === "redeemed" && (
                       <button onClick={() => handleDownloadPDF(gift)} className="px-3 py-1.5 rounded-lg bg-white/[0.06] border border-white/[0.08] text-[#CBD5E1] text-caption font-medium hover:bg-white/[0.1] transition-all flex items-center gap-1.5">
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                         Download Receipt
                       </button>
                     )}
