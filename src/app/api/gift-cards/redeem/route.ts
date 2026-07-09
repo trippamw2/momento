@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase-admin";
 
 interface RedeemRequest {
   code: string;
+  experience_id?: string;
   booking_id?: string;
   amount?: number;
 }
@@ -37,6 +38,29 @@ export async function POST(request: Request) {
       return json({ error: "Gift card has no remaining balance" }, 400);
     }
 
+    // If experience_id is provided, validate that the card balance is sufficient
+    if (body.experience_id) {
+      const { data: experience } = await admin
+        .from("experiences")
+        .select("id, price, title")
+        .eq("id", body.experience_id)
+        .eq("status", "published")
+        .single();
+
+      if (!experience) {
+        return json({ error: "Experience not found or unavailable" }, 404);
+      }
+
+      if (giftCard.balance < experience.price) {
+        return json({
+          error: `Insufficient gift card balance. Card has MK ${giftCard.balance.toLocaleString()} but "${experience.title}" costs MK ${experience.price.toLocaleString()}.`,
+          card_balance: giftCard.balance,
+          experience_price: experience.price,
+          valid: false,
+        }, 400);
+      }
+    }
+
     const redeemAmount = body.amount ?? giftCard.balance;
 
     if (redeemAmount <= 0 || redeemAmount > giftCard.balance) {
@@ -54,6 +78,8 @@ export async function POST(request: Request) {
     if (newBalance === 0) {
       updates.status = "redeemed";
       updates.redeemed_at = now;
+    } else {
+      updates.status = "partially_redeemed";
     }
 
     const { error: updateError } = await admin
@@ -81,7 +107,7 @@ export async function POST(request: Request) {
       currency: giftCard.currency,
       recipient_name: giftCard.recipient_name,
       sender_name: giftCard.sender_name,
-      status: newBalance === 0 ? "redeemed" : "active",
+      status: newBalance === 0 ? "redeemed" : "partially_redeemed",
     });
   } catch (error) {
     return handleRouteError(error);

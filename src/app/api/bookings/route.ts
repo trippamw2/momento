@@ -83,24 +83,47 @@ export async function POST(request: Request) {
     const admin = createAdminClient();
 
     if (body.gift_card_code) {
-      const { data: giftCard } = await admin
+      const { data: giftCard, error: gcFindError } = await admin
         .from("gift_cards")
         .select("*")
         .eq("code", body.gift_card_code.toUpperCase())
-        .single();
+        .maybeSingle();
 
-      if (giftCard && giftCard.status === "active" && giftCard.balance > 0) {
-        const redeemAmount = Math.min(giftCard.balance, serverPrice);
-
-        await admin
-          .from("gift_cards")
-          .update({
-            balance: giftCard.balance - redeemAmount,
-            status: giftCard.balance - redeemAmount === 0 ? "redeemed" : "active",
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", giftCard.id);
+      if (gcFindError) {
+        return json({ error: "Error looking up gift card" }, 500);
       }
+
+      if (!giftCard) {
+        return json({ error: "Invalid gift card code" }, 400);
+      }
+
+      if (giftCard.status !== "active" && giftCard.status !== "partially_redeemed") {
+        return json({ error: `Gift card is ${giftCard.status}` }, 400);
+      }
+
+      if (giftCard.balance <= 0) {
+        return json({ error: "Gift card has no remaining balance" }, 400);
+      }
+
+      if (giftCard.balance < serverPrice) {
+        return json({
+          error: `Insufficient gift card balance. Card has MK ${giftCard.balance.toLocaleString()} but the experience costs MK ${serverPrice.toLocaleString()}.`,
+          card_balance: giftCard.balance,
+          experience_price: serverPrice,
+        }, 400);
+      }
+
+      const redeemAmount = serverPrice;
+      const newBalance = giftCard.balance - redeemAmount;
+
+      await admin
+        .from("gift_cards")
+        .update({
+          balance: newBalance,
+          status: newBalance === 0 ? "redeemed" : "partially_redeemed",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", giftCard.id);
     }
 
     const { data, error } = await admin

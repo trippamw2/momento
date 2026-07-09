@@ -85,75 +85,13 @@ export async function POST(request: Request) {
 
         console.warn("PayChangu API returned no checkout_url, falling back to direct creation:", paychanguData);
       } catch (payErr) {
-        console.warn("PayChangu API call failed, falling back to direct creation:", payErr);
+        console.error("PayChangu API call failed:", payErr);
+        return json({ error: "Payment service unavailable. Please try again later." }, 502);
       }
     }
 
-    // Fallback: create the gift card directly without PayChangu
-    const code = await generateUniqueCode(admin);
-    const expiresAt = new Date();
-    expiresAt.setFullYear(expiresAt.getFullYear() + 1);
-
-    const { data: giftCard, error: gcError } = await admin
-      .from("gift_cards")
-      .insert({
-        code,
-        issuer_id: user.id,
-        recipient_email: recipient_email || null,
-        recipient_name,
-        sender_name: sender_name || user.email?.split("@")[0] || "Someone",
-        message: message || null,
-        amount,
-        currency: "MWK",
-        balance: amount,
-        delivery_method: delivery_method || "email",
-        occasion: occasion || null,
-        status: "active",
-        expires_at: expiresAt.toISOString(),
-      })
-      .select()
-      .single();
-
-    if (gcError) {
-      console.error("Failed to create gift card:", gcError);
-      return json({ error: "Failed to create gift card" }, 500);
-    }
-
-    await admin.from("gift_card_transactions").insert({
-      gift_card_id: giftCard.id,
-      type: "purchase",
-      amount,
-      balance_after: amount,
-    });
-
-    await admin.from("notifications").insert({
-      user_id: user.id,
-      type: "gift_card_purchased",
-      title: "Gift card created",
-      body: `Your gift card of MWK ${amount.toLocaleString()} is ready to send.`,
-      data: { gift_card_id: giftCard.id, code },
-    });
-
-    return json({ code, gift_card_id: giftCard.id, status });
+    return json({ error: "Payment service not configured" }, 500);
   } catch (error) {
     return handleRouteError(error);
   }
-}
-
-async function generateUniqueCode(admin: ReturnType<typeof createAdminClient>): Promise<string> {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  for (let attempt = 0; attempt < 15; attempt++) {
-    let code = "XPRO-";
-    for (let i = 0; i < 8; i++) {
-      if (i === 4) code += "-";
-      code += chars[Math.floor(Math.random() * chars.length)];
-    }
-    const { data: existing } = await admin
-      .from("gift_cards")
-      .select("id")
-      .eq("code", code)
-      .maybeSingle();
-    if (!existing) return code;
-  }
-  return `XPRO-${Date.now().toString(36).toUpperCase()}`;
 }

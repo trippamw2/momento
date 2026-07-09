@@ -182,28 +182,6 @@ export default function GiftPageContent() {
       if (res.ok && data.checkout_url) {
         // Redirect to PayChangu checkout
         window.location.href = data.checkout_url;
-      } else if (res.ok && data.code) {
-        // PayChangu unavailable — gift card created directly
-        setRedemptionCode(data.code);
-        if (sendMode === "now" && delivery === "whatsapp") {
-          sendGiftCard({
-            id: data.gift_card_id || "",
-            code: data.code,
-            amount: selectedValue,
-            balance: selectedValue,
-            currency: "MWK",
-            recipientName,
-            recipientContact,
-            senderName,
-            message: message || undefined,
-            deliveryMethod: delivery,
-            occasion: occasion || undefined,
-            status: "active",
-            createdAt: new Date().toISOString(),
-            expiresAt: new Date(Date.now() + 365 * 86400000).toISOString(),
-          });
-        }
-        setSent(true);
       } else {
         setPayError(data?.error || "Failed to initiate payment");
       }

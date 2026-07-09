@@ -1,6 +1,7 @@
 import { json, handleRouteError } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
-import { sendBookingConfirmation, sendGiftCardEmail } from "@/lib/brevo";
+import { sendBookingConfirmation } from "@/lib/brevo";
+import { sendGiftCardDelivery } from "@/lib/gift-delivery";
 
 /**
  * PayChangu Webhook Handler
@@ -196,20 +197,38 @@ export async function POST(request: Request) {
         data: { gift_card_id: giftCard.id, code },
       });
 
-      // Send Brevo gift card email to recipient if email provided
-      if (giftDetails.recipient_email) {
-        const emailResult = await sendGiftCardEmail({
-          recipientEmail: giftDetails.recipient_email as string,
-          recipientName: (giftDetails.recipient_name as string) || "Friend",
-          senderName: (giftDetails.sender_name as string) || "Someone",
+      // Deliver gift card via the selected channel (email / WhatsApp / SMS)
+      const deliveryMethod = (giftDetails.delivery_method as string) || "email";
+      const recipientContact =
+        deliveryMethod === "email"
+          ? (giftDetails.recipient_email as string) || ""
+          : (giftDetails.recipient_phone as string) || giftDetails.recipient_email as string || "";
+
+      if (recipientContact) {
+        const deliveryResult = await sendGiftCardDelivery({
+          code,
           amount: payment.amount,
           currency: payment.currency || "MWK",
-          code,
+          recipientName: (giftDetails.recipient_name as string) || "Friend",
+          recipientContact,
+          senderName: (giftDetails.sender_name as string) || "Someone",
           message: giftDetails.message as string | undefined,
           occasion: giftDetails.occasion as string | undefined,
+          deliveryMethod,
         });
-        if (!emailResult.success) {
-          console.error("Failed to send gift card email:", emailResult.error);
+
+        if (!deliveryResult.success) {
+          console.error(`Gift card ${code} delivery via ${deliveryMethod} failed:`, deliveryResult.detail);
+          // Mark delivery_status on the gift card for visibility
+          await admin
+            .from("gift_cards")
+            .update({ delivery_status: `failed: ${deliveryResult.detail?.slice(0, 100)}` })
+            .eq("id", giftCard.id);
+        } else {
+          await admin
+            .from("gift_cards")
+            .update({ delivery_status: "delivered" })
+            .eq("id", giftCard.id);
         }
       }
 

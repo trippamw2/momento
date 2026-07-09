@@ -180,6 +180,9 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
               </div>
             </div>
 
+            {/* Gift Cards */}
+            <GiftCardSection email={user.email} />
+
             {/* Loyalty Program */}
             <LoyaltyBadge />
 
@@ -314,6 +317,110 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
             </div>
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+/** Gift card summary section for user dashboard */
+function GiftCardSection({ email }: { email: string }) {
+  const [giftCards, setGiftCards] = useState<Array<{ code: string; amount: number; balance: number; status: string; created_at: string; recipient_name: string | null }>>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGiftCards = async () => {
+      const token = localStorage.getItem("experio-auth-token");
+      if (!token) { setLoading(false); return; }
+      try {
+        const res = await fetch("/api/gift-cards?limit=5", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setGiftCards(data.giftCards || []);
+        }
+      } catch { /* ignore */ }
+      finally { setLoading(false); }
+    };
+    fetchGiftCards();
+  }, [email]);
+
+  const activeCards = giftCards.filter(g => g.status === "active" || g.status === "partially_redeemed");
+  const totalBalance = activeCards.reduce((sum, g) => sum + g.balance, 0);
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl bg-[#111827] border border-white/[0.08] p-6">
+        <div className="animate-pulse flex gap-3">
+          <div className="h-4 w-24 bg-white/[0.06] rounded" />
+          <div className="h-4 w-16 bg-white/[0.06] rounded" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl bg-[#111827] border border-white/[0.08] p-6">
+      <h2 className="text-heading-sm font-bold text-[#F1F5F9] mb-4 flex items-center gap-2">
+        <svg className="w-5 h-5 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h18v18H3V3z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v8M8 12h8" />
+        </svg>
+        Gift Cards
+      </h2>
+
+      {giftCards.length === 0 ? (
+        <p className="text-body-sm text-[#64748B]">No gift cards yet.</p>
+      ) : (
+        <>
+          {/* Mini stats */}
+          <div className="grid grid-cols-3 gap-3 mb-4">
+            <div className="p-3 rounded-xl bg-[#1A2332] text-center">
+              <p className="text-heading-sm font-bold text-[#F1F5F9]">{giftCards.length}</p>
+              <p className="text-caption text-[#64748B]">Total</p>
+            </div>
+            <div className="p-3 rounded-xl bg-[#1A2332] text-center">
+              <p className="text-heading-sm font-bold text-emerald-400">{activeCards.length}</p>
+              <p className="text-caption text-[#64748B]">Active</p>
+            </div>
+            <div className="p-3 rounded-xl bg-[#1A2332] text-center">
+              <p className="text-heading-sm font-bold text-[#F1F5F9]">MK {totalBalance.toLocaleString()}</p>
+              <p className="text-caption text-[#64748B]">Balance</p>
+            </div>
+          </div>
+
+          {/* Recent gift cards */}
+          <div className="space-y-2">
+            {giftCards.slice(0, 3).map((gc) => {
+              const statusColors: Record<string, string> = {
+                active: "text-emerald-400",
+                partially_redeemed: "text-amber-400",
+                redeemed: "text-blue-400",
+                expired: "text-red-400",
+                cancelled: "text-gray-500",
+              };
+              return (
+                <div key={gc.code} className="flex items-center justify-between py-2 px-3 rounded-xl bg-[#1A2332]">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-body-sm font-mono text-[#F1F5F9] font-medium truncate">{gc.code}</p>
+                    <p className="text-caption text-[#64748B] truncate">{gc.recipient_name || "—"}</p>
+                  </div>
+                  <div className="text-right ml-3">
+                    <p className="text-body-sm font-medium text-[#F1F5F9]">MK {gc.balance.toLocaleString()}</p>
+                    <p className={`text-caption font-medium capitalize ${statusColors[gc.status] || "text-[#64748B]"}`}>{gc.status.replace("_", " ")}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <Link
+            href="/gift"
+            className="mt-3 block text-center py-2.5 rounded-xl bg-[#FF0F73]/10 text-[#FF0F73] text-body-sm font-semibold hover:bg-[#FF0F73]/20 transition-all"
+          >
+            View All Gift Cards
+          </Link>
+        </>
       )}
     </div>
   );
