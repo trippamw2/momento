@@ -1,10 +1,10 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 
 export default function GiftHero() {
   return (
-    <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[45vh] md:min-h-[55vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
         <Image
           src="https://images.unsplash.com/photo-1512909006721-3d6018887383?w=1920&q=90"

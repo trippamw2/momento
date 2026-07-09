@@ -1,4 +1,4 @@
-﻿import { getUser, json, handleRouteError } from "@/lib/api-helpers";
+import { getUser, json, handleRouteError } from "@/lib/api-helpers";
 import { createServerClient } from "@/lib/supabase-server";
 
 export async function GET(request: Request) {
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
       // Fall through to mock
     }
 
-    // Mock fallback â€” user has 0 points until they book
+    // Mock fallback — user has 0 points until they book
     return json({
       balance: 0,
       lifetime_points: 0,

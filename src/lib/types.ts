@@ -1,4 +1,4 @@
-﻿export type Mood =
+export type Mood =
   | "Romantic"
   | "Relaxed"
   | "Social"
@@ -90,7 +90,7 @@ export interface DiscoveryRail {
 
 export const PRICE_RANGES = [
   { label: "All", value: "all" },
-  { label: "â‰¤ 50K", value: "0-50000" },
+  { label: "≤ 50K", value: "0-50000" },
   { label: "50K-100K", value: "50000-100000" },
   { label: "100K+", value: "100000-9999999" },
 ] as const;
@@ -112,7 +112,7 @@ export interface SavedState {
   collections: Collection[];
 }
 
-// â”€â”€â”€ API Response Types â”€â”€â”€
+// ─── API Response Types ───
 
 export interface GiftCard {
   id: string;

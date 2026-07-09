@@ -1,4 +1,4 @@
-﻿import AIConcierge from "@/components/AIConcierge";
+import AIConcierge from "@/components/AIConcierge";
 
 export default function AskAIPage() {
   return (

@@ -1,4 +1,4 @@
-﻿export default function ExperienceDetailLoading() {
+export default function ExperienceDetailLoading() {
   return (
     <div className="pt-16 min-h-screen bg-[#05070B]">
       {/* Hero skeleton */}

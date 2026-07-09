@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -179,7 +179,7 @@ export default function PartnerOnboardingPage() {
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-caption font-bold ${
                   i + 1 < step ? "bg-[#FF0F73] text-white" : i + 1 === step ? "bg-[#FF0F73]/20 text-[#FF0F73] border border-[#FF0F73]" : "bg-[#1A2332] text-[#64748B] border border-white/[0.08]"
                 }`}>
-                  {i + 1 < step ? "âœ“" : s.icon}
+                  {i + 1 < step ? "✓" : s.icon}
                 </div>
                 <span className="text-caption font-medium hidden sm:block">{s.label}</span>
               </div>

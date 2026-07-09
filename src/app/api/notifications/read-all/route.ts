@@ -1,4 +1,4 @@
-﻿import { json, getUser, handleRouteError } from "@/lib/api-helpers";
+import { json, getUser, handleRouteError } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 /**

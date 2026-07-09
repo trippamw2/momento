@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { getTravelMode } from "@/lib/geo";
 
@@ -33,7 +33,7 @@ export default function DistanceBadge({
       {showIcon && <Icon />}
       <span>
         {distanceLabel}
-        {showTravelTime && time ? ` Â· ${time}` : ""}
+        {showTravelTime && time ? ` · ${time}` : ""}
       </span>
     </span>
   );

@@ -1,4 +1,4 @@
-﻿import { json, handleRouteError } from "@/lib/api-helpers";
+import { json, handleRouteError } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
 import { sendBookingConfirmation, sendGiftCardEmail } from "@/lib/brevo";
 
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
     // Only process completed payments
     if (status !== "success" && status !== "completed") {
-      return json({ ok: true, message: "Event ignored â€” not a success status" });
+      return json({ ok: true, message: "Event ignored — not a success status" });
     }
 
     if (!txRef) {
@@ -63,9 +63,9 @@ export async function POST(request: Request) {
 
     const metadata = (payment.metadata || {}) as Record<string, unknown>;
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────
     // CASE 1: Booking payment
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────
     if (payment.booking_id) {
       // Fetch full booking + user + experience details for email
       const { data: booking } = await admin
@@ -122,9 +122,9 @@ export async function POST(request: Request) {
       return json({ ok: true, message: "Booking confirmed" });
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────
     // CASE 2: Gift card payment
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────
     if (metadata.type === "gift_card") {
       // Idempotency check: if this payment already has a gift_card_id, return the existing card
       if (payment.gift_card_id) {
@@ -218,7 +218,7 @@ export async function POST(request: Request) {
       return json({ ok: true, message: "Gift card created", code });
     }
 
-    // Unknown payment type â€” just acknowledge
+    // Unknown payment type — just acknowledge
     console.log("Webhook processed payment with no specific handler:", payment.id);
     return json({ ok: true, message: "Payment recorded" });
   } catch (error) {

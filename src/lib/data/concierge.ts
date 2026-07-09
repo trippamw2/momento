@@ -1,4 +1,4 @@
-﻿import { Experience } from "../types";
+import { Experience } from "../types";
 import { experiences } from "./experiences";
 
 export const AI_CONCIERGE_RESPONSES: Record<string, { explanation: string; experienceIds: string[] }> = {

@@ -1,6 +1,6 @@
-﻿"use client";
+"use client";
 
-// â”€â”€â”€ Types â”€â”€â”€
+// ─── Types ───
 
 export interface GiftCardCreate {
   amount: number;
@@ -33,7 +33,7 @@ export interface GiftCardFull {
   expiresAt: string;
 }
 
-// â”€â”€â”€ Helpers â”€â”€â”€
+// ─── Helpers ───
 
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
@@ -62,7 +62,7 @@ function mapGiftCard(row: Record<string, unknown>): GiftCardFull {
   };
 }
 
-// â”€â”€â”€ Delivery helpers (WhatsApp/SMS still use browser) â”€â”€â”€
+// ─── Delivery helpers (WhatsApp/SMS still use browser) ───
 
 export function sendGiftCard(card: GiftCardFull): void {
   if (card.deliveryMethod === "whatsapp") {
@@ -76,7 +76,7 @@ export function sendGiftCard(card: GiftCardFull): void {
 
 function sendViaWhatsApp(card: GiftCardFull): void {
   const message = encodeURIComponent(
-    `ðŸŽ You've Received an Experio Gift Card from ${card.senderName}!\n\n` +
+    `🎁 You've Received a Experio Gift Card from ${card.senderName}!\n\n` +
     `Amount: ${card.currency} ${card.amount.toLocaleString()}\n` +
     (card.message ? `Message: "${card.message}"\n\n` : "\n") +
     `Code: ${card.code}\n\n` +
@@ -88,12 +88,12 @@ function sendViaWhatsApp(card: GiftCardFull): void {
 
 function sendViaSMS(card: GiftCardFull): void {
   const message = encodeURIComponent(
-    `ðŸŽ Experio Gift Card from ${card.senderName}! Code: ${card.code}. Redeem: ${window.location.origin}/gift/redeem?code=${card.code}`
+    `🎁 Experio Gift Card from ${card.senderName}! Code: ${card.code}. Redeem: ${window.location.origin}/gift/redeem?code=${card.code}`
   );
   window.open(`sms:${card.recipientContact}?body=${message}`, "_blank");
 }
 
-// â”€â”€â”€ API Functions â”€â”€â”€
+// ─── API Functions ───
 
 /**
  * Check a gift card by code via the real API.

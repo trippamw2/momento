@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import Logo from "@/components/Logo";
 
 export default function Footer() {
@@ -75,7 +75,7 @@ export default function Footer() {
         <div className="mt-12 pt-6 border-t border-white/[0.1] flex flex-col sm:flex-row items-center justify-between gap-4 text-caption text-[#94A3B8]">
           <p>&copy; {new Date().getFullYear()} Experio. All rights reserved.</p>
           <p className="flex items-center gap-1">
-            Made with <span className="text-[#FF0F73]">â™¥</span> in Malawi
+            Made with <span className="text-[#FF0F73]">♥</span> in Malawi
           </p>
         </div>
       </div>

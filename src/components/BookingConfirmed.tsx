@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -81,9 +81,9 @@ export default function BookingConfirmed({
       title: `Experio: ${title}`,
       date: experienceDate || new Date().toISOString(),
       location,
-      description: `${guests} guest${guests > 1 ? "s" : ""} Â· Ref: ${bookingRef || "N/A"}`,
+      description: `${guests} guest${guests > 1 ? "s" : ""} · Ref: ${bookingRef || "N/A"}`,
     });
-    downloadICS(ics, `EXPERIO-${title.replace(/\s+/g, "-").toLowerCase()}.ics`);
+    downloadICS(ics, `MOMENTO-${title.replace(/\s+/g, "-").toLowerCase()}.ics`);
   };
 
   return (
@@ -121,8 +121,8 @@ export default function BookingConfirmed({
         <h1 className="text-display-sm font-bold text-white mb-3">Booking Confirmed!</h1>
         <p className="text-[#CBD5E1] text-body-lg mb-2">{title}</p>
         <p className="text-body-sm text-[#94A3B8] mb-1">
-          {bookedDate} Â· {guests} guest{guests > 1 ? "s" : ""}
-          {duration ? ` Â· ${duration}` : ""}
+          {bookedDate} · {guests} guest{guests > 1 ? "s" : ""}
+          {duration ? ` · ${duration}` : ""}
         </p>
         <p className="text-heading-md font-bold text-white mb-8">MK {totalPrice.toLocaleString()}</p>
 

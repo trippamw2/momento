@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
@@ -183,7 +183,7 @@ export default function GiftPageContent() {
         // Redirect to PayChangu checkout
         window.location.href = data.checkout_url;
       } else if (res.ok && data.code) {
-        // PayChangu unavailable â€” gift card created directly
+        // PayChangu unavailable — gift card created directly
         setRedemptionCode(data.code);
         if (sendMode === "now" && delivery === "whatsapp") {
           sendGiftCard({
@@ -317,7 +317,7 @@ export default function GiftPageContent() {
       ctx.fillStyle = "#FF0F73";
       ctx.font = "bold 12px sans-serif";
       ctx.textAlign = "right";
-      ctx.fillText("âœ¦ Experio", rect.width - 20, 30);
+      ctx.fillText("✦ Experio", rect.width - 20, 30);
 
       // Card chip
       ctx.fillStyle = "rgba(255, 200, 50, 0.7)";
@@ -451,11 +451,38 @@ export default function GiftPageContent() {
 
   return (
     <div className="pt-20 pb-16">
-      {/* â”€â”€â”€ Hero â”€â”€â”€ */}
+      {/* ─── Hero ─── */}
       <GiftHero />
 
-      {/* â”€â”€â”€ Step Progress Indicator â”€â”€â”€ */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-8 -mt-16 relative z-10 mb-6">
+      {/* ─── How It Works ─── */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-8 -mt-8 relative z-10 mb-12">
+        <h2 className="text-center text-heading-xl font-bold text-[#F1F5F9] mb-8">How It Works</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {processSteps.map((step, i) => {
+            const icons = [
+              <svg key="choose" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>,
+              <svg key="personalize" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>,
+              <svg key="send" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>,
+              <svg key="enjoy" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+            ];
+            return (
+              <div key={step.step} className="p-6 rounded-2xl bg-[#111827] border border-white/[0.06] text-center transition-all duration-300 hover:border-white/[0.12] hover:shadow-lg hover:-translate-y-0.5 group">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] flex items-center justify-center mx-auto mb-4 text-white shadow-[0_4px_16px_rgba(255,15,115,0.25)] group-hover:shadow-[0_4px_20px_rgba(255,15,115,0.4)] transition-all">
+                  {icons[i]}
+                </div>
+                <div className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-white/[0.06] text-[#CBD5E1] text-xs font-bold mb-2">
+                  {step.step}
+                </div>
+                <h3 className="text-heading-sm font-bold text-[#F1F5F9] mb-1.5">{step.title}</h3>
+                <p className="text-caption text-[#CBD5E1] leading-relaxed">{step.desc}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ─── Step Progress Indicator ─── */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-8 mb-10">
         <div className="flex items-center justify-center gap-0">
           {processSteps.map((step, i) => {
             const stepNum = i + 1;
@@ -463,12 +490,12 @@ export default function GiftPageContent() {
             const isCompleted = currentStep > stepNum;
             return (
               <div key={step.step} className="flex items-center">
-                <div className="flex items-center gap-2">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
+                <div className="flex items-center gap-2.5">
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
                     isCompleted
-                      ? "bg-[#FF0F73] text-white shadow-[0_2px_8px_rgba(255,15,115,0.3)]"
+                      ? "bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] text-white shadow-[0_2px_12px_rgba(255,15,115,0.35)]"
                       : isActive
-                        ? "bg-[#FF0F73] text-white shadow-[0_2px_8px_rgba(255,15,115,0.3)]"
+                        ? "bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] text-white shadow-[0_2px_12px_rgba(255,15,115,0.35)]"
                         : "bg-[#1A2332] text-[#64748B] border border-white/[0.08]"
                   }`}>
                     {isCompleted ? (
@@ -477,15 +504,22 @@ export default function GiftPageContent() {
                       step.step
                     )}
                   </div>
-                  <span className={`text-caption font-medium hidden sm:inline ${
-                    isCompleted || isActive ? "text-[#F1F5F9]" : "text-[#64748B]"
-                  }`}>
-                    {step.title}
-                  </span>
+                  <div className={`flex flex-col ${isCompleted || isActive ? "" : "opacity-50"}`}>
+                    <span className={`text-overline font-semibold tracking-wider ${
+                      isCompleted || isActive ? "text-[#FF0F73]" : "text-[#64748B]"
+                    }`}>
+                      STEP {step.step}
+                    </span>
+                    <span className={`text-body-sm font-semibold ${
+                      isCompleted || isActive ? "text-[#F1F5F9]" : "text-[#64748B]"
+                    }`}>
+                      {step.title}
+                    </span>
+                  </div>
                 </div>
                 {i < processSteps.length - 1 && (
-                  <div className={`w-8 sm:w-16 h-px mx-2 transition-colors duration-300 ${
-                    isCompleted ? "bg-[#FF0F73]" : "bg-white/[0.08]"
+                  <div className={`w-10 sm:w-20 h-0.5 mx-3 transition-colors duration-300 rounded-full ${
+                    isCompleted ? "bg-[#FF0F73]" : "bg-white/[0.06]"
                   }`} />
                 )}
               </div>
@@ -495,7 +529,7 @@ export default function GiftPageContent() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-14">
-        {/* â”€â”€â”€ Experience Finder â”€â”€â”€ */}
+        {/* ─── Experience Finder ─── */}
         <section>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-heading-xl font-bold text-[#F1F5F9]">Find the perfect gift</h2>
@@ -508,7 +542,7 @@ export default function GiftPageContent() {
             </Link>
           </div>
 
-          {/* â”€â”€â”€ Filters â”€â”€â”€ */}
+          {/* ─── Filters ─── */}
           <div className="flex flex-wrap items-center gap-2.5 mb-6">
             <span className="text-caption font-medium text-[#64748B] uppercase tracking-wider mr-1">Category</span>
             {categories.map((cat) => (
@@ -545,7 +579,7 @@ export default function GiftPageContent() {
             </Link>
           </div>
 
-          {/* â”€â”€â”€ Popular Gift Ideas Rail â”€â”€â”€ */}
+          {/* ─── Popular Gift Ideas Rail ─── */}
           <div className="mb-8">
             <h3 className="text-heading-md font-bold text-[#F1F5F9] mb-4">Popular Gift Ideas</h3>
             <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar snap-x snap-mandatory">
@@ -567,9 +601,9 @@ export default function GiftPageContent() {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-transparent to-transparent" />
                       <div className="absolute bottom-0 left-0 right-0 p-4">
                         <div className="flex items-center gap-1.5 mb-1">
-                          <span className="text-yellow-400 text-[11px]">â˜…</span>
+                          <span className="text-yellow-400 text-[11px]">★</span>
                           <span className="text-caption text-white/80 font-medium">{exp.rating}</span>
-                          <span className="text-caption text-white/30">Â·</span>
+                          <span className="text-caption text-white/30">·</span>
                           <span className="text-caption text-white/50">{exp.reviewCount}</span>
                         </div>
                         <h4 className="text-white font-semibold text-body-sm leading-tight">{exp.title}</h4>
@@ -585,7 +619,7 @@ export default function GiftPageContent() {
             </div>
           </div>
 
-          {/* â”€â”€â”€ Occasion Chips â”€â”€â”€ */}
+          {/* ─── Occasion Chips ─── */}
           <div className="pt-2">
             <h3 className="text-heading-sm font-bold text-[#F1F5F9] mb-3 text-center">What&apos;s the occasion?</h3>
             <div className="flex flex-wrap items-center justify-center gap-2.5">
@@ -606,7 +640,7 @@ export default function GiftPageContent() {
           </div>
         </section>
 
-        {/* â”€â”€â”€ Gift Cards (Physical ATM/Credit Card Style) â”€â”€â”€ */}
+        {/* ─── Gift Cards (Physical ATM/Credit Card Style) ─── */}
         <section>
           <div className="text-center mb-8">
             <h2 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Gift Cards</h2>
@@ -622,7 +656,7 @@ export default function GiftPageContent() {
                 variantId={GIFT_CARD_VARIANTS[i].id}
                 selected={selectedCard === i}
                 onSelect={() => setSelectedCard(selectedCard === i ? null : i)}
-                cardNumber={`â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ ${4829 + i * 100}`}
+                cardNumber={`•••• •••• •••• ${4829 + i * 100}`}
                 expiry={`12/${27 + i}`}
                 holderName="Your Gift"
               />
@@ -631,7 +665,7 @@ export default function GiftPageContent() {
         </section>
 
 
-        {/* â”€â”€â”€ Interactive Gift Form â”€â”€â”€ */}
+        {/* ─── Interactive Gift Form ─── */}
         <section className="max-w-4xl mx-auto">
           <div className="bg-[#111827] rounded-2xl border border-white/[0.08] p-6 sm:p-8 shadow-sm">
             <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-6 text-center">Send Your Gift</h2>
@@ -764,9 +798,9 @@ export default function GiftPageContent() {
                     <div className="flex items-center justify-between">
                       <span className="text-body-sm text-[#CBD5E1]">
                         {tab === "cards" && selectedCard !== null
-                          ? `Gift Card â€” ${giftCardValues[selectedCard].label}`
+                          ? `Gift Card — ${giftCardValues[selectedCard].label}`
                           : tab === "experiences" && selectedExp
-                            ? `Experience â€” ${experiences.find((e) => e.id === selectedExp)?.title}`
+                            ? `Experience — ${experiences.find((e) => e.id === selectedExp)?.title}`
                             : "Select a gift above"}
                       </span>
                       <span className="text-heading-sm font-bold text-[#F1F5F9]">
@@ -811,7 +845,7 @@ export default function GiftPageContent() {
                         </>
                       ) : (
                         <>
-                          Continue to Payment â€” MK {selectedValue.toLocaleString()}
+                          Continue to Payment — MK {selectedValue.toLocaleString()}
                         </>
                       )}
                     </button>
@@ -820,18 +854,13 @@ export default function GiftPageContent() {
                 </div>
               </>
             ) : (
-              /* â”€â”€â”€ Premium Success State with Luxury Card â”€â”€â”€ */
+              /* ─── Success State with ATM-style Card ─── */
               <div className="max-w-lg mx-auto text-center py-6">
-                {/* Success icon with pink glow */}
-                <div className="relative mx-auto mb-5 w-16 h-16">
-                  <div className="absolute inset-0 rounded-full bg-[#FF0F73] animate-ping opacity-20" />
-                  <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] flex items-center justify-center shadow-[0_0_24px_rgba(255,15,115,0.4)]">
-                    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
-                  </div>
+                <div className="w-16 h-16 rounded-full bg-emerald-500 flex items-center justify-center mx-auto mb-4 shadow-[0_4px_16px_rgba(16,185,129,0.3)]">
+                  <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 </div>
-
                 <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-1">
-                  {sendMode === "schedule" ? "Gift Scheduled! ðŸŽ‰" : "Gift Sent! ðŸŽ‰"}
+                  {sendMode === "schedule" ? "Gift Scheduled!" : "Gift Sent!"}
                 </h2>
                 <p className="text-[#CBD5E1] text-body-sm mb-6">
                   {sendMode === "schedule"
@@ -840,95 +869,81 @@ export default function GiftPageContent() {
                   }
                 </p>
 
-                {/* Premium Luxury Gift Card */}
-                <div className="max-w-sm mx-auto mb-6" ref={cardRef}>
-                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0F0A1A] via-[#1A0A2E] to-[#2D0A3E] border border-white/[0.1] shadow-[0_0_40px_rgba(255,15,115,0.12)]">
-                    {/* Pink glow orbs */}
-                    <div className="absolute -top-12 -right-12 w-48 h-48 bg-[#FF0F73] rounded-full opacity-[0.08] blur-3xl" />
-                    <div className="absolute -bottom-12 -left-12 w-40 h-40 bg-[#FF5B3A] rounded-full opacity-[0.06] blur-3xl" />
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-[#FFA22C] rounded-full opacity-[0.04] blur-3xl" />
-
-                    {/* Subtle grid pattern */}
-                    <div className="absolute inset-0 opacity-[0.03]"
-                      style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L40 20L20 40L0 20Z' fill='none' stroke='%23FF0F73' stroke-width='0.5'/%3E%3C/svg%3E")`,
-                        backgroundSize: "28px 28px",
-                      }}
-                    />
-
-                    {/* Light sweep */}
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.08)_0%,transparent_60%)]" />
+                {/* ATM-style Gift Card (Premium) */}
+                <div className="max-w-sm mx-auto mb-6 perspective-[1000px]" ref={cardRef}>
+                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FF0F73] via-[#FF5B3A] to-[#FFA22C] border border-white/10 shadow-2xl transition-all duration-500 hover:rotate-y-[-2deg]">
+                    {/* Premium decorative elements */}
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-white/[0.07] rounded-full -translate-y-1/3 translate-x-1/3 blur-none" />
+                    <div className="absolute bottom-0 left-0 w-36 h-36 bg-black/[0.05] rounded-full translate-y-1/3 -translate-x-1/3" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.12)_0%,transparent_60%)]" />
+                    <div className="absolute bottom-6 right-6 w-20 h-20 bg-white/[0.04] rounded-full" />
+                    <div className="absolute top-1/3 -left-8 w-16 h-16 bg-white/[0.03] rounded-full blur-sm" />
+                    {/* Shimmer line */}
+                    <div className="absolute inset-0 bg-[linear-gradient(105deg,transparent_30%,rgba(255,255,255,0.08)_45%,rgba(255,255,255,0.12)_50%,rgba(255,255,255,0.08)_55%,transparent_70%)] pointer-events-none" />
 
                     <div className="relative z-10 p-6">
                       {/* Top: Chip + Brand */}
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex flex-col gap-1.5">
-                          <div className="w-9 h-6 rounded bg-gradient-to-br from-yellow-300 to-yellow-500 shadow-inner border border-yellow-200/30" />
-                          <div className="flex -space-x-1">
-                            <div className="w-5 h-3.5 rounded border border-white/20" />
-                            <div className="w-5 h-3.5 rounded border border-white/20" />
+                      <div className="flex items-start justify-between mb-5">
+                        <div className="flex flex-col gap-2">
+                          <div className="w-10 h-7 rounded bg-gradient-to-br from-yellow-200 to-yellow-400 shadow-inner border border-white/10" />
+                          <div className="flex -space-x-1.5">
+                            <div className="w-6 h-4 rounded border border-white/30" />
+                            <div className="w-6 h-4 rounded border border-white/30" />
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-[11px] font-bold text-white/50 uppercase tracking-[0.15em]">Experio</p>
-                          <div className="h-px w-full bg-white/10 mt-0.5 mb-0.5" />
-                          <p className="text-[7px] text-white/30 uppercase tracking-[0.1em]">Gift Card</p>
+                          <p className="text-[10px] font-bold text-white/80 uppercase tracking-[0.15em]">Experio</p>
+                          <p className="text-[8px] text-white/50 tracking-wider uppercase">Gift Card</p>
                         </div>
                       </div>
 
                       {/* Value */}
-                      <p className="text-2xl font-bold text-white mb-4 tracking-tight">
+                      <p className="text-2xl font-bold text-white mb-1 drop-shadow-sm">
                         {tab === "cards" && selectedCard !== null ? giftCardValues[selectedCard].label : "Gift Experience"}
                       </p>
 
-                      {/* Divider with dot */}
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#FF0F73]" />
-                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                      </div>
+                      {/* Card number */}
+                      <p className="text-sm font-mono tracking-[0.2em] text-white/70 mb-5">
+                        {tab === "cards" && selectedCard !== null
+                          ? `•••• •••• •••• ${4829 + (selectedCard * 100)}`
+                          : `•••• •••• •••• ${redemptionCode.slice(-4)}`
+                        }
+                      </p>
 
                       {/* Redemption Code + QR Row */}
-                      <div className="flex items-center gap-4 mb-4">
+                      <div className="flex items-center gap-4 mb-3">
                         <div className="flex-1 min-w-0">
-                          <p className="text-[9px] text-white/30 uppercase tracking-[0.15em] mb-1.5">Redemption Code</p>
-                          <p className="text-sm font-mono font-bold text-white tracking-wider break-all bg-white/[0.04] rounded-lg px-2.5 py-1.5 border border-white/[0.06]">
-                            {redemptionCode}
-                          </p>
-                          <div className="flex items-center gap-2 mt-2.5">
-                            <div>
-                              <p className="text-[9px] text-white/25 uppercase tracking-[0.1em]">To</p>
-                              <p className="text-xs font-medium text-white/70">{recipientName}</p>
+                          <p className="text-[9px] text-white/50 uppercase tracking-wider mb-0.5">Redemption Code</p>
+                          <p className="text-sm font-mono font-bold text-[#F1F5F9] tracking-wider break-all">{redemptionCode}</p>
+                          <div className="flex items-center gap-2 mt-2">
+                            <div className="flex items-center gap-1">
+                              <p className="text-[9px] text-white/40 uppercase">TO</p>
+                              <p className="text-xs font-medium text-white/80">{recipientName}</p>
                             </div>
-                            <div className="w-px h-6 bg-white/[0.08]" />
-                            <div>
-                              <p className="text-[9px] text-white/25 uppercase tracking-[0.1em]">From</p>
-                              <p className="text-xs font-medium text-white/50">{senderName}</p>
+                            <span className="text-white/20">|</span>
+                            <div className="flex items-center gap-1">
+                              <p className="text-[9px] text-white/40 uppercase">FROM</p>
+                              <p className="text-xs font-medium text-white/60">{senderName}</p>
                             </div>
                           </div>
                         </div>
                         {qrDataUrl && (
-                          <div className="flex-shrink-0 relative">
-                            <div className="absolute inset-0 rounded-xl bg-[#FF0F73] blur-md opacity-30" />
-                            <div className="relative rounded-xl bg-white p-1.5 shadow-lg">
-                              <Image src={qrDataUrl} alt="QR Code" width={85} height={85} className="rounded-lg" />
-                            </div>
+                          <div className="flex-shrink-0">
+                            <Image src={qrDataUrl} alt="QR Code" width={85} height={85} className="rounded-lg bg-white p-1.5 shadow-lg" />
                           </div>
                         )}
                       </div>
 
-                      {/* Bottom bar */}
-                      <div className="flex items-center justify-between pt-3.5 border-t border-white/[0.06]">
+                      {/* Bottom: valid thru */}
+                      <div className="flex items-center justify-between pt-3 border-t border-white/[0.12]">
                         <div className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/60" />
-                          <p className="text-[9px] text-white/25 font-mono tracking-wider">{redemptionCode}</p>
+                          <div className="flex -space-x-1">
+                            <div className="w-5 h-3.5 rounded bg-gradient-to-br from-yellow-200/60 to-yellow-400/60 border border-white/10" />
+                            <div className="w-5 h-3.5 rounded bg-gradient-to-br from-red-300/60 to-red-500/60 border border-white/10" />
+                          </div>
+                          <p className="text-[9px] text-white/40 font-mono">12/27</p>
                         </div>
-                        <p className="text-[8px] text-white/20">Valid 12 months</p>
-                      </div>
-
-                      {/* Experio watermark */}
-                      <div className="absolute bottom-4 right-5 text-[38px] font-bold text-white opacity-[0.02] select-none pointer-events-none leading-none">
-                        E
+                        <p className="text-[9px] text-white/40">Valid: 12 months</p>
                       </div>
                     </div>
                   </div>
@@ -939,23 +954,20 @@ export default function GiftPageContent() {
                   <button
                     onClick={handleDownloadCard}
                     disabled={!qrDataUrl}
-                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,15,115,0.4)] transition-all duration-300 disabled:opacity-40 flex items-center gap-2"
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all disabled:opacity-40 flex items-center gap-2"
                   >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                    Download Card
+                    Download Card (PNG)
                   </button>
                   <button
                     onClick={handleDownloadPDF}
-                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,15,115,0.4)] transition-all duration-300 flex items-center gap-2"
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] transition-all flex items-center gap-2"
                   >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                     Download PDF
                   </button>
                   <button
                     onClick={() => { navigator.clipboard.writeText(redemptionCode); }}
-                    className="px-6 py-2.5 rounded-xl bg-[#111827] border border-white/[0.08] text-[#CBD5E1] font-semibold text-body-sm hover:bg-white/[0.08] hover:text-white transition-all flex items-center gap-2"
+                    className="px-6 py-2.5 rounded-xl bg-[#111827] border border-white/[0.08] text-[#CBD5E1] font-semibold text-body-sm hover:bg-white/[0.05] transition-all flex items-center gap-2"
                   >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
                     Copy Code
                   </button>
                 </div>
@@ -967,7 +979,7 @@ export default function GiftPageContent() {
                 </p>
                 <button
                   onClick={handleReset}
-                  className="px-8 py-3 rounded-xl bg-white/[0.06] text-[#CBD5E1] font-semibold text-body-sm hover:bg-white/[0.1] hover:text-white transition-all border border-white/[0.06]"
+                  className="px-6 py-2.5 rounded-xl bg-white/[0.06] text-[#CBD5E1] font-semibold text-body-sm hover:bg-white/[0.1] transition-all"
                 >
                   Send Another Gift
                 </button>
@@ -976,7 +988,7 @@ export default function GiftPageContent() {
           </div>
         </section>
 
-        {/* â”€â”€â”€ Track & Redeem â”€â”€â”€ */}
+        {/* ─── Track & Redeem ─── */}
         <TrackRedeem />
       </div>
     </div>

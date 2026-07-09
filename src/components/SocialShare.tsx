@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 
@@ -14,7 +14,7 @@ export default function SocialShare({ url, title = "Check this out!", descriptio
   const ref = useRef<HTMLDivElement>(null);
 
   const shareUrl = url || (typeof window !== "undefined" ? window.location.href : "");
-  const shareText = description ? `${title} â€” ${description}` : title;
+  const shareText = description ? `${title} — ${description}` : title;
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -32,10 +32,10 @@ export default function SocialShare({ url, title = "Check this out!", descriptio
   };
 
   const shareLinks = [
-    { label: "Copy Link", action: copyLink, icon: "ðŸ”—" },
-    { label: "WhatsApp", href: `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`, icon: "ðŸ’¬" },
-    { label: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, icon: "ðŸ“˜" },
-    { label: "Twitter", href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, icon: "ðŸ¦" },
+    { label: "Copy Link", action: copyLink, icon: "🔗" },
+    { label: "WhatsApp", href: `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`, icon: "💬" },
+    { label: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, icon: "📘" },
+    { label: "Twitter", href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, icon: "🐦" },
   ];
 
   return (

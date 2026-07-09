@@ -1,6 +1,6 @@
-﻿"use client";
+"use client";
 
-// â”€â”€â”€ Types â”€â”€â”€
+// ─── Types ───
 
 export type NotificationType =
   | "booking_confirmed"
@@ -30,7 +30,7 @@ export interface AppNotification {
   actionHref?: string;
 }
 
-// â”€â”€â”€ Helpers â”€â”€â”€
+// ─── Helpers ───
 
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
@@ -113,7 +113,7 @@ function deriveActionHref(type: string, data: Record<string, unknown>): string |
   }
 }
 
-// â”€â”€â”€ API Functions â”€â”€â”€
+// ─── API Functions ───
 
 export async function getNotifications(): Promise<AppNotification[]> {
   const token = getToken();
@@ -179,7 +179,7 @@ export async function markAllAsRead(): Promise<void> {
   } catch { /* ignore */ }
 }
 
-// â”€â”€â”€ Preset creators (still synchronous â€” used for optimistic UI) â”€â”€â”€
+// ─── Preset creators (still synchronous — used for optimistic UI) ───
 
 export function createBookingConfirmedNotification(
   experienceTitle: string,

@@ -1,4 +1,4 @@
-﻿import { createAdminClient } from "@/lib/supabase-admin";
+import { createAdminClient } from "@/lib/supabase-admin";
 import { experiences } from "@/lib/data";
 import { json, handleRouteError } from "@/lib/api-helpers";
 import { createHash } from "crypto";
@@ -12,10 +12,10 @@ const DEFAULT_PARTNER_ID = "00000000-0000-4000-a000-000000000001";
 const DEFAULT_PARTNER_USER_ID = "00000000-0000-4000-a000-000000000000";
 
 const CATEGORIES = [
-  { name: "Date", slug: "date", description: "Romantic dinners & sunset spots", icon: "â¤ï¸", sort_order: 1 },
-  { name: "Chill", slug: "chill", description: "Coffee shops, spas & cafÃ©s", icon: "ðŸŒ¿", sort_order: 2 },
-  { name: "Celebrate", slug: "celebrate", description: "Birthdays, nightlife & dining", icon: "ðŸŽ‰", sort_order: 3 },
-  { name: "Escape", slug: "escape", description: "Weekend getaways & adventures", icon: "ðŸŒ", sort_order: 4 },
+  { name: "Date", slug: "date", description: "Romantic dinners & sunset spots", icon: "❤️", sort_order: 1 },
+  { name: "Chill", slug: "chill", description: "Coffee shops, spas & cafés", icon: "🌿", sort_order: 2 },
+  { name: "Celebrate", slug: "celebrate", description: "Birthdays, nightlife & dining", icon: "🎉", sort_order: 3 },
+  { name: "Escape", slug: "escape", description: "Weekend getaways & adventures", icon: "🌍", sort_order: 4 },
 ];
 
 export async function POST() {
@@ -93,7 +93,7 @@ export async function POST() {
 
     // 4. Seed experiences
     const experienceRows = experiences.map((exp) => {
-      const slug = `EXPERIO-${exp.id}`;
+      const slug = `momento-${exp.id}`;
       const catSlug = exp.category.toLowerCase().replace(/[\s&]+/g, "-");
       return {
         id: deterministicUUID(exp.id),

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -73,7 +73,6 @@ function RedeemContent() {
       {/* Hero */}
       <div className="text-center mb-10">
         <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#FF0F73]/20 to-[#FF7A1A]/20 flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
         </div>
         <h1 className="text-heading-2xl font-bold text-[#F1F5F9] mb-2">Have a Gift Card?</h1>
         <p className="text-[#CBD5E1] text-body-lg max-w-md mx-auto">
@@ -197,49 +196,27 @@ function RedeemContent() {
       {/* Suggested Experiences */}
       {suggestedExps.length > 0 && (
         <section>
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-heading-md font-bold text-[#F1F5F9]">Popular Experiences to Redeem</h2>
-            <Link href="/experiences" className="text-body-sm text-[#FF0F73] hover:text-[#FF7A1A] transition-colors font-medium">
-              Browse all â†’
-            </Link>
-          </div>
+          <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-5">Popular Experiences to Redeem</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {suggestedExps.map((exp, idx) => {
-              const gradients = [
-                "from-[#FF0F73]/20 to-[#FF7A1A]/10",
-                "from-[#7C3AED]/20 to-[#6366F1]/10",
-                "from-[#06B6D4]/20 to-[#059669]/10",
-              ];
-              return (
-                <Link
-                  key={exp.id}
-                  href={`/experiences/${exp.id}`}
-                  className="group rounded-2xl bg-[#111827] border border-white/[0.08] overflow-hidden hover:border-white/[0.15] hover:shadow-[0_0_20px_rgba(255,15,115,0.06)] transition-all duration-300"
-                >
-                  <div className={`aspect-[4/3] relative overflow-hidden bg-gradient-to-br ${gradients[idx % gradients.length]}`}>
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-transparent to-transparent z-10" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-4xl font-bold text-white/[0.08] select-none">{exp.title?.charAt(0) || "E"}</span>
-                    </div>
-                    <div className="absolute bottom-3 left-3 z-20">
-                      <span className="px-2 py-0.5 rounded-full bg-white/[0.08] text-[10px] text-white/60 font-medium backdrop-blur-sm border border-white/[0.06]">
-                        {exp.category}
-                      </span>
-                    </div>
+            {suggestedExps.map((exp) => (
+              <Link
+                key={exp.id}
+                href={`/experiences/${exp.id}`}
+                className="group rounded-2xl bg-[#111827] border border-white/[0.08] overflow-hidden hover:border-white/[0.15] transition-all"
+              >
+                <div className="aspect-[4/3] relative overflow-hidden bg-[#1A2332]">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-transparent to-transparent z-10" />
+                  <div className="w-full h-full flex items-center justify-center text-[#64748B] text-caption">
+                    {exp.title?.charAt(0) || "E"}
                   </div>
-                  <div className="p-4">
-                    <h3 className="text-body-sm font-bold text-[#F1F5F9] group-hover:text-[#FF0F73] transition-colors line-clamp-1">{exp.title}</h3>
-                    <p className="text-caption text-[#64748B] mt-0.5 line-clamp-1">{exp.subtitle}</p>
-                    <div className="flex items-center justify-between mt-2">
-                      <p className="text-body-sm font-bold text-[#FF0F73]">MK {exp.price.toLocaleString()}</p>
-                      <span className="text-caption text-[#64748B] flex items-center gap-0.5">
-                        â˜… {exp.rating}
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
+                </div>
+                <div className="p-4">
+                  <h3 className="text-body-sm font-bold text-[#F1F5F9] group-hover:text-[#FF0F73] transition-colors line-clamp-1">{exp.title}</h3>
+                  <p className="text-caption text-[#64748B] mt-0.5 line-clamp-1">{exp.subtitle}</p>
+                  <p className="text-body-sm font-bold text-[#FF0F73] mt-2">MK {exp.price.toLocaleString()}</p>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
       )}

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 
@@ -6,32 +6,32 @@ const guidelines = [
   {
     title: "Verified Hosts",
     desc: "Every experience host is vetted and verified before listing. We review credentials, safety protocols, and customer history to ensure quality and reliability.",
-    icon: "ðŸ›¡",
+    icon: "🛡",
   },
   {
     title: "Secure Payments",
     desc: "All transactions are processed through encrypted, PCI-compliant gateways. Your financial information is never shared with hosts.",
-    icon: "ðŸ”’",
+    icon: "🔒",
   },
   {
     title: "Transparent Reviews",
     desc: "Every review comes from a confirmed booking. We do not allow fake or incentivized reviews, and our moderation team actively monitors for abuse.",
-    icon: "â­",
+    icon: "⭐",
   },
   {
     title: "24/7 Support",
     desc: "Our support team is available around the clock to assist with any safety concerns before, during, or after your experience.",
-    icon: "ðŸ“ž",
+    icon: "📞",
   },
   {
     title: "COVID-19 Precautions",
     desc: "We encourage all hosts to follow local health guidelines. Many experiences offer flexible cancellation if you or a guest feel unwell.",
-    icon: "ðŸ©º",
+    icon: "🩺",
   },
   {
     title: "Community Guidelines",
     desc: "We maintain a zero-tolerance policy for harassment, discrimination, or unsafe behavior. All participants agree to treat each other with respect.",
-    icon: "ðŸ¤",
+    icon: "🤝",
   },
 ];
 

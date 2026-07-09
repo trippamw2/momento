@@ -1,4 +1,4 @@
-﻿const colors: Record<string, string> = {
+const colors: Record<string, string> = {
   confirmed: "bg-emerald-400/10 text-emerald-400 border-emerald-400/20",
   pending: "bg-amber-400/10 text-amber-400 border-amber-400/20",
   completed: "bg-blue-400/10 text-blue-400 border-blue-400/20",

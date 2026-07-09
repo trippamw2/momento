@@ -1,6 +1,6 @@
-﻿"use client";
+"use client";
 
-// â”€â”€â”€ Types â”€â”€â”€
+// ─── Types ───
 
 export interface TimeSlot {
   date: string;
@@ -21,7 +21,7 @@ export interface BookingRequest {
   contactEmail?: string;
 }
 
-// â”€â”€â”€ Mock data: capacity per experience â”€â”€â”€
+// ─── Mock data: capacity per experience ───
 
 const EXPERIENCE_CAPACITY: Record<string, number> = {
   "sunset-cruise": 12,
@@ -52,7 +52,7 @@ function getMockBookedCount(experienceId: string, date: string): number {
   return hash(key) % 5; // 0-4 pre-booked slots
 }
 
-// â”€â”€â”€ Time slot generation â”€â”€â”€
+// ─── Time slot generation ───
 
 const TIME_SLOTS: { start: string; end: string }[] = [
   { start: "09:00", end: "11:00" },
@@ -85,7 +85,7 @@ export function checkAvailability(experienceId: string, date: string, guests: nu
   return slots.some((s) => s.remaining >= guests);
 }
 
-// â”€â”€â”€ Mock booking storage â”€â”€â”€
+// ─── Mock booking storage ───
 
 const STORAGE_KEY = "experio-booking-engine";
 

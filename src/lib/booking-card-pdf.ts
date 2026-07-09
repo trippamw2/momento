@@ -1,4 +1,4 @@
-﻿import jsPDF from "jspdf";
+import jsPDF from "jspdf";
 
 export interface BookingPdfData {
   bookingRef: string;
@@ -20,7 +20,7 @@ export function generateBookingPDF(data: BookingPdfData): Blob {
   const h = doc.internal.pageSize.getHeight();
   const mg = 12;
 
-  // â”€â”€ Background gradient (simulated with rects) â”€â”€
+  // ── Background gradient (simulated with rects) ──
   for (let y = 0; y < h; y += 0.5) {
     const t = y / h;
     const r = Math.round(5 + t * 10);
@@ -34,13 +34,13 @@ export function generateBookingPDF(data: BookingPdfData): Blob {
   doc.setFillColor(255, 45, 122);
   doc.rect(0, 0, w, 3, "F");
 
-  // â”€â”€ Decorative circles â”€â”€
+  // ── Decorative circles ──
   doc.setFillColor(255, 45, 122, 0.06);
   doc.circle(w - 30, -10, 50, "F");
   doc.setFillColor(255, 122, 24, 0.04);
   doc.circle(-15, h - 30, 40, "F");
 
-  // â”€â”€ Header: Brand â”€â”€
+  // ── Header: Brand ──
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(18);
   doc.setFont("helvetica", "bold");
@@ -66,19 +66,19 @@ export function generateBookingPDF(data: BookingPdfData): Blob {
   doc.setFont("helvetica", "bold");
   doc.text(data.status.toUpperCase(), w - mg - 24, 23, { align: "center" });
 
-  // â”€â”€ Separator â”€â”€
+  // ── Separator ──
   doc.setDrawColor(255, 255, 255, 0.08);
   doc.setLineWidth(0.5);
   doc.line(mg, 34, w - mg, 34);
 
-  // â”€â”€ Title â”€â”€
+  // ── Title ──
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
   const titleLines = doc.splitTextToSize(data.title, w - mg * 2 - 50);
   doc.text(titleLines, mg + 2, 44);
 
-  // â”€â”€ Details â”€â”€
+  // ── Details ──
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(200, 213, 225);
@@ -99,12 +99,12 @@ export function generateBookingPDF(data: BookingPdfData): Blob {
   };
 
   const dateStr = data.dateLabel || data.dateLabel;
-  detailRow("Date & Time", `${dateStr}${data.time ? ` Â· ${data.time}` : ""}`);
-  detailRow("Venue", data.venue || data.location || "â€”");
+  detailRow("Date & Time", `${dateStr}${data.time ? ` · ${data.time}` : ""}`);
+  detailRow("Venue", data.venue || data.location || "—");
   detailRow("Guests", `${data.guests} ${data.guests === 1 ? "guest" : "guests"}`);
   if (data.guestName) detailRow("Guest", data.guestName);
 
-  // â”€â”€ Price â”€â”€
+  // ── Price ──
   yPos = Math.max(yPos, 90);
   doc.setDrawColor(255, 255, 255, 0.08);
   doc.line(mg, yPos, w - mg, yPos);
@@ -120,7 +120,7 @@ export function generateBookingPDF(data: BookingPdfData): Blob {
   doc.setFont("helvetica", "bold");
   doc.text(`MK ${data.price.toLocaleString()}`, leftCol, yPos + 10);
 
-  // â”€â”€ QR Code â”€â”€
+  // ── QR Code ──
   if (data.qrDataUrl) {
     try {
       doc.addImage(data.qrDataUrl, "PNG", w - mg - 42, 44, 38, 38);
@@ -131,7 +131,7 @@ export function generateBookingPDF(data: BookingPdfData): Blob {
     } catch { /* QR rendering failed */ }
   }
 
-  // â”€â”€ Booking Ref â”€â”€
+  // ── Booking Ref ──
   yPos = Math.max(yPos + 20, 120);
   doc.setDrawColor(255, 255, 255, 0.08);
   doc.line(mg, yPos, w - mg, yPos);
@@ -146,11 +146,11 @@ export function generateBookingPDF(data: BookingPdfData): Blob {
   doc.setFont("helvetica", "bold");
   doc.text(data.bookingRef, leftCol, yPos + 6);
 
-  // â”€â”€ Footer â”€â”€
+  // ── Footer ──
   doc.setTextColor(100, 116, 139);
   doc.setFontSize(6);
   doc.setFont("helvetica", "normal");
-  doc.text("LIVE THE MOMENT â€” Experio", mg + 2, h - 8);
+  doc.text("LIVE THE MOMENT — Experio", mg + 2, h - 8);
   doc.text(`Issued ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}`, w - mg - 2, h - 8, { align: "right" });
 
   return doc.output("blob");

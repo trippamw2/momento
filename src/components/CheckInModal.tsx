@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
@@ -287,9 +287,9 @@ export default function CheckInModal({ onClose }: Props) {
                           Checking in...
                         </>
                       ) : booking.status === "completed" ? (
-                        "âœ“ Already Checked In"
+                        "✓ Already Checked In"
                       ) : booking.status === "cancelled" ? (
-                        "âœ• Booking Cancelled"
+                        "✕ Booking Cancelled"
                       ) : (
                         <>
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

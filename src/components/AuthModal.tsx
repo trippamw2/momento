@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -94,7 +94,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         return;
       }
 
-      // â”€â”€â”€ Signup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ─── Signup ──────────────────────────────────────────
 
       const res = await fetch("/api/auth/signup", {
         method: "POST",

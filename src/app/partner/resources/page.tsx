@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useAuthGuard } from "@/lib/use-auth-guard";
@@ -7,32 +7,32 @@ const resources = [
   {
     title: "Hosting Guide",
     desc: "Best practices for creating unforgettable guest experiences, from setting expectations to going the extra mile.",
-    icon: "ðŸ“–",
+    icon: "📖",
   },
   {
     title: "Pricing Tips",
     desc: "Learn how to price your experience competitively while ensuring a great value proposition for guests.",
-    icon: "ðŸ’°",
+    icon: "💰",
   },
   {
     title: "Photography Guide",
     desc: "Tips for capturing high-quality photos that showcase your experience and attract more bookings.",
-    icon: "ðŸ“¸",
+    icon: "📸",
   },
   {
     title: "Safety Checklist",
     desc: "Essential safety protocols and best practices to ensure every guest has a safe and enjoyable experience.",
-    icon: "âœ…",
+    icon: "✅",
   },
   {
     title: "Marketing Tools",
     desc: "Promote your experiences with custom links, social media templates, and seasonal campaign ideas.",
-    icon: "ðŸ“£",
+    icon: "📣",
   },
   {
     title: "Partner Dashboard",
     desc: "Manage your listings, view analytics, and track earnings through your partner dashboard.",
-    icon: "ðŸ“Š",
+    icon: "📊",
     link: "/profile",
   },
 ];
@@ -81,7 +81,7 @@ export default function PartnerResourcesPage() {
         <div className="mb-12">
           <h1 className="text-display-sm font-bold text-[#F1F5F9] mb-3">Partner Resources</h1>
           <p className="text-[#94A3B8] text-body-lg max-w-lg">
-            Everything you need to succeed as an Experio host â€” from getting started to growing your business.
+            Everything you need to succeed as an Experio host — from getting started to growing your business.
           </p>
         </div>
 

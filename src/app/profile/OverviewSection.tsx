@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import type { Experience } from "@/lib/types";
@@ -36,10 +36,10 @@ export default function OverviewSection({
   return (
     <div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
-        <KpiCard label="Total Revenue (30d)" value={`MK ${totalRevenue.toLocaleString()}`} trend="12.5%" icon="ðŸ’°" />
-        <KpiCard label="Bookings (30d)" value={activeBookings.toString()} trend="8.2%" icon="ðŸ“…" />
-        <KpiCard label="Conversion Rate" value={`${conversionRate}%`} trend="3.1%" icon="ðŸŽ¯" />
-        <KpiCard label="Total Views (30d)" value={totalViews.toLocaleString()} trend="18.7%" icon="ðŸ‘" />
+        <KpiCard label="Total Revenue (30d)" value={`MK ${totalRevenue.toLocaleString()}`} trend="12.5%" icon="💰" />
+        <KpiCard label="Bookings (30d)" value={activeBookings.toString()} trend="8.2%" icon="📅" />
+        <KpiCard label="Conversion Rate" value={`${conversionRate}%`} trend="3.1%" icon="🎯" />
+        <KpiCard label="Total Views (30d)" value={totalViews.toLocaleString()} trend="18.7%" icon="👁" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">

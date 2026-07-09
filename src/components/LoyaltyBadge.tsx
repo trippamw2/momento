@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -68,7 +68,7 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
               {tier.name.charAt(0).toUpperCase() + tier.name.slice(1)} Member
             </p>
             <p className="text-caption text-[#94A3B8]">
-              {formatPoints(data.balance)} points Â· {formatPoints(data.lifetime_points)} lifetime
+              {formatPoints(data.balance)} points · {formatPoints(data.lifetime_points)} lifetime
             </p>
           </div>
         </div>
@@ -96,7 +96,7 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
                 <ul className="space-y-1">
                   {nextTierConfig.benefits.map((b, i) => (
                     <li key={i} className="text-caption text-[#CBD5E1] flex items-start gap-1.5">
-                      <span className="text-emerald-400 mt-0.5">âœ“</span>
+                      <span className="text-emerald-400 mt-0.5">✓</span>
                       {b}
                     </li>
                   ))}
@@ -111,7 +111,7 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
           </div>
         ) : (
           <div className="flex items-center gap-2 text-emerald-400 text-caption font-medium">
-            <span>ðŸ‘‘</span> Maximum Tier â€” You&apos;re at the top!
+            <span>👑</span> Maximum Tier — You&apos;re at the top!
           </div>
         )}
 
@@ -119,8 +119,8 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
         <div className="grid grid-cols-3 gap-2 mt-4">
           {[
             { label: "Points multiplier", value: `${tier.multiplier}x` },
-            { label: "Exclusive perks", value: tier.name !== "bronze" ? "âœ“" : "â€”" },
-            { label: "Priority support", value: tier.name === "platinum" || tier.name === "gold" || tier.name === "vip" ? "âœ“" : "â€”" },
+            { label: "Exclusive perks", value: tier.name !== "bronze" ? "✓" : "—" },
+            { label: "Priority support", value: tier.name === "platinum" || tier.name === "gold" || tier.name === "vip" ? "✓" : "—" },
           ].map((stat) => (
             <div key={stat.label} className="text-center p-2 rounded-xl bg-[#0A0E17] border border-white/[0.05]">
               <p className="text-caption font-bold text-[#F1F5F9]">{stat.value}</p>
@@ -132,7 +132,7 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
         {/* View full dashboard link */}
         <div className="mt-3 text-center">
           <span className="text-caption font-medium bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] bg-clip-text text-transparent">
-            View Full Dashboard â†’
+            View Full Dashboard →
           </span>
         </div>
       </div>

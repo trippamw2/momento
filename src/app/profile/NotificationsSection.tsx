@@ -1,11 +1,11 @@
-﻿"use client";
+"use client";
 
 export default function NotificationsSection() {
   const mockNotifications = [
     { id: "N1", title: "New booking received", desc: "Chimwemwe Banda booked Sunset Cruise", time: "12m ago", read: false },
     { id: "N2", title: "Review alert", desc: "New 5-star review on Spa Day", time: "2h ago", read: false },
     { id: "N3", title: "Payout processed", desc: "MK 845,000 sent to your account", time: "1d ago", read: false },
-    { id: "N4", title: "Experience suggestion", desc: "Pool & Lunch is trending â€” consider adding slots", time: "2d ago", read: true },
+    { id: "N4", title: "Experience suggestion", desc: "Pool & Lunch is trending — consider adding slots", time: "2d ago", read: true },
     { id: "N5", title: "Weekly report ready", desc: "Your performance summary for Jun 14-20", time: "3d ago", read: true },
     { id: "N6", title: "Cancellation notice", desc: "Rooftop Dining booking cancelled by guest", time: "4d ago", read: true },
   ];

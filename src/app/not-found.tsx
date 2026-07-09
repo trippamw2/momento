@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 
 export default function NotFound() {
   return (
@@ -9,7 +9,7 @@ export default function NotFound() {
         </div>
         <h1 className="text-heading-xl font-bold text-[#222222] mb-2">Lost your way?</h1>
         <p className="text-[#6a6a6a] text-body mb-8 max-w-md mx-auto">
-          This page doesn&apos;t exist. But don&apos;t worry â€” there are plenty of experiences waiting to be discovered.
+          This page doesn&apos;t exist. But don&apos;t worry — there are plenty of experiences waiting to be discovered.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link

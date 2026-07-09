@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
 import Image from "next/image";
@@ -245,7 +245,7 @@ export default function SavedPageContent() {
   return (
     <div className="pt-20 pb-16 min-h-screen">
       <div className="max-w-7xl mx-auto flex gap-0 sm:gap-6 px-0 sm:px-8">
-        {/* â”€â”€â”€ Sidebar â”€â”€â”€ */}
+        {/* ─── Sidebar ─── */}
         <aside className="hidden sm:flex flex-col w-56 flex-shrink-0 sticky top-24 self-start">
           <div className="bg-[#111827] border border-white/[0.08] rounded-2xl overflow-hidden">
             <div className="px-5 py-4 border-b border-white/[0.08]">
@@ -299,7 +299,7 @@ export default function SavedPageContent() {
           </div>
         </div>
 
-        {/* â”€â”€â”€ Main Content â”€â”€â”€ */}
+        {/* ─── Main Content ─── */}
         <main className="flex-1 min-w-0 px-4 sm:px-0">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -322,7 +322,7 @@ export default function SavedPageContent() {
             )}
           </div>
 
-          {/* â”€â”€â”€ Search Bar â”€â”€â”€ */}
+          {/* ─── Search Bar ─── */}
           {!isRecentlyTab && savedExperiences.length > 0 && (
             <div className="relative mb-4 max-w-md">
               <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -336,12 +336,12 @@ export default function SavedPageContent() {
                 className="w-full pl-10 pr-8 py-2.5 rounded-xl bg-[#1A2332] border border-white/[0.08] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B]/60 focus:outline-none focus:border-[#FF0F73] focus:ring-1 focus:ring-[#FF0F73]/30 transition-all"
               />
               {searchQuery && (
-                <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-text-secondary text-xs">âœ•</button>
+                <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-text-secondary text-xs">✕</button>
               )}
             </div>
           )}
 
-          {/* â”€â”€â”€ Saved / Filtered Grid â”€â”€â”€ */}
+          {/* ─── Saved / Filtered Grid ─── */}
           {displayed.length > 0 ? (
             <>
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-10">
@@ -361,7 +361,7 @@ export default function SavedPageContent() {
                 ))}
               </div>
 
-              {/* â”€â”€â”€ Collections Section â”€â”€â”€ */}
+              {/* ─── Collections Section ─── */}
               {!isRecentlyTab && (
                 <section className="mb-10">
                   <div className="flex items-center justify-between mb-4">
@@ -385,7 +385,7 @@ export default function SavedPageContent() {
                               <Image src={coverImg} alt={col.name} fill className="object-cover" sizes="192px" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center">
-                                <span className="text-2xl opacity-20 font-light">ðŸ—‚</span>
+                                <span className="text-2xl opacity-20 font-light">🗂</span>
                               </div>
                             )}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
@@ -393,7 +393,7 @@ export default function SavedPageContent() {
                               onClick={() => deleteCollection(col.id)}
                               className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500/60 transition-all"
                             >
-                              <span className="text-body font-bold text-white">âœ•</span>
+                              <span className="text-body font-bold text-white">✕</span>
                             </button>
                             <div className="absolute bottom-0 left-0 right-0 p-2.5">
                               <p className="text-white font-semibold text-body-sm">{col.name}</p>
@@ -425,7 +425,7 @@ export default function SavedPageContent() {
                         onClick={() => setCreatingCollection(true)}
                         className="flex-shrink-0 w-48 rounded-xl border-2 border-dashed border-white/[0.08] hover:border-[#FF0F73]/30 transition-all flex flex-col items-center justify-center gap-1 text-[#64748B] hover:text-[#94A3B8]"
                       >
-                        <span className="text-3xl font-light">ï¼‹</span>
+                        <span className="text-3xl font-light">＋</span>
                         <span className="text-caption font-medium">New Collection</span>
                       </button>
                     )}
@@ -433,7 +433,7 @@ export default function SavedPageContent() {
                 </section>
               )}
 
-              {/* â”€â”€â”€ Recently Viewed Section â”€â”€â”€ */}
+              {/* ─── Recently Viewed Section ─── */}
               {!isRecentlyTab && getRecentlyViewed().length > 0 && (
                 <section className="mb-10">
                   <div className="flex items-center justify-between mb-4">
@@ -475,7 +475,7 @@ export default function SavedPageContent() {
                 </section>
               )}
 
-              {/* â”€â”€â”€ Bottom CTA â”€â”€â”€ */}
+              {/* ─── Bottom CTA ─── */}
               <section className="relative rounded-2xl overflow-hidden bg-[#111827] border border-white/[0.08] p-8 sm:p-10 text-center">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-[#FF0F73]/5 via-[#FF0F73]/5 to-[#FF0F73]/5 rounded-full blur-3xl" />
                 <div className="relative z-10">
@@ -495,7 +495,7 @@ export default function SavedPageContent() {
               </section>
             </>
           ) : (
-            /* â”€â”€â”€ Empty State â”€â”€â”€ */
+            /* ─── Empty State ─── */
             <div className="text-center py-20">
               <div className="w-16 h-16 rounded-full bg-[#1A2332] flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
@@ -591,9 +591,9 @@ function SavedCard({
           {/* Bottom Info */}
           <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
             <div className="flex items-center gap-1.5 mb-1.5">
-              <span className="text-yellow-400 text-[11px]">â˜…</span>
+              <span className="text-yellow-400 text-[11px]">★</span>
               <span className="text-caption text-white/80 font-medium">{exp.rating}</span>
-              <span className="text-caption text-white/30">Â·</span>
+              <span className="text-caption text-white/30">·</span>
               <span className="text-caption text-white/50">{exp.reviewCount}</span>
             </div>
             <h3 className="text-white font-semibold text-body-sm leading-tight line-clamp-1">{exp.title}</h3>

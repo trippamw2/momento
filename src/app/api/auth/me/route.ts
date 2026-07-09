@@ -1,4 +1,4 @@
-﻿import { getUser, json, unauthorized, badRequest, handleRouteError } from "@/lib/api-helpers";
+import { getUser, json, unauthorized, badRequest, handleRouteError } from "@/lib/api-helpers";
 
 export async function GET(request: Request) {
   try {

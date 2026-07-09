@@ -1,4 +1,4 @@
-﻿import { Experience, Review, ExperioCategory, V2Category } from "./types";
+import { Experience, Review, ExperioCategory, V2Category } from "./types";
 import { mapV2CategoryToExperio } from "./categories";
 import { AFRICAN_CITY_COORDS } from "./geo";
 

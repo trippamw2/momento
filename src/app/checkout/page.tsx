@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -160,8 +160,8 @@ export default function CheckoutPage() {
             )}
             <div className="flex-1 min-w-0">
               <h2 className="text-heading-sm font-bold text-[#F1F5F9] truncate">{experience.title}</h2>
-              <p className="text-caption text-[#94A3B8]">{experience.location} Â· {experience.duration}</p>
-              <p className="text-body-sm text-[#94A3B8] mt-1">{date}{time ? ` at ${time}` : ""} Â· {guests} guest{guests > 1 ? "s" : ""}</p>
+              <p className="text-caption text-[#94A3B8]">{experience.location} · {experience.duration}</p>
+              <p className="text-body-sm text-[#94A3B8] mt-1">{date}{time ? ` at ${time}` : ""} · {guests} guest{guests > 1 ? "s" : ""}</p>
             </div>
           </div>
         </div>
@@ -208,7 +208,7 @@ export default function CheckoutPage() {
         <div className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5 mb-6">
           <div className="space-y-2">
             <div className="flex justify-between text-body-sm">
-              <span className="text-[#94A3B8]">MK {experience.price.toLocaleString()} Ã— {guests} guest{guests > 1 ? "s" : ""}</span>
+              <span className="text-[#94A3B8]">MK {experience.price.toLocaleString()} × {guests} guest{guests > 1 ? "s" : ""}</span>
               <span className="text-[#F1F5F9]">MK {totalPrice.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-body-sm">

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -144,10 +144,10 @@ export default function PartnerPayoutsPage() {
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[
-            { label: "Total Earned", value: `MK ${(earnings?.total_earned ?? 0).toLocaleString()}`, icon: "ðŸ’°", color: "text-[#F1F5F9]" },
-            { label: "Available Balance", value: `MK ${(earnings?.available_balance ?? 0).toLocaleString()}`, icon: "âœ…", color: "text-emerald-400" },
-            { label: "Pending Payouts", value: `MK ${(earnings?.pending_payouts ?? 0).toLocaleString()}`, icon: "â³", color: "text-amber-400" },
-            { label: "Withdrawn", value: `MK ${(earnings?.withdrawn ?? 0).toLocaleString()}`, icon: "ðŸ“¤", color: "text-blue-400" },
+            { label: "Total Earned", value: `MK ${(earnings?.total_earned ?? 0).toLocaleString()}`, icon: "💰", color: "text-[#F1F5F9]" },
+            { label: "Available Balance", value: `MK ${(earnings?.available_balance ?? 0).toLocaleString()}`, icon: "✅", color: "text-emerald-400" },
+            { label: "Pending Payouts", value: `MK ${(earnings?.pending_payouts ?? 0).toLocaleString()}`, icon: "⏳", color: "text-amber-400" },
+            { label: "Withdrawn", value: `MK ${(earnings?.withdrawn ?? 0).toLocaleString()}`, icon: "📤", color: "text-blue-400" },
           ].map((stat) => (
             <div key={stat.label} className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5">
               <p className="text-caption text-[#94A3B8] font-medium mb-1">{stat.label}</p>
@@ -178,15 +178,15 @@ export default function PartnerPayoutsPage() {
                   <tr key={p.id} className="border-b border-white/[0.08]/50 last:border-0 hover:bg-white/[0.05] transition-colors">
                     <td className="px-5 py-3.5 text-body-sm text-[#94A3B8]">{new Date(p.created_at).toLocaleDateString()}</td>
                     <td className="px-5 py-3.5 text-body-sm font-semibold text-[#F1F5F9]">MK {p.amount.toLocaleString()}</td>
-                    <td className="px-5 py-3.5 text-body-sm text-[#94A3B8]">{p.payout_method || "â€”"}</td>
-                    <td className="px-5 py-3.5 text-body-sm text-[#94A3B8]">{p.bank_name || "â€”"}</td>
+                    <td className="px-5 py-3.5 text-body-sm text-[#94A3B8]">{p.payout_method || "—"}</td>
+                    <td className="px-5 py-3.5 text-body-sm text-[#94A3B8]">{p.bank_name || "—"}</td>
                     <td className="px-5 py-3.5">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-medium capitalize ${STATUS_COLORS[p.status] || "bg-gray-800 text-gray-300"}`}>
                         {p.status}
                       </span>
                     </td>
                     <td className="px-5 py-3.5 text-body-sm text-[#94A3B8]">
-                      {p.processed_at ? new Date(p.processed_at).toLocaleDateString() : "â€”"}
+                      {p.processed_at ? new Date(p.processed_at).toLocaleDateString() : "—"}
                     </td>
                   </tr>
                 ))}

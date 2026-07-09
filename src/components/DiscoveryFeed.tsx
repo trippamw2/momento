@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
@@ -100,12 +100,12 @@ export default function DiscoveryFeed() {
 
                 <div className="flex items-center gap-4 mb-4">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-yellow-400 text-body-sm font-medium">â˜…</span>
+                    <span className="text-yellow-400 text-body-sm font-medium">★</span>
                     <span className="text-white/80 text-body-sm font-medium">{exp.rating}</span>
                   </div>
-                  <span className="text-white/50">Â·</span>
+                  <span className="text-white/50">·</span>
                   <span className="text-white/60 text-body-sm">{exp.location}</span>
-                  <span className="text-white/50">Â·</span>
+                  <span className="text-white/50">·</span>
                   <span className="text-white font-semibold text-heading-sm">MK {exp.price.toLocaleString()}</span>
                 </div>
 
@@ -126,7 +126,7 @@ export default function DiscoveryFeed() {
                         : "border-white/[0.15] text-white/80 hover:bg-white/[0.06]"
                     }`}
                   >
-                    {saved ? "â™¥ Saved" : "â™¡ Save"}
+                    {saved ? "♥ Saved" : "♡ Save"}
                   </button>
                   <button
                     onClick={() => {

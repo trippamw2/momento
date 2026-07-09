@@ -1,4 +1,4 @@
-﻿import { json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
+import { json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
 import { createServerClient } from "@/lib/supabase-server";
 
 export async function GET(request: Request) {

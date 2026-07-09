@@ -1,4 +1,4 @@
-﻿import { notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import { createServerClient } from "@/lib/supabase-server";
 import ErrorBoundaryWrapper from "./ErrorBoundaryWrapper";
 import ExperienceDetailClient from "@/components/ExperienceDetailClient";

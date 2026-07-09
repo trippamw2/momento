@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
@@ -6,7 +6,7 @@ import { useAuthGuard } from "@/lib/use-auth-guard";
 import { findNearestCity } from "@/lib/geo";
 import { useGeolocation } from "@/lib/use-geolocation";
 
-const Experio_CATEGORIES = [
+const EXPERIO_CATEGORIES = [
   "Date",
   "Chill",
   "Celebrate",
@@ -99,7 +99,7 @@ export default function ListExperiencePage() {
         },
         body: JSON.stringify({
           title: form.title,
-          subtitle: form.subtitle || `${form.title} â€” A Experio Experience`,
+          subtitle: form.subtitle || `${form.title} — A Experio Experience`,
           description: form.description,
           price: parseInt(form.price),
           duration: form.duration,
@@ -243,7 +243,7 @@ export default function ListExperiencePage() {
               }`}
             >
               <option value="" disabled>Select a category</option>
-              {Experio_CATEGORIES.map((cat) => (
+              {EXPERIO_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
@@ -331,7 +331,7 @@ export default function ListExperiencePage() {
                 <p className="text-caption text-[#64748B] mt-1 animate-pulse">Detecting your location via GPS...</p>
               )}
               {geo.position && form.location && (
-                <p className="text-caption text-[#FF0F73] mt-1">ðŸ“ Auto-detected</p>
+                <p className="text-caption text-[#FF0F73] mt-1">📍 Auto-detected</p>
               )}
             </div>
             <div>

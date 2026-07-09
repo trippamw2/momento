@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase-admin";
 import { json, handleRouteError } from "@/lib/api-helpers";
 

@@ -1,4 +1,4 @@
-﻿import { getUser, json, handleRouteError, badRequest } from "@/lib/api-helpers";
+import { getUser, json, handleRouteError, badRequest } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 const PAYCHANGU_API = process.env.PAYCHANGU_API_URL || "https://api.paychangu.com";

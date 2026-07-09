@@ -1,4 +1,4 @@
-﻿export default function KpiCard({ label, value, trend, icon }: { label: string; value: string; trend?: string; icon: string }) {
+export default function KpiCard({ label, value, trend, icon }: { label: string; value: string; trend?: string; icon: string }) {
   return (
     <div className="p-5 rounded-xl bg-white border border-[#ebebeb] hover:border-[#dddddd] transition-all shadow-sm">
       <div className="flex items-center justify-between mb-3">

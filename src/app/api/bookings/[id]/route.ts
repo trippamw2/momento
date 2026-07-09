@@ -1,4 +1,4 @@
-﻿import { getUser, json, handleRouteError } from "@/lib/api-helpers";
+import { getUser, json, handleRouteError } from "@/lib/api-helpers";
 import { createServerClient } from "@/lib/supabase-server";
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {

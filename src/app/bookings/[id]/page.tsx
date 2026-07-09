@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -75,7 +75,7 @@ export default function BookingDetailPage() {
         setBooking(data);
         // Handle payment callback
         if (paymentStatus === "success") {
-          // Payment was successful â€” refresh to get updated status
+          // Payment was successful — refresh to get updated status
           setTimeout(() => {
             fetch(`/api/bookings/${id}`, {
               headers: { Authorization: `Bearer ${token}` },
@@ -257,7 +257,7 @@ export default function BookingDetailPage() {
             </div>
             <div className="flex justify-between py-2 border-b border-white/[0.08]">
               <span className="text-[#CBD5E1]">Price per person</span>
-              <span className="text-[#F1F5F9]">MK {booking.experience?.price?.toLocaleString() || "â€”"}</span>
+              <span className="text-[#F1F5F9]">MK {booking.experience?.price?.toLocaleString() || "—"}</span>
             </div>
             <div className="flex justify-between py-2">
               <span className="text-[#CBD5E1]">Total</span>

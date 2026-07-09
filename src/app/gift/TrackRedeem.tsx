@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 
@@ -72,8 +72,8 @@ export default function TrackRedeem() {
         {trackResult && (
           <div className={`p-5 rounded-2xl border mb-6 transition-all ${
             trackResult.found
-              ? "bg-gradient-to-br from-emerald-500/8 to-emerald-400/5 border-emerald-500/20"
-              : "bg-gradient-to-br from-red-500/8 to-red-400/5 border-red-500/20"
+              ? "bg-emerald-500/10 border-emerald-500/20"
+              : "bg-red-500/10 border-red-500/20"
           }`}>
             <div className="flex items-start gap-3">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
@@ -87,26 +87,13 @@ export default function TrackRedeem() {
               </div>
               <div className="flex-1">
                 <p className={`text-body-sm font-bold ${trackResult.found ? "text-emerald-400" : "text-red-400"}`}>
-                  {trackResult.found ? "âœ¨ Gift Card Found!" : "Code Not Found"}
+                  {trackResult.found ? "Gift Card Found!" : "Code Not Found"}
                 </p>
                 <p className={`text-caption mt-0.5 ${trackResult.found ? "text-emerald-300" : "text-red-300"}`}>
                   {trackResult.found
-                    ? `Status: ${trackResult.status === "active" ? "Active" : trackResult.status} Â· Value: ${trackResult.value}`
+                    ? `This card is ${trackResult.status} · ${trackResult.value}`
                     : "Please check the code and try again. Codes are format: XPRO-XXXXXXXX"}
                 </p>
-                {trackResult.found && (
-                  <div className="flex items-center gap-2 mt-3">
-                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${
-                      trackResult.status === "active"
-                        ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                        : trackResult.status === "redeemed"
-                          ? "bg-purple-500/10 border-purple-500/20 text-purple-400"
-                          : "bg-blue-500/10 border-blue-500/20 text-blue-400"
-                    }`}>
-                      {trackResult.status}
-                    </span>
-                  </div>
-                )}
               </div>
             </div>
           </div>

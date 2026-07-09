@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -170,12 +170,12 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
                 <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
                   <span className="text-[#94A3B8]">Phone</span>
                   <span className={`font-medium ${user.profile?.phone ? "text-[#F1F5F9]" : "text-[#64748B]"}`}>
-                    {user.profile?.phone || "â€”"}
+                    {user.profile?.phone || "—"}
                   </span>
                 </div>
                 <div className="flex justify-between py-2.5">
                   <span className="text-[#94A3B8]">Password</span>
-                  <span className="text-[#64748B]">â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢</span>
+                  <span className="text-[#64748B]">••••••••</span>
                 </div>
               </div>
             </div>
@@ -228,7 +228,7 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
                   >
                     <span className="w-8 h-8 rounded-lg bg-[#0A0E17] flex items-center justify-center shrink-0">
                       <span className="text-[#FF0F73] text-sm">
-                        {link.icon === "calendar" ? "ðŸ“…" : link.icon === "chat" ? "ðŸ’¬" : link.icon === "heart" ? "â™¥" : link.icon === "gift" ? "ðŸŽ" : "â­"}
+                        {link.icon === "calendar" ? "📅" : link.icon === "chat" ? "💬" : link.icon === "heart" ? "♥" : link.icon === "gift" ? "🎁" : "⭐"}
                       </span>
                     </span>
                     {link.label}
@@ -387,16 +387,16 @@ export default function ProfilePage() {
     );
   }
 
-  // Partner â†’ show PartnerDashboard
+  // Partner → show PartnerDashboard
   if (user?.role === "partner" || user?.role === "admin") {
     return <PartnerDashboard />;
   }
 
-  // Authenticated user â†’ show user profile
+  // Authenticated user → show user profile
   if (user) {
     return <UserProfile user={user} />;
   }
 
-  // Guest â†’ show welcome page
+  // Guest → show welcome page
   return <GuestProfile />;
 }

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 
@@ -9,7 +9,7 @@ const faqs = [
   },
   {
     q: "Can I cancel or reschedule a booking?",
-    a: "Yes â€” you can reschedule any booking up to 48 hours before the start time at no charge. Cancellations made more than 48 hours in advance are fully refunded. See our cancellation policy for details.",
+    a: "Yes — you can reschedule any booking up to 48 hours before the start time at no charge. Cancellations made more than 48 hours in advance are fully refunded. See our cancellation policy for details.",
   },
   {
     q: "How do gift cards work?",

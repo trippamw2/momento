@@ -1,4 +1,4 @@
-﻿import { createServerClient } from "@/lib/supabase-server";
+import { createServerClient } from "@/lib/supabase-server";
 import { json, badRequest, unauthorized, handleRouteError } from "@/lib/api-helpers";
 
 export async function POST(request: Request) {

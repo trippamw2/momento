@@ -1,23 +1,23 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { getNotifications, markAsRead, markAllAsRead, type AppNotification } from "@/lib/notifications-engine";
 
 const NOTIF_ICONS: Record<string, string> = {
-  booking_confirmed: "âœ…",
-  booking_cancelled: "âŒ",
-  booking_reminder: "â°",
-  payment_success: "ðŸ’°",
-  gift_card_purchased: "ðŸŽ",
-  points_earned: "â­",
-  tier_upgrade: "ðŸ†",
-  gift_received: "ðŸŽ",
-  gift_redeemed: "ðŸŽ‰",
-  review_request: "âœï¸",
-  new_experience: "âœ¨",
-  flash_sale: "ðŸ”¥",
-  achievement_unlocked: "ðŸ…",
+  booking_confirmed: "✅",
+  booking_cancelled: "❌",
+  booking_reminder: "⏰",
+  payment_success: "💰",
+  gift_card_purchased: "🎁",
+  points_earned: "⭐",
+  tier_upgrade: "🏆",
+  gift_received: "🎁",
+  gift_redeemed: "🎉",
+  review_request: "✍️",
+  new_experience: "✨",
+  flash_sale: "🔥",
+  achievement_unlocked: "🏅",
 };
 
 export default function NotificationsPage() {
@@ -81,7 +81,7 @@ export default function NotificationsPage() {
         {/* List */}
         {notifications.length === 0 ? (
           <div className="text-center py-20">
-            <div className="text-4xl mb-4">ðŸ””</div>
+            <div className="text-4xl mb-4">🔔</div>
             <h2 className="text-heading-md font-bold text-white mb-2">No notifications yet</h2>
             <p className="text-[#94A3B8] text-body-sm">
               You&apos;ll see updates about your bookings, rewards, and more here.
@@ -105,7 +105,7 @@ export default function NotificationsPage() {
                 }`}
               >
                 <div className="flex items-start gap-3">
-                  <span className="text-lg mt-0.5">{NOTIF_ICONS[n.type] || "ðŸ””"}</span>
+                  <span className="text-lg mt-0.5">{NOTIF_ICONS[n.type] || "🔔"}</span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <h3 className={`text-body-sm font-semibold ${n.read ? "text-[#CBD5E1]" : "text-white"}`}>
@@ -133,7 +133,7 @@ export default function NotificationsPage() {
                         onClick={() => handleMarkRead(n.id)}
                         className="inline-block mt-2 text-caption font-semibold text-[#FF0F73] hover:text-[#FF0F73]/80 transition-colors"
                       >
-                        {n.actionLabel} â†’
+                        {n.actionLabel} →
                       </Link>
                     )}
                   </div>

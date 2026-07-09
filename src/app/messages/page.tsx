@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -188,7 +188,7 @@ export default function MessagesPage() {
             href="/bookings"
             className="text-body-sm text-[#64748B] hover:text-[#CBD5E1] transition-colors"
           >
-            â† Back to Bookings
+            ← Back to Bookings
           </Link>
         </div>
 

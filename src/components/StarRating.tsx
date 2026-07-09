@@ -1,4 +1,4 @@
-﻿export default function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "md" }) {
+export default function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "md" }) {
   const cls = size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4";
   return (
     <div className="flex items-center gap-0.5">

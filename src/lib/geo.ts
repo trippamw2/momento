@@ -1,4 +1,4 @@
-﻿export interface Coordinates {
+export interface Coordinates {
   lat: number;
   lng: number;
 }
@@ -26,7 +26,7 @@ export function formatDistance(km: number): string {
   return `${Math.round(km)} km`;
 }
 
-// â”€â”€â”€ Malawi Cities Database â”€â”€â”€
+// ─── Malawi Cities Database ───
 
 export interface CityInfo {
   name: string;
@@ -55,7 +55,7 @@ export const AFRICAN_CITY_COORDS: Record<string, Coordinates> = Object.fromEntri
 
 export const AFRICAN_CITIES = Object.keys(AFRICAN_CITY_COORDS);
 
-// â”€â”€â”€ City Detection â”€â”€â”€
+// ─── City Detection ───
 
 export function findNearestCity(lat: number, lng: number): string | null {
   const user: Coordinates = { lat, lng };
@@ -71,14 +71,14 @@ export function findNearestCity(lat: number, lng: number): string | null {
   return best;
 }
 
-// â”€â”€â”€ Smart Radius â”€â”€â”€
+// ─── Smart Radius ───
 
 /**
  * Returns a dynamic search radius based on the city's population density.
- * Urban areas (Lilongwe, Blantyre) â†’ 5 km
- * Suburban â†’ 10 km
- * Rural â†’ 25 km
- * Unknown â†’ 15 km fallback
+ * Urban areas (Lilongwe, Blantyre) → 5 km
+ * Suburban → 10 km
+ * Rural → 25 km
+ * Unknown → 15 km fallback
  */
 export function getSmartRadius(city: string | null): number {
   if (!city) return 15;
@@ -144,7 +144,7 @@ export function attachDistance<T>(
   });
 }
 
-// â”€â”€â”€ Location Suggestions â”€â”€â”€
+// ─── Location Suggestions ───
 
 export interface LocationSuggestion {
   name: string;

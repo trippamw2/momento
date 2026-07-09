@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
@@ -119,7 +119,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
       // Draw details
       ctx.fillStyle = "rgba(255,255,255,0.6)";
       ctx.font = "12px sans-serif";
-      ctx.fillText(`${booking.dateLabel} Â· ${booking.guests} guest${booking.guests > 1 ? "s" : ""}`, 20, 112);
+      ctx.fillText(`${booking.dateLabel} · ${booking.guests} guest${booking.guests > 1 ? "s" : ""}`, 20, 112);
       ctx.fillText(booking.location, 20, 130);
 
       // Draw QR code
@@ -153,7 +153,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
       ctx.fillStyle = "rgba(255,255,255,0.2)";
       ctx.font = "8px sans-serif";
       ctx.textAlign = "left";
-      ctx.fillText("Experio â€” Live The Experience", 20, rect.height - 10);
+      ctx.fillText("Experio — Live The Experience", 20, rect.height - 10);
 
       const link = document.createElement("a");
       link.download = `booking-${booking.bookingRef}.png`;
@@ -224,7 +224,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
             )}
             <div className="space-y-1 mb-6">
               <p className="text-body-sm font-semibold text-white">{booking.title}</p>
-              <p className="text-caption text-[#94A3B8]">{booking.dateLabel} Â· {booking.time}</p>
+              <p className="text-caption text-[#94A3B8]">{booking.dateLabel} · {booking.time}</p>
               <p className="text-caption text-[#64748B] font-mono">{booking.bookingRef}</p>
             </div>
             <button

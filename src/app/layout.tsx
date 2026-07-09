@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -15,13 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Experio â€” Curated Experiences in Malawi",
+    title: "Experio — Curated Experiences in Malawi",
   description:
-    "Discover unforgettable experiences curated for every feeling â€” romantic dates, laid-back chill spots, celebrations, and escapes across Malawi. Live Life.",
+    "Discover unforgettable experiences curated for every feeling — romantic dates, laid-back chill spots, celebrations, and escapes across Malawi. Live Life.",
   openGraph: {
-  title: "Experio â€” Curated Experiences in Malawi",
+  title: "Experio — Curated Experiences in Malawi",
     description:
-      "Discover unforgettable experiences curated for every feeling â€” romantic dates, laid-back chill spots, celebrations, and escapes across Malawi. Live Life.",
+      "Discover unforgettable experiences curated for every feeling — romantic dates, laid-back chill spots, celebrations, and escapes across Malawi. Live Life.",
     siteName: "Experio",
     type: "website",
     images: [{ url: "/experio-logo.png", width: 512, height: 512 }],

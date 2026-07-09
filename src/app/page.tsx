@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import HeroSection from "@/components/HeroSection";
@@ -61,7 +61,7 @@ export default function Home() {
   const geo = useGeolocation();
   const [detectedCity, setDetectedCity] = useState<string | null>(null);
 
-  // â”€â”€â”€ Location Search â”€â”€â”€
+  // ─── Location Search ───
   const [locationQuery, setLocationQuery] = useState("");
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -173,7 +173,7 @@ export default function Home() {
     return shuffle(all).slice(0, 4);
   }, [experiences]);
 
-  // â”€â”€â”€ Helper components â”€â”€â”€
+  // ─── Helper components ───
 
   const GridCards = ({ title, items }: { title: string; items: Experience[] }) => (
     <section className="mb-10 px-4 sm:px-8">
@@ -263,13 +263,13 @@ export default function Home() {
     <div className="overflow-x-hidden">
       <HeroSection />
 
-      {/* â”€â”€â”€ Surprise Me â”€â”€â”€ */}
+      {/* ─── Surprise Me ─── */}
       <div className="relative z-10 px-4 sm:px-8 pt-6 sm:pt-8">
         <button
           onClick={handleSurpriseMe}
           className="group w-full sm:w-auto px-6 py-4 rounded-2xl bg-gradient-to-r from-[#FF0F73]/15 to-[#FF7A1A]/15 border border-[#FF7A1A]/25 hover:border-[#FF7A1A]/50 text-white transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(255, 122, 26, 0.15)]"
         >
-          <span className="text-2xl">ðŸŽ²</span>
+          <span className="text-2xl">🎲</span>
           <div className="text-left">
             <p className="text-body-sm font-bold">Surprise Me</p>
             <p className="text-caption text-[#CBD5E1]">Feeling lucky? Let us pick for you</p>
@@ -282,7 +282,7 @@ export default function Home() {
 
       <div className="relative z-10 pt-6 sm:pt-8 pb-16 space-y-1">
         
-        {/* â”€â”€â”€ City Detection Banner â”€â”€â”€ */}
+        {/* ─── City Detection Banner ─── */}
         {detectedCity && (
           <div className="px-4 sm:px-8 pt-4 pb-0">
             <div className="flex items-center gap-2 text-body-sm text-[#CBD5E1]">
@@ -311,7 +311,7 @@ export default function Home() {
           </div>
         )}
 
-        {/* â”€â”€â”€ Location Search â”€â”€â”€ */}
+        {/* ─── Location Search ─── */}
         <div ref={searchRef} className="px-4 sm:px-8 pt-3 pb-1">
           <div className="relative max-w-md">
             <div className="flex items-center gap-2 bg-[#1A2332] border border-white/[0.08] rounded-xl px-3.5 py-2.5 focus-within:border-[#FF0F73]/40 focus-within:shadow-[0_0_0_2px_rgba(255, 15, 115, 0.1)] transition-all">
@@ -347,7 +347,7 @@ export default function Home() {
                     <svg className="w-4 h-4 text-[#FF0F73] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     <div>
                       <p className="text-white text-caption font-medium">{s.name}</p>
-                      <p className="text-[#64748B] text-[11px]">{s.region} Region{s.isUrban ? " Â· Urban" : ""}</p>
+                      <p className="text-[#64748B] text-[11px]">{s.region} Region{s.isUrban ? " · Urban" : ""}</p>
                     </div>
                   </button>
                 ))}
@@ -356,17 +356,17 @@ export default function Home() {
           </div>
         </div>
 
-        {/* â”€â”€â”€ Trending â”€â”€â”€ */}
+        {/* ─── Trending ─── */}
         {railsMap.trending && (
           <ContentRail title={railsMap.trending.title} experiences={railsMap.trending.experiences} viewAllHref="/experiences" />
         )}
         
-        {/* â”€â”€â”€ Personalized â”€â”€â”€ */}
+        {/* ─── Personalized ─── */}
         {railsMap.personalized && (
           <GridCards title={railsMap.personalized.title} items={railsMap.personalized.experiences} />
         )}
 
-        {/* â”€â”€â”€ GPS: Near You â”€â”€â”€ */}
+        {/* ─── GPS: Near You ─── */}
         {railsMap.nearby && (
           <ContentRail
             title={railsMap.nearby.title}
@@ -376,7 +376,7 @@ export default function Home() {
           />
         )}
 
-        {/* â”€â”€â”€ Popular Around You â”€â”€â”€ */}
+        {/* ─── Popular Around You ─── */}
         {railsMap.popular && (
           <ContentRail
             title={railsMap.popular.title}
@@ -386,7 +386,7 @@ export default function Home() {
           />
         )}
 
-        {/* â”€â”€â”€ Weekend & Most Saved â”€â”€â”€ */}
+        {/* ─── Weekend & Most Saved ─── */}
         {railsMap.weekend && (
           <ContentRail title={railsMap.weekend.title} experiences={railsMap.weekend.experiences} viewAllHref="/experiences" />
         )}
@@ -395,10 +395,10 @@ export default function Home() {
           <GridCards title={railsMap['most-saved'].title} items={railsMap['most-saved'].experiences} />
         )}
 
-        {/* â”€â”€â”€ Featured Experience â”€â”€â”€ */}
+        {/* ─── Featured Experience ─── */}
         {featured && <FeaturedCard exp={featured} />}
 
-        {/* â”€â”€â”€ Date & Chill â”€â”€â”€ */}
+        {/* ─── Date & Chill ─── */}
         <SectionDivider title="Date & Chill" />
         
         {railsMap.date && (
@@ -409,7 +409,7 @@ export default function Home() {
           <GridCards title={railsMap.chill.title} items={railsMap.chill.experiences} />
         )}
 
-        {/* â”€â”€â”€ Social Proof â”€â”€â”€ */}
+        {/* ─── Social Proof ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-6 sm:my-8">
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 py-4 sm:py-5 px-4 sm:px-8 rounded-2xl bg-[#111827] border border-white/[0.06]">
             <div className="flex items-center gap-2">
@@ -430,14 +430,14 @@ export default function Home() {
               </div>
             </div>
             <div className="flex items-center gap-4 sm:gap-6 text-caption text-[#CBD5E1]">
-              <span className="flex items-center gap-1">âœ“ Curated experiences</span>
-              <span className="hidden xs:inline flex items-center gap-1">âœ“ Instant booking</span>
-              <span className="flex items-center gap-1">âœ“ Free cancellation</span>
+              <span className="flex items-center gap-1">✓ Curated experiences</span>
+              <span className="hidden xs:inline flex items-center gap-1">✓ Instant booking</span>
+              <span className="flex items-center gap-1">✓ Free cancellation</span>
             </div>
           </div>
         </section>
 
-        {/* â”€â”€â”€ Celebrate & Escape â”€â”€â”€ */}
+        {/* ─── Celebrate & Escape ─── */}
         <SectionDivider title="Celebrate & Escape" />
         
         {railsMap.celebrate && (
@@ -448,7 +448,7 @@ export default function Home() {
           <ContentRail title={railsMap.escape.title} experiences={railsMap.escape.experiences} viewAllHref="/experiences" />
         )}
 
-        {/* â”€â”€â”€ Gift A Moment â”€â”€â”€ */}
+        {/* ─── Gift A Moment ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-10">
           <div className="relative rounded-2xl overflow-hidden border border-white/[0.1] bg-[#05070B]">
             <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF0F73]/10 rounded-full blur-3xl" />
@@ -511,12 +511,12 @@ export default function Home() {
           <ContentRail title={railsMap.affordable.title} experiences={railsMap.affordable.experiences} viewAllHref="/experiences" />
         )}
 
-        {/* â”€â”€â”€ AI Concierge â”€â”€â”€ */}
+        {/* ─── AI Concierge ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-10">
           <AIConcierge />
         </section>
 
-        {/* â”€â”€â”€ Large CTA â”€â”€â”€ */}
+        {/* ─── Large CTA ─── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 my-12">
           <div className="relative rounded-2xl overflow-hidden bg-[#111827] border border-white/[0.1] p-10 sm:p-16 text-center">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#FF0F73]/8 via-[#FF7A1A]/8 to-[#FF0F73]/8 rounded-full blur-3xl" />
