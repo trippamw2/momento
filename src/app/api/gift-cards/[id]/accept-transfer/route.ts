@@ -3,11 +3,13 @@ import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getUser(request);
     if (!user) return json({ error: "Unauthorized" }, 401);
+
+    const { id } = await params;
 
     const giftCardId = params.id;
     const admin = createAdminClient();

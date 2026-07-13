@@ -2,10 +2,12 @@ import { getUser, json, handleRouteError } from "@/lib/api-helpers";
 import { getWallet, setWalletStatus, adminAdjustBalance } from "@/lib/wallet-engine";
 import { createAdminClient } from "@/lib/supabase-admin";
 
-export async function GET(request: Request, { params }: { params: { userId: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ userId: string }> }) {
   try {
     const user = await getUser(request);
     if (!user || user.role !== "admin") return json({ error: "Unauthorized" }, 401);
+
+    const { userId } = await params;
 
     const wallet = await getWallet(params.userId);
     if (!wallet) return json({ error: "Wallet not found" }, 404);

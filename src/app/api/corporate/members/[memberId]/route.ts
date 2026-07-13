@@ -5,10 +5,12 @@ import {
 } from "@/lib/corporate-engine";
 import { createAdminClient } from "@/lib/supabase-admin";
 
-export async function PATCH(request: Request, { params }: { params: { memberId: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ memberId: string }> }) {
   try {
     const user = await getUser(request);
     if (!user) return json({ error: "Unauthorized" }, 401);
+
+    const { memberId } = await params;
 
     const body = await request.json();
 

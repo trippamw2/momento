@@ -44,3 +44,10 @@ next-env.d.ts
 
 # opencode
 .omo/
+
+# playright mcp logs
+.playwright-mcp/
+
+# dev artifacts
+INTEGRATION_TEST_PLAN.md
+summary_update.md
