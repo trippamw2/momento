@@ -189,52 +189,51 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       >
         <div className="h-1.5 bg-gradient-to-r from-[#FF0F73] via-[#FFA22C] to-[#F82D7B]" />
 
-        <div className="p-7">
-          {/* Role Selection (signup only) */}
-          {mode === "signup" && (
-            <div className="mb-6">
-              <h2 className="text-heading-lg font-bold text-[#F1F5F9] mb-1">Join Experio</h2>
-              <p className="text-caption text-[#CBD5E1] mb-4">Choose how you&apos;ll use Experio</p>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setSignupRole("user")}
-                  className={`p-4 rounded-xl border-2 text-left transition-all ${
-                    signupRole === "user"
-                      ? "border-[#FF0F73] bg-[#FF0F73]/10"
-                      : "border-white/[0.1] bg-[#1E293B] hover:border-[#FF0F73]/30"
-                  }`}
-                >
-                  <p className="text-body-sm font-semibold text-[#F1F5F9]">Explorer</p>
-                  <p className="text-caption text-[#CBD5E1] mt-0.5">Discover &amp; book experiences</p>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSignupRole("partner")}
-                  className={`p-4 rounded-xl border-2 text-left transition-all ${
-                    signupRole === "partner"
-                      ? "border-[#F82D7B] bg-[#F82D7B]/10"
-                      : "border-white/[0.1] bg-[#1E293B] hover:border-[#F82D7B]/30"
-                  }`}
-                >
-                  <p className="text-body-sm font-semibold text-[#F1F5F9]">Partner</p>
-                  <p className="text-caption text-[#CBD5E1] mt-0.5">List &amp; manage experiences</p>
-                </button>
-              </div>
-            </div>
-          )}
-
-          {mode === "login" && (
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-heading-lg font-bold text-[#F1F5F9]">Welcome back</h2>
-                <p className="text-caption text-[#CBD5E1] mt-0.5">Sign in to continue discovering</p>
-              </div>
+        <div className="px-4 sm:p-7">
+          {/* Role Selection (always visible) */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-1">
+              <h2 className="text-heading-lg font-bold text-[#F1F5F9]">
+                {mode === "login"
+                  ? signupRole === "partner" ? "Partner Sign In" : "Welcome back"
+                  : "Join Experio"}
+              </h2>
               <button onClick={onClose} className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-[#0A0E17] text-[#CBD5E1] transition-colors shrink-0">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
-          )}
+            <p className="text-caption text-[#CBD5E1] mb-4">
+              {mode === "login"
+                ? signupRole === "partner" ? "Sign in to your partner account" : "Sign in to continue discovering"
+                : "Choose how you&apos;ll use Experio"}
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setSignupRole("user")}
+                className={`p-4 rounded-xl border-2 text-left transition-all ${
+                  signupRole === "user"
+                    ? "border-[#FF0F73] bg-[#FF0F73]/10"
+                    : "border-white/[0.1] bg-[#1E293B] hover:border-[#FF0F73]/30"
+                }`}
+              >
+                <p className="text-body-sm font-semibold text-[#F1F5F9]">Explorer</p>
+                <p className="text-caption text-[#CBD5E1] mt-0.5">Discover &amp; book experiences</p>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSignupRole("partner")}
+                className={`p-4 rounded-xl border-2 text-left transition-all ${
+                  signupRole === "partner"
+                    ? "border-[#F82D7B] bg-[#F82D7B]/10"
+                    : "border-white/[0.1] bg-[#1E293B] hover:border-[#F82D7B]/30"
+                }`}
+              >
+                <p className="text-body-sm font-semibold text-[#F1F5F9]">Partner</p>
+                <p className="text-caption text-[#CBD5E1] mt-0.5">List &amp; manage experiences</p>
+              </button>
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-3.5">
             {/* Name (signup only) */}

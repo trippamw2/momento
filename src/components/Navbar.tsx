@@ -51,11 +51,9 @@ export default function Navbar() {
   const navItems = [
     { label: "Discover", href: "/discover" },
     { label: "Experiences", href: "/experiences" },
-    { label: "ASK AI", href: "/ask-ai" },
+    { label: "Saved", href: "/saved" },
     { label: "Wallet", href: "/wallet" },
     { label: "Gift", href: "/gift" },
-    { label: "Saved", href: "/saved" },
-    { label: "Dashboard", href: "/dashboard" },
   ];
 
   const handleSignOut = async () => {
@@ -277,7 +275,7 @@ export default function Navbar() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMenuOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-body-sm font-semibold transition-all ${
+                    className={`flex items-center gap-3 px-4 py-4 rounded-xl text-body-sm font-semibold transition-all ${
                       isActive
                         ? "bg-white/15 text-white backdrop-blur-md border border-white/10"
                         : "text-white/80 hover:text-white hover:bg-white/10"
@@ -304,6 +302,19 @@ export default function Navbar() {
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                 Near Me
               </Link>
+              {signedIn && userRole !== "partner" && userRole !== "admin" && (
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    localStorage.setItem("experio-signup-role", "partner");
+                    setAuthOpen(true);
+                  }}
+                  className="flex items-center gap-3 w-full px-4 py-4 rounded-xl text-body-sm font-semibold bg-gradient-to-r from-[#FF0F73]/20 to-[#FF7A1A]/20 text-[#FF0F73] hover:from-[#FF0F73]/30 hover:to-[#FF7A1A]/30 transition-all border border-[#FF0F73]/20"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                  Become a Host
+                </button>
+              )}
               {signedIn ? (
                 <>
                   <button
@@ -311,7 +322,7 @@ export default function Navbar() {
                       setMenuOpen(false);
                       setNotifOpen(!notifOpen);
                     }}
-                    className="flex items-center gap-3 w-full px-4 py-3.5 rounded-xl text-body-sm font-semibold text-white/80 hover:text-white hover:bg-white/10 transition-all"
+                    className="flex items-center gap-3 w-full px-4 py-4 rounded-xl text-body-sm font-semibold text-white/80 hover:text-white hover:bg-white/10 transition-all"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
                     Notifications
@@ -321,7 +332,7 @@ export default function Navbar() {
                       setMenuOpen(false);
                       handleSignOut();
                     }}
-                    className="flex items-center gap-3 w-full px-4 py-3.5 rounded-xl text-body-sm font-semibold text-[#ff6b6b] hover:bg-white/10 transition-all"
+                    className="flex items-center gap-3 w-full px-4 py-4 rounded-xl text-body-sm font-semibold text-[#ff6b6b] hover:bg-white/10 transition-all"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
                     Sign Out
@@ -333,7 +344,7 @@ export default function Navbar() {
                     setMenuOpen(false);
                     setAuthOpen(true);
                   }}
-                  className="flex items-center gap-3 w-full px-4 py-3.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255, 15, 115, 0.4)] transition-all"
+                  className="flex items-center gap-3 w-full px-4 py-4 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255, 15, 115, 0.4)] transition-all min-h-[52px]"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
                   Sign In / Register

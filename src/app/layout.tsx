@@ -24,7 +24,7 @@ export const metadata: Metadata = {
       "Discover unforgettable experiences curated for every feeling — romantic dates, laid-back chill spots, celebrations, and escapes across Malawi. Live Life.",
     siteName: "Experio",
     type: "website",
-    images: [{ url: "/experio-logo.png", width: 512, height: 512 }],
+    images: [{ url: "/experio-logo.png", width: 1280, height: 683 }],
   },
   icons: {
     icon: "/experio-logo.png",

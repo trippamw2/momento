@@ -58,17 +58,17 @@ interface BookingRow {
 }
 
 const NAV: { key: Section; label: string; icon: string }[] = [
-  { key: "overview", label: "Overview", icon: "📊" },
-  { key: "users", label: "Users", icon: "👥" },
-  { key: "experiences", label: "Experiences", icon: "🎯" },
-  { key: "reviews", label: "Reviews", icon: "⭐" },
-  { key: "testimonials", label: "Testimonials", icon: "💬" },
-  { key: "bookings", label: "Bookings", icon: "📅" },
-  { key: "gift-cards", label: "Gift Cards", icon: "🎁" },
-  { key: "partners", label: "Partners", icon: "🤝" },
-  { key: "financials", label: "Financials", icon: "💰" },
-  { key: "payouts", label: "Payouts", icon: "💸" },
-  { key: "settings", label: "Settings", icon: "⚙️" },
+  { key: "overview", label: "Overview", icon: "◇" },
+  { key: "users", label: "Users", icon: "◆" },
+  { key: "experiences", label: "Experiences", icon: "★" },
+  { key: "reviews", label: "Reviews", icon: "☆" },
+  { key: "testimonials", label: "Testimonials", icon: "♢" },
+  { key: "bookings", label: "Bookings", icon: "▣" },
+  { key: "gift-cards", label: "Gift Cards", icon: "▸" },
+  { key: "partners", label: "Partners", icon: "♤" },
+  { key: "financials", label: "Financials", icon: "▲" },
+  { key: "payouts", label: "Payouts", icon: "▼" },
+  { key: "settings", label: "Settings", icon: "●" },
 ];
 
 function StatusBadge({ status }: { status: string }) {
@@ -312,12 +312,12 @@ export default function AdminPage() {
                 <div className="space-y-6">
                   <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                     {[
-                      { label: "Total Users", value: overview.totalUsers.toLocaleString(), icon: "👥" },
-                      { label: "Partners", value: overview.totalPartners.toLocaleString(), icon: "🤝" },
-                      { label: "Experiences", value: overview.totalExperiences.toLocaleString(), icon: "🎯" },
-                      { label: "Total Bookings", value: overview.totalBookings.toLocaleString(), icon: "📅" },
-                      { label: "Pending", value: overview.pendingBookings.toLocaleString(), icon: "⏳" },
-                      { label: "Revenue", value: `MK ${overview.totalRevenue.toLocaleString()}`, icon: "💰" },
+                      { label: "Total Users", value: overview.totalUsers.toLocaleString(), icon: "◆" },
+                      { label: "Partners", value: overview.totalPartners.toLocaleString(), icon: "♤" },
+                      { label: "Experiences", value: overview.totalExperiences.toLocaleString(), icon: "★" },
+                      { label: "Total Bookings", value: overview.totalBookings.toLocaleString(), icon: "▣" },
+                      { label: "Pending", value: overview.pendingBookings.toLocaleString(), icon: "⋯" },
+                      { label: "Revenue", value: `MK ${overview.totalRevenue.toLocaleString()}`, icon: "▲" },
                     ].map((stat) => (
                       <div key={stat.label} className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                         <div className="flex items-center justify-between mb-2">
@@ -560,10 +560,10 @@ export default function AdminPage() {
                   {/* Stats */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
-                      { label: "Total Cards", value: giftCards.length, icon: "🎁" },
-                      { label: "Active", value: giftCards.filter(g => g.status === "active").length, icon: "✅" },
-                      { label: "Partially Redeemed", value: giftCards.filter(g => g.status === "partially_redeemed").length, icon: "🔄" },
-                      { label: "Redeemed", value: giftCards.filter(g => g.status === "redeemed").length, icon: "✔️" },
+                      { label: "Total Cards", value: giftCards.length, icon: "▸" },
+                      { label: "Active", value: giftCards.filter(g => g.status === "active").length, icon: "●" },
+                      { label: "Partially Redeemed", value: giftCards.filter(g => g.status === "partially_redeemed").length, icon: "◐" },
+                      { label: "Redeemed", value: giftCards.filter(g => g.status === "redeemed").length, icon: "◆" },
                     ].map((stat) => (
                       <div key={stat.label} className="p-4 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                         <div className="flex items-center justify-between mb-1">
@@ -612,10 +612,10 @@ export default function AdminPage() {
                   {/* Stats */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
-                      { label: "Total Partners", value: partnersList.length, icon: "🤝" },
-                      { label: "Active", value: partnersList.filter(p => p.verification_status === "verified" && p.is_active).length, icon: "✅" },
-                      { label: "Pending", value: partnersList.filter(p => p.verification_status === "pending").length, icon: "⏳" },
-                      { label: "Suspended", value: partnersList.filter(p => !p.is_active).length, icon: "⛔" },
+                      { label: "Total Partners", value: partnersList.length, icon: "♤" },
+                      { label: "Active", value: partnersList.filter(p => p.verification_status === "verified" && p.is_active).length, icon: "●" },
+                      { label: "Pending", value: partnersList.filter(p => p.verification_status === "pending").length, icon: "⋯" },
+                      { label: "Suspended", value: partnersList.filter(p => !p.is_active).length, icon: "⊘" },
                     ].map((stat) => (
                       <div key={stat.label} className="p-4 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                         <div className="flex items-center justify-between mb-1">
@@ -715,10 +715,10 @@ export default function AdminPage() {
                       {/* Summary Cards */}
                       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                         {[
-                          { label: "Total Revenue", value: `MK ${financials.totalRevenue.toLocaleString()}`, icon: "💰", accent: "text-emerald-400" },
-                          { label: "Pending Payouts", value: `MK ${financials.pendingPayouts.toLocaleString()}`, icon: "⏳", accent: "text-amber-400" },
-                          { label: "Completed Payouts", value: `MK ${financials.completedPayouts.toLocaleString()}`, icon: "✅", accent: "text-blue-400" },
-                          { label: "Platform Fees", value: `MK ${financials.platformFee.toLocaleString()}`, icon: "📊", accent: "text-purple-400" },
+                          { label: "Total Revenue", value: `MK ${financials.totalRevenue.toLocaleString()}`, icon: "▲", accent: "text-emerald-400" },
+                          { label: "Pending Payouts", value: `MK ${financials.pendingPayouts.toLocaleString()}`, icon: "⋯", accent: "text-amber-400" },
+                          { label: "Completed Payouts", value: `MK ${financials.completedPayouts.toLocaleString()}`, icon: "◆", accent: "text-blue-400" },
+                          { label: "Platform Fees", value: `MK ${financials.platformFee.toLocaleString()}`, icon: "◇", accent: "text-purple-400" },
                         ].map((stat) => (
                           <div key={stat.label} className="p-5 rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm">
                             <div className="flex items-center justify-between mb-2">

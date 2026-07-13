@@ -7,27 +7,22 @@ interface LogoProps {
 }
 
 const sizeClasses = {
-  sm: "h-5",
-  md: "h-7",
-  lg: "h-10",
+  sm: "h-4 sm:h-5",
+  md: "h-6 sm:h-7",
+  lg: "h-8 sm:h-10",
 };
 
 export default function Logo({ size = "md", showTagline = false }: LogoProps) {
   return (
-    <Link href="/" className="flex items-center gap-2.5 group">
+    <Link href="/" className="flex items-center group">
       <Image
-        src="/experio-logo.svg"
+        src="/experio-logo.png"
         alt="Experio"
-        width={120}
-        height={36}
-        className={`w-auto ${sizeClasses[size]} transition-transform duration-300 group-hover:scale-105`}
+        width={1280}
+        height={683}
+        className={`w-auto ${sizeClasses[size]} transition-transform duration-300 group-hover:scale-105 object-contain`}
         priority
       />
-      {showTagline && (
-        <span className="text-xs sm:text-sm text-[#94A3B8] tracking-[0.15em] uppercase mt-0.5 hidden sm:block">
-          Live Life.
-        </span>
-      )}
     </Link>
   );
 }
