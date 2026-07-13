@@ -55,7 +55,7 @@ export default function Navbar() {
     { label: "Wallet", href: "/wallet" },
     { label: "Gift", href: "/gift" },
     { label: "Saved", href: "/saved" },
-    { label: "Memories", href: "/bookings" },
+    { label: "Dashboard", href: "/dashboard" },
   ];
 
   const handleSignOut = async () => {

@@ -31,11 +31,11 @@ const TX_ICONS: Record<string, { icon: string; color: string }> = {
   refund: { icon: "↻", color: "text-green-400" },
   transfer_in: { icon: "←", color: "text-blue-400" },
   transfer_out: { icon: "→", color: "text-orange-400" },
-  cashback: { icon: "🎁", color: "text-green-400" },
-  bonus: { icon: "✨", color: "text-yellow-400" },
+  cashback: { icon: "$", color: "text-green-400" },
+  bonus: { icon: "+", color: "text-yellow-400" },
   fee: { icon: "✕", color: "text-red-400" },
-  adjustment: { icon: "⚡", color: "text-purple-400" },
-  gift_card_redemption: { icon: "🎫", color: "text-pink-400" },
+  adjustment: { icon: "±", color: "text-purple-400" },
+  gift_card_redemption: { icon: "◇", color: "text-pink-400" },
 };
 
 function formatCurrency(amount: number): string {
@@ -125,7 +125,9 @@ export default function WalletPage() {
   if (error && !summary) {
     return (
       <div className="text-center py-20">
-        <p className="text-4xl mb-4">🔒</p>
+        <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-dark-800 flex items-center justify-center">
+          <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+        </div>
         <p className="text-gray-400 mb-4">{error}</p>
         <button
           onClick={() => router.push("/auth")}
@@ -190,21 +192,27 @@ export default function WalletPage() {
           onClick={() => router.push("/wallet/top-up")}
           className="flex flex-col items-center gap-2 p-4 bg-dark-800 rounded-xl hover:bg-dark-700 transition-colors"
         >
-          <span className="text-2xl">💳</span>
+          <span className="w-6 h-6 flex items-center justify-center">
+            <svg className="w-5 h-5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+          </span>
           <span className="text-xs font-medium text-gray-300">Top Up</span>
         </button>
         <button
           onClick={() => router.push("/bookings")}
           className="flex flex-col items-center gap-2 p-4 bg-dark-800 rounded-xl hover:bg-dark-700 transition-colors"
         >
-          <span className="text-2xl">🎫</span>
+          <span className="w-6 h-6 flex items-center justify-center">
+            <svg className="w-5 h-5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+          </span>
           <span className="text-xs font-medium text-gray-300">Pay</span>
         </button>
         <button
           onClick={() => router.push("/wallet/transfer")}
           className="flex flex-col items-center gap-2 p-4 bg-dark-800 rounded-xl hover:bg-dark-700 transition-colors"
         >
-          <span className="text-2xl">↔️</span>
+          <span className="w-6 h-6 flex items-center justify-center">
+            <svg className="w-5 h-5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+          </span>
           <span className="text-xs font-medium text-gray-300">Transfer</span>
         </button>
       </div>
@@ -223,7 +231,9 @@ export default function WalletPage() {
           </div>
         ) : transactions.length === 0 ? (
           <div className="text-center py-12 bg-dark-800/50 rounded-xl">
-            <p className="text-3xl mb-3">📭</p>
+            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-dark-700 flex items-center justify-center">
+              <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+            </div>
             <p className="text-gray-400">No transactions yet</p>
             <p className="text-sm text-gray-500 mt-1">Top up your wallet to get started</p>
           </div>
@@ -288,9 +298,9 @@ function LoyaltySummary() {
     <div className="bg-gradient-to-r from-purple-900/30 to-dark-800 border border-purple-500/20 rounded-2xl p-5">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className="text-xl">
-            {loyalty.tier === "bronze" ? "🥉" : loyalty.tier === "silver" ? "🥈" : loyalty.tier === "gold" ? "🥇" : loyalty.tier === "platinum" ? "💎" : loyalty.tier === "black" ? "🖤" : "👑"}
-          </span>
+          <div className="w-9 h-9 rounded-full bg-dark-700 flex items-center justify-center">
+            <svg className="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
+          </div>
           <div>
             <p className="text-sm font-medium text-white capitalize">{loyalty.tier}</p>
             <p className="text-xs text-gray-400">{loyalty.points.toLocaleString()} points</p>
