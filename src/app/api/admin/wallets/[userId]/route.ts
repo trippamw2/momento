@@ -9,7 +9,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ user
 
     const { userId } = await params;
 
-    const wallet = await getWallet(params.userId);
+    const wallet = await getWallet(userId);
     if (!wallet) return json({ error: "Wallet not found" }, 404);
 
     // Fetch transactions
@@ -17,7 +17,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ user
     const { data: txns } = await admin
       .from("wallet_transactions")
       .select("*")
-      .eq("user_id", params.userId)
+      .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .range(0, 49);
 
@@ -25,7 +25,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ user
     const { data: userProfile } = await admin
       .from("users")
       .select("id, email, full_name, phone, role, created_at")
-      .eq("id", params.userId)
+      .eq("id", userId)
       .single();
 
     return json({
@@ -38,11 +38,12 @@ export async function GET(request: Request, { params }: { params: Promise<{ user
   }
 }
 
-export async function PATCH(request: Request, { params }: { params: { userId: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ userId: string }> }) {
   try {
     const user = await getUser(request);
     if (!user || user.role !== "admin") return json({ error: "Unauthorized" }, 401);
 
+    const { userId } = await params;
     const body = await request.json();
     const { action } = body;
 
@@ -50,13 +51,13 @@ export async function PATCH(request: Request, { params }: { params: { userId: st
 
     switch (action) {
       case "freeze": {
-        const result = await setWalletStatus(params.userId, "frozen", user.id);
+        const result = await setWalletStatus(userId, "frozen", user.id);
         if ("error" in result) return json({ error: result.error }, 400);
         return json({ success: true, status: "frozen" });
       }
 
       case "unfreeze": {
-        const result = await setWalletStatus(params.userId, "active", user.id);
+        const result = await setWalletStatus(userId, "active", user.id);
         if ("error" in result) return json({ error: result.error }, 400);
         return json({ success: true, status: "active" });
       }
@@ -69,7 +70,7 @@ export async function PATCH(request: Request, { params }: { params: { userId: st
         if (!reason || typeof reason !== "string") {
           return json({ error: "A reason is required for balance adjustment" }, 400);
         }
-        const result = await adminAdjustBalance(params.userId, amount, reason, user.id);
+        const result = await adminAdjustBalance(userId, amount, reason, user.id);
         if ("error" in result) return json({ error: result.error }, 400);
         return json({ success: true, newBalance: result.newBalance, amount, reason });
       }

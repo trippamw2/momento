@@ -80,7 +80,7 @@ export default function PartnerDashboardPage() {
           const now = new Date();
           const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
           const thisMonthBookingsList = bookingList.filter((b: Record<string, unknown>) => {
-            const d = new Date(b.booking_date || b.created_at || "");
+            const d = new Date((b.booking_date || b.created_at || "") as string);
             return d >= thisMonthStart;
           });
           const thisMonthTotal = thisMonthBookingsList.length;

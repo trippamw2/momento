@@ -23,7 +23,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ me
       const { data: member } = await supabase
         .from("corporate_members")
         .select("corporate_account_id")
-        .eq("id", params.memberId)
+        .eq("id", memberId)
         .single();
 
       if (!member || member.corporate_account_id !== account.id) {
@@ -31,7 +31,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ me
       }
     }
 
-    const result = await updateCorporateMember(params.memberId, {
+    const result = await updateCorporateMember(memberId, {
       role: body.role,
       spendingLimit: body.spending_limit,
       isActive: body.is_active,
@@ -44,10 +44,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ me
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { memberId: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ memberId: string }> }) {
   try {
     const user = await getUser(request);
     if (!user) return json({ error: "Unauthorized" }, 401);
+
+    const { memberId } = await params;
 
     // Verify ownership
     if (user.role !== "admin") {
@@ -58,7 +60,7 @@ export async function DELETE(request: Request, { params }: { params: { memberId:
       const { data: member } = await supabase
         .from("corporate_members")
         .select("corporate_account_id")
-        .eq("id", params.memberId)
+        .eq("id", memberId)
         .single();
 
       if (!member || member.corporate_account_id !== account.id) {
@@ -70,7 +72,7 @@ export async function DELETE(request: Request, { params }: { params: { memberId:
     const { error } = await supabase
       .from("corporate_members")
       .delete()
-      .eq("id", params.memberId);
+      .eq("id", memberId);
 
     if (error) return json({ error: error.message }, 400);
     return json({ success: true });

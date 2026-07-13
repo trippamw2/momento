@@ -11,7 +11,7 @@ export async function POST(
 
     const { id } = await params;
 
-    const giftCardId = params.id;
+    const giftCardId = id;
     const admin = createAdminClient();
 
     // Find the pending transfer for this gift card

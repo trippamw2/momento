@@ -36,7 +36,7 @@ export async function POST(request: Request) {
 
     if (uploadError) {
       // If bucket doesn't exist, create it
-      if (uploadError.message?.includes("bucket") || uploadError.statusCode === 404) {
+      if (uploadError.message?.includes("bucket")) {
         const { error: bucketError } = await admin.storage.createBucket("avatars", {
           public: true,
         });

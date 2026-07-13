@@ -130,7 +130,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
 
         // Award loyalty points (fire and forget)
         const pts = calculatePoints(exp.price * guests);
-        addPointsLocally(pts, "booking");
+        const loyaltyUpdate = addPointsLocally(pts, "booking");
 
         // Send booking confirmation email (async, non-blocking)
         const emailTarget = contactEmail || data?.user?.email || "";
@@ -155,8 +155,8 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
           setBookedDate(selectedDate.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }));
           setBookingRef(data.booking_ref || data.id.slice(0, 8).toUpperCase());
           setEarnedPoints(pts);
-          const newTier = calculateTier(addPointsLocally(pts, "booking"));
-          if (newTier) setTierUpgrade(newTier);
+          const newTier = calculateTier(loyaltyUpdate.lifetimePoints);
+          if (newTier.tier !== loyaltyUpdate.tier) setTierUpgrade(newTier.tier);
           setBookingDone(true);
         } else {
           // Redirect to booking detail page for payment (PayChangu)

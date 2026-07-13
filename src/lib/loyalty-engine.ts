@@ -124,7 +124,14 @@ export interface UserStats {
   birthdayBooked: boolean;
 }
 
-export function checkAchievements(stats: UserStats): AchievementDef[] {
+export interface CheckedAchievement extends AchievementDef {
+  unlocked: boolean;
+  progress: number;
+  current: number;
+  requirement: number;
+}
+
+export function checkAchievements(stats: UserStats): CheckedAchievement[] {
   return ACHIEVEMENT_DEFS.map((def) => {
     const result = def.check(stats);
     return { ...def, ...result };

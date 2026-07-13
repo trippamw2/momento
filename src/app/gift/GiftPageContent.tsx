@@ -262,6 +262,21 @@ export default function GiftPageContent() {
     }
   };
 
+  // Resolve the selected card variant for display/rendering
+  const selectedVariant = useMemo(() => {
+    if (tab === "cards" && selectedCard !== null) {
+      return GIFT_CARD_VARIANTS[selectedCard];
+    }
+    return GIFT_CARD_VARIANTS[4]; // Default to "signature" for experiences
+  }, [tab, selectedCard]);
+
+  const hexToRgb = useCallback((hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+      ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) }
+      : { r: 0, g: 0, b: 0 };
+  }, []);
+
   const handleDownloadCard = useCallback(async () => {
     if (!cardRef.current || !qrDataUrl) return;
     try {
@@ -417,21 +432,6 @@ export default function GiftPageContent() {
       variantId: selectedVariant.id,
     });
   }, [recipientName, senderName, selectedValue, redemptionCode, message, occasion, qrDataUrl, selectedVariant]);
-
-  // Resolve the selected card variant for display/rendering
-  const selectedVariant = useMemo(() => {
-    if (tab === "cards" && selectedCard !== null) {
-      return GIFT_CARD_VARIANTS[selectedCard];
-    }
-    return GIFT_CARD_VARIANTS[4]; // Default to "signature" for experiences
-  }, [tab, selectedCard]);
-
-  const hexToRgb = useCallback((hex: string) => {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result
-      ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) }
-      : { r: 0, g: 0, b: 0 };
-  }, []);
 
   const canSend = (tab === "cards" && selectedCard !== null || tab === "experiences" && selectedExp !== null)
     && recipientName.trim()
