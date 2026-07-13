@@ -1,5 +1,5 @@
 import { json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
   try {
@@ -9,10 +9,10 @@ export async function GET(request: Request) {
     const lng = params.lng ? parseFloat(params.lng) : null;
     const radiusKm = parseFloat(params.radius_km ?? "25");
 
-    const supabase = createServerClient();
+    const admin = createAdminClient();
 
     // Fetch published experiences with images, moods, and booking counts
-    let query = supabase
+    let query = admin
       .from("experiences")
       .select(`
         *,
@@ -63,17 +63,16 @@ export async function GET(request: Request) {
         if (exp.category === "Celebrate") score += 3;
       }
 
-      // Proximity bonus (if user location provided)
+      // Proximity bonus (if user location and experience lat/lng provided)
       let distance = Infinity;
-      if (lat && lng && exp.coordinates) {
-        const expCoords = exp.coordinates as { lat: number; lng: number };
+      if (lat && lng && exp.latitude != null && exp.longitude != null) {
         const R = 6371;
-        const dLat = ((expCoords.lat - lat) * Math.PI) / 180;
-        const dLng = ((expCoords.lng - lng) * Math.PI) / 180;
+        const dLat = ((exp.latitude - lat) * Math.PI) / 180;
+        const dLng = ((exp.longitude - lng) * Math.PI) / 180;
         const a =
           Math.sin(dLat / 2) ** 2 +
           Math.cos((lat * Math.PI) / 180) *
-            Math.cos((expCoords.lat * Math.PI) / 180) *
+            Math.cos((exp.latitude * Math.PI) / 180) *
             Math.sin(dLng / 2) ** 2;
         distance = 2 * R * Math.asin(Math.sqrt(a));
         if (distance < 2) score += 5;

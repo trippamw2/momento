@@ -1,5 +1,4 @@
 import { getUser, json, handleRouteError, parseBody, getQueryParams } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
@@ -9,7 +8,7 @@ export async function GET(request: Request) {
     const limit = Math.min(50, Math.max(1, parseInt(params.limit ?? "20")));
     const offset = (page - 1) * limit;
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
     let query = supabase
       .from("experiences")
       .select("*, partner:partner_id(business_name, business_logo, cities), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))", { count: "exact" });
@@ -112,7 +111,7 @@ export async function POST(request: Request) {
       if (!body[field]) return json({ error: `${field} is required` }, 400);
     }
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
     const { data: partner } = await supabase
       .from("partners")
       .select("id")

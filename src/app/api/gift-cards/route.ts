@@ -1,6 +1,7 @@
-import { getUser, json, handleRouteError, parseBody, getQueryParams } from "@/lib/api-helpers";
+import { getUser, json, handleRouteError, parseBody, getQueryParams, badRequest } from "@/lib/api-helpers";
 import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
+import { payFromWallet } from "@/lib/wallet-engine";
 
 function generateCode(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -22,8 +23,8 @@ export async function GET(request: Request) {
     const limit = Math.min(50, Math.max(1, parseInt(params.limit ?? "20")));
     const offset = (page - 1) * limit;
 
-    const supabase = createServerClient();
-    let query = supabase
+    const admin = createAdminClient();
+    let query = admin
       .from("gift_cards")
       .select("*", { count: "exact" })
       .or(`issuer_id.eq.${user.id},recipient_email.eq.${user.email}`);
@@ -55,6 +56,7 @@ export async function POST(request: Request) {
       delivery_method?: string;
       occasion?: string;
       design?: string;
+      pay_with_wallet?: boolean;
     }>(request);
 
     if (!body.amount || body.amount < 1000) {
@@ -101,6 +103,42 @@ export async function POST(request: Request) {
       amount: body.amount,
       balance_after: body.amount,
     });
+
+    // Process wallet payment if requested
+    if (body.pay_with_wallet) {
+      const walletResult = await payFromWallet(user.id, body.amount, {
+        description: `Gift card purchase: ${data.code}`,
+        referenceType: "gift_card",
+        referenceId: data.id,
+      });
+
+      if ("error" in walletResult) {
+        // Gift card was created but payment failed — mark as cancelled
+        await admin
+          .from("gift_cards")
+          .update({ status: "cancelled", updated_at: new Date().toISOString() })
+          .eq("id", data.id);
+        return badRequest(`Wallet payment failed: ${walletResult.error}. Gift card has been cancelled.`);
+      }
+
+      // Mark gift card as paid/sent (wallet is instant)
+      await admin
+        .from("gift_cards")
+        .update({ sent_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+        .eq("id", data.id);
+
+      // Record wallet payment
+      await admin.from("payments").insert({
+        booking_id: null,
+        user_id: user.id,
+        amount: body.amount,
+        currency: "MWK",
+        method: "wallet",
+        status: "succeeded",
+        provider: "experio_wallet",
+        gift_card_id: data.id,
+      });
+    }
 
     return json(data, 201);
   } catch (error) {

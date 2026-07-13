@@ -1,12 +1,13 @@
 import { getUser, json, unauthorized, badRequest, handleRouteError } from "@/lib/api-helpers";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
   try {
     const user = await getUser(request);
     if (!user) return unauthorized();
 
-    const { createServerClient } = await import("@/lib/supabase-server");
-    const supabase = createServerClient();
+    const { createAdminClient } = await import("@/lib/supabase-admin");
+    const supabase = createAdminClient();
 
     const { data: profile } = await supabase
       .from("users")
@@ -33,8 +34,8 @@ export async function PUT(request: Request) {
 
     const { full_name, phone } = await request.json();
 
-    const { createServerClient } = await import("@/lib/supabase-server");
-    const supabase = createServerClient();
+    const { createAdminClient } = await import("@/lib/supabase-admin");
+    const supabase = createAdminClient();
 
     const updates: Record<string, unknown> = {};
     if (full_name !== undefined) updates.full_name = full_name;

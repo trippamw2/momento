@@ -49,10 +49,22 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [contactError, setContactError] = useState("");
   const [reviewSort, setReviewSort] = useState<"recent" | "highest" | "lowest">("recent");
+  const [payWithWallet, setPayWithWallet] = useState(false);
+  const [walletBalance, setWalletBalance] = useState<number | null>(null);
   const router = useRouter();
 
   // Track view on mount
   useEffect(() => { trackView(exp.id); }, [exp.id]);
+
+  // Fetch wallet balance to enable wallet payment option
+  useEffect(() => {
+    const token = localStorage.getItem("experio-auth-token");
+    if (!token) return;
+    fetch("/api/wallet", { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => { if (data?.balance != null) setWalletBalance(data.balance); })
+      .catch(() => { /* silent — wallet option simply won't show */ });
+  }, []);
 
   // Load local reviews and merge with exp.reviews
   const allReviews = useMemo(() => {
@@ -109,6 +121,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
           special_requests: specialRequests || undefined,
           contact_phone: contactPhone || undefined,
           contact_email: contactEmail || undefined,
+          ...(payWithWallet ? { pay_with_wallet: true } : {}),
         }),
       });
       const data = await res.json();
@@ -137,8 +150,18 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
           }).catch((err) => console.warn("Confirmation email failed:", err));
         }
 
-        // Redirect to booking detail page for payment
-        router.push(`/bookings/${data.id}`);
+        // If paid with wallet, booking is instantly confirmed — show confirmation directly
+        if (data.status === "confirmed") {
+          setBookedDate(selectedDate.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }));
+          setBookingRef(data.booking_ref || data.id.slice(0, 8).toUpperCase());
+          setEarnedPoints(pts);
+          const newTier = calculateTier(addPointsLocally(pts, "booking"));
+          if (newTier) setTierUpgrade(newTier);
+          setBookingDone(true);
+        } else {
+          // Redirect to booking detail page for payment (PayChangu)
+          router.push(`/bookings/${data.id}`);
+        }
         return;
       }
     } catch (e) {
@@ -624,6 +647,28 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   </div>
                   {giftError && <p className="text-caption text-red-500 mt-1.5">{giftError}</p>}
                 </div>
+
+                {/* Wallet Payment — hidden when gift card covers full amount */}
+                {walletBalance !== null && walletBalance >= finalPrice && finalPrice > 0 && (
+                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.1]">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={payWithWallet}
+                        onChange={(e) => setPayWithWallet(e.target.checked)}
+                        className="w-4 h-4 rounded border-white/20 bg-[#0A0E17] text-[#FF0F73] focus:ring-[#FF0F73] focus:ring-offset-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-caption font-semibold text-white">Pay with Experio Wallet</p>
+                        <p className="text-caption text-[#94A3B8]">Balance: MK {walletBalance.toLocaleString()}</p>
+                      </div>
+                      <span className="text-emerald-400 text-caption font-medium">Instant confirm</span>
+                    </label>
+                    {walletBalance < finalPrice && (
+                      <p className="text-caption text-[#94A3B8] mt-1.5">Insufficient wallet balance for this booking</p>
+                    )}
+                  </div>
+                )}
 
                 {/* Price Breakdown */}
                 <div className="space-y-2">

@@ -1,5 +1,4 @@
 import { getUser, json, handleRouteError, parseBody, getQueryParams } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
@@ -9,7 +8,7 @@ export async function GET(request: Request) {
     const limit = Math.min(50, Math.max(1, parseInt(params.limit ?? "20")));
     const offset = (page - 1) * limit;
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
     let query = supabase
       .from("reviews")
       .select("*, user:user_id(full_name, avatar_url), experience:experience_id(title, slug)", { count: "exact", head: false });
@@ -55,7 +54,7 @@ export async function POST(request: Request) {
       return json({ error: "Rating must be between 1 and 5" }, 400);
     }
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
 
     const { data: booking } = await supabase
       .from("bookings")

@@ -1,5 +1,4 @@
 import { getUser, json, handleRouteError, badRequest } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 const PAYCHANGU_API = process.env.PAYCHANGU_API_URL || "https://api.paychangu.com";
@@ -13,7 +12,7 @@ export async function POST(request: Request) {
     const { booking_id } = await request.json();
     if (!booking_id) return badRequest("booking_id is required");
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
 
     const { data: booking, error } = await supabase
       .from("bookings")

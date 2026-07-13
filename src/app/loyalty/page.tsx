@@ -6,12 +6,14 @@ import {
   TIERS,
   ACHIEVEMENT_DEFS,
   calculateTier,
+  checkAchievements,
   TIER_MAP,
   formatPoints,
   calculateStreak,
   getStreakMilestones,
   type TierName,
   type TierConfig,
+  type UserStats,
 } from "@/lib/loyalty-engine";
 
 interface LoyaltyData {
@@ -92,6 +94,7 @@ function StreakDisplay() {
 
 export default function LoyaltyPage() {
   const [data, setData] = useState<LoyaltyData | null>(null);
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [signedIn, setSignedIn] = useState(false);
 
@@ -104,6 +107,7 @@ export default function LoyaltyPage() {
     }
     setSignedIn(true);
 
+    // Fetch loyalty points
     fetch("/api/loyalty/points", {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -111,6 +115,14 @@ export default function LoyaltyPage() {
       .then((d) => setData(d))
       .catch((err) => console.error("Loyalty points fetch failed:", err))
       .finally(() => setLoading(false));
+
+    // Fetch real user stats for achievements
+    fetch("/api/loyalty/stats", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((d) => setUserStats(d))
+      .catch((err) => console.error("Loyalty stats fetch failed:", err));
   }, []);
 
   if (loading) return <Loading />;
@@ -143,12 +155,14 @@ export default function LoyaltyPage() {
   const points = data?.balance || 0;
   const lifetimePoints = data?.lifetime_points || 0;
 
-  // Determine unlocked achievements
-  const unlockedAchievements = ACHIEVEMENT_DEFS.filter((a) => {
-    // Simple heuristic for display: if an achievement's requirement appears met based on stats
-    // Since we don't have full stats from the API, we'll show them all with progress
-    return false;
-  });
+  // Determine unlocked achievements from real user stats
+  const defaultStats: UserStats = {
+    totalBookings: 0, totalSpent: 0, totalReviews: 0, totalReferrals: 0,
+    totalGifts: 0, totalGifted: 0, totalShares: 0, daysSinceSignup: 0,
+    citiesVisited: [], categories: [], consecutiveBookings: 0, birthdayBooked: false,
+  };
+  const stats = userStats || defaultStats;
+  const unlockedAchievements = checkAchievements(stats).filter((a) => a.unlocked);
 
   return (
     <div className="min-h-screen pt-24 pb-16 bg-[#05070B]">
@@ -293,7 +307,8 @@ export default function LoyaltyPage() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {ACHIEVEMENT_DEFS.map((ach) => {
-              const unlocked = false; // MVP: all locked until we have full stats
+              const checked = checkAchievements(stats).find((a) => a.id === ach.id);
+              const unlocked = checked?.unlocked ?? false;
               return (
                 <div
                   key={ach.id}
@@ -318,11 +333,11 @@ export default function LoyaltyPage() {
                     )}
                   </div>
                   {/* Progress bar for locked achievements */}
-                  {!unlocked && (
+                  {!unlocked && checked && (
                     <div className="w-full h-1.5 rounded-full bg-[#1E293B] overflow-hidden">
                       <div
                         className="h-full rounded-full bg-[#FF0F73] transition-all duration-500"
-                        style={{ width: `${Math.min(100, (ach.check({ totalBookings: 0, totalSpent: 0, totalReviews: 0, totalReferrals: 0, totalGifts: 0, totalGifted: 0, totalShares: 0, daysSinceSignup: 0, citiesVisited: [], categories: [], consecutiveBookings: 0, birthdayBooked: false }).current / ach.check({ totalBookings: 0, totalSpent: 0, totalReviews: 0, totalReferrals: 0, totalGifts: 0, totalGifted: 0, totalShares: 0, daysSinceSignup: 0, citiesVisited: [], categories: [], consecutiveBookings: 0, birthdayBooked: false }).requirement) * 100)}%` }}
+                        style={{ width: `${Math.min(100, (checked.current / checked.requirement) * 100)}%` }}
                       />
                     </div>
                   )}

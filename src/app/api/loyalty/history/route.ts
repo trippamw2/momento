@@ -1,5 +1,5 @@
 import { getUser, json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
   try {
@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     const limit = Math.min(50, Math.max(1, parseInt(params.limit ?? "20")));
 
     try {
-      const supabase = createServerClient();
+      const supabase = createAdminClient();
       const { data, error } = await supabase
         .from("loyalty_transactions")
         .select("*")

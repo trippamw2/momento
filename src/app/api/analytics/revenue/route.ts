@@ -1,5 +1,5 @@
 import { getUser, json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
   try {
@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     const params = getQueryParams(request.url);
     const days = parseInt(params.days ?? "30");
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
     let query = supabase
       .from("payments")
       .select("amount, created_at, method, status");

@@ -109,7 +109,8 @@ export default function AdminPage() {
 
   // Real data states (replacing mock data)
   const [giftCards, setGiftCards] = useState<Array<{ id: string; code: string; amount: number; balance: number; status: string; recipient_name: string | null; sender_name: string | null; created_at: string }>>([]);
-  const [partnersList, setPartnersList] = useState<Array<{ id: string; business_name: string; verification_status: string; is_active: boolean; user: { full_name: string | null } | null; created_at: string }>>([]);
+  const [partnersList, setPartnersList] = useState<Array<{ id: string; business_name: string; verification_status: string; is_active: boolean; user: { full_name: string | null; email?: string } | null; created_at: string }>>([]);
+  const [selectedPartner, setSelectedPartner] = useState<typeof partnersList[0] | null>(null);
   const [financials, setFinancials] = useState<{ totalRevenue: number; monthlyRevenue: Array<{ month: string; amount: number }>; pendingPayouts: number; completedPayouts: number; platformFee: number; refundedAmount: number } | null>(null);
 
   const getToken = useCallback(() => localStorage.getItem("experio-auth-token"), []);
@@ -646,7 +647,12 @@ export default function AdminPage() {
                             <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{new Date(p.created_at).toLocaleDateString()}</td>
                             <td className="py-3 px-4">
                               <div className="flex gap-1">
-                                <button className="px-2 py-1 rounded-lg bg-emerald-900/30 text-emerald-400 hover:bg-emerald-800/40">View</button>
+                                <button
+                                  onClick={() => setSelectedPartner(p)}
+                                  className="px-2 py-1 rounded-lg bg-emerald-900/30 text-emerald-400 hover:bg-emerald-800/40"
+                                >
+                                  View
+                                </button>
                                 <button className="px-2 py-1 rounded-lg bg-amber-900/30 text-amber-400 text-caption hover:bg-amber-800/40">Contact</button>
                               </div>
                             </td>
@@ -657,6 +663,46 @@ export default function AdminPage() {
                         )}
                       </tbody>
                     </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Partner Detail Modal */}
+              {selectedPartner && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedPartner(null)}>
+                  <div className="w-full max-w-lg rounded-2xl bg-[#0F172A] border border-white/[0.08] shadow-xl p-6" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-heading-sm font-bold text-[#F1F5F9]">{selectedPartner.business_name || "Partner Details"}</h3>
+                      <button onClick={() => setSelectedPartner(null)} className="w-8 h-8 rounded-lg bg-white/[0.08] flex items-center justify-center text-[#94A3B8] hover:text-[#F1F5F9]">
+                        ✕
+                      </button>
+                    </div>
+                    <div className="space-y-3 text-body-sm">
+                      <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
+                        <span className="text-[#94A3B8]">Business Name</span>
+                        <span className="text-[#F1F5F9] font-medium">{selectedPartner.business_name || "—"}</span>
+                      </div>
+                      <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
+                        <span className="text-[#94A3B8]">Owner</span>
+                        <span className="text-[#F1F5F9] font-medium">{selectedPartner.user?.full_name || "—"}</span>
+                      </div>
+                      <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
+                        <span className="text-[#94A3B8]">Verification</span>
+                        <StatusBadge status={selectedPartner.verification_status} />
+                      </div>
+                      <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
+                        <span className="text-[#94A3B8]">Status</span>
+                        <StatusBadge status={selectedPartner.is_active ? "active" : "suspended"} />
+                      </div>
+                      <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
+                        <span className="text-[#94A3B8]">Joined</span>
+                        <span className="text-[#F1F5F9] font-medium">{new Date(selectedPartner.created_at).toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex justify-between py-2.5">
+                        <span className="text-[#94A3B8]">Partner ID</span>
+                        <span className="text-[#F1F5F9] font-mono text-caption">{selectedPartner.id}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}

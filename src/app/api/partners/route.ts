@@ -1,5 +1,4 @@
 import { json, handleRouteError, getUser, parseBody, getQueryParams } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
@@ -9,7 +8,7 @@ export async function GET(request: Request) {
     const limit = Math.min(50, Math.max(1, parseInt(params.limit ?? "20")));
     const offset = (page - 1) * limit;
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
     let query = supabase
       .from("partners")
       .select("*, user:user_id(id, full_name, avatar_url)", { count: "exact" });
@@ -37,7 +36,7 @@ export async function POST(request: Request) {
     const user = await getUser(request);
     if (!user) return json({ error: "Unauthorized" }, 401);
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
     const { data: existing } = await supabase
       .from("partners")
       .select("id")

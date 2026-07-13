@@ -1,5 +1,4 @@
 import { getUser, json, handleRouteError, parseBody } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
@@ -7,7 +6,7 @@ export async function GET(request: Request) {
     const user = await getUser(request);
     if (!user) return json({ error: "Unauthorized" }, 401);
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
     const { data: prefs, error } = await supabase
       .from("notification_preferences")
       .select("*")

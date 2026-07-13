@@ -1,13 +1,12 @@
 import { getUser, json, handleRouteError, parseBody } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const supabase = createServerClient();
+    const admin = createAdminClient();
 
-    const { data: experience, error } = await supabase
+    const { data: experience, error } = await admin
       .from("experiences")
       .select("*, partner:partner_id(business_name, business_logo, business_description, cities, business_phone, business_email), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
       .eq("id", id)
@@ -15,7 +14,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     if (error || !experience) return json({ error: "Experience not found" }, 404);
 
-    const { data: availability } = await supabase
+    const { data: availability } = await admin
       .from("experience_availability")
       .select("*")
       .eq("experience_id", id)
@@ -24,7 +23,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
       .order("date")
       .order("start_time");
 
-    const { data: reviews } = await supabase
+    const { data: reviews } = await admin
       .from("reviews")
       .select("*, user:user_id(full_name, avatar_url)")
       .eq("experience_id", id)
@@ -64,10 +63,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     });
     filtered.updated_at = new Date().toISOString();
 
-    const supabase = createServerClient();
+    const admin2 = createAdminClient();
 
     if (user.role !== "admin") {
-      const { data: partner } = await supabase
+      const { data: partner } = await admin2
         .from("partners")
         .select("id")
         .eq("user_id", user.id)
@@ -75,7 +74,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
       if (!partner) return json({ error: "Forbidden" }, 403);
 
-      const { data: exp } = await supabase
+      const { data: exp } = await admin2
         .from("experiences")
         .select("partner_id")
         .eq("id", id)
@@ -105,10 +104,10 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     const user = await getUser(request);
     if (!user) return json({ error: "Unauthorized" }, 401);
 
-    const supabase = createServerClient();
+    const admin2 = createAdminClient();
 
     if (user.role !== "admin") {
-      const { data: partner } = await supabase
+      const { data: partner } = await admin2
         .from("partners")
         .select("id")
         .eq("user_id", user.id)
@@ -116,7 +115,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
       if (!partner) return json({ error: "Forbidden" }, 403);
 
-      const { data: exp } = await supabase
+      const { data: exp } = await admin2
         .from("experiences")
         .select("partner_id")
         .eq("id", id)

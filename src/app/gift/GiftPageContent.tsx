@@ -175,6 +175,7 @@ export default function GiftPageContent() {
           delivery_method: delivery,
           occasion: occasion || undefined,
           schedule_date: sendMode === "schedule" ? scheduleDate : undefined,
+          design: tab === "cards" && selectedCard !== null ? GIFT_CARD_VARIANTS[selectedCard].id : undefined,
         }),
       });
 
@@ -218,6 +219,7 @@ export default function GiftPageContent() {
           delivery_method: delivery,
           occasion: occasion || undefined,
           schedule_date: sendMode === "schedule" ? scheduleDate : undefined,
+          design: tab === "cards" && selectedCard !== null ? GIFT_CARD_VARIANTS[selectedCard].id : undefined,
         }),
       });
 
@@ -271,82 +273,103 @@ export default function GiftPageContent() {
       canvas.height = rect.height * 2;
       ctx.scale(2, 2);
 
-      // Draw ATM-style card background
+      // Get the selected variant's canvas colors
+      const cv = selectedVariant.canvas;
+      const textColor = cv.lightText ? "#ffffff" : "#1e293b";
+      const textMuted = cv.lightText ? "rgba(255,255,255,0.6)" : "rgba(30,41,59,0.6)";
+      const textDim = cv.lightText ? "rgba(255,255,255,0.3)" : "rgba(30,41,59,0.3)";
+      const textVeryDim = cv.lightText ? "rgba(255,255,255,0.25)" : "rgba(30,41,59,0.25)";
+
+      // Draw card background with variant gradient
       const gradient = ctx.createLinearGradient(0, 0, rect.width, rect.height);
-      gradient.addColorStop(0, "#1a1a2e");
-      gradient.addColorStop(0.5, "#16213e");
-      gradient.addColorStop(1, "#0f3460");
+      gradient.addColorStop(0, cv.from);
+      gradient.addColorStop(0.5, cv.via);
+      gradient.addColorStop(1, cv.to);
       ctx.fillStyle = gradient;
       ctx.beginPath();
       ctx.roundRect(0, 0, rect.width, rect.height, 16);
       ctx.fill();
 
-      // Decorative elements
-      ctx.fillStyle = "rgba(255, 15, 115, 0.08)";
+      // Decorative circles using accent color
+      const accentRgba = hexToRgb(cv.accent);
+      ctx.fillStyle = `rgba(${accentRgba.r}, ${accentRgba.g}, ${accentRgba.b}, 0.10)`;
       ctx.beginPath();
       ctx.arc(rect.width - 40, -20, 100, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = "rgba(159, 59, 255, 0.06)";
+      ctx.fillStyle = `rgba(${accentRgba.r}, ${accentRgba.g}, ${accentRgba.b}, 0.07)`;
       ctx.beginPath();
       ctx.arc(-30, rect.height - 30, 80, 0, Math.PI * 2);
       ctx.fill();
 
+      // Shimmer line overlay
+      const shimmer = ctx.createLinearGradient(0, 0, rect.width, 0);
+      shimmer.addColorStop(0, "transparent");
+      shimmer.addColorStop(0.45, cv.lightText ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.03)");
+      shimmer.addColorStop(0.5, cv.lightText ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.06)");
+      shimmer.addColorStop(0.55, cv.lightText ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.03)");
+      shimmer.addColorStop(1, "transparent");
+      ctx.fillStyle = shimmer;
+      ctx.beginPath();
+      ctx.roundRect(0, 0, rect.width, rect.height, 16);
+      ctx.fill();
+
       // Experio brand mark
-      ctx.fillStyle = "#FF0F73";
+      ctx.fillStyle = textMuted;
       ctx.font = "bold 12px sans-serif";
       ctx.textAlign = "right";
-      ctx.fillText("✦ Experio", rect.width - 20, 30);
+      ctx.fillText("Experio", rect.width - 20, 30);
 
-      // Card chip
-      ctx.fillStyle = "rgba(255, 200, 50, 0.7)";
+      // Card chip (variant chip color)
+      const chipRgb = hexToRgb(cv.chip);
+      ctx.fillStyle = `rgba(${chipRgb.r}, ${chipRgb.g}, ${chipRgb.b}, 0.8)`;
       ctx.beginPath();
       ctx.roundRect(20, 40, 40, 30, 6);
       ctx.fill();
 
       // Gift Card label
-      ctx.fillStyle = "rgba(255,255,255,0.3)";
+      ctx.fillStyle = textDim;
       ctx.font = "9px sans-serif";
       ctx.textAlign = "left";
       ctx.fillText("GIFT CARD", 20, 90);
 
       // Value amount
       const selectedGiftValue = tab === "cards" && selectedCard !== null ? giftCardValues[selectedCard].label : "Experience";
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = textColor;
       ctx.font = "bold 24px sans-serif";
       ctx.textAlign = "left";
       ctx.fillText(selectedGiftValue, 20, 125);
 
-      // Card number
-      ctx.fillStyle = "rgba(255,255,255,0.6)";
+      // Card number / redemption code
+      ctx.fillStyle = textMuted;
       ctx.font = "bold 16px monospace";
       ctx.textAlign = "left";
       ctx.fillText(redemptionCode, 20, 160);
 
       // Recipient
-      ctx.fillStyle = "rgba(255,255,255,0.3)";
+      ctx.fillStyle = textDim;
       ctx.font = "10px sans-serif";
       ctx.textAlign = "left";
       ctx.fillText("TO", 20, 185);
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = textColor;
       ctx.font = "bold 14px sans-serif";
       ctx.fillText(recipientName, 20, 205);
 
       // From
-      ctx.fillStyle = "rgba(255,255,255,0.3)";
+      ctx.fillStyle = textDim;
       ctx.font = "10px sans-serif";
       ctx.textAlign = "left";
       ctx.fillText("FROM", 20, 230);
-      ctx.fillStyle = "rgba(255,255,255,0.7)";
+      ctx.fillStyle = textMuted;
       ctx.font = "12px sans-serif";
       ctx.fillText(senderName, 20, 248);
 
       // Gift message
       if (message) {
-        ctx.fillStyle = "rgba(255,255,255,0.25)";
+        ctx.fillStyle = textVeryDim;
         ctx.font = "9px sans-serif";
         ctx.textAlign = "left";
         ctx.fillText("MESSAGE", 20, 268);
-        ctx.fillStyle = "rgba(255,255,255,0.5)";
+        ctx.fillStyle = cv.lightText ? "rgba(255,255,255,0.5)" : "rgba(30,41,59,0.5)";
         ctx.font = "italic 10px sans-serif";
         const maxW = Math.min(rect.width - 140, 200);
         const truncated = message.length > 80 ? message.slice(0, 77) + "..." : message;
@@ -372,7 +395,7 @@ export default function GiftPageContent() {
       link.href = canvas.toDataURL();
       link.click();
     } catch (e) { console.warn("Failed to download gift card image:", e); }
-  }, [redemptionCode, qrDataUrl, recipientName, senderName, tab, selectedCard]);
+  }, [redemptionCode, qrDataUrl, recipientName, senderName, tab, selectedCard, selectedVariant, hexToRgb, message]);
 
   const selectedValue = tab === "cards" && selectedCard !== null
     ? giftCardValues[selectedCard].value
@@ -391,8 +414,24 @@ export default function GiftPageContent() {
       occasion: occasion || undefined,
       qrDataUrl: qrDataUrl || undefined,
       expiresAt: new Date(Date.now() + 365 * 86400000).toISOString(),
+      variantId: selectedVariant.id,
     });
-  }, [recipientName, senderName, selectedValue, redemptionCode, message, occasion, qrDataUrl]);
+  }, [recipientName, senderName, selectedValue, redemptionCode, message, occasion, qrDataUrl, selectedVariant]);
+
+  // Resolve the selected card variant for display/rendering
+  const selectedVariant = useMemo(() => {
+    if (tab === "cards" && selectedCard !== null) {
+      return GIFT_CARD_VARIANTS[selectedCard];
+    }
+    return GIFT_CARD_VARIANTS[4]; // Default to "signature" for experiences
+  }, [tab, selectedCard]);
+
+  const hexToRgb = useCallback((hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+      ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) }
+      : { r: 0, g: 0, b: 0 };
+  }, []);
 
   const canSend = (tab === "cards" && selectedCard !== null || tab === "experiences" && selectedExp !== null)
     && recipientName.trim()
@@ -847,9 +886,9 @@ export default function GiftPageContent() {
                   }
                 </p>
 
-                {/* ATM-style Gift Card (Premium) */}
+                {/* ATM-style Gift Card (Premium) — matches selected variant */}
                 <div className="max-w-sm mx-auto mb-6 perspective-[1000px]" ref={cardRef}>
-                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FF0F73] via-[#FF5B3A] to-[#FFA22C] border border-white/10 shadow-2xl transition-all duration-500 hover:rotate-y-[-2deg]">
+                  <div className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${selectedVariant.gradient} border border-white/10 shadow-2xl transition-all duration-500 hover:rotate-y-[-2deg]`}>
                     {/* Premium decorative elements */}
                     <div className="absolute top-0 right-0 w-48 h-48 bg-white/[0.07] rounded-full -translate-y-1/3 translate-x-1/3 blur-none" />
                     <div className="absolute bottom-0 left-0 w-36 h-36 bg-black/[0.05] rounded-full translate-y-1/3 -translate-x-1/3" />
@@ -863,25 +902,25 @@ export default function GiftPageContent() {
                       {/* Top: Chip + Brand */}
                       <div className="flex items-start justify-between mb-5">
                         <div className="flex flex-col gap-2">
-                          <div className="w-10 h-7 rounded bg-gradient-to-br from-yellow-200 to-yellow-400 shadow-inner border border-white/10" />
+                          <div className={`w-10 h-7 rounded bg-gradient-to-br ${selectedVariant.chipColor} shadow-inner border border-white/10`} />
                           <div className="flex -space-x-1.5">
-                            <div className="w-6 h-4 rounded border border-white/30" />
-                            <div className="w-6 h-4 rounded border border-white/30" />
+                            <div className={`w-6 h-4 rounded border ${selectedVariant.textColor.includes("white") ? "border-white/30" : "border-gray-400"}`} />
+                            <div className={`w-6 h-4 rounded border ${selectedVariant.textColor.includes("white") ? "border-white/30" : "border-gray-400"}`} />
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-[10px] font-bold text-white/80 uppercase tracking-[0.15em]">Experio</p>
-                          <p className="text-[8px] text-white/50 tracking-wider uppercase">Gift Card</p>
+                          <p className={`text-[10px] font-bold ${selectedVariant.textColorSecondary} uppercase tracking-[0.15em]`}>Experio</p>
+                          <p className={`text-[8px] ${selectedVariant.textColorSecondary} opacity-60 tracking-wider uppercase`}>Gift Card</p>
                         </div>
                       </div>
 
                       {/* Value */}
-                      <p className="text-2xl font-bold text-white mb-1 drop-shadow-sm">
+                      <p className={`text-2xl font-bold ${selectedVariant.textColor} mb-1 drop-shadow-sm`}>
                         {tab === "cards" && selectedCard !== null ? giftCardValues[selectedCard].label : "Gift Experience"}
                       </p>
 
                       {/* Card number */}
-                      <p className="text-sm font-mono tracking-[0.2em] text-white/70 mb-5">
+                      <p className={`text-sm font-mono tracking-[0.2em] ${selectedVariant.textColorSecondary} opacity-70 mb-5`}>
                         {tab === "cards" && selectedCard !== null
                           ? `•••• •••• •••• ${4829 + (selectedCard * 100)}`
                           : `•••• •••• •••• ${redemptionCode.slice(-4)}`
@@ -891,17 +930,17 @@ export default function GiftPageContent() {
                       {/* Redemption Code + QR Row */}
                       <div className="flex items-center gap-4 mb-3">
                         <div className="flex-1 min-w-0">
-                          <p className="text-[9px] text-white/50 uppercase tracking-wider mb-0.5">Redemption Code</p>
-                          <p className="text-sm font-mono font-bold text-[#F1F5F9] tracking-wider break-all">{redemptionCode}</p>
+                          <p className={`text-[9px] ${selectedVariant.textColorSecondary} opacity-60 uppercase tracking-wider mb-0.5`}>Redemption Code</p>
+                          <p className={`text-sm font-mono font-bold ${selectedVariant.textColor} drop-shadow-sm tracking-wider break-all`}>{redemptionCode}</p>
                           <div className="flex items-center gap-2 mt-2">
                             <div className="flex items-center gap-1">
-                              <p className="text-[9px] text-white/40 uppercase">TO</p>
-                              <p className="text-xs font-medium text-white/80">{recipientName}</p>
+                              <p className={`text-[9px] ${selectedVariant.textColorSecondary} opacity-50 uppercase`}>TO</p>
+                              <p className={`text-xs font-medium ${selectedVariant.textColor} drop-shadow-sm`}>{recipientName}</p>
                             </div>
-                            <span className="text-white/20">|</span>
+                            <span className={`${selectedVariant.textColorSecondary} opacity-30`}>|</span>
                             <div className="flex items-center gap-1">
-                              <p className="text-[9px] text-white/40 uppercase">FROM</p>
-                              <p className="text-xs font-medium text-white/60">{senderName}</p>
+                              <p className={`text-[9px] ${selectedVariant.textColorSecondary} opacity-50 uppercase`}>FROM</p>
+                              <p className={`text-xs font-medium ${selectedVariant.textColorSecondary} drop-shadow-sm`}>{senderName}</p>
                             </div>
                           </div>
                         </div>
@@ -913,15 +952,15 @@ export default function GiftPageContent() {
                       </div>
 
                       {/* Bottom: valid thru */}
-                      <div className="flex items-center justify-between pt-3 border-t border-white/[0.12]">
+                      <div className={`flex items-center justify-between pt-3 border-t ${selectedVariant.textColor.includes("white") ? "border-white/[0.12]" : "border-black/[0.12]"}`}>
                         <div className="flex items-center gap-2">
                           <div className="flex -space-x-1">
-                            <div className="w-5 h-3.5 rounded bg-gradient-to-br from-yellow-200/60 to-yellow-400/60 border border-white/10" />
+                            <div className={`w-5 h-3.5 rounded bg-gradient-to-br ${selectedVariant.chipColor} opacity-60 border border-white/10`} />
                             <div className="w-5 h-3.5 rounded bg-gradient-to-br from-red-300/60 to-red-500/60 border border-white/10" />
                           </div>
-                          <p className="text-[9px] text-white/40 font-mono">12/27</p>
+                          <p className={`text-[9px] ${selectedVariant.textColorSecondary} opacity-50 font-mono`}>12/27</p>
                         </div>
-                        <p className="text-[9px] text-white/40">Valid: 12 months</p>
+                        <p className={`text-[9px] ${selectedVariant.textColorSecondary} opacity-50`}>Valid: 12 months</p>
                       </div>
                     </div>
                   </div>

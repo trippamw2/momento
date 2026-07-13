@@ -23,6 +23,16 @@ function getCoords(location: string): { lat: number; lng: number } {
   return AFRICAN_CITY_COORDS[location] || AFRICAN_CITY_COORDS["Lilongwe"];
 }
 
+/** Resolve coordinates from raw DB row: prefer lat/lng columns, fall back to city lookup. */
+function resolveCoords(raw: Record<string, unknown>, city: string): { lat: number; lng: number } {
+  const lat = raw.latitude as number | null | undefined;
+  const lng = raw.longitude as number | null | undefined;
+  if (typeof lat === "number" && typeof lng === "number" && !isNaN(lat) && !isNaN(lng)) {
+    return { lat, lng };
+  }
+  return getCoords(city);
+}
+
 /** Transform a raw API experience shape into the app's `Experience` type. */
 export function transformExperience(raw: Record<string, unknown>): Experience {
   const images = (raw.images as Array<{ url: string; alt?: string; is_primary?: boolean; sort_order?: number }>) ?? [];
@@ -76,7 +86,7 @@ export function transformExperience(raw: Record<string, unknown>): Experience {
     featured: (raw.featured as boolean) ?? false,
     includes: (raw.includes as string[]) ?? [],
     capacity: (raw.capacity as number) ?? 8,
-    coordinates: getCoords(city),
+    coordinates: resolveCoords(raw, city),
     reviews,
   };
 }

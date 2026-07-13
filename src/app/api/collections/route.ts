@@ -1,5 +1,4 @@
 import { getUser, json, handleRouteError, parseBody, getQueryParams } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
@@ -8,7 +7,7 @@ export async function GET(request: Request) {
     if (!user) return json({ error: "Unauthorized" }, 401);
 
     const params = getQueryParams(request.url);
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
     let query = supabase
       .from("collections")
       .select("*, items:saved_items(count)", { count: "exact" })

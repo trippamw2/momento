@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import PartnerDashboard from "./PartnerDashboard";
 import LoyaltyBadge from "@/components/LoyaltyBadge";
@@ -39,6 +39,110 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
   const [editPhone, setEditPhone] = useState(user.profile?.phone || "");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
+
+  // Password change state
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSuccess, setPasswordSuccess] = useState("");
+
+  // Avatar upload state
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+
+  // Recent activity from real data
+  type ActivityItem = { action: string; time: string; ts: number };
+  const [activities, setActivities] = useState<ActivityItem[]>([]);
+  const [activitiesLoaded, setActivitiesLoaded] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("experio-auth-token");
+    if (!token) return;
+
+    const fetchActivities = async () => {
+      const items: ActivityItem[] = [];
+
+      try {
+        // Fetch recent bookings
+        const bRes = await fetch("/api/bookings?limit=5", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (bRes.ok) {
+          const bData = await bRes.json();
+          const bookingList = bData.bookings || bData || [];
+          for (const b of bookingList) {
+            const expTitle = b.experiences?.title || b.experience_title || "Experience";
+            const status = b.status || "pending";
+            const action = status === "completed"
+              ? `Completed "${expTitle}"`
+              : status === "confirmed"
+              ? `Booked "${expTitle}"`
+              : `Booked "${expTitle}"`;
+            const ts = new Date(b.booking_date || b.created_at || Date.now()).getTime();
+            if (!isNaN(ts)) items.push({ action, time: timeAgo(ts), ts });
+          }
+        }
+      } catch { /* ignore bookings fetch */ }
+
+      try {
+        // Fetch recent reviews
+        const rRes = await fetch("/api/reviews/mine?limit=5", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (rRes.ok) {
+          const rData = await rRes.json();
+          const reviewList = rData.reviews || rData || [];
+          for (const r of reviewList) {
+            const expTitle = r.experiences?.title || r.experience_title || "Experience";
+            const action = `Reviewed "${expTitle}"`;
+            const ts = new Date(r.created_at || Date.now()).getTime();
+            if (!isNaN(ts)) items.push({ action, time: timeAgo(ts), ts });
+          }
+        }
+      } catch { /* ignore reviews fetch */ }
+
+      try {
+        // Fetch recent loyalty transactions
+        const lRes = await fetch("/api/loyalty/history?limit=5", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (lRes.ok) {
+          const lData = await lRes.json();
+          const txList = lData.transactions || lData.history || lData || [];
+          for (const tx of txList) {
+            const pts = tx.points || tx.amount || 0;
+            const reason = tx.reason || tx.description || "Earned points";
+            const action = `Earned ${pts} loyalty points`;
+            const ts = new Date(tx.created_at || Date.now()).getTime();
+            if (!isNaN(ts)) items.push({ action, time: timeAgo(ts), ts });
+          }
+        }
+      } catch { /* ignore loyalty fetch */ }
+
+      // Sort by most recent first, take top 5
+      items.sort((a, b) => b.ts - a.ts);
+      setActivities(items.slice(0, 5));
+      setActivitiesLoaded(true);
+    };
+
+    fetchActivities();
+  }, []);
+
+  function timeAgo(ts: number): string {
+    const diff = Date.now() - ts;
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return "just now";
+    if (mins < 60) return `${mins} min ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 7) return `${days}d ago`;
+    const weeks = Math.floor(days / 7);
+    return `${weeks}w ago`;
+  }
 
   const handleEdit = () => {
     setEditName(user.profile?.full_name || "");
@@ -94,6 +198,68 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
     window.location.href = "/";
   };
 
+  const handleChangePassword = async () => {
+    if (!newPassword) { setPasswordError("Enter a new password"); return; }
+    if (newPassword.length < 6) { setPasswordError("Password must be at least 6 characters"); return; }
+    if (newPassword !== confirmPassword) { setPasswordError("Passwords do not match"); return; }
+
+    setPasswordSaving(true);
+    setPasswordError("");
+    setPasswordSuccess("");
+    const token = localStorage.getItem("experio-auth-token");
+
+    try {
+      const res = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ new_password: newPassword }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setPasswordSuccess("Password changed successfully!");
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        setTimeout(() => setShowPasswordForm(false), 2000);
+      } else {
+        setPasswordError(data.error || "Failed to change password");
+      }
+    } catch {
+      setPasswordError("Network error. Please try again.");
+    } finally {
+      setPasswordSaving(false);
+    }
+  };
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setAvatarUploading(true);
+    const token = localStorage.getItem("experio-auth-token");
+
+    try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+      const res = await fetch("/api/auth/avatar", {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: formData,
+      });
+      const data = await res.json();
+      if (res.ok && data.avatar_url) {
+        setUser((prev) => ({
+          ...prev,
+          profile: { ...prev.profile, avatar_url: data.avatar_url },
+        }));
+      }
+    } catch { /* ignore upload error */ }
+    finally { setAvatarUploading(false); }
+  };
+
   const initials = user.profile?.full_name
     ? user.profile.full_name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase()
     : user.email[0]?.toUpperCase() || "U";
@@ -109,8 +275,31 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
           <div className="h-24 sm:h-32 bg-gradient-to-r from-[#FF0F73]/30 via-[#FFA22C]/20 to-[#F82D7B]/30" />
           <div className="px-6 pb-6 -mt-12 sm:-mt-16">
             <div className="flex flex-col sm:flex-row sm:items-end gap-4">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] flex items-center justify-center text-white text-heading-xl font-bold shadow-lg border-4 border-[#111827] shrink-0">
-                {initials}
+              <div className="relative shrink-0">
+                <button
+                  onClick={() => avatarInputRef.current?.click()}
+                  disabled={avatarUploading}
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] flex items-center justify-center text-white text-heading-xl font-bold shadow-lg border-4 border-[#111827] overflow-hidden hover:opacity-90 transition-opacity disabled:opacity-70 group"
+                >
+                  {user.profile?.avatar_url ? (
+                    <img src={user.profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                  ) : avatarUploading ? (
+                    <div className="w-8 h-8 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                  ) : (
+                    <span>{initials}</span>
+                  )}
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">
+                    <span className="text-white text-xs font-medium">Change</span>
+                  </div>
+                </button>
+                <input
+                  ref={avatarInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleAvatarChange}
+                />
               </div>
               <div className="min-w-0 flex-1 sm:pb-2">
                 <div className="flex items-center gap-3 mt-2 sm:mt-0">
@@ -175,8 +364,48 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
                 </div>
                 <div className="flex justify-between py-2.5">
                   <span className="text-[#94A3B8]">Password</span>
-                  <span className="text-[#64748B]">••••••••</span>
+                  <button
+                    onClick={() => { setShowPasswordForm(!showPasswordForm); setPasswordError(""); setPasswordSuccess(""); }}
+                    className="text-[#FF0F73] text-body-sm font-medium hover:underline"
+                  >
+                    {showPasswordForm ? "Cancel" : "Change"}
+                  </button>
                 </div>
+                {showPasswordForm && (
+                  <div className="pt-3 pb-2 space-y-3 border-t border-white/[0.06]">
+                    <input
+                      type="password"
+                      placeholder="New password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-[#0A0E17] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-1 border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20 transition-all"
+                    />
+                    <input
+                      type="password"
+                      placeholder="Confirm new password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-[#0A0E17] text-[#F1F5F9] text-body-sm placeholder:text-[#64748B] focus:outline-none focus:ring-1 border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20 transition-all"
+                    />
+                    {passwordError && (
+                      <p className="text-body-sm text-[#c13515]">{passwordError}</p>
+                    )}
+                    {passwordSuccess && (
+                      <p className="text-body-sm text-emerald-400">{passwordSuccess}</p>
+                    )}
+                    <button
+                      onClick={handleChangePassword}
+                      disabled={passwordSaving}
+                      className="w-full py-3 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FFA22C] text-white font-semibold text-body-sm hover:shadow-[0_4px_20px_rgba(255,15,115,0.35)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {passwordSaving ? (
+                        <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                      ) : (
+                        "Update Password"
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -195,18 +424,22 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
                 Recent Activity
               </h2>
               <div className="space-y-3">
-                {[
-                  { action: "Booked Sunset Cruise", time: "3 days ago" },
-                  { action: "Earned 550 loyalty points", time: "3 days ago" },
-                  { action: "Reviewed Spa Day", time: "1 week ago" },
-                  { action: "Saved Date Night to wishlist", time: "2 weeks ago" },
-                ].map((activity, i) => (
-                  <div key={i} className="flex items-center gap-3 py-2 border-b border-white/[0.06] last:border-0">
-                    <div className="w-2 h-2 rounded-full bg-[#FF0F73]" />
-                    <p className="flex-1 text-body-sm text-[#CBD5E1]">{activity.action}</p>
-                    <span className="text-caption text-[#64748B]">{activity.time}</span>
+                {activities.length === 0 && !activitiesLoaded ? (
+                  <div className="flex items-center gap-2 py-2">
+                    <div className="w-4 h-4 rounded-full border-2 border-[#FF0F73]/30 border-t-[#FF0F73] animate-spin" />
+                    <span className="text-caption text-[#64748B]">Loading activity...</span>
                   </div>
-                ))}
+                ) : activities.length === 0 ? (
+                  <p className="text-caption text-[#64748B] py-2">No recent activity yet. Start booking experiences!</p>
+                ) : (
+                  activities.map((activity, i) => (
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-white/[0.06] last:border-0">
+                      <div className="w-2 h-2 rounded-full bg-[#FF0F73]" />
+                      <p className="flex-1 text-body-sm text-[#CBD5E1]">{activity.action}</p>
+                      <span className="text-caption text-[#64748B]">{activity.time}</span>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>

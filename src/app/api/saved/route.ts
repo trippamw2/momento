@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     const limit = Math.min(50, Math.max(1, parseInt(params.limit ?? "20")));
     const offset = (page - 1) * limit;
 
-    const supabase = (await import("@/lib/supabase-server")).createServerClient();
+    const supabase = createAdminClient();
     let query = supabase
       .from("saved_items")
       .select("*, experience:experience_id(id, title, slug, subtitle, price, currency, location, duration, rating, review_count, category, images:experience_images(url, alt, is_primary))", { count: "exact" })

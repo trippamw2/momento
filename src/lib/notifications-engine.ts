@@ -15,7 +15,18 @@ export type NotificationType =
   | "review_request"
   | "new_experience"
   | "flash_sale"
-  | "achievement_unlocked";
+  | "achievement_unlocked"
+  // Wallet & enhanced loyalty notifications
+  | "wallet_deposit"
+  | "wallet_payment"
+  | "wallet_transfer_in"
+  | "wallet_transfer_out"
+  | "wallet_low_balance"
+  | "cashback_credited"
+  | "badge_earned"
+  | "gift_card_transferred"
+  | "gift_card_expiring"
+  | "corporate_allocation";
 
 export interface AppNotification {
   id: string;
@@ -75,16 +86,34 @@ function deriveActionLabel(type: string): string | undefined {
       return "View Booking";
     case "gift_received":
     case "gift_card_purchased":
+    case "gift_card_transferred":
       return "View Gift";
     case "points_earned":
     case "tier_upgrade":
     case "achievement_unlocked":
+    case "badge_earned":
       return "View Rewards";
     case "review_request":
       return "Write Review";
     case "new_experience":
     case "flash_sale":
       return "Browse";
+    case "wallet_deposit":
+      return "View Wallet";
+    case "wallet_payment":
+      return "View Booking";
+    case "wallet_transfer_in":
+      return "View Wallet";
+    case "wallet_transfer_out":
+      return "View Wallet";
+    case "wallet_low_balance":
+      return "Top Up";
+    case "cashback_credited":
+      return "View Wallet";
+    case "gift_card_expiring":
+      return "Use Now";
+    case "corporate_allocation":
+      return "View Account";
     default:
       return undefined;
   }
@@ -95,19 +124,33 @@ function deriveActionHref(type: string, data: Record<string, unknown>): string |
     case "booking_confirmed":
     case "booking_cancelled":
     case "payment_success":
+    case "wallet_payment":
       return "/bookings";
     case "gift_received":
     case "gift_card_purchased":
+    case "gift_card_transferred":
       return "/gift/redeem";
+    case "gift_card_expiring":
+      return data.gift_card_id ? `/gift/${data.gift_card_id}` : "/gift";
     case "points_earned":
     case "tier_upgrade":
     case "achievement_unlocked":
+    case "badge_earned":
       return "/loyalty";
     case "review_request":
       return data.experience_id ? `/experiences/${data.experience_id}` : "/experiences";
     case "new_experience":
     case "flash_sale":
       return "/experiences";
+    case "wallet_deposit":
+    case "wallet_transfer_in":
+    case "wallet_transfer_out":
+    case "cashback_credited":
+      return "/wallet";
+    case "wallet_low_balance":
+      return "/wallet/top-up";
+    case "corporate_allocation":
+      return "/corporate";
     default:
       return undefined;
   }

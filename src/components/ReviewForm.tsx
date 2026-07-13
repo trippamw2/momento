@@ -5,11 +5,12 @@ import Image from "next/image";
 
 interface ReviewFormProps {
   experienceId: string;
+  bookingId?: string;
   onSubmitted?: () => void;
   onCancel?: () => void;
 }
 
-export default function ReviewForm({ experienceId, onSubmitted, onCancel }: ReviewFormProps) {
+export default function ReviewForm({ experienceId, bookingId, onSubmitted, onCancel }: ReviewFormProps) {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [text, setText] = useState("");
@@ -53,26 +54,56 @@ export default function ReviewForm({ experienceId, onSubmitted, onCancel }: Revi
     setSubmitting(true);
     setError("");
 
-    // Simulate API call
-    await new Promise((r) => setTimeout(r, 800));
+    // Try real API first
+    let apiSuccess = false;
+    const token = typeof window !== "undefined" ? localStorage.getItem("experio-auth-token") : null;
+    if (bookingId && token) {
+      try {
+        const body: Record<string, unknown> = {
+          booking_id: bookingId,
+          experience_id: experienceId,
+          rating,
+          body: text.trim(),
+        };
+        if (photos.length > 0) body.images = photos;
+        const res = await fetch("/api/reviews", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+        if (res.ok) {
+          apiSuccess = true;
+        } else {
+          const err = await res.json().catch(() => ({}));
+          console.warn("API review submission failed:", err.error || res.status);
+        }
+      } catch (e) {
+        console.warn("API review submission error:", e);
+      }
+    }
 
-    // Save to localStorage for persistence
-    try {
-      const key = `EXPERIO-reviews-${experienceId}`;
-      const existing = JSON.parse(localStorage.getItem(key) || "[]");
-      existing.unshift({
-        id: `rev-${Date.now()}`,
-        author: "You",
-        rating,
-        text: text.trim(),
-        date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-        timestamp: Date.now(),
-        photos: photos.length > 0 ? photos : undefined,
-        verified: true,
-      });
-      localStorage.setItem(key, JSON.stringify(existing));
-    } catch {
-      console.warn("Failed to save review");
+    if (!apiSuccess) {
+      // Fallback: save to localStorage
+      try {
+        const key = `EXPERIO-reviews-${experienceId}`;
+        const existing = JSON.parse(localStorage.getItem(key) || "[]");
+        existing.unshift({
+          id: `rev-${Date.now()}`,
+          author: "You",
+          rating,
+          text: text.trim(),
+          date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+          timestamp: Date.now(),
+          photos: photos.length > 0 ? photos : undefined,
+          verified: true,
+        });
+        localStorage.setItem(key, JSON.stringify(existing));
+      } catch {
+        console.warn("Failed to save review to localStorage");
+      }
     }
 
     setSubmitting(false);

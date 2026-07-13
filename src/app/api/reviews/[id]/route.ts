@@ -1,13 +1,12 @@
 import { getUser, json, handleRouteError, parseBody } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const supabase = createServerClient();
+    const admin = createAdminClient();
 
-    const { data: review, error } = await supabase
+    const { data: review, error } = await admin
       .from("reviews")
       .select("*, user:user_id(full_name, avatar_url), experience:experience_id(title, slug)")
       .eq("id", id)
@@ -47,15 +46,15 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const isAdmin = user.role === "admin";
 
     if (!isOwner && !isAdmin) {
-      const supabase = createServerClient();
-      const { data: partner } = await supabase
+      const admin2 = createAdminClient();
+      const { data: partner } = await admin2
         .from("partners")
         .select("id")
         .eq("user_id", user.id)
         .single();
 
       if (partner) {
-        const { data: exp } = await supabase
+        const { data: exp } = await admin2
           .from("experiences")
           .select("partner_id")
           .eq("id", review.experience_id)

@@ -267,16 +267,27 @@ export default function Home() {
       <div className="relative z-10 px-4 sm:px-8 pt-6 sm:pt-8">
         <button
           onClick={handleSurpriseMe}
-          className="group w-full sm:w-auto px-6 py-4 rounded-2xl bg-gradient-to-r from-[#FF0F73]/15 to-[#FF7A1A]/15 border border-[#FF7A1A]/25 hover:border-[#FF7A1A]/50 text-white transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(255, 122, 26, 0.15)]"
+          disabled={loading || experiences.length === 0}
+          className="group w-full sm:w-auto px-6 py-4 rounded-2xl bg-gradient-to-r from-[#FF0F73]/15 to-[#FF7A1A]/15 border border-[#FF7A1A]/25 hover:border-[#FF7A1A]/50 text-white transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(255, 122, 26, 0.15)] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-none disabled:hover:border-[#FF7A1A]/25"
         >
-          <span className="text-2xl">🎲</span>
+          {loading ? (
+            <div className="w-5 h-5 rounded-full border-2 border-[#FF7A1A]/30 border-t-[#FF7A1A] animate-spin" />
+          ) : (
+            <span className="text-2xl">🎲</span>
+          )}
           <div className="text-left">
             <p className="text-body-sm font-bold">Surprise Me</p>
-            <p className="text-caption text-[#CBD5E1]">Feeling lucky? Let us pick for you</p>
+            {loading ? (
+              <p className="text-caption text-[#CBD5E1] animate-pulse">Finding something for you...</p>
+            ) : (
+              <p className="text-caption text-[#CBD5E1]">Feeling lucky? Let us pick for you</p>
+            )}
           </div>
-          <svg className="w-5 h-5 text-[#FF7A1A] group-hover:translate-x-1 transition-transform shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
+          {!loading && (
+            <svg className="w-5 h-5 text-[#FF7A1A] group-hover:translate-x-1 transition-transform shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          )}
         </button>
       </div>
 

@@ -1,5 +1,5 @@
 import { getUser, json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
   try {
@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     const code = params.code;
     if (!code) return json({ error: "code query parameter is required" }, 400);
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
     const { data: giftCard } = await supabase
       .from("gift_cards")
       .select("id, amount, balance, currency, status, expires_at, recipient_name, sender_name")

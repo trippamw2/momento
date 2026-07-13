@@ -1,5 +1,5 @@
 import { getUser, json, handleRouteError, parseBody } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function POST(request: Request) {
   try {
@@ -15,8 +15,8 @@ export async function POST(request: Request) {
 
     if (!body.event_name) return json({ error: "event_name is required" }, 400);
 
-    const supabase = createServerClient();
-    const { error } = await supabase
+    const admin = createAdminClient();
+    const { error } = await admin
       .from("analytics_events")
       .insert({
         event_name: body.event_name,

@@ -37,6 +37,7 @@ interface PartnerExperience {
   name: string;
   bookings: number;
   rating: number;
+  reviewCount: number;
   revenue: number;
   status: string;
 }
@@ -44,6 +45,8 @@ interface PartnerExperience {
 export default function PartnerDashboardPage() {
   const [stats, setStats] = useState<DashboardStats>(DEFAULT_STATS);
   const [bookings, setBookings] = useState<RecentBooking[]>([]);
+  const [thisMonthBookings, setThisMonthBookings] = useState(0);
+  const [thisMonthRevenue, setThisMonthRevenue] = useState(0);
   const [statsLoading, setStatsLoading] = useState(true);
   const { allowed: isPartner, loading: authLoading } = useAuthGuard({ requiredRole: "partner" });
   const [checkInOpen, setCheckInOpen] = useState(false);
@@ -73,13 +76,34 @@ export default function PartnerDashboardPage() {
           const totalEarnings = completedBookings.reduce((sum: number, b: Record<string, unknown>) => sum + Number(b.total_amount || 0), 0);
           const confirmedBookings = bookingList.filter((b: Record<string, unknown>) => b.status === "confirmed");
 
+          // Compute this month stats
+          const now = new Date();
+          const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+          const thisMonthBookingsList = bookingList.filter((b: Record<string, unknown>) => {
+            const d = new Date(b.booking_date || b.created_at || "");
+            return d >= thisMonthStart;
+          });
+          const thisMonthTotal = thisMonthBookingsList.length;
+          const thisMonthRevenueTotal = thisMonthBookingsList
+            .filter((b: Record<string, unknown>) => b.status === "completed" || b.status === "confirmed")
+            .reduce((sum: number, b: Record<string, unknown>) => sum + Number(b.total_amount || 0), 0);
+
+          setThisMonthBookings(thisMonthTotal);
+          setThisMonthRevenue(thisMonthRevenueTotal);
+
+          const expWithRatings = experiences.filter((e) => e.rating > 0);
+          const avgRating = expWithRatings.length > 0
+            ? parseFloat((expWithRatings.reduce((s, e) => s + e.rating, 0) / expWithRatings.length).toFixed(1))
+            : 0;
+          const totalReviewCount = experiences.reduce((s, e) => s + e.reviewCount, 0);
+
           setStats({
             totalExperiences: experiences.length || 0,
             activeExperiences: experiences.filter(e => e.status === "active").length || 0,
             totalBookings,
             totalEarnings,
-            averageRating: 0,
-            reviewCount: 0,
+            averageRating: avgRating,
+            reviewCount: totalReviewCount,
           });
 
           // Map bookings to RecentBooking format
@@ -122,6 +146,7 @@ export default function PartnerDashboardPage() {
             name: String(e.title ?? e.name ?? "Untitled"),
             bookings: Number(e.booking_count ?? e.bookings ?? 0),
             rating: Number(e.rating ?? 0),
+            reviewCount: Number(e.review_count ?? 0),
             revenue: Number(e.revenue ?? e.total_revenue ?? 0),
             status: String(e.status ?? "draft"),
           }));
@@ -358,19 +383,19 @@ export default function PartnerDashboardPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-body-sm text-[#94A3B8]">Bookings</span>
-                  <span className="text-body-sm font-semibold text-[#F1F5F9]">12</span>
+                  <span className="text-body-sm font-semibold text-[#F1F5F9]">{thisMonthBookings}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-body-sm text-[#94A3B8]">Revenue</span>
-                  <span className="text-body-sm font-semibold text-[#F1F5F9]">MK 840,000</span>
+                  <span className="text-body-sm font-semibold text-[#F1F5F9]">MK {thisMonthRevenue.toLocaleString()}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-body-sm text-[#94A3B8]">Avg. per booking</span>
-                  <span className="text-body-sm font-semibold text-[#F1F5F9]">MK 70,000</span>
+                  <span className="text-body-sm font-semibold text-[#F1F5F9]">MK {thisMonthBookings > 0 ? Math.round(thisMonthRevenue / thisMonthBookings).toLocaleString() : "0"}</span>
                 </div>
                 <div className="flex items-center justify-between pt-2 border-t border-white/[0.08]">
                   <span className="text-body-sm font-semibold text-[#F1F5F9]">Projected (30d)</span>
-                  <span className="text-body-sm font-bold text-emerald-400">MK 1,050,000</span>
+                  <span className="text-body-sm font-bold text-emerald-400">MK {(thisMonthRevenue * 2).toLocaleString()}</span>
                 </div>
               </div>
             </div>

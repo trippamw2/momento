@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     if (!user) return json({ error: "Unauthorized" }, 401);
 
     const body = await request.json();
-    const { amount, recipient_name, recipient_email, sender_name, message, delivery_method, occasion, schedule_date } = body;
+    const { amount, recipient_name, recipient_email, sender_name, message, delivery_method, occasion, schedule_date, design } = body;
 
     if (!amount || amount < 1000) {
       return badRequest("Minimum gift card amount is 1,000 MWK");
@@ -61,6 +61,7 @@ export async function POST(request: Request) {
                 message: message || null,
                 delivery_method: delivery_method || "email",
                 occasion: occasion || null,
+                design: design || null,
               },
             },
           }),

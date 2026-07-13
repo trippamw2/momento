@@ -1,5 +1,4 @@
 import { getUser, json, handleRouteError, parseBody, getQueryParams } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
@@ -7,7 +6,7 @@ export async function GET(request: Request) {
     await getUser(request);
     const params = getQueryParams(request.url);
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
     let query = supabase
       .from("review_flags")
       .select("*, review:review_id(*, user:user_id(full_name)), flagged_by_user:flagged_by(full_name)", { count: "exact" });

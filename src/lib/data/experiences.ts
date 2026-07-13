@@ -20,7 +20,7 @@ export const navItems: NavItem[] = [
   { label: "Discover", href: "/", icon: "compass" },
   { label: "Gift", href: "/gift", icon: "gift" },
   { label: "Saved Moments", href: "/saved", icon: "heart" },
-  { label: "Memories", href: "/bookings", icon: "calendar" },
+  { label: "Bookings", href: "/bookings", icon: "calendar" },
   { label: "Partners", href: "/profile", icon: "briefcase" },
 ];
 

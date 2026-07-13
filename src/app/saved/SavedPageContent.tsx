@@ -8,6 +8,62 @@ import { Experience } from "@/lib/types";
 import { trackSaved } from "@/lib/recommendation-engine";
 import { getRecentlyViewed, RecentlyViewedItem } from "@/lib/recently-viewed";
 
+// Minimal shape the API returns for nested experience data on saved items
+interface ApiSavedExperience {
+  id: string;
+  title: string;
+  slug?: string;
+  subtitle?: string;
+  price: number;
+  currency: string;
+  location: string;
+  duration?: string;
+  rating: number;
+  review_count: number;
+  category: string;
+  images?: { url: string; alt?: string; is_primary?: boolean }[];
+}
+
+interface ApiSavedItem {
+  id: string;
+  experience_id: string;
+  collection_id: string | null;
+  experience: ApiSavedExperience;
+}
+
+/** Convert an API saved item's nested experience into a partial Experience usable by this page */
+function toMockExperience(apiExp: ApiSavedExperience): Experience | null {
+  if (!apiExp || !apiExp.id) return null;
+  // Derive a city from location
+  const city = (apiExp.location || "").split(",")[0].trim() || apiExp.location;
+  const primary = apiExp.images?.find((i) => i.is_primary);
+  const image = primary?.url || apiExp.images?.[0]?.url || "";
+  return {
+    id: apiExp.id,
+    title: apiExp.title || "Untitled",
+    subtitle: apiExp.subtitle || "",
+    description: "",
+    image,
+    images: (apiExp.images || []).map((i) => i.url),
+    price: apiExp.price ?? 0,
+    currency: apiExp.currency || "MWK",
+    partner: "",
+    location: apiExp.location || "",
+    city,
+    distance: "",
+    duration: apiExp.duration || "",
+    mood: [],
+    rating: apiExp.rating ?? 0,
+    reviewCount: apiExp.review_count ?? 0,
+    category: (apiExp.category as Experience["category"]) || "Date",
+    featured: false,
+    includes: [],
+    capacity: 0,
+    coordinates: { lat: 0, lng: 0 },
+    reviews: [],
+  };
+}
+
 interface Collection {
   id: string;
   name: string;
@@ -73,19 +129,34 @@ async function apiUnsave(savedId: string): Promise<boolean> {
   return false;
 }
 
-async function apiFetchSaved(): Promise<string[]> {
+async function apiFetchSavedItems(): Promise<{ items: ApiSavedItem[]; ids: string[] }> {
   try {
     const token = localStorage.getItem("experio-auth-token");
-    if (!token) return [];
+    if (!token) return { items: [], ids: [] };
     const res = await fetch("/api/saved?limit=100", {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (res.ok) {
       const d = await res.json();
-      return (d.saved || []).map((s: { experience_id: string }) => s.experience_id);
+      const items: ApiSavedItem[] = d.saved || [];
+      const ids = items.map((s) => s.experience_id);
+      return { items, ids };
     }
   } catch { /* offline fallback */ }
-  return [];
+  return { items: [], ids: [] };
+}
+
+async function apiAssignCollection(savedId: string, collectionId: string | null): Promise<boolean> {
+  try {
+    const token = localStorage.getItem("experio-auth-token");
+    if (!token) return false;
+    const res = await fetch(`/api/saved/${savedId}`, {
+      method: "PATCH",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ collection_id: collectionId }),
+    });
+    return res.ok;
+  } catch { return false; }
 }
 
 function loadFavorites(): string[] {
@@ -122,14 +193,29 @@ export default function SavedPageContent() {
   const [favoriteIds, setFavoriteIds] = useState<string[]>(loadFavorites);
   const [savedIdMap, setSavedIdMap] = useState<Record<string, string>>({});
 
+  const [apiExperiences, setApiExperiences] = useState<Map<string, Experience>>(new Map());
+  const [apiSavedItems, setApiSavedItems] = useState<ApiSavedItem[]>([]);
+
   // Sync saved items from DB on mount
   useEffect(() => {
     const syncFromDB = async () => {
-      const dbIds = await apiFetchSaved();
-      if (dbIds.length > 0) {
+      const { items, ids } = await apiFetchSavedItems();
+      if (items.length > 0) {
+        setApiSavedItems(items);
+        // Convert API experiences to Experience type and build ID map
+        const expMap = new Map<string, Experience>();
+        items.forEach((item) => {
+          const conv = toMockExperience(item.experience);
+          if (conv) expMap.set(item.experience_id, conv);
+        });
+        setApiExperiences(expMap);
+        // Build savedIdMap from API IDs
+        const idMap: Record<string, string> = {};
+        items.forEach((item) => { idMap[item.experience_id] = item.id; });
+        setSavedIdMap(idMap);
         setState(prev => ({
           ...prev,
-          savedIds: [...new Set([...prev.savedIds, ...dbIds])],
+          savedIds: [...new Set([...prev.savedIds, ...ids])],
         }));
       }
     };
@@ -139,9 +225,19 @@ export default function SavedPageContent() {
   useEffect(() => { saveState(state); }, [state]);
   useEffect(() => { saveFavorites(favoriteIds); }, [favoriteIds]);
 
+  // Combine mock experiences with API-fetched experiences for display
+  const allExperiences = useMemo(() => {
+    const merged = [...experiences];
+    // Add API experiences that aren't already in mock data (by ID)
+    apiExperiences.forEach((exp) => {
+      if (!merged.find((m) => m.id === exp.id)) merged.push(exp);
+    });
+    return merged;
+  }, [apiExperiences]);
+
   const savedExperiences = useMemo(
-    () => experiences.filter((e) => state.savedIds.includes(e.id)),
-    [state.savedIds]
+    () => allExperiences.filter((e) => state.savedIds.includes(e.id)),
+    [state.savedIds, allExperiences]
   );
 
   const toggleSave = useCallback(async (id: string) => {
@@ -161,7 +257,8 @@ export default function SavedPageContent() {
     }
   }, [state.savedIds, savedIdMap]);
 
-  const addToCollection = useCallback((experienceId: string, collectionId: string) => {
+  const addToCollection = useCallback(async (experienceId: string, collectionId: string) => {
+    // Optimistic local update
     setState((prev) => ({
       ...prev,
       collections: prev.collections.map((c) =>
@@ -170,7 +267,10 @@ export default function SavedPageContent() {
           : c
       ),
     }));
-  }, []);
+    // Persist to API
+    const savedId = savedIdMap[experienceId];
+    if (savedId) await apiAssignCollection(savedId, collectionId);
+  }, [savedIdMap]);
 
   const removeFromCollection = useCallback((experienceId: string, collectionId: string) => {
     setState((prev) => ({
@@ -203,13 +303,13 @@ export default function SavedPageContent() {
     let list: Experience[];
     switch (sidebarTab) {
       case "all": list = savedExperiences; break;
-      case "favorites": list = experiences.filter((e) => favoriteIds.includes(e.id)); break;
+      case "favorites": list = allExperiences.filter((e) => favoriteIds.includes(e.id)); break;
       case "want-to-try": list = savedExperiences.filter((e) => e.category === "Date" || e.mood.includes("Active")); break;
       case "events": list = savedExperiences.filter((e) => e.category === "Escape" || e.category === "Celebrate"); break;
       case "gift-ideas": list = savedExperiences.filter((e) => e.mood.includes("Luxurious") || e.mood.includes("Romantic")); break;
       case "recently-viewed": {
         const rv = getRecentlyViewed();
-        list = rv.map((item) => experiences.find((e) => e.id === item.id)).filter(Boolean) as Experience[];
+        list = rv.map((item) => allExperiences.find((e) => e.id === item.id)).filter(Boolean) as Experience[];
         break;
       }
       default: list = savedExperiences;
@@ -230,7 +330,7 @@ export default function SavedPageContent() {
   const getSidebarCount = (key: SidebarTab): number => {
     switch (key) {
       case "all": return savedExperiences.length;
-      case "favorites": return experiences.filter((e) => favoriteIds.includes(e.id)).length;
+      case "favorites": return allExperiences.filter((e) => favoriteIds.includes(e.id)).length;
       case "want-to-try": return savedExperiences.filter((e) => e.category === "Date" || e.mood.includes("Active")).length;
       case "events": return savedExperiences.filter((e) => e.category === "Escape" || e.category === "Celebrate").length;
       case "gift-ideas": return savedExperiences.filter((e) => e.mood.includes("Luxurious") || e.mood.includes("Romantic")).length;

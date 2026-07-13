@@ -2,6 +2,8 @@ import { json, handleRouteError } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
 import { sendBookingConfirmation } from "@/lib/brevo";
 import { sendGiftCardDelivery } from "@/lib/gift-delivery";
+import { depositToWallet } from "@/lib/wallet-engine";
+import { creditBookingPoints } from "@/lib/loyalty-server";
 
 /**
  * PayChangu Webhook Handler
@@ -120,11 +122,71 @@ export async function POST(request: Request) {
         }
       }
 
+      // Credit loyalty points for the booking
+      const expTitle = (booking.experiences as Record<string, unknown> | null)?.title as string || "Experience";
+      const pointsResult = await creditBookingPoints(
+        payment.user_id,
+        booking.total_price || payment.amount,
+        payment.booking_id,
+        expTitle
+      );
+      if ("error" in pointsResult) {
+        console.error("Failed to credit loyalty points:", pointsResult.error);
+      } else if (pointsResult.pointsEarned > 0) {
+        console.log(`Loyalty: user ${payment.user_id} earned ${pointsResult.pointsEarned} points for booking ${payment.booking_id}`);
+      }
+
       return json({ ok: true, message: "Booking confirmed" });
     }
 
     // ─────────────────────────────────────────
-    // CASE 2: Gift card payment
+    // CASE 2: Wallet deposit
+    // ─────────────────────────────────────────
+    if (metadata.type === "wallet_deposit") {
+      const depositResult = await depositToWallet(payment.user_id, payment.amount, {
+        description: "Wallet top-up via PayChangu",
+        paymentId: payment.id,
+      });
+
+      if ("error" in depositResult) {
+        console.error(`Wallet deposit failed for user ${payment.user_id}:`, depositResult.error);
+        return json({ ok: false, message: depositResult.error }, 500);
+      }
+
+      // Create notification
+      await admin.from("notifications").insert({
+        user_id: payment.user_id,
+        type: "wallet_deposit",
+        title: "Wallet topped up",
+        body: `MWK ${payment.amount.toLocaleString()} has been deposited to your wallet.`,
+        data: { payment_id: payment.id, new_balance: depositResult.newBalance },
+      });
+
+      // Award wallet_topup badge on first deposit
+      const { data: existingBadge } = await admin
+        .from("user_badges")
+        .select("id")
+        .eq("user_id", payment.user_id)
+        .eq("badge_id", "wallet_topup")
+        .maybeSingle();
+
+      if (!existingBadge) {
+        await admin.from("user_badges").insert({
+          user_id: payment.user_id,
+          badge_id: "wallet_topup",
+          badge_name: "Funded",
+          badge_description: "Deposit into your wallet",
+          badge_icon: "\u{1F4B0}",
+          badge_category: "milestone",
+        });
+      }
+
+      console.log(`Wallet deposit: user ${payment.user_id} received MWK ${payment.amount}, new balance ${depositResult.newBalance}`);
+      return json({ ok: true, message: "Wallet credited", new_balance: depositResult.newBalance });
+    }
+
+    // ─────────────────────────────────────────
+    // CASE 3: Gift card payment
     // ─────────────────────────────────────────
     if (metadata.type === "gift_card") {
       // Idempotency check: if this payment already has a gift_card_id, return the existing card

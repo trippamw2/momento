@@ -1,5 +1,4 @@
 import { getUser, json, handleRouteError, badRequest } from "@/lib/api-helpers";
-import { createServerClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
@@ -11,7 +10,7 @@ export async function GET(request: Request) {
     const conversation_id = url.searchParams.get("conversation_id");
     if (!conversation_id) return badRequest("conversation_id is required");
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
 
     // Verify user is part of this conversation
     const { data: conv } = await supabase
@@ -56,7 +55,7 @@ export async function POST(request: Request) {
     const { conversation_id, content } = await request.json();
     if (!conversation_id || !content?.trim()) return badRequest("conversation_id and content are required");
 
-    const supabase = createServerClient();
+    const supabase = createAdminClient();
 
     // Verify user is part of this conversation
     const { data: conv } = await supabase

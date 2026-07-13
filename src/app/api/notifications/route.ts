@@ -12,8 +12,8 @@ export async function GET(request: Request) {
     const limit = Math.min(50, Math.max(1, parseInt(params.limit ?? "20")));
     const offset = (page - 1) * limit;
 
-    const supabase = createServerClient();
-    let query = supabase
+    const admin = createAdminClient();
+    let query = admin
       .from("notifications")
       .select("*", { count: "exact" })
       .eq("user_id", user.id);

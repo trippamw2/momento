@@ -3,7 +3,30 @@
 import { useState } from "react";
 
 // ─── Card Color Variants ───
-export const GIFT_CARD_VARIANTS = [
+// Each variant includes Tailwind classes for the React component
+// plus hex color values for canvas (PNG) and PDF rendering.
+export interface GiftCardVariant {
+  id: string;
+  label: string;
+  gradient: string;
+  accent: string;
+  textColor: string;
+  textColorSecondary: string;
+  chipColor: string;
+  badgeBg: string;
+  /** Hex colors for canvas/PDF gradient */
+  canvas: {
+    from: string;
+    via: string;
+    to: string;
+    accent: string;
+    /** true = white text, false = dark text */
+    lightText: boolean;
+    chip: string;
+  };
+}
+
+export const GIFT_CARD_VARIANTS: GiftCardVariant[] = [
   {
     id: "midnight",
     label: "Midnight Black",
@@ -13,6 +36,14 @@ export const GIFT_CARD_VARIANTS = [
     textColorSecondary: "text-gray-300",
     chipColor: "from-yellow-300 to-yellow-500",
     badgeBg: "bg-white/10",
+    canvas: {
+      from: "#111827",
+      via: "#1f2937",
+      to: "#111827",
+      accent: "#6b7280",
+      lightText: true,
+      chip: "#fbbf24",
+    },
   },
   {
     id: "rose-gold",
@@ -23,6 +54,14 @@ export const GIFT_CARD_VARIANTS = [
     textColorSecondary: "text-rose-50",
     chipColor: "from-yellow-200 to-yellow-400",
     badgeBg: "bg-white/20",
+    canvas: {
+      from: "#fda4af",
+      via: "#fb7185",
+      to: "#f472b6",
+      accent: "#f9a8d4",
+      lightText: true,
+      chip: "#fde68a",
+    },
   },
   {
     id: "platinum",
@@ -33,6 +72,14 @@ export const GIFT_CARD_VARIANTS = [
     textColorSecondary: "text-gray-500",
     chipColor: "from-yellow-400 to-amber-500",
     badgeBg: "bg-black/5",
+    canvas: {
+      from: "#f1f5f9",
+      via: "#f9fafb",
+      to: "#e2e8f0",
+      accent: "#94a3b8",
+      lightText: false,
+      chip: "#f59e0b",
+    },
   },
   {
     id: "gold",
@@ -43,6 +90,14 @@ export const GIFT_CARD_VARIANTS = [
     textColorSecondary: "text-amber-50",
     chipColor: "from-yellow-200 to-yellow-400",
     badgeBg: "bg-white/20",
+    canvas: {
+      from: "#fbbf24",
+      via: "#facc15",
+      to: "#f59e0b",
+      accent: "#fde68a",
+      lightText: true,
+      chip: "#fde68a",
+    },
   },
   {
     id: "signature",
@@ -53,6 +108,14 @@ export const GIFT_CARD_VARIANTS = [
     textColorSecondary: "text-white/80",
     chipColor: "from-yellow-200 to-yellow-400",
     badgeBg: "bg-white/15",
+    canvas: {
+      from: "#FF0F73",
+      via: "#FF5B3A",
+      to: "#FFA22C",
+      accent: "#FF7A1A",
+      lightText: true,
+      chip: "#fde68a",
+    },
   },
   {
     id: "ocean",
@@ -63,8 +126,16 @@ export const GIFT_CARD_VARIANTS = [
     textColorSecondary: "text-blue-100",
     chipColor: "from-yellow-200 to-yellow-400",
     badgeBg: "bg-white/10",
+    canvas: {
+      from: "#1d4ed8",
+      via: "#2563eb",
+      to: "#0891b2",
+      accent: "#22d3ee",
+      lightText: true,
+      chip: "#fde68a",
+    },
   },
-] as const;
+];
 
 export type GiftCardVariantId = (typeof GIFT_CARD_VARIANTS)[number]["id"];
 

@@ -1,5 +1,6 @@
 import { getUser, json, handleRouteError } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
+import { creditBookingPoints } from "@/lib/loyalty-server";
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -10,7 +11,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const admin = createAdminClient();
     const { data: booking } = await admin
       .from("bookings")
-      .select("user_id, experience_id, status")
+      .select("user_id, experience_id, status, total_price")
       .eq("id", id)
       .single();
 
@@ -24,7 +25,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
     const { data: experience } = await admin
       .from("experiences")
-      .select("partner_id")
+      .select("partner_id, title")
       .eq("id", booking.experience_id)
       .single();
 
@@ -53,6 +54,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       body: "Your experience booking has been confirmed.",
       data: { booking_id: id, experience_id: booking.experience_id },
     });
+
+    // Credit loyalty points for the booking
+    const pointsResult = await creditBookingPoints(
+      booking.user_id,
+      booking.total_price || 0,
+      id,
+      experience?.title || "Experience"
+    );
+    if ("error" in pointsResult) {
+      console.error("Failed to credit loyalty points:", pointsResult.error);
+    }
 
     return json({ message: "Booking confirmed" });
   } catch (error) {

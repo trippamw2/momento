@@ -1,4 +1,5 @@
 import jsPDF from "jspdf";
+import { GIFT_CARD_VARIANTS, type GiftCardVariant } from "@/components/GiftCard";
 
 export interface GiftCardPDFData {
   recipientName: string;
@@ -10,93 +11,113 @@ export interface GiftCardPDFData {
   occasion?: string;
   qrDataUrl?: string;
   expiresAt: string;
+  /** Variant id from GIFT_CARD_VARIANTS (defaults to "signature") */
+  variantId?: string;
+}
+
+/** Parse hex color to RGB tuple for jsPDF */
+function hexToRgb(hex: string): [number, number, number] {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) return [0, 0, 0];
+  return [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)];
 }
 
 export function generateGiftPDF(data: GiftCardPDFData, filename: string = "experio-gift-card.pdf"): void {
+  // Resolve the variant
+  const variant = GIFT_CARD_VARIANTS.find((v) => v.id === (data.variantId || "signature")) || GIFT_CARD_VARIANTS[4];
+  const cv = variant.canvas;
+  const [fromR, fromG, fromB] = hexToRgb(cv.from);
+  const [viaR, viaG, viaB] = hexToRgb(cv.via);
+  const [toR, toG, toB] = hexToRgb(cv.to);
+  const [accentR, accentG, accentB] = hexToRgb(cv.accent);
+
   const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a5" });
   const w = doc.internal.pageSize.getWidth();
   const h = doc.internal.pageSize.getHeight();
 
-  // ── Dark background ──
-  doc.setFillColor(5, 7, 11);
-  doc.rect(0, 0, w, h, "F");
-
-  // ── Gradient overlay (simulated with rectangles) ──
+  // ── Gradient background (variant themed) ──
   const steps = 40;
   for (let i = 0; i < steps; i++) {
     const t = i / steps;
-    const r = Math.round(5 + t * 10);
-    const g = Math.round(7 + t * 10);
-    const b = Math.round(11 + t * 15);
+    const r = Math.round(fromR + (toR - fromR) * t);
+    const g = Math.round(fromG + (toG - fromG) * t);
+    const b = Math.round(fromB + (toB - fromB) * t);
     doc.setFillColor(r, g, b);
     doc.rect(0, (h / steps) * i, w, h / steps + 1, "F");
   }
 
-  // ── Decorative circles ──
-  doc.setFillColor(255, 45, 122, 0.06);
+  // ── Decorative circles using accent ──
+  doc.setFillColor(accentR, accentG, accentB, 0.08);
   doc.circle(w - 30, -10, 60, "F");
-  doc.setFillColor(255, 122, 24, 0.04);
+  doc.setFillColor(accentR, accentG, accentB, 0.05);
   doc.circle(-20, h + 10, 50, "F");
 
   // ── Top accent line ──
-  doc.setFillColor(255, 45, 122);
+  doc.setFillColor(accentR, accentG, accentB);
   doc.rect(0, 0, w, 3, "F");
 
+  // Determine text colors based on variant
+  const textPrimary = cv.lightText ? [255, 255, 255] as const : [30, 41, 59] as const;
+  const textSecondary = cv.lightText ? [148, 163, 184] as const : [100, 116, 139] as const;
+  const textMuted = cv.lightText ? [100, 116, 139] as const : [71, 85, 105] as const;
+  const dividerColor = cv.lightText ? 255 : 0;
+  const dividerOpacity = cv.lightText ? 0.08 : 0.15;
+
   // ── Brand ──
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(textPrimary[0], textPrimary[1], textPrimary[2]);
   doc.setFontSize(18);
   doc.setFont("helvetica", "bold");
   doc.text("Experio", 15, 20);
 
-  doc.setTextColor(255, 45, 122);
+  doc.setTextColor(accentR, accentG, accentB);
   doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
   doc.text("GIFT CARD", 15, 26);
 
   // ── Decorative divider ──
-  doc.setDrawColor(255, 255, 255, 0.08);
+  doc.setDrawColor(dividerColor, dividerColor, dividerColor, dividerOpacity);
   doc.setLineWidth(0.5);
   doc.line(15, 32, w - 15, 32);
 
   // ── Occasion badge ──
   if (data.occasion) {
-    doc.setFillColor(255, 45, 122, 0.15);
+    doc.setFillColor(accentR, accentG, accentB, 0.15);
     doc.roundedRect(15, 37, doc.getTextWidth(data.occasion) + 8, 6, 3, 3, "F");
-    doc.setTextColor(255, 45, 122);
+    doc.setTextColor(accentR, accentG, accentB);
     doc.setFontSize(7);
     doc.setFont("helvetica", "bold");
     doc.text(data.occasion, 19, 42);
   }
 
   // ── Amount ──
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(textPrimary[0], textPrimary[1], textPrimary[2]);
   doc.setFontSize(28);
   doc.setFont("helvetica", "bold");
   const amountLabel = `${data.currency} ${data.amount.toLocaleString()}`;
   doc.text(amountLabel, 15, 58);
 
   // ── To / From ──
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(textSecondary[0], textSecondary[1], textSecondary[2]);
   doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
   doc.text("TO", 15, 70);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(textPrimary[0], textPrimary[1], textPrimary[2]);
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
   doc.text(data.recipientName, 15, 78);
 
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(textSecondary[0], textSecondary[1], textSecondary[2]);
   doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
   doc.text("FROM", 80, 70);
-  doc.setTextColor(203, 213, 225);
+  doc.setTextColor(textPrimary[0], textPrimary[1], textPrimary[2]);
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
   doc.text(data.senderName, 80, 78);
 
   // ── Message ──
   if (data.message) {
-    doc.setTextColor(148, 163, 184);
+    doc.setTextColor(textSecondary[0], textSecondary[1], textSecondary[2]);
     doc.setFontSize(7);
     doc.setFont("helvetica", "italic");
     const msg = `"${data.message}"`;
@@ -109,12 +130,13 @@ export function generateGiftPDF(data: GiftCardPDFData, filename: string = "exper
     }
   }
 
-  // ── Code ──
-  doc.setFillColor(17, 24, 39);
+  // ── Code badge ──
+  const codeBgColor = cv.lightText ? [17, 24, 39] as const : [241, 245, 249] as const;
+  doc.setFillColor(codeBgColor[0], codeBgColor[1], codeBgColor[2]);
   doc.roundedRect(15, 98, 100, 14, 4, 4, "F");
-  doc.setDrawColor(255, 255, 255, 0.08);
+  doc.setDrawColor(dividerColor, dividerColor, dividerColor, dividerOpacity);
   doc.roundedRect(15, 98, 100, 14, 4, 4, "S");
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(textPrimary[0], textPrimary[1], textPrimary[2]);
   doc.setFontSize(9);
   doc.setFont("courier", "bold");
   doc.text(data.code, 20, 108);
@@ -124,7 +146,7 @@ export function generateGiftPDF(data: GiftCardPDFData, filename: string = "exper
     try {
       const qrSize = 28;
       doc.addImage(data.qrDataUrl, "PNG", w - 15 - qrSize, 40, qrSize, qrSize);
-      doc.setTextColor(100, 116, 139);
+      doc.setTextColor(textMuted[0], textMuted[1], textMuted[2]);
       doc.setFontSize(5);
       doc.setFont("courier", "normal");
       doc.text(data.code, w - 15 - qrSize, 75);
@@ -134,17 +156,17 @@ export function generateGiftPDF(data: GiftCardPDFData, filename: string = "exper
   }
 
   // ── Bottom divider ──
-  doc.setDrawColor(255, 255, 255, 0.06);
+  doc.setDrawColor(dividerColor, dividerColor, dividerColor, dividerOpacity);
   doc.setLineWidth(0.3);
   doc.line(15, h - 20, w - 15, h - 20);
 
   // ── Footer ──
-  doc.setTextColor(100, 116, 139);
+  doc.setTextColor(textMuted[0], textMuted[1], textMuted[2]);
   doc.setFontSize(6);
   doc.setFont("helvetica", "normal");
   doc.text("Live The Moment — Experio", 15, h - 12);
 
-  doc.setTextColor(71, 85, 105);
+  doc.setTextColor(textMuted[0], textMuted[1], textMuted[2]);
   doc.setFontSize(5);
   doc.text(`Expires: ${new Date(data.expiresAt).toLocaleDateString()}`, 15, h - 7);
 

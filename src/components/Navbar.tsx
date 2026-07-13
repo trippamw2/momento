@@ -52,6 +52,7 @@ export default function Navbar() {
     { label: "Discover", href: "/discover" },
     { label: "Experiences", href: "/experiences" },
     { label: "ASK AI", href: "/ask-ai" },
+    { label: "Wallet", href: "/wallet" },
     { label: "Gift", href: "/gift" },
     { label: "Saved", href: "/saved" },
     { label: "Memories", href: "/bookings" },
