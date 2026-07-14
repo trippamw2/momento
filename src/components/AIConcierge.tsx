@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
@@ -162,7 +162,7 @@ export default function AIConcierge() {
                                   </button>
                                   <div className="absolute bottom-0 left-0 right-0 p-2.5">
                                     <p className="text-white font-semibold text-body-sm leading-tight line-clamp-1">{exp.title}</p>
-                                    <p className="text-white/50 text-caption mt-0.5 line-clamp-1">{exp.subtitle}</p>
+                                    <p className="text-[#64748B] text-caption mt-0.5 line-clamp-1">{exp.subtitle}</p>
                                     <p className="text-white font-semibold text-body-sm mt-1">MK {exp.price.toLocaleString()}</p>
                                   </div>
                                 </div>

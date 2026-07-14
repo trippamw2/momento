@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { getTravelMode } from "@/lib/geo";
 
@@ -28,7 +28,7 @@ export default function DistanceBadge({
 
   return (
     <span
-      className={`inline-flex items-center gap-1 text-caption font-medium text-[#94A3B8] ${className}`}
+      className={`inline-flex items-center gap-1 text-caption font-medium text-[#64748B] ${className}`}
     >
       {showIcon && <Icon />}
       <span>

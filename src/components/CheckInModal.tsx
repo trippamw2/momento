@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
@@ -233,11 +233,11 @@ export default function CheckInModal({ onClose }: Props) {
 
                     <div className="space-y-2 text-body-sm mb-5">
                       <div className="flex justify-between py-1.5 border-b border-white/[0.06]">
-                        <span className="text-[#94A3B8]">Experience</span>
+                        <span className="text-[#64748B]">Experience</span>
                         <span className="text-[#F1F5F9] font-medium">{booking.experience_title}</span>
                       </div>
                       <div className="flex justify-between py-1.5 border-b border-white/[0.06]">
-                        <span className="text-[#94A3B8]">Date</span>
+                        <span className="text-[#64748B]">Date</span>
                         <span className="text-[#F1F5F9]">
                           {new Date(booking.experience_date).toLocaleDateString("en-US", {
                             weekday: "short",
@@ -248,20 +248,20 @@ export default function CheckInModal({ onClose }: Props) {
                       </div>
                       {booking.experience_time && (
                         <div className="flex justify-between py-1.5 border-b border-white/[0.06]">
-                          <span className="text-[#94A3B8]">Time</span>
+                          <span className="text-[#64748B]">Time</span>
                           <span className="text-[#F1F5F9]">{booking.experience_time}</span>
                         </div>
                       )}
                       <div className="flex justify-between py-1.5 border-b border-white/[0.06]">
-                        <span className="text-[#94A3B8]">Guests</span>
+                        <span className="text-[#64748B]">Guests</span>
                         <span className="text-[#F1F5F9]">{booking.guests_count}</span>
                       </div>
                       <div className="flex justify-between py-1.5 border-b border-white/[0.06]">
-                        <span className="text-[#94A3B8]">Reference</span>
+                        <span className="text-[#64748B]">Reference</span>
                         <span className="text-[#F1F5F9] font-mono text-caption">{booking.booking_ref || booking.id.slice(0, 8).toUpperCase()}</span>
                       </div>
                       <div className="flex justify-between py-1.5">
-                        <span className="text-[#94A3B8]">Status</span>
+                        <span className="text-[#64748B]">Status</span>
                         <span className={`px-2 py-0.5 rounded-full text-caption font-medium ${
                           booking.status === "confirmed" || booking.status === "completed"
                             ? "bg-emerald-500/10 text-emerald-400"

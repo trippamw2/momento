@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef } from "react";
 import Image from "next/image";
@@ -116,7 +116,7 @@ export default function ReviewForm({ experienceId, bookingId, onSubmitted, onCan
       <div className="p-6 rounded-2xl bg-[#111827] border border-white/[0.08] text-center">
         <div className="text-3xl mb-3">🎉</div>
         <h3 className="text-body font-semibold text-white mb-1">Thank you for your review!</h3>
-        <p className="text-caption text-[#94A3B8]">Your feedback helps other explorers.</p>
+        <p className="text-caption text-[#64748B]">Your feedback helps other explorers.</p>
       </div>
     );
   }
@@ -127,7 +127,7 @@ export default function ReviewForm({ experienceId, bookingId, onSubmitted, onCan
 
       {/* Star Rating */}
       <div className="mb-4">
-        <p className="text-caption text-[#94A3B8] mb-2">Your rating</p>
+        <p className="text-caption text-[#64748B] mb-2">Your rating</p>
         <div className="flex items-center gap-1">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -157,7 +157,7 @@ export default function ReviewForm({ experienceId, bookingId, onSubmitted, onCan
 
       {/* Review Text */}
       <div className="mb-4">
-        <p className="text-caption text-[#94A3B8] mb-2">Your review</p>
+        <p className="text-caption text-[#64748B] mb-2">Your review</p>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -170,7 +170,7 @@ export default function ReviewForm({ experienceId, bookingId, onSubmitted, onCan
 
       {/* Photo Upload */}
       <div className="mb-4">
-        <p className="text-caption text-[#94A3B8] mb-2">
+        <p className="text-caption text-[#64748B] mb-2">
           Photos <span className="text-[#64748B]">(optional, up to 5)</span>
         </p>
         <div className="flex flex-wrap gap-2">
@@ -225,7 +225,7 @@ export default function ReviewForm({ experienceId, bookingId, onSubmitted, onCan
         {onCancel && (
           <button
             onClick={onCancel}
-            className="px-5 py-2.5 rounded-xl text-caption text-[#94A3B8] hover:text-white hover:bg-white/5 transition-all"
+            className="px-5 py-2.5 rounded-xl text-caption text-[#64748B] hover:text-white hover:bg-white/5 transition-all"
           >
             Cancel
           </button>

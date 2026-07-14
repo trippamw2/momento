@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo } from "react";
 
@@ -40,17 +40,17 @@ export default function BookingCalendar({ selectedDate, onSelect }: { selectedDa
   return (
     <div className="bg-[#111827] rounded-xl p-4 border border-white/[0.1]">
       <div className="flex items-center justify-between mb-4">
-        <button onClick={prevMonth} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors text-[#94A3B8]">
+        <button onClick={prevMonth} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors text-[#64748B]">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
         </button>
         <span className="text-body-sm font-semibold text-white">{MONTHS[month]} {year}</span>
-        <button onClick={nextMonth} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors text-[#94A3B8]">
+        <button onClick={nextMonth} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors text-[#64748B]">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
         </button>
       </div>
       <div className="grid grid-cols-7 gap-1 mb-2">
         {DAYS.map((d) => (
-          <div key={d} className="text-center text-caption text-[#94A3B8] font-medium py-1">{d}</div>
+          <div key={d} className="text-center text-caption text-[#64748B] font-medium py-1">{d}</div>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-1">

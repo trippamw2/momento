@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -61,7 +61,7 @@ export default function HeroSection() {
                   <span className="text-lg sm:text-xl">{cat.emoji}</span>
                 </div>
                 <span className="text-caption sm:text-body-sm font-bold leading-tight text-white">{cat.label}</span>
-                <span className="text-[10px] sm:text-caption text-[#94A3B8] leading-snug">{cat.description}</span>
+                <span className="text-[10px] sm:text-caption text-[#64748B] leading-snug">{cat.description}</span>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Link>

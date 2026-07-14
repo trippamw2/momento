@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback } from "react";
 import Image from "next/image";
@@ -120,12 +120,12 @@ export default function DiscoveryFeedItem({
         </h2>
 
         {/* Subtitle */}
-        <p className="text-white/60 text-body-sm sm:text-body max-w-xl line-clamp-2 mb-3">
+        <p className="text-[#CBD5E1] text-body-sm sm:text-body max-w-xl line-clamp-2 mb-3">
           {exp.subtitle}
         </p>
 
         {/* Meta row */}
-        <div className="flex items-center gap-4 text-white/50 text-caption">
+        <div className="flex items-center gap-4 text-[#64748B] text-caption">
           <span className="flex items-center gap-1">
             <span className="text-yellow-400">★</span> {exp.rating}
           </span>
@@ -157,7 +157,7 @@ export default function DiscoveryFeedItem({
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
           </div>
-          <span className="text-[10px] text-white/60 group-hover/btn:text-white/90 transition-colors">
+          <span className="text-[10px] text-[#CBD5E1] group-hover/btn:text-white/90 transition-colors">
             {isSaved ? "Saved" : "Save"}
           </span>
         </button>
@@ -177,7 +177,7 @@ export default function DiscoveryFeedItem({
               <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
             </svg>
           </div>
-          <span className="text-[10px] text-white/60 group-hover/btn:text-white/90 transition-colors">Gift</span>
+          <span className="text-[10px] text-[#CBD5E1] group-hover/btn:text-white/90 transition-colors">Gift</span>
         </button>
 
         {/* Share */}
@@ -198,7 +198,7 @@ export default function DiscoveryFeedItem({
               </svg>
             )}
           </div>
-          <span className="text-[10px] text-white/60 group-hover/btn:text-white/90 transition-colors">
+          <span className="text-[10px] text-[#CBD5E1] group-hover/btn:text-white/90 transition-colors">
             {shareFeedback ? "Copied!" : "Share"}
           </span>
         </button>
@@ -215,7 +215,7 @@ export default function DiscoveryFeedItem({
               <line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
             </svg>
           </div>
-          <span className="text-[10px] text-white/60 group-hover/btn:text-white/90 transition-colors">Book</span>
+          <span className="text-[10px] text-[#CBD5E1] group-hover/btn:text-white/90 transition-colors">Book</span>
         </button>
       </div>
 
@@ -223,7 +223,7 @@ export default function DiscoveryFeedItem({
       {isActive && (
         <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-8 z-20 flex items-center gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-[#FF0F73] animate-pulse" />
-          <span className="text-caption text-white/50">Swipe up to explore</span>
+          <span className="text-caption text-[#64748B]">Swipe up to explore</span>
         </div>
       )}
     </Link>

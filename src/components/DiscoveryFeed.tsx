@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
@@ -101,15 +101,15 @@ export default function DiscoveryFeed() {
                 <div className="flex items-center gap-4 mb-4">
                   <div className="flex items-center gap-1.5">
                     <span className="text-yellow-400 text-body-sm font-medium">★</span>
-                    <span className="text-white/80 text-body-sm font-medium">{exp.rating}</span>
+                    <span className="text-[#CBD5E1] text-body-sm font-medium">{exp.rating}</span>
                   </div>
-                  <span className="text-white/50">·</span>
-                  <span className="text-white/60 text-body-sm">{exp.location}</span>
-                  <span className="text-white/50">·</span>
+                  <span className="text-[#64748B]">·</span>
+                  <span className="text-[#CBD5E1] text-body-sm">{exp.location}</span>
+                  <span className="text-[#64748B]">·</span>
                   <span className="text-white font-semibold text-heading-sm">MK {exp.price.toLocaleString()}</span>
                 </div>
 
-                <p className="text-white/60 text-body-sm mb-5 line-clamp-2 leading-relaxed">{exp.description}</p>
+                <p className="text-[#CBD5E1] text-body-sm mb-5 line-clamp-2 leading-relaxed">{exp.description}</p>
 
                 <div className="flex items-center gap-3">
                   <Link
@@ -123,7 +123,7 @@ export default function DiscoveryFeed() {
                     className={`px-4 py-2.5 rounded-xl border transition-all text-body-sm font-medium ${
                       saved
                         ? "border-[#FF0F73] text-[#FF0F73] bg-[#FF0F73]/10"
-                        : "border-white/[0.15] text-white/80 hover:bg-white/[0.06]"
+                        : "border-white/[0.15] text-[#CBD5E1] hover:bg-white/[0.06]"
                     }`}
                   >
                     {saved ? "♥ Saved" : "♡ Save"}
@@ -134,7 +134,7 @@ export default function DiscoveryFeed() {
                         navigator.share({ title: exp.title, url: `${window.location.origin}/experiences/${exp.id}` }).catch((err) => console.warn("Share failed:", err));
                       }
                     }}
-                    className="px-4 py-2.5 rounded-xl border border-white/[0.15] text-white/80 text-body-sm font-medium hover:bg-white/[0.06] transition-all"
+                    className="px-4 py-2.5 rounded-xl border border-white/[0.15] text-[#CBD5E1] text-body-sm font-medium hover:bg-white/[0.06] transition-all"
                   >
                     Share
                   </button>

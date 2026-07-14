@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -120,7 +120,7 @@ export default function BookingConfirmed({
 
         <h1 className="text-display-sm font-bold text-white mb-3">Booking Confirmed!</h1>
         <p className="text-[#CBD5E1] text-body-lg mb-2">{title}</p>
-        <p className="text-body-sm text-[#94A3B8] mb-1">
+        <p className="text-body-sm text-[#64748B] mb-1">
           {bookedDate} · {guests} guest{guests > 1 ? "s" : ""}
           {duration ? ` · ${duration}` : ""}
         </p>
@@ -157,7 +157,7 @@ export default function BookingConfirmed({
           </div>
         )}
 
-        <p className="text-caption text-[#94A3B8] mb-6">
+        <p className="text-caption text-[#64748B] mb-6">
           Check your email for the full confirmation and receipt.
         </p>
 

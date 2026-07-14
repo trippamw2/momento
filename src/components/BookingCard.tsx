@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
@@ -216,7 +216,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
               <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
             </div>
             <h3 className="text-heading-md font-bold text-white mb-1">Verification QR</h3>
-            <p className="text-caption text-[#94A3B8] mb-6">Present this code at check-in</p>
+            <p className="text-caption text-[#64748B] mb-6">Present this code at check-in</p>
             {qrDataUrl && (
               <div className="mb-6 p-4 rounded-2xl bg-white inline-block shadow-lg">
                 <Image src={qrDataUrl} alt="Verification QR" width={200} height={200} className="mx-auto" />
@@ -224,7 +224,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
             )}
             <div className="space-y-1 mb-6">
               <p className="text-body-sm font-semibold text-white">{booking.title}</p>
-              <p className="text-caption text-[#94A3B8]">{booking.dateLabel} · {booking.time}</p>
+              <p className="text-caption text-[#64748B]">{booking.dateLabel} · {booking.time}</p>
               <p className="text-caption text-[#64748B] font-mono">{booking.bookingRef}</p>
             </div>
             <button
@@ -256,7 +256,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className={`w-2 h-2 rounded-full ${statusColors[actualStatus] || "bg-gray-500"} animate-pulse`} />
-              <span className="text-caption font-semibold text-white/60 uppercase tracking-wider">{actualStatus}</span>
+              <span className="text-caption font-semibold text-[#CBD5E1] uppercase tracking-wider">{actualStatus}</span>
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.15em]">Experio</p>
@@ -267,7 +267,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
           {/* Countdown for upcoming */}
           {actualStatus === "upcoming" && countdown && !countdown.expired && (
             <div className="mb-3 flex items-center gap-3 text-caption">
-              <span className="text-white/40 uppercase tracking-wider text-[10px]">Starts in</span>
+              <span className="text-[#64748B] uppercase tracking-wider text-[10px]">Starts in</span>
               <div className="flex gap-2">
                 {countdown.days > 0 && <CountdownUnit value={countdown.days} label="d" />}
                 <CountdownUnit value={countdown.hours} label="h" />
@@ -285,7 +285,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
               </h3>
 
               {/* Details */}
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-body-sm text-white/60 mb-4">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-body-sm text-[#CBD5E1] mb-4">
                 <span className="flex items-center gap-1">
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                   {booking.dateLabel}
@@ -313,7 +313,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
                 )}
                 <div className="min-w-0">
                   <p className="text-[10px] text-white/30 uppercase tracking-wider">Booking Ref</p>
-                  <p className="text-body-sm font-mono font-bold text-white/80">{booking.bookingRef}</p>
+                  <p className="text-body-sm font-mono font-bold text-[#CBD5E1]">{booking.bookingRef}</p>
                 </div>
               </div>
             </div>
@@ -332,7 +332,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
 
           {/* Mobile price */}
           <div className="sm:hidden mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between">
-            <p className="text-caption text-white/40">Total</p>
+            <p className="text-caption text-[#64748B]">Total</p>
             <p className="text-heading-sm font-bold text-[#FF0F73]">MK {booking.price.toLocaleString()}</p>
           </div>
         </div>
@@ -351,21 +351,21 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
               </Link>
               <button
                 onClick={() => setShowQRVerification(true)}
-                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all"
+                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-[#CBD5E1] text-body-sm font-medium hover:bg-white/20 transition-all"
                 title="Show QR for verification"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" /></svg>
               </button>
               <button
                 onClick={handleDownloadPNG}
-                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all"
+                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-[#CBD5E1] text-body-sm font-medium hover:bg-white/20 transition-all"
                 title="Download PNG"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
               </button>
               <button
                 onClick={handleDownloadPDF}
-                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all"
+                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-[#CBD5E1] text-body-sm font-medium hover:bg-white/20 transition-all"
                 title="Download PDF"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
@@ -382,21 +382,21 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
             <>
               <button
                 onClick={handleDownloadPNG}
-                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-[#CBD5E1] text-body-sm font-medium hover:bg-white/20 transition-all flex items-center justify-center gap-2"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                 Download Pass (PNG)
               </button>
               <button
                 onClick={handleDownloadPDF}
-                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-[#CBD5E1] text-body-sm font-medium hover:bg-white/20 transition-all flex items-center justify-center gap-2"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                 Download Pass (PDF)
               </button>
               <Link
                 href={`/experiences/${booking.id}`}
-                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium hover:bg-white/20 transition-all text-center"
+                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-[#CBD5E1] text-body-sm font-medium hover:bg-white/20 transition-all text-center"
               >
                 Rebook
               </Link>
@@ -405,7 +405,7 @@ export default function BookingCard({ booking, showActions = true, onCancel }: B
           {booking.status === "cancelled" && (
             <Link
               href={`/experiences/${booking.id}`}
-              className="flex-1 px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-white/80 text-body-sm font-medium text-center hover:bg-white/20 transition-all"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-white/10 border border-white/[0.08] text-[#CBD5E1] text-body-sm font-medium text-center hover:bg-white/20 transition-all"
             >
               Book Again
             </Link>
@@ -427,7 +427,7 @@ function CountdownUnit({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex items-center gap-0.5">
       <span className="text-white font-bold text-body-sm">{value.toString().padStart(2, "0")}</span>
-      <span className="text-white/40 text-[10px] uppercase">{label}</span>
+      <span className="text-[#64748B] text-[10px] uppercase">{label}</span>
     </div>
   );
 }

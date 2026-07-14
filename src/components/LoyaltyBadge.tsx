@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -67,7 +67,7 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
             <p className="text-body-sm font-semibold text-[#F1F5F9]">
               {tier.name.charAt(0).toUpperCase() + tier.name.slice(1)} Member
             </p>
-            <p className="text-caption text-[#94A3B8]">
+            <p className="text-caption text-[#64748B]">
               {formatPoints(data.balance)} points · {formatPoints(data.lifetime_points)} lifetime
             </p>
           </div>
@@ -76,7 +76,7 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
         {/* Progress to next tier */}
         {nextTier && nextTierConfig ? (
           <div className="relative">
-            <div className="flex items-center justify-between text-caption text-[#94A3B8] mb-1.5">
+            <div className="flex items-center justify-between text-caption text-[#64748B] mb-1.5">
               <span>{formatPoints(data.lifetime_points)} / {formatPoints(nextTierConfig.minPoints)} to {nextTierConfig.name.charAt(0).toUpperCase() + nextTierConfig.name.slice(1)}</span>
               <span>{Math.round(progress)}%</span>
             </div>
@@ -102,7 +102,7 @@ export default function LoyaltyBadge({ minimal = false }: { minimal?: boolean })
                   ))}
                 </ul>
                 <div className="mt-2 pt-2 border-t border-white/[0.06]">
-                  <p className="text-caption text-[#94A3B8]">
+                  <p className="text-caption text-[#64748B]">
                     {formatPoints(pointsToNext)} more points needed
                   </p>
                 </div>
