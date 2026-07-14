@@ -67,10 +67,10 @@ export default function ExperienceCard({
     <Link
       href={`/experiences/${exp.id}`}
       onClick={() => trackView(exp.id)}
-      className={`${width} flex-shrink-0 snap-start group relative cursor-pointer`}
+      className={`${width} flex-shrink-0 snap-start group cursor-pointer`}
     >
-      <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#0a0a0a] transition-all duration-500 group-hover:shadow-[0_12px_48px_rgba(0,0,0,0.4)] group-hover:scale-[1.02] group-hover:translate-y-[-3px] border border-white/[0.06]">
-        {/* Image */}
+      {/* Image container */}
+      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#0a0a0a] transition-all duration-500 group-hover:shadow-[0_12px_48px_rgba(0,0,0,0.4)] group-hover:scale-[1.02]">
         <Image
           src={exp.image}
           alt={exp.title}
@@ -86,14 +86,13 @@ export default function ExperienceCard({
         {/* Loading shimmer */}
         {!imgLoaded && <div className="absolute inset-0 shimmer" />}
 
-        {/* Subtle gradient overlay at bottom only */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-[#05070B]/30 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
+        {/* Subtle gradient overlay for save button readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent" />
 
-        {/* Premium border glow on hover */}
+        {/* Hover ring */}
         <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ring-1 ring-white/20" />
 
-        {/* Top: Save button */}
+        {/* Save button */}
         <div className="absolute top-3 right-3 z-10">
           <button
             onClick={toggleSave}
@@ -114,60 +113,34 @@ export default function ExperienceCard({
             </svg>
           </button>
         </div>
+      </div>
 
-        {/* Bottom content - minimal & airy */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
-          {primaryMood && (
-            <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold text-white/80 bg-white/10 backdrop-blur-sm border border-white/10 mb-2">
-              {primaryMood}
-            </span>
-          )}
+      {/* Info below image — photo-dominant, no overlay */}
+      <div className="mt-2.5 px-0.5">
+        {primaryMood && (
+          <span className="text-caption text-[#64748B] font-medium uppercase tracking-wider">
+            {primaryMood}
+          </span>
+        )}
 
-          <h3 className="text-white font-semibold text-body-sm leading-tight line-clamp-1 tracking-tight">
-            {exp.title}
-          </h3>
+        <h3 className="text-[#F1F5F9] font-semibold text-body-sm leading-snug line-clamp-1 mt-0.5">
+          {exp.title}
+        </h3>
 
-          <div className="flex items-center justify-between mt-1.5">
-            <span className="text-white/50 text-caption flex items-center gap-1 truncate">
-              <svg
-                className="w-3 h-3 shrink-0"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-              {exp.location}
-            </span>
-            {distance !== undefined && (
-              <span className="text-white/40 text-[10px] whitespace-nowrap">
-                {distance.toFixed(1)} km
-              </span>
-            )}
-          </div>
+        <div className="flex items-center justify-between mt-1">
+          <span className="text-[#64748B] text-caption truncate">
+            {exp.location}
+          </span>
+        </div>
 
-          <div className="h-px bg-white/[0.06] my-2" />
-
-          <div className="flex items-center justify-between">
-            <span className="text-white font-bold text-body-sm tracking-tight">
-              MK {exp.price.toLocaleString()}
-            </span>
-            <span className="flex items-center gap-1 text-caption text-white/50">
-              <span className="text-yellow-400/80">&#9733;</span>
-              {exp.rating}
-            </span>
-          </div>
+        <div className="flex items-center justify-between mt-1.5">
+          <span className="text-white font-semibold text-body-sm">
+            MK {exp.price.toLocaleString()}
+          </span>
+          <span className="flex items-center gap-1 text-caption text-[#CBD5E1]">
+            <span className="text-yellow-400/80">&#9733;</span>
+            {exp.rating}
+          </span>
         </div>
       </div>
     </Link>
