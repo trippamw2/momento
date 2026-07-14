@@ -1,23 +1,23 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { getNotifications, markAsRead, markAllAsRead, type AppNotification } from "@/lib/notifications-engine";
 
 const NOTIF_ICONS: Record<string, string> = {
-  booking_confirmed: "✅",
-  booking_cancelled: "❌",
-  booking_reminder: "⏰",
-  payment_success: "💰",
-  gift_card_purchased: "🎁",
-  points_earned: "⭐",
-  tier_upgrade: "🏆",
-  gift_received: "🎁",
-  gift_redeemed: "🎉",
-  review_request: "✍️",
-  new_experience: "✨",
+  booking_confirmed: "◇",
+  booking_cancelled: "⊘",
+  booking_reminder: "▸",
+  payment_success: "▲",
+  gift_card_purchased: "▣",
+  points_earned: "★",
+  tier_upgrade: "◆",
+  gift_received: "▣",
+  gift_redeemed: "●",
+  review_request: "✎",
+  new_experience: "✦",
   flash_sale: "🔥",
-  achievement_unlocked: "🏅",
+  achievement_unlocked: "◆",
 };
 
 export default function NotificationsPage() {
@@ -64,7 +64,7 @@ export default function NotificationsPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-heading-xl font-bold text-white">Notifications</h1>
-            <p className="text-[#94A3B8] text-body-sm mt-1">
+            <p className="text-[#64748B] text-body-sm mt-1">
               {unreadCount > 0 ? `${unreadCount} unread` : "All caught up!"}
             </p>
           </div>
@@ -81,9 +81,11 @@ export default function NotificationsPage() {
         {/* List */}
         {notifications.length === 0 ? (
           <div className="text-center py-20">
-            <div className="text-4xl mb-4">🔔</div>
+            <div className="w-16 h-16 rounded-full bg-[#111827] border border-white/[0.08] flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">◇</span>
+            </div>
             <h2 className="text-heading-md font-bold text-white mb-2">No notifications yet</h2>
-            <p className="text-[#94A3B8] text-body-sm">
+            <p className="text-[#64748B] text-body-sm">
               You&apos;ll see updates about your bookings, rewards, and more here.
             </p>
             <Link
@@ -105,7 +107,7 @@ export default function NotificationsPage() {
                 }`}
               >
                 <div className="flex items-start gap-3">
-                  <span className="text-lg mt-0.5">{NOTIF_ICONS[n.type] || "🔔"}</span>
+                  <span className="w-8 h-8 rounded-full bg-[#1A2332] border border-white/[0.06] flex items-center justify-center text-sm shrink-0">{NOTIF_ICONS[n.type] || "◇"}</span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <h3 className={`text-body-sm font-semibold ${n.read ? "text-[#CBD5E1]" : "text-white"}`}>
@@ -126,7 +128,7 @@ export default function NotificationsPage() {
                         )}
                       </div>
                     </div>
-                    <p className="text-caption text-[#94A3B8] mt-1 line-clamp-2">{n.description}</p>
+                    <p className="text-caption text-[#64748B] mt-1 line-clamp-2">{n.description}</p>
                     {n.actionLabel && n.actionHref && (
                       <Link
                         href={n.actionHref}

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -108,7 +108,7 @@ export default function DashboardPage() {
       <div className="min-h-screen pt-24 pb-16 bg-[#05070B] flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#111827] flex items-center justify-center">
-            <svg className="w-7 h-7 text-[#94A3B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+            <svg className="w-7 h-7 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
           </div>
           <h1 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Welcome</h1>
           <p className="text-[#CBD5E1] mb-6">Sign in to view your dashboard</p>
@@ -139,7 +139,7 @@ export default function DashboardPage() {
               <h1 className="text-heading-xl font-bold text-[#F1F5F9]">
                 Welcome back, {displayName.split(" ")[0]}
               </h1>
-              <p className="text-[#94A3B8] text-body-sm">Here&apos;s your activity overview</p>
+              <p className="text-[#64748B] text-body-sm">Here&apos;s your activity overview</p>
             </div>
           </div>
         </div>
@@ -154,7 +154,7 @@ export default function DashboardPage() {
               <svg className="w-5 h-5 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
             </div>
             <p className="text-2xl font-bold text-[#F1F5F9]">{bookings.length}</p>
-            <p className="text-caption text-[#94A3B8]">Bookings</p>
+            <p className="text-caption text-[#64748B]">Bookings</p>
           </Link>
 
           <Link
@@ -167,7 +167,7 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold text-[#F1F5F9]">
               {wallet ? formatCurrency(wallet.balance) : "—"}
             </p>
-            <p className="text-caption text-[#94A3B8]">{wallet?.currency || "Wallet"}</p>
+            <p className="text-caption text-[#64748B]">{wallet?.currency || "Wallet"}</p>
           </Link>
 
           <Link
@@ -180,7 +180,7 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold text-[#F1F5F9]">
               {loyalty ? loyalty.points.toLocaleString() : "—"}
             </p>
-            <p className="text-caption text-[#94A3B8]">
+            <p className="text-caption text-[#64748B]">
               {loyalty ? `${loyalty.tier} points` : "Loyalty"}
             </p>
           </Link>
@@ -224,7 +224,7 @@ export default function DashboardPage() {
                       ? "bg-emerald-500/10 text-emerald-400"
                       : b.status === "cancelled"
                       ? "bg-red-500/10 text-red-400"
-                      : "bg-[#1E293B] text-[#94A3B8]"
+                      : "bg-[#1E293B] text-[#64748B]"
                   }`}>
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={b.status === "completed" || b.status === "confirmed" ? "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" : "M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"} /></svg>
                   </div>
@@ -232,7 +232,7 @@ export default function DashboardPage() {
                     <p className="text-body-sm font-semibold text-[#F1F5F9] truncate">
                       {b.experience_title || `Booking #${b.booking_ref || b.id.slice(0, 8)}`}
                     </p>
-                    <p className="text-caption text-[#94A3B8]">
+                    <p className="text-caption text-[#64748B]">
                       {b.experience_date ? new Date(b.experience_date).toLocaleDateString() : ""}
                       {b.total_price ? ` · ${formatCurrency(b.total_price)}` : ""}
                       {b.created_at ? ` · ${timeAgo(b.created_at)}` : ""}
@@ -243,7 +243,7 @@ export default function DashboardPage() {
                     b.status === "completed" ? "bg-blue-500/10 text-blue-400" :
                     b.status === "pending" ? "bg-yellow-500/10 text-yellow-400" :
                     b.status === "cancelled" ? "bg-red-500/10 text-red-400" :
-                    "bg-[#1E293B] text-[#94A3B8]"
+                    "bg-[#1E293B] text-[#64748B]"
                   }`}>
                     {b.status}
                   </span>

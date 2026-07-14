@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Logo from "@/components/Logo";
 import Button from "@/components/Button";
 import MoodPill from "@/components/MoodPill";
@@ -180,15 +180,15 @@ export default function DesignSystemPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             <div className="p-8 rounded-2xl gradient-brand text-center">
               <p className="text-white font-semibold text-body-sm">Brand</p>
-              <p className="text-white/60 text-caption mt-1">#ff2d87 → #ff6b2b</p>
+              <p className="text-[#CBD5E1] text-caption mt-1">#ff2d87 → #ff6b2b</p>
             </div>
             <div className="p-8 rounded-2xl gradient-warm text-center">
               <p className="text-white font-semibold text-body-sm">Warm</p>
-              <p className="text-white/60 text-caption mt-1">#ff6b2b → #ff2d87</p>
+              <p className="text-[#CBD5E1] text-caption mt-1">#ff6b2b → #ff2d87</p>
             </div>
             <div className="p-8 rounded-2xl gradient-ambient text-center border border-border-default">
               <p className="text-white font-semibold text-body-sm">Ambient</p>
-              <p className="text-white/60 text-caption mt-1">Radial glow overlay</p>
+              <p className="text-[#CBD5E1] text-caption mt-1">Radial glow overlay</p>
             </div>
           </div>
           <div className="p-6 rounded-xl bg-surface-secondary border border-border-default">
@@ -275,11 +275,11 @@ export default function DesignSystemPage() {
             <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-6 rounded-xl glass">
                 <p className="text-white font-semibold">glass</p>
-                <p className="text-white/60 text-caption mt-1">rgba(255,255,255,0.04) + blur(12px)</p>
+                <p className="text-[#CBD5E1] text-caption mt-1">rgba(255,255,255,0.04) + blur(12px)</p>
               </div>
               <div className="p-6 rounded-xl glass-strong">
                 <p className="text-white font-semibold">glass-strong</p>
-                <p className="text-white/60 text-caption mt-1">rgba(0,0,0,0.8) + blur(24px)</p>
+                <p className="text-[#CBD5E1] text-caption mt-1">rgba(0,0,0,0.8) + blur(24px)</p>
               </div>
             </div>
           </div>

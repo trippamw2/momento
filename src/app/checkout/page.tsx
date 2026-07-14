@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -120,7 +120,7 @@ export default function CheckoutPage() {
   if (!experienceId) {
     return (
       <div className="pt-24 pb-20 text-center">
-        <p className="text-[#94A3B8]">No experience selected.</p>
+        <p className="text-[#64748B]">No experience selected.</p>
         <Link href="/discover" className="text-[#FF0F73] hover:underline mt-2 inline-block">Browse experiences</Link>
       </div>
     );
@@ -137,7 +137,7 @@ export default function CheckoutPage() {
   if (!experience) {
     return (
       <div className="pt-24 pb-20 text-center">
-        <p className="text-[#94A3B8]">Experience not found.</p>
+        <p className="text-[#64748B]">Experience not found.</p>
         <Link href="/discover" className="text-[#FF0F73] hover:underline mt-2 inline-block">Browse experiences</Link>
       </div>
     );
@@ -160,8 +160,8 @@ export default function CheckoutPage() {
             )}
             <div className="flex-1 min-w-0">
               <h2 className="text-heading-sm font-bold text-[#F1F5F9] truncate">{experience.title}</h2>
-              <p className="text-caption text-[#94A3B8]">{experience.location} · {experience.duration}</p>
-              <p className="text-body-sm text-[#94A3B8] mt-1">{date}{time ? ` at ${time}` : ""} · {guests} guest{guests > 1 ? "s" : ""}</p>
+              <p className="text-caption text-[#64748B]">{experience.location} · {experience.duration}</p>
+              <p className="text-body-sm text-[#64748B] mt-1">{date}{time ? ` at ${time}` : ""} · {guests} guest{guests > 1 ? "s" : ""}</p>
             </div>
           </div>
         </div>
@@ -177,19 +177,19 @@ export default function CheckoutPage() {
           <h3 className="text-heading-sm font-bold text-[#F1F5F9] mb-4">Contact Information</h3>
           <div className="space-y-3">
             <div>
-              <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Phone</label>
+              <label className="text-caption text-[#64748B] font-medium mb-1 block">Phone</label>
               <input value={form.contact_phone} onChange={e => setForm(f => ({ ...f, contact_phone: e.target.value }))}
                 className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]"
                 placeholder="+265..." />
             </div>
             <div>
-              <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Email</label>
+              <label className="text-caption text-[#64748B] font-medium mb-1 block">Email</label>
               <input value={form.contact_email} onChange={e => setForm(f => ({ ...f, contact_email: e.target.value }))} type="email"
                 className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]"
                 placeholder="your@email.com" />
             </div>
             <div>
-              <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Special Requests (optional)</label>
+              <label className="text-caption text-[#64748B] font-medium mb-1 block">Special Requests (optional)</label>
               <textarea value={form.special_requests} onChange={e => setForm(f => ({ ...f, special_requests: e.target.value }))} rows={2}
                 className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73] resize-none" />
             </div>
@@ -208,11 +208,11 @@ export default function CheckoutPage() {
         <div className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5 mb-6">
           <div className="space-y-2">
             <div className="flex justify-between text-body-sm">
-              <span className="text-[#94A3B8]">MK {experience.price.toLocaleString()} × {guests} guest{guests > 1 ? "s" : ""}</span>
+              <span className="text-[#64748B]">MK {experience.price.toLocaleString()} × {guests} guest{guests > 1 ? "s" : ""}</span>
               <span className="text-[#F1F5F9]">MK {totalPrice.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-body-sm">
-              <span className="text-[#94A3B8]">Platform fee</span>
+              <span className="text-[#64748B]">Platform fee</span>
               <span className="text-[#F1F5F9]">Included</span>
             </div>
             <div className="flex justify-between text-heading-sm font-bold pt-2 border-t border-white/[0.08]">

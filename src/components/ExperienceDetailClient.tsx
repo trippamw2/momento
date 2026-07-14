@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo, useCallback, useEffect } from "react";
 import Image from "next/image";
@@ -350,8 +350,8 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               <div className="flex items-center gap-1.5 text-body-sm text-[#CBD5E1]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                 {exp.location}
-                {exp.city && <><span className="text-[#94A3B8]">·</span><span className="text-[#94A3B8]">{exp.city}</span></>}
-                {exp.distance && <><span className="text-[#94A3B8]">·</span><span className="text-[#94A3B8]">{exp.distance}</span></>}
+                {exp.city && <><span className="text-[#64748B]">·</span><span className="text-[#64748B]">{exp.city}</span></>}
+                {exp.distance && <><span className="text-[#64748B]">·</span><span className="text-[#64748B]">{exp.distance}</span></>}
               </div>
               <div className="flex items-center gap-1.5 text-body-sm text-[#CBD5E1]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -360,20 +360,20 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               <div className="flex items-center gap-1.5 text-body-sm">
                 <span className="text-yellow-400">★</span>
                 <span className="text-white font-semibold">{exp.rating}</span>
-                <span className="text-[#94A3B8]">({exp.reviewCount} reviews)</span>
+                <span className="text-[#64748B]">({exp.reviewCount} reviews)</span>
               </div>
             </div>
 
             {/* Mobile: Quick Booking Summary */}
             <div className="lg:hidden flex items-center justify-between p-4 rounded-xl border border-white/[0.1] mb-6">
               <div>
-                <p className="text-caption text-[#94A3B8]">From</p>
+                <p className="text-caption text-[#64748B]">From</p>
                 <p className="text-heading-lg font-bold text-white">MK {exp.price.toLocaleString()}</p>
-                <p className="text-caption text-[#94A3B8]">per person</p>
+                <p className="text-caption text-[#64748B]">per person</p>
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-caption text-[#94A3B8]">Guests:</span>
+                  <span className="text-caption text-[#64748B]">Guests:</span>
                   <div className="flex items-center gap-2">
                     <button onClick={() => setGuests(Math.max(1, guests - 1))} disabled={guests <= 1} className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-white text-sm disabled:opacity-30 hover:bg-white/10">−</button>
                     <span className="w-5 text-center text-body-sm text-white font-medium">{guests}</span>
@@ -397,7 +397,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   {exp.partner.split(" ").map((w) => w[0]).slice(0, 2).join("")}
                 </div>
                 <div>
-                  <p className="text-caption text-[#94A3B8]">Hosted by</p>
+                  <p className="text-caption text-[#64748B]">Hosted by</p>
                   <p className="text-body-sm font-semibold text-white">{exp.partner}</p>
                 </div>
               </div>
@@ -433,7 +433,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 <h2 className="text-heading-md font-bold text-white flex items-center gap-2">
                   <span className="text-yellow-400 text-heading">★</span>
                   <span>{exp.rating}</span>
-                  <span className="text-[#94A3B8] font-normal text-body-sm">· {allReviews.length} reviews</span>
+                  <span className="text-[#64748B] font-normal text-body-sm">· {allReviews.length} reviews</span>
                 </h2>
                 {/* Sort Controls */}
                 <div className="flex items-center gap-1 bg-white/[0.04] rounded-lg p-0.5 border border-white/[0.06]">
@@ -457,7 +457,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               <div className="space-y-2 mb-6 p-4 rounded-xl bg-white/[0.03] border border-white/[0.1]">
                 {ratingBreakdown.map(({ star, count, pct }) => (
                   <div key={star} className="flex items-center gap-3">
-                    <span className="text-caption font-medium text-[#94A3B8] w-6 text-right">{star}</span>
+                    <span className="text-caption font-medium text-[#64748B] w-6 text-right">{star}</span>
                     <svg className="w-3.5 h-3.5 text-yellow-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
@@ -467,7 +467,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span className="text-caption text-[#94A3B8] w-8">{count}</span>
+                    <span className="text-caption text-[#64748B] w-8">{count}</span>
                   </div>
                 ))}
               </div>
@@ -480,7 +480,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               </div>
 
               {allReviews.length === 0 && (
-                <div className="text-center py-8 text-[#94A3B8] text-body-sm">
+                <div className="text-center py-8 text-[#64748B] text-body-sm">
                   No reviews yet. Be the first to share your experience!
                 </div>
               )}
@@ -531,19 +531,19 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                       : "border-white/[0.1] text-[#CBD5E1] hover:bg-white/5 hover:text-white"
                   }`}
                 >
-                  {saved ? "♥ Saved" : "♡ Save"}
+                  {saved ? "♥ Saved" : "♥ Save"}
                 </button>
                 <Link
                   href={`/gift?exp=${exp.id}`}
                   className="px-4 py-3 rounded-xl border border-white/[0.1] text-[#CBD5E1] text-body-sm font-medium text-center hover:bg-white/5 hover:text-white transition-all"
                 >
-                  🎁 Gift
+                  ▩ Gift
                 </Link>
                 <button
                   onClick={handleShare}
                   className="px-4 py-3 rounded-xl border border-white/[0.1] text-[#CBD5E1] text-body-sm font-medium hover:bg-white/5 hover:text-white transition-all"
                 >
-                  {shareFeedback ? "✓ Copied" : "↗ Share"}
+                  {shareFeedback ? "Copied" : "↗ Share"}
                 </button>
               </div>
             </div>
@@ -558,7 +558,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               <div className="p-6 pb-4 border-b border-white/[0.1]">
                 <div className="flex items-baseline gap-1">
                   <span className="text-heading-lg font-bold text-white">MK {exp.price.toLocaleString()}</span>
-                  <span className="text-caption text-[#94A3B8]">/ person</span>
+                  <span className="text-caption text-[#64748B]">/ person</span>
                 </div>
               </div>
 
@@ -580,9 +580,9 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                     onChange={(e) => setSpecialRequests(e.target.value)}
                     maxLength={200}
                     placeholder="Any special requests?"
-                    className="w-full px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF0F73] transition-all resize-none h-16"
+                    className="w-full px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption placeholder:text-[#64748B] focus:outline-none focus:border-[#FF0F73] transition-all resize-none h-16"
                   />
-                  <p className="text-caption text-[#94A3B8] mt-1 text-right">{specialRequests.length}/200</p>
+                  <p className="text-caption text-[#64748B] mt-1 text-right">{specialRequests.length}/200</p>
                 </div>
 
                 {/* Contact Fields */}
@@ -593,7 +593,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                     value={contactPhone}
                     onChange={(e) => { setContactPhone(e.target.value); if (contactError) setContactError(""); }}
                     placeholder="Phone number"
-                    className={`w-full px-3 py-2 rounded-lg bg-[#0A0E17] border text-white text-caption placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF0F73] transition-all ${
+                    className={`w-full px-3 py-2 rounded-lg bg-[#0A0E17] border text-white text-caption placeholder:text-[#64748B] focus:outline-none focus:border-[#FF0F73] transition-all ${
                       contactError && !contactPhone.trim() && !contactEmail.trim() ? "border-red-500/50" : "border-white/[0.1]"
                     }`}
                   />
@@ -602,7 +602,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                     value={contactEmail}
                     onChange={(e) => { setContactEmail(e.target.value); if (contactError) setContactError(""); }}
                     placeholder="Email address"
-                    className={`w-full px-3 py-2 rounded-lg bg-[#0A0E17] border text-white text-caption placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF0F73] transition-all ${
+                    className={`w-full px-3 py-2 rounded-lg bg-[#0A0E17] border text-white text-caption placeholder:text-[#64748B] focus:outline-none focus:border-[#FF0F73] transition-all ${
                       contactError && !contactPhone.trim() && !contactEmail.trim() ? "border-red-500/50" : "border-white/[0.1]"
                     }`}
                   />
@@ -616,14 +616,14 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
 
                 {/* Gift Card */}
                 <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.1]">
-                  <p className="text-caption font-semibold text-[#94A3B8] mb-2 uppercase tracking-wider">Gift Card</p>
+                  <p className="text-caption font-semibold text-[#64748B] mb-2 uppercase tracking-wider">Gift Card</p>
                   <div className="flex gap-2">
                     <input
                       type="text"
                       placeholder="XPRO-XXXXXXXX"
                       value={giftCode}
                       onChange={(e) => { setGiftCode(e.target.value.toUpperCase()); setGiftApplied(false); setGiftError(""); }}
-                      className="flex-1 px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption font-mono placeholder:text-[#94A3B8] focus:outline-none focus:border-[#FF0F73] transition-all"
+                      className="flex-1 px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption font-mono placeholder:text-[#64748B] focus:outline-none focus:border-[#FF0F73] transition-all"
                       disabled={giftApplied}
                     />
                     {giftApplied ? (
@@ -660,12 +660,12 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                       />
                       <div className="flex-1 min-w-0">
                         <p className="text-caption font-semibold text-white">Pay with Experio Wallet</p>
-                        <p className="text-caption text-[#94A3B8]">Balance: MK {walletBalance.toLocaleString()}</p>
+                        <p className="text-caption text-[#64748B]">Balance: MK {walletBalance.toLocaleString()}</p>
                       </div>
                       <span className="text-emerald-400 text-caption font-medium">Instant confirm</span>
                     </label>
                     {walletBalance < finalPrice && (
-                      <p className="text-caption text-[#94A3B8] mt-1.5">Insufficient wallet balance for this booking</p>
+                      <p className="text-caption text-[#64748B] mt-1.5">Insufficient wallet balance for this booking</p>
                     )}
                   </div>
                 )}
@@ -706,7 +706,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                   )}
                 </button>
 
-                <p className="text-caption text-[#94A3B8] text-center">You won&apos;t be charged yet</p>
+                <p className="text-caption text-[#64748B] text-center">You won&apos;t be charged yet</p>
 
                 {/* Action Buttons */}
                 <div className="grid grid-cols-3 gap-2">
@@ -727,7 +727,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                     href={`/gift?exp=${exp.id}`}
                     className="py-2.5 rounded-xl border border-white/[0.1] text-[#CBD5E1] text-caption font-medium text-center hover:bg-white/5 hover:text-white transition-all flex items-center justify-center gap-1"
                   >
-                    🎁 Gift
+                    ▩ Gift
                   </Link>
                   <button
                     onClick={handleShare}

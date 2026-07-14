@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
@@ -619,12 +619,12 @@ export default function GiftPageContent() {
                       <div className="absolute bottom-0 left-0 right-0 p-4">
                         <div className="flex items-center gap-1.5 mb-1">
                           <span className="text-yellow-400 text-[11px]">★</span>
-                          <span className="text-caption text-white/80 font-medium">{exp.rating}</span>
+                          <span className="text-caption text-[#CBD5E1] font-medium">{exp.rating}</span>
                           <span className="text-caption text-white/30">·</span>
-                          <span className="text-caption text-white/50">{exp.reviewCount}</span>
+                          <span className="text-caption text-[#64748B]">{exp.reviewCount}</span>
                         </div>
                         <h4 className="text-white font-semibold text-body-sm leading-tight">{exp.title}</h4>
-                        <p className="text-white/50 text-caption mt-0.5">{exp.subtitle}</p>
+                        <p className="text-[#64748B] text-caption mt-0.5">{exp.subtitle}</p>
                         <p className="text-white font-semibold text-body-sm mt-1.5">
                           MK {exp.price.toLocaleString()}
                         </p>

@@ -224,7 +224,7 @@ export default function BookingDetailPage() {
               </div>
               <StatusBadge status={booking.status} />
             </div>
-            <div className="flex flex-wrap gap-4 text-body-sm text-[#94A3B8]">
+            <div className="flex flex-wrap gap-4 text-body-sm text-[#64748B]">
               <span>Ref: {booking.booking_ref || booking.id.slice(0, 8).toUpperCase()}</span>
             </div>
           </div>

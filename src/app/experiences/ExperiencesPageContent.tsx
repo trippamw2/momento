@@ -15,15 +15,15 @@ import { trackRecentlyViewed } from "@/lib/recently-viewed";
 const ITEMS_PER_PAGE = 8;
 const LOAD_MORE = 4;
 
-const MOOD_LABELS: { label: Mood; description: string; emoji: string; accent: string }[] = [
-  { label: "Romantic", description: "Perfect for two", emoji: "🌹", accent: "from-rose-500 to-pink-500" },
-  { label: "Relaxed", description: "Unwind and recharge", emoji: "🌊", accent: "from-emerald-500 to-teal-500" },
-  { label: "Social", description: "Connect with others", emoji: "💬", accent: "from-pink-500 to-rose-500" },
-  { label: "Culinary", description: "Food lovers", emoji: "🍽️", accent: "from-amber-600 to-orange-600" },
-  { label: "Active", description: "Get moving", emoji: "🧗", accent: "from-red-500 to-rose-500" },
-  { label: "Luxurious", description: "You deserve it", emoji: "✨", accent: "from-fuchsia-500 to-purple-500" },
-  { label: "Celebratory", description: "Make it special", emoji: "🥂", accent: "from-amber-500 to-orange-500" },
-  { label: "Creative", description: "Artsy fun", emoji: "🎨", accent: "from-violet-500 to-purple-500" },
+const MOOD_LABELS: { label: Mood; description: string; symbol: string; accent: string }[] = [
+  { label: "Romantic", description: "Perfect for two", symbol: "♡", accent: "from-rose-500 to-pink-500" },
+  { label: "Relaxed", description: "Unwind and recharge", symbol: "≈", accent: "from-emerald-500 to-teal-500" },
+  { label: "Social", description: "Connect with others", symbol: "▣", accent: "from-pink-500 to-rose-500" },
+  { label: "Culinary", description: "Food lovers", symbol: "✦", accent: "from-amber-600 to-orange-600" },
+  { label: "Active", description: "Get moving", symbol: "▲", accent: "from-red-500 to-rose-500" },
+  { label: "Luxurious", description: "You deserve it", symbol: "★", accent: "from-fuchsia-500 to-purple-500" },
+  { label: "Celebratory", description: "Make it special", symbol: "◆", accent: "from-amber-500 to-orange-500" },
+  { label: "Creative", description: "Artsy fun", symbol: "✎", accent: "from-violet-500 to-purple-500" },
 ];
 
 function parseMoodParam(value: string | null): Mood | null {
@@ -243,7 +243,7 @@ export default function ExperiencesPageContent() {
           <p className="text-[#CBD5E1] text-body-lg">{filtered.length} moments to discover</p>
           {geo.position && filters.location !== "All" && (
             <p className="text-caption text-[#FF0F73] mt-1">
-              📍 Showing experiences near <strong>{filters.location}</strong>
+              <svg className="w-3.5 h-3.5 inline shrink-0 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg> Showing experiences near <strong>{filters.location}</strong>
               {geo.loading && <span className="text-[#64748B] ml-1">(detecting location...)</span>}
             </p>
           )}
@@ -305,7 +305,7 @@ export default function ExperiencesPageContent() {
                   : "bg-[#1A2332] text-[#CBD5E1] border border-white/[0.08] hover:bg-white/[0.05] hover:text-[#F1F5F9] hover:border-[#FF0F73]/30"
               }`}
             >
-              <span>{mood.emoji}</span>
+              <span>{mood.symbol}</span>
               <span>{mood.label}</span>
             </button>
           ))}
@@ -354,7 +354,7 @@ export default function ExperiencesPageContent() {
             }`}
           >
             <svg className={`w-3.5 h-3.5 ${geo.loading ? "animate-pulse" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-            {geo.loading ? "Locating..." : geo.position && filters.nearby ? "📍 Near You" : "Nearby"}
+            {geo.loading ? "Locating..." : geo.position && filters.nearby ? "◎ Near You" : "Nearby"}
           </button>
 
           <span className="text-[#64748B] text-caption hidden sm:inline select-none">|</span>

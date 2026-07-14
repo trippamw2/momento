@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
@@ -353,17 +353,17 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
               </h2>
               <div className="space-y-3 text-body-sm">
                 <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
-                  <span className="text-[#94A3B8]">Email</span>
+                  <span className="text-[#64748B]">Email</span>
                   <span className="text-[#F1F5F9] font-medium">{user.email}</span>
                 </div>
                 <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
-                  <span className="text-[#94A3B8]">Phone</span>
+                  <span className="text-[#64748B]">Phone</span>
                   <span className={`font-medium ${user.profile?.phone ? "text-[#F1F5F9]" : "text-[#64748B]"}`}>
                     {user.profile?.phone || "—"}
                   </span>
                 </div>
                 <div className="flex justify-between py-2.5">
-                  <span className="text-[#94A3B8]">Password</span>
+                  <span className="text-[#64748B]">Password</span>
                   <button
                     onClick={() => { setShowPasswordForm(!showPasswordForm); setPasswordError(""); setPasswordSuccess(""); }}
                     className="text-[#FF0F73] text-body-sm font-medium hover:underline"
@@ -462,11 +462,11 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
                     href={link.href}
                     className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#1E293B] border border-white/[0.1] text-body-sm text-[#CBD5E1] hover:text-[#F1F5F9] hover:bg-white/[0.05] transition-all"
                   >
-                    <span className="w-8 h-8 rounded-lg bg-[#0A0E17] flex items-center justify-center shrink-0">
-                      <span className="text-[#FF0F73] text-sm">
-                        {link.icon === "calendar" ? "📅" : link.icon === "chat" ? "💬" : link.icon === "heart" ? "♥" : link.icon === "gift" ? "🎁" : "⭐"}
+                      <span className="w-8 h-8 rounded-lg bg-[#0A0E17] flex items-center justify-center shrink-0">
+                        <span className="text-[#FF0F73] text-sm">
+                          {link.icon === "calendar" ? "◇" : link.icon === "chat" ? "▣" : link.icon === "heart" ? "♥" : link.icon === "gift" ? "▩" : "★"}
+                        </span>
                       </span>
-                    </span>
                     {link.label}
                   </Link>
                 ))}

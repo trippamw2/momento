@@ -72,7 +72,10 @@ function RedeemContent() {
     <div className="max-w-3xl mx-auto px-4 sm:px-8">
       {/* Hero */}
       <div className="text-center mb-10">
-        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#FF0F73]/20 to-[#FF7A1A]/20 flex items-center justify-center mx-auto mb-4">
+        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF0F73]/20 to-[#FF7A1A]/20 flex items-center justify-center mx-auto mb-4">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] flex items-center justify-center">
+            <span className="text-white text-lg">▩</span>
+          </div>
         </div>
         <h1 className="text-heading-2xl font-bold text-[#F1F5F9] mb-2">Have a Gift Card?</h1>
         <p className="text-[#CBD5E1] text-body-lg max-w-md mx-auto">

@@ -306,7 +306,7 @@ export default function MessagesPage() {
                             }`}
                           >
                             <p>{msg.content}</p>
-                            <p className={`text-caption mt-1 ${isMe ? "text-white/60" : "text-[#64748B]"}`}>
+                            <p className={`text-caption mt-1 ${isMe ? "text-[#CBD5E1]" : "text-[#64748B]"}`}>
                               {new Date(msg.created_at).toLocaleTimeString("en-US", {
                                 hour: "numeric",
                                 minute: "2-digit",

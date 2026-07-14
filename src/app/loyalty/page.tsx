@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
@@ -52,7 +52,7 @@ function StreakDisplay() {
             <p className="text-heading-md font-bold text-[#F1F5F9]">
               {streak.current > 0 ? `${streak.current} week${streak.current > 1 ? "s" : ""}` : "No active streak"}
             </p>
-            <p className="text-body-sm text-[#94A3B8]">
+            <p className="text-body-sm text-[#64748B]">
               {streak.current > 0
                 ? `Longest: ${streak.longest} week${streak.longest > 1 ? "s" : ""}`
                 : "Book experiences weekly to start a streak"}
@@ -62,7 +62,7 @@ function StreakDisplay() {
 
         {/* Streak milestones */}
         <div className="flex-1">
-          <p className="text-caption text-[#94A3B8] mb-3">
+          <p className="text-caption text-[#64748B] mb-3">
             {nextMilestone
               ? `${nextMilestone.weeks - streak.current} more week${nextMilestone.weeks - streak.current > 1 ? "s" : ""} to "${nextMilestone.label}"`
               : "All milestones reached!"}
@@ -183,7 +183,7 @@ export default function LoyaltyPage() {
         {/* ─── Points Balance ─── */}
         <section>
           <div className="max-w-md mx-auto text-center p-8 rounded-3xl bg-gradient-to-br from-[#111827] to-[#0A0E17] border border-white/[0.08] shadow-sm">
-            <p className="text-caption text-[#94A3B8] uppercase tracking-wider mb-1">Your Balance</p>
+            <p className="text-caption text-[#64748B] uppercase tracking-wider mb-1">Your Balance</p>
             <p className="text-5xl sm:text-6xl font-bold text-[#F1F5F9] mb-1">{formatPoints(points)}</p>
             <p className="text-body-sm text-[#64748B]">
               {formatPoints(lifetimePoints)} lifetime points
@@ -208,7 +208,7 @@ export default function LoyaltyPage() {
                   <p className="text-heading-md font-bold text-[#F1F5F9]">
                     {tier.name.charAt(0).toUpperCase() + tier.name.slice(1)}
                   </p>
-                  <p className="text-body-sm text-[#94A3B8]">{tier.multiplier}x points multiplier</p>
+                  <p className="text-body-sm text-[#64748B]">{tier.multiplier}x points multiplier</p>
                 </div>
               </div>
 
@@ -216,7 +216,7 @@ export default function LoyaltyPage() {
               <div className="flex-1 min-w-0">
                 {nextTierConfig ? (
                   <>
-                    <div className="flex items-center justify-between text-caption text-[#94A3B8] mb-1.5">
+                    <div className="flex items-center justify-between text-caption text-[#64748B] mb-1.5">
                       <span>
                         {formatPoints(lifetimePoints)} / {formatPoints(nextTierConfig.minPoints)} to{" "}
                         {nextTierConfig.name.charAt(0).toUpperCase() + nextTierConfig.name.slice(1)}
@@ -280,7 +280,7 @@ export default function LoyaltyPage() {
                   <p className="text-caption text-[#64748B] mb-2">
                     {t.minPoints === 0 ? "Start here" : `${formatPoints(t.minPoints)} points`}
                   </p>
-                  <p className="text-caption text-[#94A3B8] mb-3">{t.multiplier}x multiplier</p>
+                  <p className="text-caption text-[#64748B] mb-3">{t.multiplier}x multiplier</p>
 
                   {/* Benefits */}
                   <ul className="space-y-1.5">
@@ -301,7 +301,7 @@ export default function LoyaltyPage() {
         <section>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-heading-lg font-bold text-[#F1F5F9]">Achievements</h2>
-            <span className="text-caption text-[#94A3B8]">
+            <span className="text-caption text-[#64748B]">
               {unlockedAchievements.length} / {ACHIEVEMENT_DEFS.length} unlocked
             </span>
           </div>
@@ -321,7 +321,7 @@ export default function LoyaltyPage() {
                   <div className="flex items-center gap-3 mb-2">
                     <span className={`text-2xl ${unlocked ? "" : "grayscale opacity-50"}`}>{ach.icon}</span>
                     <div className="min-w-0">
-                      <p className={`text-body-sm font-semibold ${unlocked ? "text-[#F1F5F9]" : "text-[#94A3B8]"}`}>
+                      <p className={`text-body-sm font-semibold ${unlocked ? "text-[#F1F5F9]" : "text-[#64748B]"}`}>
                         {ach.name}
                       </p>
                       <p className="text-caption text-[#64748B] truncate">{ach.description}</p>
