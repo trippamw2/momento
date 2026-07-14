@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
 import Image from "next/image";
@@ -362,7 +362,7 @@ export default function SavedPageContent() {
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all duration-200 ${
                       sidebarTab === item.key
                         ? "bg-[#FF0F73]/10 text-[#F1F5F9] border border-[#FF0F73]/20"
-                        : "text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#1A2332]"
+                        : "text-[#64748B] hover:text-[#F1F5F9] hover:bg-[#1A2332]"
                     }`}
                   >
                     <span className="flex-1 text-left">{item.label}</span>
@@ -390,7 +390,7 @@ export default function SavedPageContent() {
                 className={`px-4 py-2 rounded-full text-body-sm font-medium whitespace-nowrap transition-all ${
                   sidebarTab === item.key
                     ? "bg-[#FF0F73] text-white"
-                    : "bg-[#1A2332] text-[#94A3B8] border border-white/[0.08]"
+                    : "bg-[#1A2332] text-[#64748B] border border-white/[0.08]"
                 }`}
               >
                 {item.label}
@@ -405,7 +405,7 @@ export default function SavedPageContent() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-heading-xl font-bold text-[#F1F5F9]">{pageTitle}</h1>
-              <p className="text-[#94A3B8] text-body-sm mt-0.5">
+              <p className="text-[#64748B] text-body-sm mt-0.5">
                 {isRecentlyTab
                   ? `${getRecentlyViewed().length} recently viewed`
                   : `${displayed.length} experience${displayed.length !== 1 ? "s" : ""}`
@@ -415,7 +415,7 @@ export default function SavedPageContent() {
             {!isRecentlyTab && displayed.length > 0 && (
               <button
                 onClick={() => window.location.href = "/experiences"}
-                className="text-body-sm text-[#94A3B8] hover:text-[#F1F5F9] transition-colors font-medium"
+                className="text-body-sm text-[#64748B] hover:text-[#F1F5F9] transition-colors font-medium"
               >
                 Browse all
               </button>
@@ -468,7 +468,7 @@ export default function SavedPageContent() {
                     <h2 className="text-heading-md font-bold text-[#F1F5F9]">Collections</h2>
                     <button
                        onClick={() => setCreatingCollection(true)}
-                       className="text-body-sm text-[#94A3B8] hover:text-[#F1F5F9] transition-colors font-medium"
+                       className="text-body-sm text-[#64748B] hover:text-[#F1F5F9] transition-colors font-medium"
                      >
                        Create
                      </button>
@@ -485,7 +485,7 @@ export default function SavedPageContent() {
                               <Image src={coverImg} alt={col.name} fill className="object-cover" sizes="192px" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center">
-                                <span className="text-2xl opacity-20 font-light">🗂</span>
+                                <span className="text-2xl opacity-20 font-light">▣</span>
                               </div>
                             )}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
@@ -497,7 +497,7 @@ export default function SavedPageContent() {
                             </button>
                             <div className="absolute bottom-0 left-0 right-0 p-2.5">
                               <p className="text-white font-semibold text-body-sm">{col.name}</p>
-                              <p className="text-white/60 text-caption">{col.experienceIds.length} experiences</p>
+                              <p className="text-[#CBD5E1] text-caption">{col.experienceIds.length} experiences</p>
                             </div>
                           </div>
                         </div>
@@ -517,13 +517,13 @@ export default function SavedPageContent() {
                         />
                         <div className="flex gap-1.5">
                           <button onClick={createCollection} className="flex-1 py-1.5 rounded-lg bg-[#FF0F73] text-white text-caption font-medium">Create</button>
-                          <button onClick={() => { setCreatingCollection(false); setNewCollectionName(""); }} className="flex-1 py-1.5 rounded-lg bg-[#111827] text-[#94A3B8] text-caption border border-white/[0.08]">Cancel</button>
+                          <button onClick={() => { setCreatingCollection(false); setNewCollectionName(""); }} className="flex-1 py-1.5 rounded-lg bg-[#111827] text-[#64748B] text-caption border border-white/[0.08]">Cancel</button>
                         </div>
                       </div>
                     ) : (
                       <button
                         onClick={() => setCreatingCollection(true)}
-                        className="flex-shrink-0 w-48 rounded-xl border-2 border-dashed border-white/[0.08] hover:border-[#FF0F73]/30 transition-all flex flex-col items-center justify-center gap-1 text-[#64748B] hover:text-[#94A3B8]"
+                        className="flex-shrink-0 w-48 rounded-xl border-2 border-dashed border-white/[0.08] hover:border-[#FF0F73]/30 transition-all flex flex-col items-center justify-center gap-1 text-[#64748B] hover:text-[#64748B]"
                       >
                         <span className="text-3xl font-light">＋</span>
                         <span className="text-caption font-medium">New Collection</span>
@@ -540,7 +540,7 @@ export default function SavedPageContent() {
                     <h2 className="text-heading-md font-bold text-[#F1F5F9]">Recently Viewed</h2>
                     <button
                       onClick={() => setSidebarTab("recently-viewed")}
-                      className="text-body-sm text-[#94A3B8] hover:text-[#F1F5F9] transition-colors"
+                      className="text-body-sm text-[#64748B] hover:text-[#F1F5F9] transition-colors"
                     >
                       View all
                     </button>
@@ -565,7 +565,7 @@ export default function SavedPageContent() {
                             </div>
                             <div className="absolute bottom-0 left-0 right-0 p-2.5">
                               <h3 className="text-white font-semibold text-body-sm leading-tight line-clamp-1">{exp.title}</h3>
-                              <p className="text-white/60 text-caption mt-0.5 line-clamp-1">{exp.subtitle}</p>
+                              <p className="text-[#CBD5E1] text-caption mt-0.5 line-clamp-1">{exp.subtitle}</p>
                             </div>
                           </div>
                         </Link>
@@ -583,7 +583,7 @@ export default function SavedPageContent() {
                     <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                   </div>
                   <h2 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Don&apos;t miss out on your favourites.</h2>
-                  <p className="text-[#94A3B8] text-body-lg mb-6">Book now and live the moment.</p>
+                  <p className="text-[#64748B] text-body-lg mb-6">Book now and live the moment.</p>
                   <Link
                     href="/experiences"
                     className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.25)] transition-all duration-300"
@@ -601,7 +601,7 @@ export default function SavedPageContent() {
                 <svg className="w-8 h-8 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
               </div>
               <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-2">Nothing saved yet</h2>
-              <p className="text-[#94A3B8] text-body-sm mb-6">Start exploring and save experiences you love.</p>
+              <p className="text-[#64748B] text-body-sm mb-6">Start exploring and save experiences you love.</p>
               <Link href="/experiences" className="inline-flex px-6 py-2.5 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.2)] transition-all">
                 Browse Experiences
               </Link>
@@ -635,7 +635,8 @@ function SavedCard({
   return (
     <div className="group relative">
       <Link href={`/experiences/${exp.id}`}>
-          <div className="relative aspect-[4/3] sm:aspect-[3/4] rounded-xl overflow-hidden bg-[#1A2332] transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_4px_16px_rgba(0,0,0,0.5)]">
+        {/* Image container */}
+        <div className="relative aspect-[4/3] sm:aspect-[4/3] rounded-xl overflow-hidden bg-[#1A2332] transition-all duration-500 group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
           <Image
             src={exp.image}
             alt={exp.title}
@@ -643,32 +644,7 @@ function SavedCard({
             className="object-cover transition-transform duration-700 group-hover:scale-110"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-transparent to-transparent" />
-
-          {/* Category Badge */}
-          <div className="absolute top-2.5 left-2.5">
-            <span className="px-2.5 py-1 rounded-full text-caption font-medium bg-[#111827]/[0.08] backdrop-blur-md text-white/90 border border-white/[0.08]">
-              {exp.category}
-            </span>
-          </div>
-
-          {/* City Badge */}
-          <div className="absolute top-2.5 right-12">
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-black/40 backdrop-blur-sm text-white/70 border border-white/10">
-              {exp.city}
-            </span>
-          </div>
-
-          {/* Star / Favorite Toggle */}
-          <button
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleFavorite(); }}
-            className="absolute top-2.5 right-12 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center hover:bg-yellow-500/60 transition-all duration-200 z-10"
-            title={isFavorited ? "Remove from favorites" : "Add to favorites"}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill={isFavorited ? "#FBBF24" : "none"} stroke={isFavorited ? "#FBBF24" : "white"} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
-          </button>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-transparent" />
 
           {/* Heart / Save Toggle */}
           <button
@@ -687,27 +663,27 @@ function SavedCard({
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
           </button>
+        </div>
 
-          {/* Bottom Info */}
-          <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-            <div className="flex items-center gap-1.5 mb-1.5">
-              <span className="text-yellow-400 text-[11px]">★</span>
-              <span className="text-caption text-white/80 font-medium">{exp.rating}</span>
-              <span className="text-caption text-white/30">·</span>
-              <span className="text-caption text-white/50">{exp.reviewCount}</span>
-            </div>
-            <h3 className="text-white font-semibold text-body-sm leading-tight line-clamp-1">{exp.title}</h3>
-            <p className="text-white/50 text-caption mt-0.5 line-clamp-1">{exp.subtitle}</p>
-            <p className="text-white font-semibold text-body-sm mt-1.5">
-              MK {exp.price.toLocaleString()}
-            </p>
+        {/* Info below image */}
+        <div className="mt-2.5 px-0.5">
+          <div className="flex items-center gap-1.5 mb-0.5">
+            <span className="text-yellow-400 text-[11px]">★</span>
+            <span className="text-caption text-[#CBD5E1] font-medium">{exp.rating}</span>
+            <span className="text-caption text-[#64748B]">·</span>
+            <span className="text-caption text-[#64748B]">{exp.reviewCount}</span>
           </div>
+          <h3 className="text-[#F1F5F9] font-semibold text-body-sm leading-snug line-clamp-1">{exp.title}</h3>
+          <p className="text-[#64748B] text-caption mt-0.5 line-clamp-1">{exp.subtitle || exp.category}</p>
+          <p className="text-white font-semibold text-body-sm mt-1.5">
+            MK {exp.price.toLocaleString()}
+          </p>
         </div>
       </Link>
 
       {/* Add to Collection */}
       {collections.length > 0 && (
-        <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+        <div className="absolute bottom-0 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
           <div className="relative">
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowMenu(!showMenu); }}
@@ -725,7 +701,7 @@ function SavedCard({
                     <button
                       key={col.id}
                       onClick={(e) => { e.preventDefault(); e.stopPropagation(); onAddToCollection(col.id); setShowMenu(false); }}
-                      className="w-full px-3 py-2 text-left text-body-sm text-[#94A3B8] hover:bg-[#1A2332] hover:text-[#F1F5F9] transition-colors flex items-center gap-2"
+                      className="w-full px-3 py-2 text-left text-body-sm text-[#64748B] hover:bg-[#1A2332] hover:text-[#F1F5F9] transition-colors flex items-center gap-2"
                     >
                       <svg className="w-3.5 h-3.5 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                       {col.name}

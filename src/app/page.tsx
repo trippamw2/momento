@@ -186,20 +186,24 @@ export default function Home() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {items.map((exp) => (
-          <Link key={exp.id} href={`/experiences/${exp.id}`} className="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#1A2332]">
-            <Image src={exp.image} alt={exp.title} fill className="object-cover transition-transform duration-500 group-hover:scale-110" sizes="(max-width: 768px) 100vw, 33vw" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-              {/* Mood badge */}
+          <Link key={exp.id} href={`/experiences/${exp.id}`} className="group rounded-2xl overflow-hidden bg-[#111827] border border-white/[0.06] transition-all duration-300 hover:border-white/[0.12] hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:translate-y-[-2px]">
+            <div className="relative aspect-[4/3] overflow-hidden bg-[#1A2332]">
+              <Image src={exp.image} alt={exp.title} fill className="object-cover transition-transform duration-500 group-hover:scale-110" sizes="(max-width: 768px) 100vw, 33vw" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+            </div>
+            <div className="p-3 sm:p-4">
               {exp.mood && exp.mood.length > 0 && (
-                <span className="inline-block px-2 py-0.5 rounded-full text-[9px] font-semibold text-white/90 bg-black/40 backdrop-blur-sm border border-white/10 mb-1.5">
+                <span className="text-caption text-[#64748B] font-medium uppercase tracking-wider">
                   {exp.mood[0]}
                 </span>
               )}
-              <p className="text-white text-body-sm font-bold line-clamp-1">{exp.title}</p>
-              <div className="flex items-center justify-between mt-1.5">
-                <span className="text-white/50 text-[10px]">MK {exp.price.toLocaleString()}</span>
-                <span className="text-yellow-400/80 text-[10px]">&#9733; {exp.rating}</span>
+              <p className="text-[#F1F5F9] text-body-sm font-semibold line-clamp-1 mt-0.5">{exp.title}</p>
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-white font-semibold text-body-sm">MK {exp.price.toLocaleString()}</span>
+                <span className="flex items-center gap-1 text-caption text-[#CBD5E1]">
+                  <span className="text-yellow-400/80">&#9733;</span>
+                  {exp.rating}
+                </span>
               </div>
             </div>
           </Link>
@@ -235,7 +239,7 @@ export default function Home() {
             )}
           </div>
           <h2 className="text-heading-xl sm:text-display-sm font-bold text-white mb-2 leading-tight">{exp.title}</h2>
-          <div className="flex items-center gap-3 mt-2 text-white/50 text-caption">
+          <div className="flex items-center gap-3 mt-2 text-[#64748B] text-caption">
             <span className="flex items-center gap-1">{exp.location}</span>
             <span>&middot;</span>
             <span>MK {exp.price.toLocaleString()}</span>
@@ -273,7 +277,7 @@ export default function Home() {
           {loading ? (
             <div className="w-5 h-5 rounded-full border-2 border-[#FF7A1A]/30 border-t-[#FF7A1A] animate-spin" />
           ) : (
-            <span className="text-2xl">🎲</span>
+            <span className="text-xl font-bold text-[#FF7A1A]">◆</span>
           )}
           <div className="text-left">
             <p className="text-body-sm font-bold">Surprise Me</p>
@@ -312,9 +316,9 @@ export default function Home() {
             <div className="flex items-center gap-3 text-caption text-amber-600 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3">
               <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               <span className="flex-1">Enable location to see experiences near you</span>
-              <button
-                onClick={() => geo.requestPosition()}
-                className="shrink-0 text-[11px] font-semibold text-white bg-amber-600/80 hover:bg-amber-600 px-3 py-1.5 rounded-lg transition-all"
+            <button
+                 onClick={() => geo.requestPosition()}
+                 className="shrink-0 text-[11px] font-semibold text-[#F1F5F9] bg-amber-600/80 hover:bg-amber-600 px-3 py-1.5 rounded-lg transition-all"
               >
                 Enable GPS
               </button>
@@ -503,7 +507,7 @@ export default function Home() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-2.5">
                           <p className="text-white text-caption font-medium line-clamp-1">{exp.title}</p>
-                          <p className="text-white/60 text-[10px]">MK {exp.price.toLocaleString()}</p>
+                          <p className="text-[#CBD5E1] text-[10px]">MK {exp.price.toLocaleString()}</p>
                         </div>
                       </Link>
                     ))}
