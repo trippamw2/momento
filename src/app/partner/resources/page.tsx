@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useAuthGuard } from "@/lib/use-auth-guard";
@@ -58,7 +58,7 @@ export default function PartnerResourcesPage() {
             </svg>
           </div>
           <h1 className="text-heading-xl font-bold text-[#F1F5F9] mb-3">Partner Access Required</h1>
-          <p className="text-[#94A3B8] text-body mb-6">
+          <p className="text-[#64748B] text-body mb-6">
             Please sign in with a partner account to access partner resources.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -80,7 +80,7 @@ export default function PartnerResourcesPage() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-display-sm font-bold text-[#F1F5F9] mb-3">Partner Resources</h1>
-          <p className="text-[#94A3B8] text-body-lg max-w-lg">
+          <p className="text-[#64748B] text-body-lg max-w-lg">
             Everything you need to succeed as an Experio host — from getting started to growing your business.
           </p>
         </div>
@@ -96,7 +96,7 @@ export default function PartnerResourcesPage() {
                 <span className="text-2xl flex-shrink-0">{item.icon}</span>
                 <div>
                   <h3 className="text-heading-sm font-bold text-[#F1F5F9] mb-1">{item.title}</h3>
-                  <p className="text-[#94A3B8] text-body-sm leading-relaxed">{item.desc}</p>
+                  <p className="text-[#64748B] text-body-sm leading-relaxed">{item.desc}</p>
                   {item.link && (
                     <Link
                       href={item.link}
@@ -117,7 +117,7 @@ export default function PartnerResourcesPage() {
         {/* Contact */}
         <div className="rounded-2xl border border-white/[0.08] bg-[#1A2332] p-8 text-center">
           <h2 className="text-heading-sm font-bold text-[#F1F5F9] mb-2">Have questions?</h2>
-          <p className="text-[#94A3B8] text-body-sm mb-5 max-w-md mx-auto">
+          <p className="text-[#64748B] text-body-sm mb-5 max-w-md mx-auto">
             Our partner support team is here to help you every step of the way.
           </p>
           <a
@@ -131,7 +131,7 @@ export default function PartnerResourcesPage() {
         <div className="mt-8 text-center">
           <Link
             href="/"
-            className="text-body-sm text-[#94A3B8] hover:text-[#F1F5F9] transition-colors"
+            className="text-body-sm text-[#64748B] hover:text-[#F1F5F9] transition-colors"
           >
             &larr; Back to Home
           </Link>

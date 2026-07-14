@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -270,7 +270,7 @@ export default function AdminPage() {
               key={item.key}
               onClick={() => switchSection(item.key)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-body-sm font-medium transition-all ${
-                section === item.key ? "bg-[#FF0F73] text-white" : "text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-white/[0.05]"
+                section === item.key ? "bg-[#FF0F73] text-white" : "text-[#64748B] hover:text-[#F1F5F9] hover:bg-white/[0.05]"
               }`}
             >
               <span>{item.icon}</span>
@@ -293,7 +293,7 @@ export default function AdminPage() {
         <header className="sticky top-18 z-20 bg-[#0F172A]/80 backdrop-blur-xl border-b border-white/[0.08]">
           <div className="flex items-center justify-between px-4 sm:px-6 h-14">
             <div className="flex items-center gap-3">
-              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/[0.05] text-[#94A3B8] font-bold text-heading">≡</button>
+              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/[0.05] text-[#64748B] font-bold text-heading">≡</button>
               <h1 className="text-heading-md font-bold text-[#F1F5F9] hidden sm:block">{NAV.find((n) => n.key === section)?.label}</h1>
             </div>
             <span className="text-caption text-[#64748B] bg-[#05070B] px-3 py-1.5 rounded-full">Admin</span>
@@ -332,7 +332,7 @@ export default function AdminPage() {
                     <p className="text-caption text-[#64748B] mb-2">Quick Actions</p>
                     <div className="flex flex-wrap gap-2">
                       {NAV.slice(1).map((item) => (
-                        <button key={item.key} onClick={() => switchSection(item.key)} className="px-4 py-2 rounded-xl bg-[#05070B] text-body-sm text-[#94A3B8] hover:bg-[#FF0F73] hover:text-white transition-all">
+                        <button key={item.key} onClick={() => switchSection(item.key)} className="px-4 py-2 rounded-xl bg-[#05070B] text-body-sm text-[#64748B] hover:bg-[#FF0F73] hover:text-white transition-all">
                           {item.icon} {item.label}
                         </button>
                       ))}
@@ -357,7 +357,7 @@ export default function AdminPage() {
                         <tr key={u.id} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
                           <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">{u.full_name || "—"}</td>
                           <td className="py-3 px-4"><StatusBadge status={u.role} /></td>
-                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{new Date(u.created_at).toLocaleDateString()}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#64748B]">{new Date(u.created_at).toLocaleDateString()}</td>
                           <td className="py-3 px-4">
                             <select
                               value={u.role}
@@ -394,11 +394,11 @@ export default function AdminPage() {
                       {experiences.map((e) => (
                         <tr key={e.id} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
                           <td className="py-3 px-4 text-body-sm text-[#F1F5F9] font-medium">{e.title}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{e.category}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#64748B]">{e.category}</td>
                           <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">MK {e.price.toLocaleString()}</td>
                           <td className="py-3 px-4"><StatusBadge status={e.status} /></td>
-                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{e.booking_count}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">★ {e.rating}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#64748B]">{e.booking_count}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#64748B]">★ {e.rating}</td>
                           <td className="py-3 px-4">
                             <div className="flex gap-1">
                               {e.status !== "published" && (
@@ -436,7 +436,7 @@ export default function AdminPage() {
                             <span className="text-caption text-[#64748B]">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
                           </div>
                           <p className="text-caption text-[#64748B] mb-1">{r.experience?.title || "Unknown experience"}</p>
-                          {r.body && <p className="text-body-sm text-[#94A3B8] mt-1">{r.body}</p>}
+                          {r.body && <p className="text-body-sm text-[#64748B] mt-1">{r.body}</p>}
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0">
                           <StatusBadge status={r.status} />
@@ -467,7 +467,7 @@ export default function AdminPage() {
                     <p className="text-body-sm text-[#64748B]">
                       Feature approved reviews as testimonials on the home page.
                     </p>
-                    <span className="text-caption text-[#94A3B8]">{featuredIds.length} featured</span>
+                    <span className="text-caption text-[#64748B]">{featuredIds.length} featured</span>
                   </div>
                   {testimonials.map((r) => {
                     const featured = featuredIds.includes(r.id);
@@ -485,7 +485,7 @@ export default function AdminPage() {
                               <span className="text-caption text-[#64748B]">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
                             </div>
                             <p className="text-caption text-[#64748B] mb-1">{r.experience?.title || "Unknown experience"}</p>
-                            {r.body && <p className="text-body-sm text-[#94A3B8] mt-1 line-clamp-2">{r.body}</p>}
+                            {r.body && <p className="text-body-sm text-[#64748B] mt-1 line-clamp-2">{r.body}</p>}
                           </div>
                           <button
                             onClick={async () => {
@@ -508,7 +508,7 @@ export default function AdminPage() {
                             className={`px-3 py-1.5 rounded-lg text-caption font-medium transition-all flex-shrink-0 ${
                               featured
                                 ? "bg-[#FF0F73]/20 text-[#FF0F73] hover:bg-[#FF0F73]/30"
-                                : "bg-white/[0.06] text-[#94A3B8] hover:bg-[#1A2332]"
+                                : "bg-white/[0.06] text-[#64748B] hover:bg-[#1A2332]"
                             }`}
                           >
                             {featured ? "★ Featured" : "☆ Feature"}
@@ -539,11 +539,11 @@ export default function AdminPage() {
                         <tr key={b.id} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
                           <td className="py-3 px-4 text-body-sm text-[#F1F5F9] font-mono">{b.id.slice(0, 8)}</td>
                           <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">{b.experience?.title || "—"}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{b.experience_date}</td>
-                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{b.guests_count}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#64748B]">{b.experience_date}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#64748B]">{b.guests_count}</td>
                           <td className="py-3 px-4 text-body-sm text-[#F1F5F9] font-medium">MK {b.total_price.toLocaleString()}</td>
                           <td className="py-3 px-4"><StatusBadge status={b.status} /></td>
-                          <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{new Date(b.created_at).toLocaleDateString()}</td>
+                          <td className="py-3 px-4 text-body-sm text-[#64748B]">{new Date(b.created_at).toLocaleDateString()}</td>
                         </tr>
                       ))}
                       {bookings.length === 0 && (
@@ -592,9 +592,9 @@ export default function AdminPage() {
                             <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">MK {gc.amount.toLocaleString()}</td>
                             <td className="py-3 px-4 text-body-sm text-[#F1F5F9]">MK {gc.balance.toLocaleString()}</td>
                             <td className="py-3 px-4"><StatusBadge status={gc.status} /></td>
-                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{gc.sender_name || "—"}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{gc.recipient_name || "—"}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{new Date(gc.created_at).toLocaleDateString()}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#64748B]">{gc.sender_name || "—"}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#64748B]">{gc.recipient_name || "—"}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#64748B]">{new Date(gc.created_at).toLocaleDateString()}</td>
                           </tr>
                         ))}
                         {giftCards.length === 0 && (
@@ -641,10 +641,10 @@ export default function AdminPage() {
                         {partnersList.map((p) => (
                           <tr key={p.id} className="border-b border-white/[0.08] hover:bg-white/[0.03] transition-colors">
                             <td className="py-3 px-4 text-body-sm text-[#F1F5F9] font-medium">{p.business_name || "—"}</td>
-                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{p.user?.full_name || "—"}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#64748B]">{p.user?.full_name || "—"}</td>
                             <td className="py-3 px-4"><StatusBadge status={p.is_active ? "active" : "suspended"} /></td>
                             <td className="py-3 px-4"><StatusBadge status={p.verification_status} /></td>
-                            <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{new Date(p.created_at).toLocaleDateString()}</td>
+                            <td className="py-3 px-4 text-body-sm text-[#64748B]">{new Date(p.created_at).toLocaleDateString()}</td>
                             <td className="py-3 px-4">
                               <div className="flex gap-1">
                                 <button
@@ -673,33 +673,33 @@ export default function AdminPage() {
                   <div className="w-full max-w-lg rounded-2xl bg-[#0F172A] border border-white/[0.08] shadow-xl p-6" onClick={(e) => e.stopPropagation()}>
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-heading-sm font-bold text-[#F1F5F9]">{selectedPartner.business_name || "Partner Details"}</h3>
-                      <button onClick={() => setSelectedPartner(null)} className="w-8 h-8 rounded-lg bg-white/[0.08] flex items-center justify-center text-[#94A3B8] hover:text-[#F1F5F9]">
+                      <button onClick={() => setSelectedPartner(null)} className="w-8 h-8 rounded-lg bg-white/[0.08] flex items-center justify-center text-[#64748B] hover:text-[#F1F5F9]">
                         ✕
                       </button>
                     </div>
                     <div className="space-y-3 text-body-sm">
                       <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
-                        <span className="text-[#94A3B8]">Business Name</span>
+                        <span className="text-[#64748B]">Business Name</span>
                         <span className="text-[#F1F5F9] font-medium">{selectedPartner.business_name || "—"}</span>
                       </div>
                       <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
-                        <span className="text-[#94A3B8]">Owner</span>
+                        <span className="text-[#64748B]">Owner</span>
                         <span className="text-[#F1F5F9] font-medium">{selectedPartner.user?.full_name || "—"}</span>
                       </div>
                       <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
-                        <span className="text-[#94A3B8]">Verification</span>
+                        <span className="text-[#64748B]">Verification</span>
                         <StatusBadge status={selectedPartner.verification_status} />
                       </div>
                       <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
-                        <span className="text-[#94A3B8]">Status</span>
+                        <span className="text-[#64748B]">Status</span>
                         <StatusBadge status={selectedPartner.is_active ? "active" : "suspended"} />
                       </div>
                       <div className="flex justify-between py-2.5 border-b border-white/[0.06]">
-                        <span className="text-[#94A3B8]">Joined</span>
+                        <span className="text-[#64748B]">Joined</span>
                         <span className="text-[#F1F5F9] font-medium">{new Date(selectedPartner.created_at).toLocaleDateString()}</span>
                       </div>
                       <div className="flex justify-between py-2.5">
-                        <span className="text-[#94A3B8]">Partner ID</span>
+                        <span className="text-[#64748B]">Partner ID</span>
                         <span className="text-[#F1F5F9] font-mono text-caption">{selectedPartner.id}</span>
                       </div>
                     </div>
@@ -739,7 +739,7 @@ export default function AdminPage() {
                             const height = maxRevenue > 0 ? (m.amount / maxRevenue) * 100 : 0;
                             return (
                               <div key={m.month} className="flex-1 flex flex-col items-center gap-1">
-                                <span className="text-[10px] text-[#94A3B8] font-medium">MK {(m.amount / 1000).toFixed(0)}k</span>
+                                <span className="text-[10px] text-[#64748B] font-medium">MK {(m.amount / 1000).toFixed(0)}k</span>
                                 <div
                                   className="w-full rounded-lg bg-gradient-to-t from-[#FF0F73] via-[#A855F7] to-[#6366F1] transition-all duration-500 hover:opacity-80"
                                   style={{ height: `${height}%` }}

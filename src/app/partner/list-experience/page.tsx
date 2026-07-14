@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
@@ -142,7 +142,7 @@ export default function ListExperiencePage() {
             </svg>
           </div>
           <h1 className="text-heading-xl font-bold text-[#F1F5F9] mb-3">Partner Access Required</h1>
-          <p className="text-[#94A3B8] text-body mb-6">
+          <p className="text-[#64748B] text-body mb-6">
             Please sign in with a partner account to list an experience.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -168,7 +168,7 @@ export default function ListExperiencePage() {
             </svg>
           </div>
           <h1 className="text-heading-xl font-bold text-[#F1F5F9] mb-3">Submission Received</h1>
-          <p className="text-[#94A3B8] text-body mb-6">
+          <p className="text-[#64748B] text-body mb-6">
             Thank you! Our team will review your experience and get back to you within 3&ndash;5 business days.
           </p>
           <Link
@@ -187,7 +187,7 @@ export default function ListExperiencePage() {
       <div className="max-w-2xl mx-auto px-4 sm:px-8">
         <div className="mb-8">
           <h1 className="text-display-sm font-bold text-[#F1F5F9] mb-2">List Your Experience</h1>
-          <p className="text-[#94A3B8] text-body-lg">
+          <p className="text-[#64748B] text-body-lg">
             Share your unique experience with the Experio community. Fill out the details below and our team will review your listing.
           </p>
         </div>
@@ -391,7 +391,7 @@ export default function ListExperiencePage() {
         <div className="mt-8 text-center">
           <Link
             href="/"
-            className="text-body-sm text-[#94A3B8] hover:text-[#F1F5F9] transition-colors"
+            className="text-body-sm text-[#64748B] hover:text-[#F1F5F9] transition-colors"
           >
             &larr; Back to Home
           </Link>

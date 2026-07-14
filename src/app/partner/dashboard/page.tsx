@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -181,7 +181,7 @@ export default function PartnerDashboardPage() {
             </svg>
           </div>
           <h1 className="text-heading-xl font-bold text-[#F1F5F9] mb-3">Partner Access Required</h1>
-          <p className="text-[#94A3B8] text-body mb-6">
+          <p className="text-[#64748B] text-body mb-6">
             Please sign in with a partner account to access the dashboard.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -211,7 +211,7 @@ export default function PartnerDashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
           <div>
             <h1 className="text-display-sm font-bold text-[#F1F5F9] mb-1">Partner Dashboard</h1>
-            <p className="text-[#94A3B8] text-body-lg">Manage your experiences and track performance.</p>
+            <p className="text-[#64748B] text-body-lg">Manage your experiences and track performance.</p>
           </div>
           <div className="flex items-center gap-3 mt-4 sm:mt-0">
             <Link
@@ -233,27 +233,27 @@ export default function PartnerDashboardPage() {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5">
-            <p className="text-caption text-[#94A3B8] font-medium mb-1">Total Experiences</p>
+            <p className="text-caption text-[#64748B] font-medium mb-1">Total Experiences</p>
             <p className="text-heading-xl font-bold text-[#F1F5F9]">{stats.totalExperiences}</p>
             <p className="text-caption text-emerald-400 mt-1">{stats.activeExperiences} active</p>
           </div>
           <div className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5">
-            <p className="text-caption text-[#94A3B8] font-medium mb-1">Total Bookings</p>
+            <p className="text-caption text-[#64748B] font-medium mb-1">Total Bookings</p>
             <p className="text-heading-xl font-bold text-[#F1F5F9]">{stats.totalBookings}</p>
             <p className="text-caption text-emerald-400 mt-1">All time</p>
           </div>
           <div className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5">
-            <p className="text-caption text-[#94A3B8] font-medium mb-1">Total Earnings</p>
+            <p className="text-caption text-[#64748B] font-medium mb-1">Total Earnings</p>
             <p className="text-heading-xl font-bold text-[#F1F5F9]">MK {stats.totalEarnings.toLocaleString()}</p>
             <p className="text-caption text-emerald-400 mt-1">Gross revenue</p>
           </div>
           <div className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5">
-            <p className="text-caption text-[#94A3B8] font-medium mb-1">Average Rating</p>
+            <p className="text-caption text-[#64748B] font-medium mb-1">Average Rating</p>
             <p className="text-heading-xl font-bold text-[#F1F5F9] flex items-center gap-2">
               {stats.averageRating}
               <span className="text-yellow-500 text-heading-sm">★</span>
             </p>
-            <p className="text-caption text-[#94A3B8] mt-1">{stats.reviewCount} reviews</p>
+            <p className="text-caption text-[#64748B] mt-1">{stats.reviewCount} reviews</p>
           </div>
         </div>
 
@@ -267,7 +267,7 @@ export default function PartnerDashboardPage() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="text-left text-caption text-[#94A3B8] font-medium border-b border-white/[0.08]">
+                  <tr className="text-left text-caption text-[#64748B] font-medium border-b border-white/[0.08]">
                     <th className="px-5 py-3">Experience</th>
                     <th className="px-5 py-3">Guest</th>
                     <th className="px-5 py-3">Date</th>
@@ -279,8 +279,8 @@ export default function PartnerDashboardPage() {
                   {bookings.map((b) => (
                     <tr key={b.id} className="border-b border-white/[0.08]/50 last:border-0 hover:bg-white/[0.05] transition-colors">
                       <td className="px-5 py-3.5 text-body-sm font-medium text-[#F1F5F9] max-w-[200px] truncate">{b.experienceTitle}</td>
-                      <td className="px-5 py-3.5 text-body-sm text-[#94A3B8]">{b.guestName}</td>
-                      <td className="px-5 py-3.5 text-body-sm text-[#94A3B8]">{new Date(b.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</td>
+                      <td className="px-5 py-3.5 text-body-sm text-[#64748B]">{b.guestName}</td>
+                      <td className="px-5 py-3.5 text-body-sm text-[#64748B]">{new Date(b.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</td>
                       <td className="px-5 py-3.5 text-body-sm font-semibold text-[#F1F5F9]">MK {b.amount.toLocaleString()}</td>
                       <td className="px-5 py-3.5">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-medium ${
@@ -321,7 +321,7 @@ export default function PartnerDashboardPage() {
                   </div>
                   <div>
                     <p className="text-body-sm font-semibold text-[#F1F5F9]">Customer Check-In</p>
-                    <p className="text-caption text-[#94A3B8]">Scan or search bookings</p>
+                    <p className="text-caption text-[#64748B]">Scan or search bookings</p>
                   </div>
                 </button>
                 <Link
@@ -333,7 +333,7 @@ export default function PartnerDashboardPage() {
                   </div>
                   <div>
                     <p className="text-body-sm font-semibold text-[#F1F5F9]">List New Experience</p>
-                    <p className="text-caption text-[#94A3B8]">Create a new offering</p>
+                    <p className="text-caption text-[#64748B]">Create a new offering</p>
                   </div>
                 </Link>
                 <Link
@@ -347,7 +347,7 @@ export default function PartnerDashboardPage() {
                   </div>
                   <div>
                     <p className="text-body-sm font-semibold text-[#F1F5F9]">Earnings & Payouts</p>
-                    <p className="text-caption text-[#94A3B8]">Track revenue and withdraw</p>
+                    <p className="text-caption text-[#64748B]">Track revenue and withdraw</p>
                   </div>
                 </Link>
                 <Link
@@ -359,7 +359,7 @@ export default function PartnerDashboardPage() {
                   </div>
                   <div>
                     <p className="text-body-sm font-semibold text-[#F1F5F9]">Partner Resources</p>
-                    <p className="text-caption text-[#94A3B8]">Guides &amp; best practices</p>
+                    <p className="text-caption text-[#64748B]">Guides &amp; best practices</p>
                   </div>
                 </Link>
                 <Link
@@ -371,7 +371,7 @@ export default function PartnerDashboardPage() {
                   </div>
                   <div>
                     <p className="text-body-sm font-semibold text-[#F1F5F9]">Profile Settings</p>
-                    <p className="text-caption text-[#94A3B8]">Update your information</p>
+                    <p className="text-caption text-[#64748B]">Update your information</p>
                   </div>
                 </Link>
               </div>
@@ -382,15 +382,15 @@ export default function PartnerDashboardPage() {
               <h2 className="text-heading-sm font-bold text-[#F1F5F9] mb-4">This Month</h2>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-body-sm text-[#94A3B8]">Bookings</span>
+                  <span className="text-body-sm text-[#64748B]">Bookings</span>
                   <span className="text-body-sm font-semibold text-[#F1F5F9]">{thisMonthBookings}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-body-sm text-[#94A3B8]">Revenue</span>
+                  <span className="text-body-sm text-[#64748B]">Revenue</span>
                   <span className="text-body-sm font-semibold text-[#F1F5F9]">MK {thisMonthRevenue.toLocaleString()}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-body-sm text-[#94A3B8]">Avg. per booking</span>
+                  <span className="text-body-sm text-[#64748B]">Avg. per booking</span>
                   <span className="text-body-sm font-semibold text-[#F1F5F9]">MK {thisMonthBookings > 0 ? Math.round(thisMonthRevenue / thisMonthBookings).toLocaleString() : "0"}</span>
                 </div>
                 <div className="flex items-center justify-between pt-2 border-t border-white/[0.08]">
@@ -415,17 +415,17 @@ export default function PartnerDashboardPage() {
           </div>
           <div className="divide-y divide-[#dddddd]/50">
             {experiencesLoading ? (
-              <div className="p-8 text-center text-[#94A3B8] text-body-sm">
+              <div className="p-8 text-center text-[#64748B] text-body-sm">
                 Loading experiences...
               </div>
             ) : experiencesError ? (
               <div className="p-8 text-center">
                 <p className="text-body-sm text-red-500 mb-2">{experiencesError}</p>
-                <p className="text-caption text-[#94A3B8]">Showing mock data instead</p>
+                <p className="text-caption text-[#64748B]">Showing mock data instead</p>
               </div>
             ) : experiences.length === 0 ? (
               <div className="p-8 text-center">
-                <p className="text-body-sm text-[#94A3B8] mb-2">You haven&apos;t listed any experiences yet.</p>
+                <p className="text-body-sm text-[#64748B] mb-2">You haven&apos;t listed any experiences yet.</p>
                 <Link href="/partner/list-experience" className="text-body-sm text-[#FF0F73] font-medium hover:underline">
                   List your first experience →
                 </Link>
@@ -438,7 +438,7 @@ export default function PartnerDashboardPage() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-body-sm font-semibold text-[#F1F5F9] truncate">{exp.name}</p>
-                    <p className="text-caption text-[#94A3B8] flex items-center gap-2">
+                    <p className="text-caption text-[#64748B] flex items-center gap-2">
                       <span>{exp.bookings} bookings</span>
                       <span>·</span>
                       <span className="flex items-center gap-0.5">
@@ -450,7 +450,7 @@ export default function PartnerDashboardPage() {
                 <div className="text-right flex-shrink-0 ml-4">
                   <p className="text-body-sm font-semibold text-[#F1F5F9]">MK {exp.revenue.toLocaleString()}</p>
                   <span className={`text-caption font-medium ${
-                    exp.status === "active" || exp.status === "published" ? "text-emerald-400" : "text-[#94A3B8]"
+                    exp.status === "active" || exp.status === "published" ? "text-emerald-400" : "text-[#64748B]"
                   }`}>
                     {exp.status === "active" || exp.status === "published" ? "● Live" : "○ Draft"}
                   </span>

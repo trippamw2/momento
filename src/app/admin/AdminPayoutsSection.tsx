@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 
@@ -103,7 +103,7 @@ export default function AdminPayoutsSection() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 rounded-lg text-caption font-medium transition-all ${
-              statusFilter === s ? "bg-[#FF0F73] text-white" : "bg-[#0F172A] text-[#94A3B8] hover:bg-[#1A2332] border border-white/[0.08]"
+              statusFilter === s ? "bg-[#FF0F73] text-white" : "bg-[#0F172A] text-[#64748B] hover:bg-[#1A2332] border border-white/[0.08]"
             }`}
           >
             {s || "All"}
@@ -134,9 +134,9 @@ export default function AdminPayoutsSection() {
                     <p className="text-caption text-[#64748B]">{p.partner?.user?.full_name || "—"}</p>
                   </td>
                   <td className="py-3 px-4 text-body-sm font-semibold text-[#F1F5F9]">MK {p.amount.toLocaleString()}</td>
-                  <td className="py-3 px-4 text-body-sm text-[#94A3B8]">{p.payout_method || "—"}</td>
+                  <td className="py-3 px-4 text-body-sm text-[#64748B]">{p.payout_method || "—"}</td>
                   <td className="py-3 px-4">
-                    <p className="text-caption text-[#94A3B8]">{p.bank_name || "—"}</p>
+                    <p className="text-caption text-[#64748B]">{p.bank_name || "—"}</p>
                     <p className="text-caption text-[#64748B]">{p.account_number || "—"}</p>
                     <p className="text-caption text-[#64748B]">{p.account_name || "—"}</p>
                   </td>
@@ -145,7 +145,7 @@ export default function AdminPayoutsSection() {
                       {p.status}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-body-sm text-[#94A3B8]">
+                  <td className="py-3 px-4 text-body-sm text-[#64748B]">
                     {new Date(p.created_at).toLocaleDateString()}
                   </td>
                   <td className="py-3 px-4">

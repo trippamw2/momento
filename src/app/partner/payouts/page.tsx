@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -130,7 +130,7 @@ export default function PartnerPayoutsPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-display-sm font-bold text-[#F1F5F9] mb-1">Earnings & Payouts</h1>
-            <p className="text-[#94A3B8] text-body-lg">Track your revenue and request payouts.</p>
+            <p className="text-[#64748B] text-body-lg">Track your revenue and request payouts.</p>
           </div>
           <button
             onClick={() => setShowModal(true)}
@@ -150,7 +150,7 @@ export default function PartnerPayoutsPage() {
             { label: "Withdrawn", value: `MK ${(earnings?.withdrawn ?? 0).toLocaleString()}`, icon: "📤", color: "text-blue-400" },
           ].map((stat) => (
             <div key={stat.label} className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5">
-              <p className="text-caption text-[#94A3B8] font-medium mb-1">{stat.label}</p>
+              <p className="text-caption text-[#64748B] font-medium mb-1">{stat.label}</p>
               <p className={`text-heading-xl font-bold ${stat.color}`}>{stat.value}</p>
             </div>
           ))}
@@ -164,7 +164,7 @@ export default function PartnerPayoutsPage() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="text-left text-caption text-[#94A3B8] font-medium border-b border-white/[0.08]">
+                <tr className="text-left text-caption text-[#64748B] font-medium border-b border-white/[0.08]">
                   <th className="px-5 py-3">Date</th>
                   <th className="px-5 py-3">Amount</th>
                   <th className="px-5 py-3">Method</th>
@@ -176,22 +176,22 @@ export default function PartnerPayoutsPage() {
               <tbody>
                 {payouts.map((p) => (
                   <tr key={p.id} className="border-b border-white/[0.08]/50 last:border-0 hover:bg-white/[0.05] transition-colors">
-                    <td className="px-5 py-3.5 text-body-sm text-[#94A3B8]">{new Date(p.created_at).toLocaleDateString()}</td>
+                    <td className="px-5 py-3.5 text-body-sm text-[#64748B]">{new Date(p.created_at).toLocaleDateString()}</td>
                     <td className="px-5 py-3.5 text-body-sm font-semibold text-[#F1F5F9]">MK {p.amount.toLocaleString()}</td>
-                    <td className="px-5 py-3.5 text-body-sm text-[#94A3B8]">{p.payout_method || "—"}</td>
-                    <td className="px-5 py-3.5 text-body-sm text-[#94A3B8]">{p.bank_name || "—"}</td>
+                    <td className="px-5 py-3.5 text-body-sm text-[#64748B]">{p.payout_method || "—"}</td>
+                    <td className="px-5 py-3.5 text-body-sm text-[#64748B]">{p.bank_name || "—"}</td>
                     <td className="px-5 py-3.5">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-medium capitalize ${STATUS_COLORS[p.status] || "bg-gray-800 text-gray-300"}`}>
                         {p.status}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5 text-body-sm text-[#94A3B8]">
+                    <td className="px-5 py-3.5 text-body-sm text-[#64748B]">
                       {p.processed_at ? new Date(p.processed_at).toLocaleDateString() : "—"}
                     </td>
                   </tr>
                 ))}
                 {payouts.length === 0 && (
-                  <tr><td colSpan={6} className="py-8 text-center text-caption text-[#94A3B8]">No payouts yet</td></tr>
+                  <tr><td colSpan={6} className="py-8 text-center text-caption text-[#64748B]">No payouts yet</td></tr>
                 )}
               </tbody>
             </table>
@@ -208,16 +208,16 @@ export default function PartnerPayoutsPage() {
               <div key={e.id} className="p-4 hover:bg-white/[0.05] transition-colors flex items-center justify-between">
                 <div>
                   <p className="text-body-sm font-medium text-[#F1F5F9]">{(e.experience as { title: string } | null)?.title || "Experience"}</p>
-                  <p className="text-caption text-[#94A3B8]">{new Date(e.created_at).toLocaleDateString()}</p>
+                  <p className="text-caption text-[#64748B]">{new Date(e.created_at).toLocaleDateString()}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-body-sm font-semibold text-[#F1F5F9]">MK {e.net_amount.toLocaleString()}</p>
-                  <p className="text-caption text-[#94A3B8]">-{(e.commission_amount / e.gross_amount * 100).toFixed(0)}% fee</p>
+                  <p className="text-caption text-[#64748B]">-{(e.commission_amount / e.gross_amount * 100).toFixed(0)}% fee</p>
                 </div>
               </div>
             ))}
             {(earnings?.recent_earnings ?? []).length === 0 && (
-              <div className="p-8 text-center text-caption text-[#94A3B8]">No earnings yet. Complete bookings to start earning!</div>
+              <div className="p-8 text-center text-caption text-[#64748B]">No earnings yet. Complete bookings to start earning!</div>
             )}
           </div>
         </div>
@@ -227,18 +227,18 @@ export default function PartnerPayoutsPage() {
           <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
             <div className="w-full max-w-md rounded-2xl bg-[#111827] border border-white/[0.08] p-6" onClick={e => e.stopPropagation()}>
               <h3 className="text-heading-md font-bold text-[#F1F5F9] mb-4">Request Payout</h3>
-              <p className="text-body-sm text-[#94A3B8] mb-4">Available: <span className="text-emerald-400 font-semibold">MK {(earnings?.available_balance ?? 0).toLocaleString()}</span></p>
+              <p className="text-body-sm text-[#64748B] mb-4">Available: <span className="text-emerald-400 font-semibold">MK {(earnings?.available_balance ?? 0).toLocaleString()}</span></p>
 
               {error && <p className="text-body-sm text-red-400 mb-4">{error}</p>}
 
               <div className="space-y-3">
                 <div>
-                  <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Amount (MK)</label>
+                  <label className="text-caption text-[#64748B] font-medium mb-1 block">Amount (MK)</label>
                   <input type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))}
                     className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" />
                 </div>
                 <div>
-                  <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Payout Method</label>
+                  <label className="text-caption text-[#64748B] font-medium mb-1 block">Payout Method</label>
                   <select value={form.payout_method} onChange={e => setForm(f => ({ ...f, payout_method: e.target.value }))}
                     className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]">
                     <option value="bank_transfer">Bank Transfer</option>
@@ -246,17 +246,17 @@ export default function PartnerPayoutsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Bank Name</label>
+                  <label className="text-caption text-[#64748B] font-medium mb-1 block">Bank Name</label>
                   <input value={form.bank_name} onChange={e => setForm(f => ({ ...f, bank_name: e.target.value }))}
                     className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" />
                 </div>
                 <div>
-                  <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Account Number</label>
+                  <label className="text-caption text-[#64748B] font-medium mb-1 block">Account Number</label>
                   <input value={form.account_number} onChange={e => setForm(f => ({ ...f, account_number: e.target.value }))}
                     className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" />
                 </div>
                 <div>
-                  <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Account Name</label>
+                  <label className="text-caption text-[#64748B] font-medium mb-1 block">Account Name</label>
                   <input value={form.account_name} onChange={e => setForm(f => ({ ...f, account_name: e.target.value }))}
                     className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" />
                 </div>

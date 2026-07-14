@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 
@@ -137,7 +137,7 @@ export default function AdminSettingsSection() {
       {/* Commission Preview */}
       <div className="rounded-xl bg-[#0F172A] border border-white/[0.08] shadow-sm p-6">
         <h3 className="text-body-sm font-semibold text-[#F1F5F9] mb-3">How It Works</h3>
-        <div className="space-y-2 text-body-sm text-[#94A3B8]">
+        <div className="space-y-2 text-body-sm text-[#64748B]">
           <p>1. Guest books an experience and pays MK 100,000</p>
           <p>2. Platform takes <span className="text-[#FF0F73] font-medium">{editValues.platform_commission_percent ?? "10"}%</span> commission = MK {(100000 * Number(editValues.platform_commission_percent ?? 10) / 100).toLocaleString()}</p>
           <p>3. Partner receives <span className="text-emerald-400 font-medium">MK {(100000 - 100000 * Number(editValues.platform_commission_percent ?? 10) / 100).toLocaleString()}</span></p>

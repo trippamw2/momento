@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -161,7 +161,7 @@ export default function PartnerOnboardingPage() {
       <div className="min-h-screen bg-[#05070B] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-heading-xl font-bold text-[#F1F5F9] mb-3">Partner Access Required</h1>
-          <p className="text-[#94A3B8] mb-6">Please sign in with a partner account.</p>
+          <p className="text-[#64748B] mb-6">Please sign in with a partner account.</p>
           <Link href="/" className="px-6 py-3 rounded-xl bg-[#FF0F73] text-white font-semibold">Back to Home</Link>
         </div>
       </div>
@@ -195,29 +195,29 @@ export default function PartnerOnboardingPage() {
             <div className="space-y-4">
               <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-4">Business Profile</h2>
               <div>
-                <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Business Name *</label>
+                <label className="text-caption text-[#64748B] font-medium mb-1 block">Business Name *</label>
                 <input value={data.business_name} onChange={e => update("business_name", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" placeholder="e.g. Lilongwe Food Tours" />
               </div>
               <div>
-                <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Description</label>
+                <label className="text-caption text-[#64748B] font-medium mb-1 block">Description</label>
                 <textarea value={data.business_description} onChange={e => update("business_description", e.target.value)} rows={3}
                   className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73] resize-none" placeholder="Tell guests about your business..." />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Email</label>
+                  <label className="text-caption text-[#64748B] font-medium mb-1 block">Email</label>
                   <input value={data.business_email} onChange={e => update("business_email", e.target.value)} type="email"
                     className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" placeholder="business@example.com" />
                 </div>
                 <div>
-                  <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Phone</label>
+                  <label className="text-caption text-[#64748B] font-medium mb-1 block">Phone</label>
                   <input value={data.business_phone} onChange={e => update("business_phone", e.target.value)}
                     className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" placeholder="+265..." />
                 </div>
               </div>
               <div>
-                <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Website</label>
+                <label className="text-caption text-[#64748B] font-medium mb-1 block">Website</label>
                 <input value={data.business_website} onChange={e => update("business_website", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" placeholder="https://..." />
               </div>
@@ -229,30 +229,30 @@ export default function PartnerOnboardingPage() {
             <div className="space-y-4">
               <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-4">Location & Categories</h2>
               <div>
-                <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Address</label>
+                <label className="text-caption text-[#64748B] font-medium mb-1 block">Address</label>
                 <input value={data.business_address} onChange={e => update("business_address", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-caption text-[#94A3B8] font-medium mb-1 block">City</label>
+                  <label className="text-caption text-[#64748B] font-medium mb-1 block">City</label>
                   <input value={data.business_city} onChange={e => update("business_city", e.target.value)}
                     className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" />
                 </div>
                 <div>
-                  <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Country</label>
+                  <label className="text-caption text-[#64748B] font-medium mb-1 block">Country</label>
                   <input value={data.business_country} onChange={e => update("business_country", e.target.value)}
                     className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" />
                 </div>
               </div>
               <div>
-                <label className="text-caption text-[#94A3B8] font-medium mb-2 block">Categories</label>
+                <label className="text-caption text-[#64748B] font-medium mb-2 block">Categories</label>
                 <div className="flex flex-wrap gap-2">
                   {CATEGORIES.map(cat => (
                     <button key={cat} onClick={() => toggleCategory(cat)}
                       className={`px-4 py-2 rounded-xl text-caption font-medium transition-all ${
                         data.categories.includes(cat)
-                          ? "bg-[#FF0F73] text-white" : "bg-[#05070B] text-[#94A3B8] border border-white/[0.08] hover:border-[#FF0F73]/50"
+                          ? "bg-[#FF0F73] text-white" : "bg-[#05070B] text-[#64748B] border border-white/[0.08] hover:border-[#FF0F73]/50"
                       }`}>
                       {cat}
                     </button>
@@ -266,9 +266,9 @@ export default function PartnerOnboardingPage() {
           {step === 3 && (
             <div className="space-y-4">
               <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-4">Bank Details</h2>
-              <p className="text-body-sm text-[#94A3B8] mb-4">This is where your payouts will be sent.</p>
+              <p className="text-body-sm text-[#64748B] mb-4">This is where your payouts will be sent.</p>
               <div>
-                <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Payout Method</label>
+                <label className="text-caption text-[#64748B] font-medium mb-1 block">Payout Method</label>
                 <select value={data.payout_method} onChange={e => update("payout_method", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]">
                   <option value="bank_transfer">Bank Transfer</option>
@@ -276,17 +276,17 @@ export default function PartnerOnboardingPage() {
                 </select>
               </div>
               <div>
-                <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Bank Name</label>
+                <label className="text-caption text-[#64748B] font-medium mb-1 block">Bank Name</label>
                 <input value={data.bank_name} onChange={e => update("bank_name", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" placeholder="e.g. National Bank of Malawi" />
               </div>
               <div>
-                <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Account Number</label>
+                <label className="text-caption text-[#64748B] font-medium mb-1 block">Account Number</label>
                 <input value={data.bank_account_number} onChange={e => update("bank_account_number", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" />
               </div>
               <div>
-                <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Account Name</label>
+                <label className="text-caption text-[#64748B] font-medium mb-1 block">Account Name</label>
                 <input value={data.bank_account_name} onChange={e => update("bank_account_name", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" placeholder="Name on the account" />
               </div>
@@ -297,9 +297,9 @@ export default function PartnerOnboardingPage() {
           {step === 4 && (
             <div className="space-y-4">
               <h2 className="text-heading-md font-bold text-[#F1F5F9] mb-4">Verification</h2>
-              <p className="text-body-sm text-[#94A3B8] mb-4">Upload an ID document to verify your identity.</p>
+              <p className="text-body-sm text-[#64748B] mb-4">Upload an ID document to verify your identity.</p>
               <div>
-                <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Document Type</label>
+                <label className="text-caption text-[#64748B] font-medium mb-1 block">Document Type</label>
                 <select value={data.id_document_type} onChange={e => update("id_document_type", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]">
                   <option value="national_id">National ID</option>
@@ -308,7 +308,7 @@ export default function PartnerOnboardingPage() {
                 </select>
               </div>
               <div>
-                <label className="text-caption text-[#94A3B8] font-medium mb-1 block">Document URL</label>
+                <label className="text-caption text-[#64748B] font-medium mb-1 block">Document URL</label>
                 <input value={data.id_document_url} onChange={e => update("id_document_url", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm focus:outline-none focus:border-[#FF0F73]" placeholder="Link to your ID document image" />
                 <p className="text-caption text-[#64748B] mt-1">Provide a link to a photo/scan of your document</p>
@@ -316,7 +316,7 @@ export default function PartnerOnboardingPage() {
               <div className="flex items-start gap-3 mt-4 p-4 rounded-xl bg-[#05070B] border border-white/[0.08]">
                 <input type="checkbox" checked={confirmed} onChange={e => setConfirmed(e.target.checked)}
                   className="mt-1 w-4 h-4 rounded border-white/[0.08] text-[#FF0F73] focus:ring-[#FF0F73]" />
-                <p className="text-body-sm text-[#94A3B8]">
+                <p className="text-body-sm text-[#64748B]">
                   I confirm that all information provided is accurate and I agree to the platform&apos;s terms of service.
                 </p>
               </div>
