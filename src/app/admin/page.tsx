@@ -93,10 +93,39 @@ function StatusBadge({ status }: { status: string }) {
 
 export default function AdminPage() {
   const router = useRouter();
-  const [section, setSection] = useState<Section>("overview");
+  const [section, setSection] = useState<Section>("host-onboarding");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const { allowed: isAdmin, loading: authLoading } = useAuthGuard({ requiredRole: "admin" });
+
+  // Add host-onboarding to NAV if not exists
+  const NAV_WITH_HOST_ONBOARDING: { key: Section; label: string; icon: string }[] = [
+    { key: "host-onboarding", label: "Host Onboarding", icon: "🏢" },
+    { key: "overview", label: "Overview", icon: "◇" },
+    { key: "users", label: "Users", icon: "◆" },
+    { key: "experiences", label: "Experiences", icon: "★" },
+    { key: "reviews", label: "Reviews", icon: "☆" },
+    { key: "testimonials", label: "Testimonials", icon: "♢" },
+    { key: "bookings", label: "Bookings", icon: "▣" },
+    { key: "gift-cards", label: "Gift Cards", icon: "▸" },
+    { key: "partners", label: "Partners", icon: "♤" },
+    { key: "financials", label: "Financials", icon: "▲" },
+    { key: "payouts", label: "Payouts", icon: "▼" },
+    { key: "settings", label: "Settings", icon: "●" },
+  ];
+
+  // Enhanced section switcher that supports both host-onboarding and overview
+  const switchSection = (s: Section) => {
+    if (s === "host-onboarding") {
+      // Show host onboarding wizard page
+      if (window.location.pathname !== "/admin/host-onboarding") {
+        router.push("/admin/host-onboarding");
+        return;
+      }
+    }
+    setSection(s);
+    loadSection(s);
+  };
 
   // Data states
   const [overview, setOverview] = useState<OverviewData | null>(null);
