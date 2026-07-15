@@ -1,17 +1,15 @@
 ﻿"use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import Logo from "@/components/Logo";
 import AuthModal from "./AuthModal";
 import LoyaltyBadge from "./LoyaltyBadge";
-import { getUnreadCount, getNotifications, markAsRead } from "@/lib/notifications-engine";
+import { getUnreadCount, getNotifications } from "@/lib/notifications-engine";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [menuOpen, setMenuOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
@@ -48,14 +46,6 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const navItems = [
-    { label: "Discover", href: "/discover" },
-    { label: "Experiences", href: "/experiences" },
-    { label: "Saved", href: "/saved" },
-    { label: "Wallet", href: "/wallet" },
-    { label: "Gift", href: "/gift" },
-  ];
-
   const handleSignOut = async () => {
     const token = localStorage.getItem("experio-auth-token");
     try {
@@ -80,28 +70,9 @@ export default function Navbar() {
       <header className="fixed top-0 left-0 right-0 z-[999] bg-[#111827]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-sm h-[72px]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="flex items-center justify-between h-[72px]">
-            {/* Left: Logo + Nav */}
-            <div className="flex items-center gap-8">
+            {/* Left: Logo */}
+            <div className="flex items-center">
               <Logo size="sm" />
-
-              <nav className="hidden md:flex items-center gap-0.5">
-                {navItems.map((item) => {
-                  const isActive = pathname === item.href || (item.href !== "/discover" && pathname.startsWith(item.href));
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={`relative px-3.5 py-2 rounded-xl text-body-sm font-semibold transition-all duration-200 ${
-                        isActive
-                          ? "text-white after:absolute after:bottom-0 after:left-1/4 after:w-1/2 after:h-0.5 after:bg-[#FF0F73] after:rounded-full"
-                          : "text-[#64748B] hover:text-white hover:bg-white/[0.05]"
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </nav>
             </div>
 
             {/* Right: Actions */}
@@ -235,126 +206,8 @@ export default function Navbar() {
               </div>
             </div>
 
-            {/* Mobile hamburger */}
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/[0.05] transition-colors"
-              aria-label="Toggle menu"
-            >
-              <div className="w-5 flex flex-col gap-1">
-                <span className={`block h-0.5 bg-white transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-1.5" : ""}`} />
-                <span className={`block h-0.5 bg-white transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
-                <span className={`block h-0.5 bg-white transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""}`} />
-              </div>
-            </button>
           </div>
         </div>
-
-        {/* Mobile menu — cinematic lifestyle overlay */}
-        {menuOpen && (
-          <div className="md:hidden fixed inset-x-0 top-[72px] bottom-0 z-[998] overflow-y-auto">
-            {/* Cinematic background image */}
-            <div className="absolute inset-0">
-              <Image
-                src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=85"
-                alt=""
-                fill
-                className="object-cover"
-                sizes="100vw"
-                unoptimized
-              />
-              {/* Dark gradient overlay for readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/60 to-black/50" />
-              <div className="absolute inset-0 backdrop-blur-[2px]" />
-              {/* Semi-transparent black backdrop for extra safety */}
-              <div className="absolute inset-0 bg-black/40" />
-            </div>
-            <nav className="relative z-10 px-4 py-6 space-y-2 min-h-full">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMenuOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-4 rounded-xl text-body-sm font-semibold transition-all ${
-                      isActive
-                        ? "bg-white/15 text-white backdrop-blur-md border border-white/10"
-                        : "text-white/80 hover:text-white hover:bg-white/10"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                );
-              })}
-              <hr className="my-3 border-white/10" />
-              <Link
-                href="/ask-ai"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-body-sm font-semibold text-[#FF0F73] hover:bg-white/10 transition-all"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" /></svg>
-                ASK AI
-              </Link>
-              <Link
-                href="/experiences?nearby=true"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-body-sm font-semibold text-white/80 hover:text-white hover:bg-white/10 transition-all"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                Near Me
-              </Link>
-              {signedIn && userRole !== "partner" && userRole !== "admin" && (
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    localStorage.setItem("experio-signup-role", "partner");
-                    setAuthOpen(true);
-                  }}
-                  className="flex items-center gap-3 w-full px-4 py-4 rounded-xl text-body-sm font-semibold bg-gradient-to-r from-[#FF0F73]/20 to-[#FF7A1A]/20 text-[#FF0F73] hover:from-[#FF0F73]/30 hover:to-[#FF7A1A]/30 transition-all border border-[#FF0F73]/20"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-                  Become a Host
-                </button>
-              )}
-              {signedIn ? (
-                <>
-                  <button
-                    onClick={() => {
-                      setMenuOpen(false);
-                      setNotifOpen(!notifOpen);
-                    }}
-                    className="flex items-center gap-3 w-full px-4 py-4 rounded-xl text-body-sm font-semibold text-white/80 hover:text-white hover:bg-white/10 transition-all"
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-                    Notifications
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMenuOpen(false);
-                      handleSignOut();
-                    }}
-                    className="flex items-center gap-3 w-full px-4 py-4 rounded-xl text-body-sm font-semibold text-[#ff6b6b] hover:bg-white/10 transition-all"
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    setAuthOpen(true);
-                  }}
-                  className="flex items-center gap-3 w-full px-4 py-4 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255, 15, 115, 0.4)] transition-all min-h-[52px]"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
-                  Sign In / Register
-                </button>
-              )}
-            </nav>
-          </div>
-        )}
       </header>
 
       {authOpen && <AuthModal onClose={() => setAuthOpen(false)} />}

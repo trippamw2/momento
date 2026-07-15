@@ -1,0 +1,96 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import AuthModal from "./AuthModal";
+
+export default function MobileBottomNav() {
+  const pathname = usePathname();
+  const [signedIn, setSignedIn] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [authOpen, setAuthOpen] = useState(false);
+
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("experio-auth-token") : null;
+    const role = typeof window !== "undefined" ? localStorage.getItem("experio-user-role") : null;
+    setSignedIn(!!token);
+    setUserRole(role);
+  }, []);
+
+  const navItems = [
+    {
+      href: "/discover",
+      label: "Discover",
+      icon: (
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      ),
+    },
+    {
+      href: "/wallet",
+      label: "Wallet",
+      icon: (
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
+        </svg>
+      ),
+    },
+    {
+      href: signedIn ? "/saved" : "#",
+      label: signedIn ? "Saved" : "Sign In",
+      icon: signedIn ? (
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      ) : (
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+        </svg>
+      ),
+      onClick: signedIn ? undefined : (e: React.MouseEvent) => { e.preventDefault(); setAuthOpen(true); },
+    },
+    {
+      href: "/profile",
+      label: "Profile",
+      icon: (
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <nav className="fixed bottom-0 left-0 right-0 md:hidden z-[1000] bg-[#111827]/95 backdrop-blur-xl border-t border-white/[0.08] safe-area-bottom">
+        <div className="grid grid-cols-4">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href || (item.href !== "/discover" && item.href !== "#" && pathname.startsWith(item.href));
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={item.onClick}
+                className={`relative flex flex-col items-center justify-center gap-0.5 px-3 py-2.5 transition-all duration-200 ${
+                  isActive
+                    ? "text-[#FF0F73]"
+                    : "text-[#64748B] active:text-white/70"
+                }`}
+              >
+                <span className="w-6 h-6 flex items-center justify-center">{item.icon}</span>
+                <span className="text-[10px] font-semibold tracking-wide leading-none">{item.label}</span>
+                {isActive && (
+                  <span className="absolute top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#FF0F73]" />
+                )}
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+
+      {authOpen && <AuthModal onClose={() => setAuthOpen(false)} />}
+    </>
+  );
+}
