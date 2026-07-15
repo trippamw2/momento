@@ -372,14 +372,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 <p className="text-caption text-[#64748B]">per person</p>
               </div>
               <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-caption text-[#64748B]">Guests:</span>
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => setGuests(Math.max(1, guests - 1))} disabled={guests <= 1} className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-white text-sm disabled:opacity-30 hover:bg-white/10">−</button>
-                    <span className="w-5 text-center text-body-sm text-white font-medium">{guests}</span>
-                    <button onClick={() => setGuests(Math.min(exp.capacity, guests + 1))} disabled={guests >= exp.capacity} className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-white text-sm disabled:opacity-30 hover:bg-white/10">+</button>
-                  </div>
-                </div>
+                <GuestSelector value={guests} onChange={setGuests} maxGuests={exp.capacity} />
                 <button
                   onClick={handleBookNow}
                   disabled={!selectedDate || booking}

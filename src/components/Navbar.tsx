@@ -72,14 +72,14 @@ export default function Navbar() {
     window.location.reload();
   };
 
-  // Hide Navbar on the discover feed page (it has its own header)
+    // Hide Navbar on the discover feed page (it has its own header)
   if (pathname === "/discover") return null;
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-[999] bg-[#111827]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-sm">
+      <header className="fixed top-0 left-0 right-0 z-[999] bg-[#111827]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-sm h-[72px]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="flex items-center justify-between h-18">
+          <div className="flex items-center justify-between h-[72px]">
             {/* Left: Logo + Nav */}
             <div className="flex items-center gap-8">
               <Logo size="sm" />
@@ -252,7 +252,7 @@ export default function Navbar() {
 
         {/* Mobile menu — cinematic lifestyle overlay */}
         {menuOpen && (
-          <div className="md:hidden fixed inset-x-0 top-18 bottom-0 z-[998] overflow-y-auto">
+          <div className="md:hidden fixed inset-x-0 top-[72px] bottom-0 z-[998] overflow-y-auto">
             {/* Cinematic background image */}
             <div className="absolute inset-0">
               <Image
@@ -266,6 +266,8 @@ export default function Navbar() {
               {/* Dark gradient overlay for readability */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/60 to-black/50" />
               <div className="absolute inset-0 backdrop-blur-[2px]" />
+              {/* Semi-transparent black backdrop for extra safety */}
+              <div className="absolute inset-0 bg-black/40" />
             </div>
             <nav className="relative z-10 px-4 py-6 space-y-2 min-h-full">
               {navItems.map((item) => {
