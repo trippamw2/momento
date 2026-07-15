@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useAuthGuard } from "@/lib/use-auth-guard";
 
 const resources = [

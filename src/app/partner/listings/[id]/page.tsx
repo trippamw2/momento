@@ -173,7 +173,7 @@ export default function ListingEditorPage() {
           duration: data.duration ?? "",
           category: data.category ?? "",
           location: data.location ?? "",
-          status: String(data.status ?? "draft"),
+          status: (String(data.status ?? "draft") as "draft" | "active" | "unlisted" | "published"),
           rating: Number(data.rating ?? 0),
           review_count: Number(data.review_count ?? 0),
           booking_count: Number(data.booking_count ?? 0),
@@ -335,7 +335,7 @@ export default function ListingEditorPage() {
     );
   };
 
-  const Input = ({ label, type = "text", value, onChange, placeholder, required, error }: any) => (
+  const Input = ({ label, type = "text", value, onChange, placeholder, required, error, min, max }: { label: string; type?: string; value: string | number; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; placeholder?: string; required?: boolean; error?: string | false; min?: string; max?: string }) => (
     <div className="space-y-1.5">
       <label className="block text-body-sm font-medium text-[#CBD5E1]">{label}{required && <span className="text-[#FF0F73] ml-1">*</span>}</label>
       <input
@@ -343,6 +343,8 @@ export default function ListingEditorPage() {
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        min={min}
+        max={max}
         className={`w-full px-4 py-3 rounded-xl bg-white/5 border ${
           error ? "border-red-500 focus:ring-red-500/30 focus:border-red-500"
           : "border-white/[0.08] focus:ring-[#FF0F73]/30 focus:border-[#FF0F73]"
@@ -352,7 +354,7 @@ export default function ListingEditorPage() {
     </div>
   );
 
-  const Textarea = ({ label, value, onChange, placeholder, rows = 3, required, error }: any) => (
+  const Textarea = ({ label, value, onChange, placeholder, rows = 3, required, error }: { label: string; value: string; onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; placeholder?: string; rows?: number; required?: boolean; error?: string | false }) => (
     <div className="space-y-1.5">
       <label className="block text-body-sm font-medium text-[#CBD5E1]">{label}{required && <span className="text-[#FF0F73] ml-1">*</span>}</label>
       <textarea
@@ -369,7 +371,7 @@ export default function ListingEditorPage() {
     </div>
   );
 
-  const Select = ({ label, value, onChange, options, required, error }: any) => (
+  const Select = ({ label, value, onChange, options, required, error }: { label: string; value: string; onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void; options: string[]; required?: boolean; error?: string | false }) => (
     <div className="space-y-1.5">
       <label className="block text-body-sm font-medium text-[#CBD5E1]">{label}{required && <span className="text-[#FF0F73] ml-1">*</span>}</label>
       <select
@@ -389,7 +391,7 @@ export default function ListingEditorPage() {
     </div>
   );
 
-  const CheckboxGroup = ({ label, options, value, onChange }: any) => (
+  const CheckboxGroup = ({ label, options, value, onChange }: { label: string; options: string[]; value: string[]; onChange: (val: string[]) => void }) => (
     <div className="space-y-2">
       <label className="block text-body-sm font-medium text-[#CBD5E1] mb-2">{label}</label>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -639,7 +641,7 @@ export default function ListingEditorPage() {
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input label="Host Name" value={form.about_host?.name ?? ""} onChange={(e) => updateNested("about_host", "name", e.target.value)} placeholder="Your display name" />
-              <Input label="Year Started Hosting" type="number" min="2000" max={new Date().getFullYear()} value={form.about_host?.year_started ?? new Date().getFullYear()} onChange={(e) => updateNested("about_host", "year_started", Number(e.target.value))} />
+              <Input label="Year Started Hosting" type="number" min="2000" max={String(new Date().getFullYear())} value={form.about_host?.year_started ?? new Date().getFullYear()} onChange={(e) => updateNested("about_host", "year_started", Number(e.target.value))} />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input label="Contact Email" type="email" value={form.about_host?.email ?? ""} onChange={(e) => updateNested("about_host", "email", e.target.value)} placeholder="you@example.com" />

@@ -284,7 +284,6 @@ export default function MessagesPage() {
               </div>
             </>
           ) : (
-            {/* Empty State */}
             <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
               <svg className="w-20 h-20 text-white/10 mb-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                 <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z" />

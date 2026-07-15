@@ -133,6 +133,37 @@ export default function HostOnboardingPage() {
     }
   };
 
+  const isSlideValid = (): boolean => {
+    const currentSlideData = slides[currentSlide];
+    switch (currentSlideData.component) {
+      case "host-type":
+        return !!formData.hostType;
+      case "business-form":
+        if (formData.hostType === "business") {
+          if (!formData.businessName?.trim()) return false;
+        } else {
+          if (!formData.name?.trim()) return false;
+        }
+        if (!formData.email?.trim()) return false;
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formData.email)) return false;
+        if (!formData.phone?.trim()) return false;
+        return true;
+      case "experience-summary":
+        if (!formData.hasExperience) return false;
+        if (formData.hasExperience && !formData.experienceTypes?.length) return false;
+        return true;
+      case "professional-tier":
+        return true;
+      case "policy-acceptance":
+        return !!formData.acceptance && !!formData.policyAgreement && !!formData.liabilityWaiver;
+      case "verification":
+        if (formData.hostType === "individual" && !formData.email) return false;
+        return true;
+      default:
+        return true;
+    }
+  };
+
   const validateCurrentSlide = (): boolean => {
     const currentSlideData = slides[currentSlide];
     const errors: Record<string, string> = {};
@@ -204,7 +235,7 @@ export default function HostOnboardingPage() {
   };
 
   const handleSubmit = async () => {
-    if (!handleNext()) return; // This should validate before submitting
+    if (!validateCurrentSlide()) return;
     
     setIsLoading(true);
     try {
@@ -731,7 +762,7 @@ export default function HostOnboardingPage() {
               
               <button
                 onClick={handleNext}
-                disabled={!validateCurrentSlide() && slides[currentSlide].required}
+                disabled={!isSlideValid() && slides[currentSlide].required}
                 className="px-8 py-3 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold hover:shadow-[0_4px_24px_rgba(255,15,115,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Next

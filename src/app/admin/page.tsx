@@ -7,7 +7,7 @@ import { useAuthGuard } from "@/lib/use-auth-guard";
 import AdminSettingsSection from "./AdminSettingsSection";
 import AdminPayoutsSection from "./AdminPayoutsSection";
 
-type Section = "overview" | "users" | "experiences" | "reviews" | "testimonials" | "bookings" | "settings" | "gift-cards" | "partners" | "financials" | "payouts";
+type Section = "overview" | "users" | "experiences" | "reviews" | "testimonials" | "bookings" | "settings" | "gift-cards" | "partners" | "financials" | "payouts" | "host-onboarding";
 
 interface OverviewData {
   totalUsers: number;
@@ -117,13 +117,13 @@ export default function AdminPage() {
   // Enhanced section switcher that supports both host-onboarding and overview
   const switchSection = (s: Section) => {
     if (s === "host-onboarding") {
-      // Show host onboarding wizard page
       if (window.location.pathname !== "/admin/host-onboarding") {
         router.push("/admin/host-onboarding");
         return;
       }
     }
     setSection(s);
+    setSidebarOpen(false);
     loadSection(s);
   };
 
@@ -222,12 +222,6 @@ export default function AdminPage() {
       setLoading(false);
     }
   }, [apiFetch]);
-
-  const switchSection = (s: Section) => {
-    setSection(s);
-    setSidebarOpen(false);
-    loadSection(s);
-  };
 
   const handleRoleChange = async (userId: string, newRole: string) => {
     const token = getToken();
