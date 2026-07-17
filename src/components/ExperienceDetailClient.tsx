@@ -364,23 +364,124 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               </div>
             </div>
 
-            {/* Mobile: Quick Booking Summary */}
-            <div className="lg:hidden flex items-center justify-between p-4 rounded-xl border border-white/[0.1] mb-6">
-              <div>
-                <p className="text-caption text-[#64748B]">From</p>
-                <p className="text-heading-lg font-bold text-white">MK {exp.price.toLocaleString()}</p>
-                <p className="text-caption text-[#64748B]">per person</p>
-              </div>
-              <div className="flex flex-col gap-2">
+            {/* Mobile: Quick Booking Summary & Calendar */}
+            <div className="lg:hidden mb-6">
+              <div className="flex items-center justify-between p-4 rounded-xl border border-white/[0.1]">
+                <div>
+                  <p className="text-caption text-[#64748B]">From</p>
+                  <p className="text-heading-lg font-bold text-white">MK {exp.price.toLocaleString()}</p>
+                  <p className="text-caption text-[#64748B]">per person</p>
+                </div>
                 <GuestSelector value={guests} onChange={setGuests} maxGuests={exp.capacity} />
-                <button
-                  onClick={handleBookNow}
-                  disabled={!selectedDate || booking}
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255, 15, 115, 0.25)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {booking ? "Booking..." : selectedDate ? "Book Now" : "Select Date"}
-                </button>
               </div>
+              {/* Mobile Calendar (collapsible) */}
+              <div className="mt-3">
+                <BookingCalendar selectedDate={selectedDate} onSelect={setSelectedDate} />
+              </div>
+              {/* Contact Fields */}
+              <div className="mt-3 space-y-2">
+                <input
+                  type="tel"
+                  value={contactPhone}
+                  onChange={(e) => { setContactPhone(e.target.value); if (contactError) setContactError(""); }}
+                  placeholder="Phone number"
+                  className={`w-full px-3 py-2.5 rounded-lg bg-[#0A0E17] border text-white text-caption placeholder:text-[#64748B] focus:outline-none focus:border-[#FF0F73] transition-all ${
+                    contactError && !contactPhone.trim() && !contactEmail.trim() ? "border-red-500/50" : "border-white/[0.1]"
+                  }`}
+                />
+                <input
+                  type="email"
+                  value={contactEmail}
+                  onChange={(e) => { setContactEmail(e.target.value); if (contactError) setContactError(""); }}
+                  placeholder="Email address"
+                  className={`w-full px-3 py-2.5 rounded-lg bg-[#0A0E17] border text-white text-caption placeholder:text-[#64748B] focus:outline-none focus:border-[#FF0F73] transition-all ${
+                    contactError && !contactPhone.trim() && !contactEmail.trim() ? "border-red-500/50" : "border-white/[0.1]"
+                  }`}
+                />
+                {contactError && (
+                  <p className="text-caption text-red-500">{contactError}</p>
+                )}
+              </div>
+
+              {/* Mobile: Gift Card */}
+              <div className="mt-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.1]">
+                <p className="text-caption font-semibold text-[#64748B] mb-2 uppercase tracking-wider">Gift Card</p>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="XPRO-XXXXXXXX"
+                    value={giftCode}
+                    onChange={(e) => { setGiftCode(e.target.value.toUpperCase()); setGiftApplied(false); setGiftError(""); }}
+                    className="flex-1 px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption font-mono placeholder:text-[#64748B] focus:outline-none focus:border-[#FF0F73] transition-all"
+                    disabled={giftApplied}
+                  />
+                  {giftApplied ? (
+                    <button
+                      onClick={() => { setGiftApplied(false); setGiftCode(""); setGiftAmount(0); setGiftError(""); }}
+                      className="px-3 py-2 rounded-lg bg-emerald-500/20 text-emerald-400 text-caption font-semibold border border-emerald-500/30 hover:bg-emerald-500/30 transition-all whitespace-nowrap"
+                    >
+                      ✓ Applied
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleApplyGiftCard}
+                      disabled={!giftCode.trim() || giftChecking}
+                      className="px-3 py-2 rounded-lg bg-[#FF0F73] text-white text-caption font-semibold hover:bg-[#FF0F73]/80 transition-all disabled:opacity-50 whitespace-nowrap"
+                    >
+                      {giftChecking ? (
+                        <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                      ) : "Apply"}
+                    </button>
+                  )}
+                </div>
+                {giftError && <p className="text-caption text-red-500 mt-1.5">{giftError}</p>}
+              </div>
+
+              {/* Mobile: Wallet Payment */}
+              {walletBalance !== null && walletBalance >= finalPrice && finalPrice > 0 && (
+                <div className="mt-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.1]">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={payWithWallet}
+                      onChange={(e) => setPayWithWallet(e.target.checked)}
+                      className="w-4 h-4 rounded border-white/20 bg-[#0A0E17] text-[#FF0F73] focus:ring-[#FF0F73] focus:ring-offset-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-caption font-semibold text-white">Pay with Experio Wallet</p>
+                      <p className="text-caption text-[#64748B]">Balance: MK {walletBalance.toLocaleString()}</p>
+                    </div>
+                    <span className="text-emerald-400 text-caption font-medium">Instant confirm</span>
+                  </label>
+                </div>
+              )}
+
+              {/* Mobile: Price Breakdown */}
+              <div className="mt-3 space-y-2">
+                <div className="flex items-center justify-between text-body-sm text-[#CBD5E1]">
+                  <span>MK {exp.price.toLocaleString()} × {guests} {guests === 1 ? "guest" : "guests"}</span>
+                  <span>MK {totalPrice.toLocaleString()}</span>
+                </div>
+                {giftApplied && giftAmount > 0 && (
+                  <div className="flex items-center justify-between text-body-sm text-emerald-400">
+                    <span>Gift card discount</span>
+                    <span>-MK {giftAmount.toLocaleString()}</span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.1]">
+                  <span className="text-body-sm font-semibold text-white">Total</span>
+                  <span className="text-heading-sm font-bold text-white">MK {finalPrice.toLocaleString()}</span>
+                </div>
+              </div>
+
+              {/* Mobile Book Button */}
+              <button
+                onClick={handleBookNow}
+                disabled={!selectedDate || booking}
+                className="mt-3 w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-body-sm hover:shadow-[0_4px_24px_rgba(255, 15, 115, 0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {booking ? "Booking..." : selectedDate ? "Book Now — MK " + finalPrice.toLocaleString() : "Select a date above"}
+              </button>
             </div>
 
             {/* Host Section */}

@@ -193,37 +193,6 @@ export default function WalletPage() {
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-3 gap-3">
-        <button
-          onClick={() => router.push("/wallet/top-up")}
-          className="flex flex-col items-center gap-2 p-4 rounded-xl bg-[#111827] border border-white/[0.08] hover:border-[#FF0F73]/40 transition-all hover:-translate-y-0.5"
-        >
-          <span className="w-10 h-10 rounded-full bg-[#1A2332] flex items-center justify-center">
-            <svg className="w-5 h-5 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-          </span>
-          <span className="text-body-sm font-medium text-[#CBD5E1]">Top Up</span>
-        </button>
-        <button
-          onClick={() => router.push("/bookings")}
-          className="flex flex-col items-center gap-2 p-4 rounded-xl bg-[#111827] border border-white/[0.08] hover:border-[#FF0F73]/40 transition-all hover:-translate-y-0.5"
-        >
-          <span className="w-10 h-10 rounded-full bg-[#1A2332] flex items-center justify-center">
-            <svg className="w-5 h-5 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
-          </span>
-          <span className="text-body-sm font-medium text-[#CBD5E1]">Pay</span>
-        </button>
-        <button
-          onClick={() => router.push("/wallet/transfer")}
-          className="flex flex-col items-center gap-2 p-4 rounded-xl bg-[#111827] border border-white/[0.08] hover:border-[#FF0F73]/40 transition-all hover:-translate-y-0.5"
-        >
-          <span className="w-10 h-10 rounded-full bg-[#1A2332] flex items-center justify-center">
-            <svg className="w-5 h-5 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
-          </span>
-          <span className="text-body-sm font-medium text-[#CBD5E1]">Transfer</span>
-        </button>
-      </div>
-
       {/* Loyalty Summary */}
       <LoyaltySummary />
 

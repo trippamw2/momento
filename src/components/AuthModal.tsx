@@ -181,6 +181,35 @@ export default function AuthModal({ onClose }: AuthModalProps) {
     setFieldErrors({});
   };
 
+  const [resetSent, setResetSent] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
+
+  const handleForgotPassword = async () => {
+    if (!email.trim()) {
+      setError("Please enter your email address first");
+      return;
+    }
+    setResetLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setResetSent(true);
+      } else {
+        setError(data.error || "Failed to send reset email. Please try again.");
+      }
+    } catch {
+      setError("Connection error. Please try again.");
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md" onClick={onClose}>
       <div
@@ -284,6 +313,17 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                 }`}
               />
               {fieldErrors.password && <p className="mt-1 text-caption text-[#c13515]">{fieldErrors.password}</p>}
+              {mode === "login" && (
+                <div className="text-right">
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    className="text-caption text-[#FF0F73] hover:text-[#e00b41] font-medium transition-colors"
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Phone (signup only) */}

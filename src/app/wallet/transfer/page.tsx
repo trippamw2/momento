@@ -64,13 +64,13 @@ export default function TransferPage() {
     return (
       <div className="max-w-md mx-auto text-center py-12 space-y-4">
         <p className="text-5xl">✅</p>
-        <h2 className="text-xl font-bold">Transfer Sent!</h2>
-        <p className="text-gray-400">
+        <h2 className="text-heading-lg font-bold text-[#F1F5F9]">Transfer Sent!</h2>
+        <p className="text-body-sm text-[#64748B]">
           MK {result.amount.toLocaleString()} sent to {result.email}
         </p>
         <button
           onClick={() => router.push("/wallet")}
-          className="px-6 py-2 bg-gold text-dark-950 rounded-lg font-medium hover:bg-gold/90"
+          className="px-6 py-2 bg-[#FFA22C] text-[#05070B] rounded-lg font-medium hover:bg-[#FFA22C]/90 transition-all"
         >
           Back to Wallet
         </button>
@@ -81,53 +81,53 @@ export default function TransferPage() {
   return (
     <div className="max-w-md mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Send Money</h1>
-        <p className="text-sm text-gray-400 mt-1">Transfer funds to another Experio user</p>
+        <h1 className="text-heading-lg font-bold text-[#F1F5F9]">Send Money</h1>
+        <p className="text-body-sm text-[#64748B] mt-1">Transfer funds to another Experio user</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Recipient Email</label>
+          <label className="block text-body-sm font-medium text-[#CBD5E1] mb-2">Recipient Email</label>
           <input
             type="email"
             value={recipientEmail}
             onChange={(e) => setRecipientEmail(e.target.value)}
             placeholder="user@example.com"
-            className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white focus:outline-none focus:border-gold/50 transition-colors"
+            className="w-full px-4 py-3 bg-[#111827] border border-white/[0.08] rounded-xl text-white focus:outline-none focus:border-[#FFA22C]/50 transition-colors"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Amount (MWK)</label>
+          <label className="block text-body-sm font-medium text-[#CBD5E1] mb-2">Amount (MWK)</label>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">MK</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#64748B] font-medium">MK</span>
             <input
               type="text"
               inputMode="numeric"
               value={amount}
               onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, ""))}
               placeholder="0"
-              className="w-full pl-12 pr-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white text-lg font-medium focus:outline-none focus:border-gold/50 transition-colors"
+              className="w-full pl-12 pr-4 py-3 bg-[#111827] border border-white/[0.08] rounded-xl text-white text-lg font-medium focus:outline-none focus:border-[#FFA22C]/50 transition-colors"
               required
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Note (optional)</label>
+          <label className="block text-body-sm font-medium text-[#CBD5E1] mb-2">Note (optional)</label>
           <input
             type="text"
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="What's this for?"
             maxLength={100}
-            className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white focus:outline-none focus:border-gold/50 transition-colors"
+            className="w-full px-4 py-3 bg-[#111827] border border-white/[0.08] rounded-xl text-white focus:outline-none focus:border-[#FFA22C]/50 transition-colors"
           />
         </div>
 
         {error && (
-          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-sm text-red-400">
+          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-body-sm text-red-400">
             {error}
           </div>
         )}
@@ -135,14 +135,14 @@ export default function TransferPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 bg-gold text-dark-950 rounded-xl font-semibold hover:bg-gold/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          className="w-full py-3 bg-[#FFA22C] text-[#05070B] rounded-xl font-semibold hover:bg-[#FFA22C]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
           {loading ? "Processing..." : "Send Money"}
         </button>
       </form>
 
-      <div className="p-4 bg-dark-800/50 rounded-xl">
-        <p className="text-xs text-gray-500">
+      <div className="p-4 bg-[#111827]/50 rounded-xl border border-white/[0.06]">
+        <p className="text-caption text-[#64748B]">
           <span className="text-yellow-400">⚠️</span> Transfers are instant and cannot be reversed. 
           Double-check the recipient email before sending.
         </p>

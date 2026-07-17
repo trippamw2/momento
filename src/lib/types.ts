@@ -22,6 +22,19 @@ export type ExperioCategory =
   | "Celebrate"
   | "Escape";
 
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
+export interface UserInteraction {
+  id: string;
+  experienceId: string;
+  type: "viewed" | "liked" | "saved" | "shared" | "gifted" | "booked";
+  timestamp: number;
+  weight: number;
+}
+
 
 export interface Review {
   id: string;
@@ -35,6 +48,15 @@ export interface Review {
   timestamp?: number;
 }
 
+export type MediaType = "image" | "video" | "reel" | "story";
+
+export interface MediaItem {
+  type: MediaType;
+  url: string;
+  thumbnail?: string;
+  duration?: number; // for videos in seconds
+}
+
 export interface Experience {
   id: string;
   title: string;
@@ -42,6 +64,7 @@ export interface Experience {
   description: string;
   image: string;
   images: string[];
+  media?: MediaItem[]; // New field for mixed media
   price: number;
   currency: string;
   partner: string;
@@ -60,6 +83,18 @@ export interface Experience {
   capacity: number;
   coordinates: { lat: number; lng: number };
   reviews: Review[];
+  // New fields for social content
+  hostProfile?: {
+    id: string;
+    name: string;
+    avatar: string;
+    bio: string;
+  };
+  createdAt?: string; // ISO date string for trending age calculation
+  ugcCount?: number; // User-generated content count
+  ugc?: MediaItem[]; // User-generated content
+  giftCount?: number;
+  bookedCount?: number;
 }
 
 export interface NavItem {
@@ -80,12 +115,19 @@ export type DiscoveryRailKey =
   | "escape"
   | "staff-picks"
   | "affordable"
-  | "personalized";
+  | "personalized"
+  | "because-you-like"
+  | "hidden-gems"
+  | "free"
+  | "luxury";
 
 export interface DiscoveryRail {
   key: DiscoveryRailKey;
   title: string;
-  getExperiences: () => Experience[];
+  experiences: Experience[];
+  getExperiences?: () => Experience[];
+  subtitle?: string;
+  isPersonalized?: boolean;
 }
 
 export const PRICE_RANGES = [

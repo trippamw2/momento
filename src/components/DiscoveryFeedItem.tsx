@@ -1,10 +1,10 @@
 ﻿"use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Experience } from "@/lib/types";
+import { Experience, MediaType } from "@/lib/types";
 import { trackView, trackSaved, trackShared, trackGifted } from "@/lib/recommendation-engine";
 
 interface DiscoveryFeedItemProps {
@@ -13,6 +13,78 @@ interface DiscoveryFeedItemProps {
   onSaveToggle: (id: string, saved: boolean) => void;
   onBook: (id: string) => void;
   isSaved: boolean;
+}
+
+function MediaPlayer({ 
+  media, 
+  isActive, 
+  onLoad,
+  poster 
+}: { 
+  media: { type: MediaType; url: string; thumbnail?: string; duration?: number };
+  isActive: boolean;
+  onLoad?: () => void;
+  poster?: string;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [loaded, setLoaded] = useState(false);
+  const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    if (media.type === "video" || media.type === "reel") {
+      if (isActive && videoRef.current) {
+        videoRef.current.muted = true;
+        videoRef.current.play().catch(() => {});
+        setPlaying(true);
+      } else if (videoRef.current) {
+        videoRef.current.pause();
+        setPlaying(false);
+      }
+    }
+  }, [isActive, media.type]);
+
+  if (media.type === "image") {
+    return (
+      <Image
+        src={media.url}
+        alt=""
+        fill
+        className={`object-cover transition-opacity duration-700 ${loaded ? "opacity-100" : "opacity-0"}`}
+        sizes="100vw"
+        priority={isActive}
+        onLoad={onLoad}
+      />
+    );
+  }
+
+  if (media.type === "video" || media.type === "reel") {
+    return (
+      <video
+        ref={videoRef}
+        src={media.url}
+        poster={poster || media.thumbnail}
+        className={`w-full h-full object-cover ${loaded ? "opacity-100" : "opacity-0"} transition-opacity duration-700`}
+        autoPlay
+        muted
+        loop
+        playsInline
+        onLoadedData={() => { setLoaded(true); onLoad?.(); }}
+      />
+    );
+  }
+
+  // Story type - show as image with story indicator
+  return (
+    <Image
+      src={media.url}
+      alt=""
+      fill
+      className={`object-cover transition-opacity duration-700 ${loaded ? "opacity-100" : "opacity-0"}`}
+      sizes="100vw"
+      priority={isActive}
+      onLoad={onLoad}
+    />
+  );
 }
 
 export default function DiscoveryFeedItem({
@@ -25,6 +97,16 @@ export default function DiscoveryFeedItem({
   const router = useRouter();
   const [imgLoaded, setImgLoaded] = useState(false);
   const [shareFeedback, setShareFeedback] = useState(false);
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+  const [showMediaPicker, setShowMediaPicker] = useState(false);
+
+  // Get all media for this experience
+  const allMedia = exp.media && exp.media.length > 0 
+    ? exp.media 
+    : [{ type: "image" as MediaType, url: exp.image, thumbnail: exp.image }];
+
+  const currentMedia = allMedia[currentMediaIndex];
+  const hasMultipleMedia = allMedia.length > 1;
 
   // Track view when this item becomes active
   if (isActive) {
@@ -66,7 +148,7 @@ export default function DiscoveryFeedItem({
       trackGifted(exp.id);
       router.push(`/gift?experience=${exp.id}`);
     },
-    [exp.id]
+    [exp.id, router]
   );
 
   const handleBook = useCallback(
@@ -79,32 +161,91 @@ export default function DiscoveryFeedItem({
     [exp.id, onBook]
   );
 
+  const handleMediaChange = useCallback((index: number) => {
+    setCurrentMediaIndex(index);
+    setShowMediaPicker(false);
+  }, []);
+
+  const handleNextMedia = useCallback(() => {
+    setCurrentMediaIndex((prev) => (prev + 1) % allMedia.length);
+  }, [allMedia.length]);
+
+  const handlePrevMedia = useCallback(() => {
+    setCurrentMediaIndex((prev) => (prev - 1 + allMedia.length) % allMedia.length);
+  }, [allMedia.length]);
+
+  // Auto-advance media for reels/stories when active
+  useEffect(() => {
+    if (isActive && (currentMedia.type === "reel" || currentMedia.type === "story")) {
+      const timer = setTimeout(() => {
+        handleNextMedia();
+      }, currentMedia.type === "story" ? 5000 : 15000);
+      return () => clearTimeout(timer);
+    }
+  }, [isActive, currentMedia, currentMediaIndex, handleNextMedia]);
+
   return (
     <Link
       href={`/experiences/${exp.id}`}
       className="relative w-full h-full flex items-center justify-center overflow-hidden bg-[#05070B]"
     >
-      {/* Full-bleed image */}
+      {/* Media carousel */}
       <div className="absolute inset-0">
-        <Image
-          src={exp.image}
-          alt={exp.title}
-          fill
-          className={`object-cover transition-opacity duration-700 ${imgLoaded ? "opacity-90" : "opacity-0"}`}
-          sizes="100vw"
-          priority={isActive}
+        <MediaPlayer
+          media={currentMedia}
+          isActive={isActive}
           onLoad={() => setImgLoaded(true)}
+          poster={currentMedia.thumbnail || exp.image}
         />
+        
         {/* Loading shimmer */}
         {!imgLoaded && <div className="absolute inset-0 shimmer" />}
+
+        {/* Media indicator dots */}
+        {hasMultipleMedia && (
+          <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            {allMedia.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => handleMediaChange(i)}
+                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  i === currentMediaIndex
+                    ? "bg-white scale-125"
+                    : "bg-white/50 hover:bg-white/75"
+                }`}
+                aria-label={`View media ${i + 1}`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Media type badge */}
+        {(currentMedia.type === "video" || currentMedia.type === "reel") && (
+          <div className="absolute top-4 left-4 z-10 flex items-center gap-1 px-2 py-1 rounded-full bg-black/60 backdrop-blur-sm text-xs text-white/90">
+            <svg className="w-3 h-3 text-[#FF0F73]" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span>{currentMedia.type === "reel" ? "Reel" : "Video"}</span>
+          </div>
+        )}
+
+        {/* Story progress bar */}
+        {currentMedia.type === "story" && isActive && (
+          <div className="absolute top-4 left-4 right-4 z-10 flex gap-1">
+            {allMedia.map((_, i) => (
+              <div
+                key={i}
+                className={`flex-1 h-0.5 rounded transition-all duration-300 ${
+                  i < currentMediaIndex ? "bg-white" : i === currentMediaIndex ? "bg-[#FF0F73]" : "bg-white/30"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Gradient overlays */}
       <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-[#05070B]/30 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent" />
-
-      {/* Subtle brand glow */}
       <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#FF0F73]/5 via-transparent to-transparent" />
 
       {/* ─── Bottom content ─── */}
@@ -125,11 +266,11 @@ export default function DiscoveryFeedItem({
         </p>
 
         {/* Meta row */}
-        <div className="flex items-center gap-4 text-[#64748B] text-caption">
+        <div className="flex flex-wrap items-center gap-4 text-[#64748B] text-caption">
           <span className="flex items-center gap-1">
             <span className="text-yellow-400">★</span> {exp.rating}
           </span>
-          <span>MK {exp.price.toLocaleString()}</span>
+          <span>{exp.currency} {exp.price.toLocaleString()}</span>
           <span>{exp.duration}</span>
           <span>{exp.location}</span>
         </div>
@@ -219,11 +360,43 @@ export default function DiscoveryFeedItem({
         </button>
       </div>
 
+      {/* Media navigation arrows */}
+      {hasMultipleMedia && (
+        <>
+          <button
+            onClick={handlePrevMedia}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+            aria-label="Previous media"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <button
+            onClick={handleNextMedia}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+            aria-label="Next media"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </>
+      )}
+
       {/* ─── Progress indicator (bottom-left) ─── */}
       {isActive && (
         <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-8 z-20 flex items-center gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-[#FF0F73] animate-pulse" />
           <span className="text-caption text-[#64748B]">Swipe up to explore</span>
+        </div>
+      )}
+
+      {/* UGC indicator */}
+      {exp.ugcCount && exp.ugcCount > 0 && (
+        <div className="absolute top-4 right-4 z-10 flex items-center gap-1 px-2 py-1 rounded-full bg-black/60 backdrop-blur-sm text-xs text-white/90">
+          <svg className="w-3 h-3 text-[#FF0F73]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+          <span>{exp.ugcCount} UGC</span>
         </div>
       )}
     </Link>

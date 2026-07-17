@@ -16,6 +16,15 @@ interface Experience {
   images: { url: string; alt: string; is_primary: boolean }[];
 }
 
+type PaymentMethod = "paychangu" | "card" | "voucher" | "wallet";
+
+const PAYMENT_OPTIONS: { value: PaymentMethod; label: string; desc: string; icon: string }[] = [
+  { value: "paychangu", label: "Pay Direct", desc: "PayChangu mobile money", icon: "📱" },
+  { value: "card", label: "Card Payment", desc: "Credit or debit card", icon: "💳" },
+  { value: "voucher", label: "Gift Card / Voucher", desc: "Redeem a gift card", icon: "🎁" },
+  { value: "wallet", label: "Experio Wallet", desc: "Pay with wallet balance", icon: "💰" },
+];
+
 export default function CheckoutPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -36,6 +45,14 @@ export default function CheckoutPage() {
     gift_card_code: "",
   });
 
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("paychangu");
+  const [giftApplied, setGiftApplied] = useState(false);
+  const [giftChecking, setGiftChecking] = useState(false);
+  const [giftAmount, setGiftAmount] = useState(0);
+  const [giftError, setGiftError] = useState("");
+  const [walletBalance, setWalletBalance] = useState<number | null>(null);
+  const [walletLoading, setWalletLoading] = useState(false);
+
   const getToken = () => localStorage.getItem("experio-auth-token");
 
   useEffect(() => {
@@ -53,7 +70,46 @@ export default function CheckoutPage() {
     fetchExp();
   }, [experienceId]);
 
+  // Fetch wallet balance when wallet method is selected
+  useEffect(() => {
+    if (paymentMethod !== "wallet") return;
+    const token = getToken();
+    if (!token) return;
+    setWalletLoading(true);
+    fetch("/api/wallet", { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => { if (data?.balance != null) setWalletBalance(data.balance); })
+      .catch(() => { /* silent */ })
+      .finally(() => setWalletLoading(false));
+  }, [paymentMethod]);
+
   const totalPrice = (experience?.price ?? 0) * guests;
+  const finalPrice = Math.max(0, totalPrice - (paymentMethod === "voucher" && giftApplied ? giftAmount : 0));
+
+  const handleApplyGiftCard = async () => {
+    if (!form.gift_card_code.trim()) return;
+    setGiftChecking(true);
+    setGiftError("");
+    try {
+      const token = getToken();
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const res = await fetch(`/api/gift-cards/check?code=${encodeURIComponent(form.gift_card_code)}`, { headers });
+      const data = await res.json();
+      if (res.ok && data) {
+        const balance = data.balance || data.amount || 0;
+        if (balance <= 0) { setGiftError("This gift card has no remaining balance"); return; }
+        setGiftAmount(Math.min(balance, totalPrice));
+        setGiftApplied(true);
+      } else {
+        setGiftError(data?.error || "Invalid gift card code");
+      }
+    } catch {
+      setGiftError("Could not verify gift card. Please try again.");
+    } finally {
+      setGiftChecking(false);
+    }
+  };
 
   const handlePay = useCallback(async () => {
     if (!experienceId || !experience) return;
@@ -63,21 +119,43 @@ export default function CheckoutPage() {
       const token = getToken();
       if (!token) { router.push("/"); return; }
 
+      // Build booking payload
+      const payload: Record<string, unknown> = {
+        experience_id: experienceId,
+        guests_count: guests,
+        total_price: totalPrice,
+        experience_date: date,
+        experience_time: time || undefined,
+        contact_phone: form.contact_phone || undefined,
+        contact_email: form.contact_email || undefined,
+        special_requests: form.special_requests || undefined,
+      };
+
+      // Add payment-specific params
+      if (paymentMethod === "voucher" && giftApplied && form.gift_card_code) {
+        payload.gift_card_code = form.gift_card_code;
+      }
+      if (paymentMethod === "wallet") {
+        payload.pay_with_wallet = true;
+      }
+      if (paymentMethod === "voucher" && giftApplied && form.gift_card_code && finalPrice > 0) {
+        // Gift card covers partial — pay remainder with PayChangu
+        // The API validates gift card balance >= total, so if finalPrice > 0,
+        // the gift card doesn't cover it all. We need split payment.
+        // For simplicity: gift card covers what it can, wallet/paychangu covers rest
+        // First check if wallet can cover the remainder
+        if (walletBalance !== null && walletBalance >= finalPrice) {
+          payload.pay_with_wallet = true;
+        }
+        // If no wallet or insufficient balance, PayChangu will handle remainder
+        // (gift card + PayChangu not yet supported in API — send gift card and redirect)
+      }
+
       // Create booking
       const bookingRes = await fetch("/api/bookings", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          experience_id: experienceId,
-          guests_count: guests,
-          total_price: totalPrice,
-          experience_date: date,
-          experience_time: time || undefined,
-          contact_phone: form.contact_phone || undefined,
-          contact_email: form.contact_email || undefined,
-          special_requests: form.special_requests || undefined,
-          gift_card_code: form.gift_card_code || undefined,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!bookingRes.ok) {
@@ -89,13 +167,19 @@ export default function CheckoutPage() {
 
       const booking = await bookingRes.json();
 
-      // Initiate payment
+      // If paid with wallet or gift card fully covered — booking is confirmed instantly
+      if (booking.status === "confirmed") {
+        router.push(`/bookings/${booking.id}?confirmed=true`);
+        return;
+      }
+
+      // Otherwise redirect to PayChangu for payment
       const payRes = await fetch("/api/payments/paychangu", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
         body: JSON.stringify({
           booking_id: booking.id,
-          amount: totalPrice,
+          amount: finalPrice || totalPrice,
           currency: "MWK",
           description: `Booking: ${experience.title}`,
         }),
@@ -115,7 +199,7 @@ export default function CheckoutPage() {
       setError("Something went wrong. Please try again.");
       setSubmitting(false);
     }
-  }, [experienceId, experience, guests, totalPrice, date, time, form, router]);
+  }, [experienceId, experience, guests, totalPrice, finalPrice, date, time, form, paymentMethod, giftApplied, giftAmount, walletBalance, router]);
 
   if (!experienceId) {
     return (
@@ -196,12 +280,101 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        {/* Gift Card */}
+        {/* Payment Method */}
         <div className="rounded-2xl border border-white/[0.08] bg-[#111827] p-5 mb-6">
-          <h3 className="text-heading-sm font-bold text-[#F1F5F9] mb-3">Gift Card (optional)</h3>
-          <input value={form.gift_card_code} onChange={e => setForm(f => ({ ...f, gift_card_code: e.target.value.toUpperCase() }))}
-            className="w-full px-4 py-3 rounded-xl bg-[#05070B] border border-white/[0.08] text-[#F1F5F9] text-body-sm font-mono focus:outline-none focus:border-[#FF0F73]"
-            placeholder="XPRO-XXXX-XXXX" />
+          <h3 className="text-heading-sm font-bold text-[#F1F5F9] mb-4">Payment Method</h3>
+          <div className="grid grid-cols-2 gap-2">
+            {PAYMENT_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => { setPaymentMethod(opt.value); if (opt.value !== "voucher") { setGiftApplied(false); setGiftError(""); } }}
+                className={`p-3 rounded-xl border text-left transition-all ${
+                  paymentMethod === opt.value
+                    ? "border-[#FF0F73] bg-[#FF0F73]/10 text-white"
+                    : "border-white/[0.08] bg-[#05070B] text-[#64748B] hover:border-white/20 hover:text-[#CBD5E1]"
+                }`}
+              >
+                <span className="text-lg">{opt.icon}</span>
+                <p className="text-caption font-semibold mt-1">{opt.label}</p>
+                <p className={`text-caption ${paymentMethod === opt.value ? "text-[#CBD5E1]" : "text-[#64748B]"}`}>{opt.desc}</p>
+              </button>
+            ))}
+          </div>
+
+          {/* Voucher — Gift Card Input */}
+          {paymentMethod === "voucher" && (
+            <div className="mt-4 p-4 rounded-xl bg-[#05070B] border border-white/[0.06]">
+              <p className="text-caption font-semibold text-[#64748B] mb-2 uppercase tracking-wider">Gift Card Code</p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={form.gift_card_code}
+                  onChange={e => { setForm(f => ({ ...f, gift_card_code: e.target.value.toUpperCase() })); setGiftApplied(false); setGiftError(""); }}
+                  className="flex-1 px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption font-mono placeholder:text-[#64748B] focus:outline-none focus:border-[#FF0F73] transition-all"
+                  placeholder="XPRO-XXXX-XXXX"
+                  disabled={giftApplied}
+                />
+                {giftApplied ? (
+                  <button
+                    onClick={() => { setGiftApplied(false); setForm(f => ({ ...f, gift_card_code: "" })); setGiftAmount(0); setGiftError(""); }}
+                    className="px-3 py-2 rounded-lg bg-emerald-500/20 text-emerald-400 text-caption font-semibold border border-emerald-500/30 hover:bg-emerald-500/30 transition-all whitespace-nowrap"
+                  >
+                    ✓ Applied
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleApplyGiftCard}
+                    disabled={!form.gift_card_code.trim() || giftChecking}
+                    className="px-3 py-2 rounded-lg bg-[#FF0F73] text-white text-caption font-semibold hover:bg-[#FF0F73]/80 transition-all disabled:opacity-50 whitespace-nowrap"
+                  >
+                    {giftChecking ? (
+                      <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                    ) : "Apply"}
+                  </button>
+                )}
+              </div>
+              {giftError && <p className="text-caption text-red-500 mt-1.5">{giftError}</p>}
+              {giftApplied && giftAmount > 0 && (
+                <p className="text-caption text-emerald-400 mt-1.5">
+                  Gift card discount: -MK {giftAmount.toLocaleString()}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Wallet — Balance Display */}
+          {paymentMethod === "wallet" && (
+            <div className="mt-4 p-4 rounded-xl bg-[#05070B] border border-white/[0.06]">
+              {walletLoading ? (
+                <div className="flex items-center gap-2 text-caption text-[#64748B]">
+                  <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                  Checking wallet balance...
+                </div>
+              ) : walletBalance !== null ? (
+                <div>
+                  <p className="text-caption font-semibold text-[#64748B] mb-1">Wallet Balance</p>
+                  <p className={`text-heading-sm font-bold ${walletBalance >= totalPrice ? "text-emerald-400" : "text-[#FF0F73]"}`}>
+                    MK {walletBalance.toLocaleString()}
+                  </p>
+                  {walletBalance >= totalPrice ? (
+                    <p className="text-caption text-emerald-400 mt-1">✓ Sufficient balance — instant confirmation</p>
+                  ) : (
+                    <p className="text-caption text-[#FF0F73] mt-1">
+                      Insufficient balance (short by MK {(totalPrice - walletBalance).toLocaleString()}). 
+                      Please top up or choose another payment method.
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <p className="text-caption text-[#64748B]">Unable to load wallet.</p>
+                  <p className="text-caption text-[#64748B] mt-0.5">
+                    <Link href="/wallet/top-up" className="text-[#FF0F73] hover:underline">Create a wallet</Link> to use this option.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Price Summary */}
@@ -215,21 +388,49 @@ export default function CheckoutPage() {
               <span className="text-[#64748B]">Platform fee</span>
               <span className="text-[#F1F5F9]">Included</span>
             </div>
+            {paymentMethod === "voucher" && giftApplied && giftAmount > 0 && (
+              <div className="flex justify-between text-body-sm">
+                <span className="text-emerald-400">Gift card discount</span>
+                <span className="text-emerald-400">-MK {giftAmount.toLocaleString()}</span>
+              </div>
+            )}
             <div className="flex justify-between text-heading-sm font-bold pt-2 border-t border-white/[0.08]">
               <span className="text-[#F1F5F9]">Total</span>
-              <span className="text-[#FF0F73]">MK {totalPrice.toLocaleString()}</span>
+              <span className="text-[#FF0F73]">MK {finalPrice.toLocaleString()}</span>
             </div>
           </div>
         </div>
 
         {/* Pay Button */}
-        <button onClick={handlePay} disabled={submitting}
-          className="w-full py-4 rounded-2xl bg-[#FF0F73] text-white font-bold text-heading-sm hover:shadow-[0_4px_24px_rgba(255,15,115,0.4)] transition-all disabled:opacity-50">
-          {submitting ? "Processing..." : `Pay MK ${totalPrice.toLocaleString()}`}
+        <button
+          onClick={handlePay}
+          disabled={submitting || (paymentMethod === "wallet" && walletBalance !== null && walletBalance < totalPrice)}
+          className="w-full py-4 rounded-2xl bg-[#FF0F73] text-white font-bold text-heading-sm hover:shadow-[0_4px_24px_rgba(255,15,115,0.4)] transition-all disabled:opacity-50"
+        >
+          {submitting ? (
+            <span className="flex items-center justify-center gap-2">
+              <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+              Processing...
+            </span>
+          ) : paymentMethod === "wallet" && walletBalance !== null && walletBalance >= totalPrice ? (
+            "Confirm & Pay with Wallet"
+          ) : paymentMethod === "voucher" && giftApplied && finalPrice === 0 ? (
+            "Redeem Gift Card"
+          ) : paymentMethod === "voucher" && giftApplied ? (
+            `Pay MK ${finalPrice.toLocaleString()}`
+          ) : (
+            `Pay MK ${finalPrice.toLocaleString()}`
+          )}
         </button>
 
         <p className="text-caption text-[#64748B] text-center mt-3">
-          You&apos;ll be redirected to PayChangu to complete payment
+          {paymentMethod === "paychangu" || paymentMethod === "card"
+            ? "You'll be redirected to PayChangu to complete payment"
+            : paymentMethod === "voucher" && (!giftApplied || finalPrice > 0)
+            ? "Remaining balance will be charged via PayChangu"
+            : paymentMethod === "wallet" && walletBalance !== null && walletBalance >= totalPrice
+            ? "Booking will be confirmed instantly"
+            : "Secure payment via PayChangu"}
         </p>
       </div>
     </div>

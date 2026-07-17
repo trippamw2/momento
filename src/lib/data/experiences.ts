@@ -755,6 +755,22 @@ export const discoveryRails: Record<DiscoveryRailKey, { title: string; getExperi
     title: "Just For You",
     getExperiences: () => shuffle(experiences).slice(0, 8),
   },
+  "because-you-like": {
+    title: "Because You Like",
+    getExperiences: () => [],
+  },
+  "hidden-gems": {
+    title: "Hidden Gems",
+    getExperiences: () => [],
+  },
+  free: {
+    title: "Free Experiences",
+    getExperiences: () => [],
+  },
+  luxury: {
+    title: "Luxury Picks",
+    getExperiences: () => [],
+  },
 };
 
 export const railOrder: DiscoveryRailKey[] = [
