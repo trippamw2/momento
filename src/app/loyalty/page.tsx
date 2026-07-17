@@ -165,8 +165,8 @@ export default function LoyaltyPage() {
   const unlockedAchievements = checkAchievements(stats).filter((a) => a.unlocked);
 
   return (
-    <div className="min-h-screen pt-24 pb-16 bg-[#05070B]">
-      <div className="max-w-5xl mx-auto px-4 sm:px-8 space-y-10">
+    <div className="min-h-screen max-h-[100dvh] overflow-hidden pt-24 pb-16 bg-[#05070B]">
+      <div className="max-w-5xl mx-auto px-4 sm:px-8 h-[calc(100dvh-96px)] overflow-y-auto space-y-10">
         {/* ─── Hero ─── */}
         <section className="text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#FF0F73]/10 to-[#FF7A1A]/10 border border-[#FF0F73]/20 text-[#FF0F73] text-caption font-semibold mb-4">

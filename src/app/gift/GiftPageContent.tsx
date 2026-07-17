@@ -466,8 +466,8 @@ export default function GiftPageContent() {
     ? new Date(scheduleDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
     : null;
 
-  return (
-    <div className="pt-20 pb-16">
+return (
+    <div className="pt-20 pb-16 min-h-screen max-h-[100dvh] overflow-hidden">
       {/* ─── Hero ─── */}
       <GiftHero />
 
@@ -545,7 +545,7 @@ export default function GiftPageContent() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-14">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-14 flex-1 overflow-y-auto h-[calc(100dvh-80px)]">
         {/* ─── Experience Finder ─── */}
         <section>
           <div className="flex items-center justify-between mb-6">

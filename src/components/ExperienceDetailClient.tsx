@@ -493,6 +493,9 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 <div>
                   <p className="text-caption text-[#64748B]">Hosted by</p>
                   <p className="text-body-sm font-semibold text-white">{exp.partner}</p>
+                  {exp.partnerJoinedAt && (
+                    <p className="text-caption text-[#64748B] mt-0.5">Joined {new Date(exp.partnerJoinedAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })}</p>
+                  )}
                 </div>
               </div>
               <button className="px-4 py-2 rounded-xl border border-white/[0.1] text-body-sm font-medium text-white hover:bg-white/5 transition-all">
@@ -520,6 +523,52 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 ))}
               </div>
             </div>
+
+            {/* What's Excluded */}
+            {exp.excludes && exp.excludes.length > 0 && (
+              <div className="mb-6">
+                <h2 className="text-heading-md font-bold text-white mb-4">What&apos;s not included</h2>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {exp.excludes.map((item, i) => (
+                    <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.1]">
+                      <div className="w-5 h-5 rounded-full bg-[#64748B]/50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg className="w-3 h-3 text-[#CBD5E1]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
+                      </div>
+                      <span className="text-body-sm text-[#CBD5E1]">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Itinerary */}
+            {exp.itinerary && exp.itinerary.length > 0 && (
+              <div className="mb-6">
+                <h2 className="text-heading-md font-bold text-white mb-4">Itinerary</h2>
+                <div className="space-y-4">
+                  {exp.itinerary.map((item, i) => (
+                    <div key={i} className="flex gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.1]">
+                      <div className="flex-shrink-0 w-20 text-right text-caption text-white/40 font-mono">
+                        {item.time}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-body-sm font-semibold text-white">{item.title}</h3>
+                        <p className="text-body-sm text-[#CBD5E1] mt-0.5">{item.description}</p>
+                        {item.location && (
+                          <p className="text-caption text-[#64748B] mt-1 flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            {item.location}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* ═══ Reviews Section ═══ */}
             <div className="mb-6 pt-4 border-t border-white/[0.1]">

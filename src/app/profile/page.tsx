@@ -265,11 +265,11 @@ function UserProfile({ user: initialUser }: { user: UserData }) {
     : user.email[0]?.toUpperCase() || "U";
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-[#05070B] relative">
+    <div className="min-h-screen max-h-[100dvh] overflow-hidden pt-20 pb-16 bg-[#05070B] relative">
       {/* Cover Gradient */}
       <div className="absolute top-20 left-0 right-0 h-48 bg-gradient-to-b from-[#FF0F73]/20 via-[#FF7A1A]/10 to-transparent pointer-events-none" />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-8 relative">
+      <div className="max-w-4xl mx-auto px-4 sm:px-8 relative h-[calc(100dvh-80px)] overflow-y-auto">
         {/* Header Card */}
         <div className="rounded-2xl bg-[#111827] border border-white/[0.08] overflow-hidden mb-6 shadow-lg">
           <div className="h-24 sm:h-32 bg-gradient-to-r from-[#FF0F73]/30 via-[#FFA22C]/20 to-[#F82D7B]/30" />

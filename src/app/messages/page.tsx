@@ -180,9 +180,9 @@ export default function MessagesPage() {
   }
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-[#05070B]">
-      <div className="max-w-5xl mx-auto px-4 sm:px-8">
-        <div className="flex items-center justify-between mb-6">
+    <div className="min-h-screen max-h-[100dvh] overflow-hidden pt-20 pb-16 bg-[#05070B]">
+      <div className="max-w-5xl mx-auto px-4 sm:px-8 h-[calc(100dvh-80px)] flex flex-col">
+        <div className="flex items-center justify-between mb-6 flex-shrink-0">
           <h1 className="text-heading-xl font-bold text-[#F1F5F9]">Messages</h1>
           <Link
             href="/bookings"
@@ -193,7 +193,7 @@ export default function MessagesPage() {
         </div>
 
         {conversations.length === 0 ? (
-          <div className="rounded-2xl bg-[#111827] border border-white/[0.08] p-12 text-center">
+          <div className="rounded-2xl bg-[#111827] border border-white/[0.08] p-12 text-center flex-1 flex items-center justify-center">
             <div className="w-16 h-16 rounded-full bg-white/[0.06] flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
@@ -205,17 +205,17 @@ export default function MessagesPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[65vh]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1 overflow-hidden min-h-0">
             {/* Conversation List */}
-            <div className="md:col-span-1 rounded-2xl bg-[#111827] border border-white/[0.08] overflow-hidden">
-              <div className="p-3 border-b border-white/[0.08]">
+            <div className="md:col-span-1 rounded-2xl bg-[#111827] border border-white/[0.08] overflow-hidden flex flex-col min-h-0">
+              <div className="p-3 border-b border-white/[0.08] flex-shrink-0">
                 <input
                   type="text"
                   placeholder="Search conversations..."
                   className="w-full px-3 py-2 rounded-lg bg-[#0A0E17] border border-white/[0.1] text-white text-caption placeholder:text-[#64748B] focus:outline-none focus:border-[#FF0F73] transition-all"
                 />
               </div>
-              <div className="overflow-y-auto h-[calc(65vh-56px)]">
+              <div className="overflow-y-auto flex-1 min-h-0">
                 {conversations.map((conv) => (
                   <button
                     key={conv.id}

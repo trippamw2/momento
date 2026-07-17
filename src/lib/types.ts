@@ -8,6 +8,13 @@ export type Mood =
   | "Celebratory"
   | "Creative";
 
+export interface ItineraryItem {
+  time: string;
+  title: string;
+  description: string;
+  location?: string;
+}
+
 /** @deprecated Use ExperioCategory instead. Kept for backward compatibility. */
 export type V2Category =
   | "Date Night"
@@ -62,6 +69,7 @@ export interface Experience {
   title: string;
   subtitle: string;
   description: string;
+  itinerary?: ItineraryItem[];
   image: string;
   images: string[];
   media?: MediaItem[]; // New field for mixed media
@@ -80,6 +88,8 @@ export interface Experience {
   category: ExperioCategory;
   featured: boolean;
   includes: string[];
+  excludes?: string[];
+  partnerJoinedAt?: string;
   capacity: number;
   coordinates: { lat: number; lng: number };
   reviews: Review[];

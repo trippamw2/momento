@@ -300,8 +300,8 @@ export default function BookingsPage() {
 
   return (
     <>
-      <div className="pt-20 pb-16 min-h-screen">
-        <div className="max-w-7xl mx-auto flex gap-0 sm:gap-6 px-0 sm:px-8">
+      <div className="pt-20 pb-16 min-h-screen max-h-[100dvh] overflow-hidden">
+        <div className="max-w-7xl mx-auto flex gap-0 sm:gap-6 px-0 sm:px-8 h-[calc(100dvh-80px)] overflow-hidden">
           {/* ─── Sidebar ─── */}
           <aside className="hidden sm:flex flex-col w-56 flex-shrink-0 sticky top-24 self-start">
             <div className="bg-[#111827] border border-white/[0.08] rounded-2xl overflow-hidden shadow-sm">
@@ -361,7 +361,7 @@ export default function BookingsPage() {
           </div>
 
           {/* ─── Main Content ─── */}
-          <main className="flex-1 min-w-0 px-4 sm:px-0">
+          <main className="flex-1 min-w-0 px-4 sm:px-0 h-full overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <div>
