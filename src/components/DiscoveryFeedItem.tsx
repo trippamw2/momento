@@ -270,7 +270,7 @@ export default function DiscoveryFeedItem({
         </p>
 
         {/* Meta row */}
-        <div className="flex flex-wrap items-center gap-4 text-white/50 text-xs">
+        <div className="flex flex-wrap items-center gap-4 text-white/50 text-xs mb-14">
           <span className="flex items-center gap-1">
             <span className="text-yellow-400">★</span> {exp.rating}
           </span>
@@ -350,16 +350,16 @@ export default function DiscoveryFeedItem({
         </button>
       </div>
 
-      {/* Book button - centered at bottom */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 w-full max-w-xs sm:max-w-sm">
+      {/* Book button - right side, above meta row */}
+      <div className="absolute bottom-20 right-4 z-20">
         <button
           onClick={handleBook}
-          className="w-full py-3.5 rounded-xl bg-white text-black font-semibold text-sm hover:bg-white/90 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2"
+          className="px-4 py-2 rounded-full bg-white text-black font-semibold text-xs hover:bg-white/90 transition-all duration-300 active:scale-[0.98] flex items-center gap-1.5 shadow-lg shadow-black/30"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
           </svg>
-          Book Now
+          Book
         </button>
       </div>
     </Link>

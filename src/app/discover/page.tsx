@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mood, Experience } from "@/lib/types";
 import { getExperiences } from "@/lib/api-client";
@@ -269,20 +270,30 @@ export default function DiscoverPage() {
         <div className="snap-none h-[72px]" />
 
         {/* Header Bar */}
-        <header className="snap-none fixed top-0 left-0 right-0 z-40 h-[72px] bg-black/80 backdrop-blur-lg border-b border-white/10 flex items-center justify-between px-4">
-          <button
-            onClick={() => setShowMoodPicker(true)}
-            className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white text-sm font-medium hover:bg-white/10 transition-all"
-            aria-label="Choose your mood"
-          >
-            <span className="text-lg">{selectedMood ? "✦" : "✦"}</span>
-            <span>{selectedMood ? selectedMood.charAt(0).toUpperCase() + selectedMood.slice(1) : "How do you feel?"}</span>
-            <svg className="w-4 h-4 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
+        <header className="snap-none fixed top-0 left-0 right-0 z-40 h-[72px] bg-black/95 backdrop-blur-lg border-b border-white/10 flex items-center justify-between px-4">
+          {/* Logo */}
+          <Link href="/discover" className="flex items-center gap-2 flex-shrink-0" aria-label="Experio Home">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] flex items-center justify-center">
+              <span className="text-white font-bold text-sm">E</span>
+            </div>
+            <span className="text-xl font-bold text-white tracking-tight hidden sm:block">Experio</span>
+          </Link>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-1 justify-center">
+            <button
+              onClick={() => setShowMoodPicker(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white text-xs font-medium hover:bg-white/10 transition-all"
+              aria-label="Choose your mood"
+            >
+              <span className="text-base">✦</span>
+              <span>{selectedMood ? selectedMood.charAt(0).toUpperCase() + selectedMood.slice(1) : "Mood"}</span>
+              <svg className="w-3.5 h-3.5 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2 flex-shrink-0">
             <button
               onClick={() => setSearchOpen(!searchOpen)}
               className="w-9 h-9 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all"

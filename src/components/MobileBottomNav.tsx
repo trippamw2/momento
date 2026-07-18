@@ -8,14 +8,11 @@ import AuthModal from "./AuthModal";
 export default function MobileBottomNav() {
   const pathname = usePathname();
   const [signedIn, setSignedIn] = useState(false);
-  const [userRole, setUserRole] = useState<string | null>(null);
   const [authOpen, setAuthOpen] = useState(false);
 
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("experio-auth-token") : null;
-    const role = typeof window !== "undefined" ? localStorage.getItem("experio-user-role") : null;
     setSignedIn(!!token);
-    setUserRole(role);
   }, []);
 
   const navItems = [
@@ -29,15 +26,21 @@ export default function MobileBottomNav() {
       ),
     },
     {
-      href: signedIn ? "/saved" : "/wallet",
-      label: signedIn ? "Saved" : "Wallet",
-      icon: signedIn ? (
+      href: "/saved",
+      label: "Saved",
+      icon: (
         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
         </svg>
-      ) : (
+      ),
+      onClick: !signedIn ? (e: React.MouseEvent) => { e.preventDefault(); setAuthOpen(true); } : undefined,
+    },
+    {
+      href: "/wallet",
+      label: "Wallet",
+      icon: (
         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0V9M3 12V9" />
         </svg>
       ),
       onClick: !signedIn ? (e: React.MouseEvent) => { e.preventDefault(); setAuthOpen(true); } : undefined,
@@ -50,6 +53,7 @@ export default function MobileBottomNav() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
       ),
+      onClick: !signedIn ? (e: React.MouseEvent) => { e.preventDefault(); setAuthOpen(true); } : undefined,
     },
   ];
 
