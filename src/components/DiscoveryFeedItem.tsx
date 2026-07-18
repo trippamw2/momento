@@ -269,14 +269,25 @@ export default function DiscoveryFeedItem({
           {exp.subtitle}
         </p>
 
-        {/* Meta row */}
-        <div className="flex flex-wrap items-center gap-4 text-white/50 text-xs mb-14">
-          <span className="flex items-center gap-1">
-            <span className="text-yellow-400">★</span> {exp.rating}
-          </span>
-          <span>{exp.currency} {exp.price.toLocaleString()}</span>
-          <span>{exp.duration}</span>
-          <span>{exp.location}</span>
+        {/* Meta row + Book */}
+        <div className="flex items-center gap-2 text-white/50 text-xs">
+          <div className="flex flex-wrap items-center gap-3 flex-1 min-w-0">
+            <span className="flex items-center gap-1">
+              <span className="text-yellow-400">★</span> {exp.rating}
+            </span>
+            <span>{exp.currency} {exp.price.toLocaleString()}</span>
+            <span className="hidden xs:inline">{exp.duration}</span>
+            <span className="truncate">{exp.location}</span>
+          </div>
+          <button
+            onClick={handleBook}
+            className="shrink-0 px-3 py-1 rounded-full bg-white text-black font-semibold text-[10px] hover:bg-white/90 transition-all duration-300 active:scale-[0.98] flex items-center gap-1"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+            Book
+          </button>
         </div>
       </div>
 
@@ -347,19 +358,6 @@ export default function DiscoveryFeedItem({
           <span className="text-[10px] text-white/70 group-hover/btn:text-white/90 transition-colors">
             {shareFeedback ? "Copied" : "Share"}
           </span>
-        </button>
-      </div>
-
-      {/* Book button - right side, above meta row */}
-      <div className="absolute bottom-20 right-4 z-20">
-        <button
-          onClick={handleBook}
-          className="px-4 py-2 rounded-full bg-white text-black font-semibold text-xs hover:bg-white/90 transition-all duration-300 active:scale-[0.98] flex items-center gap-1.5 shadow-lg shadow-black/30"
-        >
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-          </svg>
-          Book
         </button>
       </div>
     </Link>

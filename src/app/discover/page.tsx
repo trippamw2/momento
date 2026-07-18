@@ -262,101 +262,89 @@ export default function DiscoverPage() {
 
   return (
     <div className="relative min-h-screen bg-black">
-      <div
-        ref={containerRef}
-        className="fixed inset-0 bg-black overflow-y-scroll snap-y snap-mandatory hide-scrollbar"
-        style={{ scrollBehavior: "smooth", scrollPaddingTop: "72px" }}
-      >
-        <div className="snap-none h-[72px]" />
-
-        {/* Header Bar */}
-        <header className="snap-none fixed top-0 left-0 right-0 z-40 h-[72px] bg-black/95 backdrop-blur-lg border-b border-white/10 flex items-center justify-between px-4">
-          {/* Logo */}
-          <Link href="/discover" className="flex items-center gap-2 flex-shrink-0" aria-label="Experio Home">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] flex items-center justify-center">
-              <span className="text-white font-bold text-sm">E</span>
-            </div>
-            <span className="text-xl font-bold text-white tracking-tight hidden sm:block">Experio</span>
-          </Link>
-
-          <div className="flex items-center gap-2 flex-1 justify-center">
-            <button
-              onClick={() => setShowMoodPicker(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white text-xs font-medium hover:bg-white/10 transition-all"
-              aria-label="Choose your mood"
-            >
-              <span className="text-base">✦</span>
-              <span>{selectedMood ? selectedMood.charAt(0).toUpperCase() + selectedMood.slice(1) : "Mood"}</span>
-              <svg className="w-3.5 h-3.5 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
+      {/* Header Bar - outside scroll container for reliable click handling */}
+      <header className="fixed top-0 left-0 right-0 z-40 h-[72px] bg-black/95 backdrop-blur-lg border-b border-white/10 flex items-center justify-between px-4">
+        {/* Logo */}
+        <Link href="/discover" className="flex items-center gap-2 flex-shrink-0" aria-label="Experio Home">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#FF0F73] to-[#FF7A1A] flex items-center justify-center">
+            <span className="text-white font-bold text-sm">E</span>
           </div>
+          <span className="text-xl font-bold text-white tracking-tight hidden sm:block">Experio</span>
+        </Link>
 
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="w-9 h-9 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all"
-              aria-label="Search"
-            >
-              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-
-            <button
-              onClick={() => setNearMe((prev) => !prev)}
-              className={`h-9 px-3 rounded-full backdrop-blur-sm border flex items-center justify-center gap-1.5 text-xs font-medium transition-all ${
-                nearMe
-                  ? "bg-white/10 border-white/20 text-white"
-                  : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
-              }`}
-              aria-label="Near Me"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              Near Me
-            </button>
-          </div>
-        </header>
-
-        {/* Search Bar */}
-        {searchOpen && (
-          <div className="snap-none fixed top-[72px] left-0 right-0 z-30 px-4 py-2 bg-black/95 backdrop-blur-md border-b border-white/10">
-            <div className="relative max-w-md mx-auto">
-              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input
-                type="text"
-                placeholder="Search experiences…"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                autoFocus
-                className="w-full pl-10 pr-8 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-white/30"
-              />
-              {searchQuery && (
-                <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white text-xs">
-                  ×
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Toast */}
-        <div className={`snap-none fixed top-20 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${toast.visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"}`}>
-          <div className="px-4 py-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 shadow-xl text-white text-sm font-medium flex items-center gap-2">
-            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <div className="flex items-center gap-2 flex-1 justify-center">
+          <button
+            onClick={() => setShowMoodPicker(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white text-xs font-medium hover:bg-white/10 transition-all active:scale-95 cursor-pointer"
+            aria-label="Choose your mood"
+          >
+            <span className="text-base">✦</span>
+            <span>{selectedMood ? selectedMood.charAt(0).toUpperCase() + selectedMood.slice(1) : "Mood"}</span>
+            <svg className="w-3.5 h-3.5 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-            {toast.message}
-          </div>
+          </button>
         </div>
 
-        {/* Feed */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <button
+            onClick={() => setSearchOpen(!searchOpen)}
+            className="w-9 h-9 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all cursor-pointer"
+            aria-label="Search"
+          >
+            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+
+          <button
+            onClick={() => setNearMe((prev) => !prev)}
+            className={`h-9 px-3 rounded-full backdrop-blur-sm border flex items-center justify-center gap-1.5 text-xs font-medium transition-all cursor-pointer ${
+              nearMe
+                ? "bg-white/10 border-white/20 text-white"
+                : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+            }`}
+            aria-label="Near Me"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            Near Me
+          </button>
+        </div>
+      </header>
+
+      {/* Search Bar - outside scroll container */}
+      {searchOpen && (
+        <div className="fixed top-[72px] left-0 right-0 z-30 px-4 py-2 bg-black/95 backdrop-blur-md border-b border-white/10">
+          <div className="relative max-w-md mx-auto">
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search experiences…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoFocus
+              className="w-full pl-10 pr-8 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-white/30"
+            />
+            {searchQuery && (
+              <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white text-xs">
+                ×
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Scroll container - feed only */}
+      <div
+        ref={containerRef}
+        className="fixed inset-0 bg-black overflow-y-scroll snap-y snap-mandatory hide-scrollbar pt-[72px]"
+        style={{ scrollBehavior: "smooth" }}
+      >
         <div className="flex flex-col items-center">
           {displayExperiences.map((exp, index) => (
             <div
@@ -391,6 +379,16 @@ export default function DiscoverPage() {
               <div className="text-white/40 text-xs">You've seen it all</div>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* Toast */}
+      <div className={`fixed top-20 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${toast.visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"}`}>
+        <div className="px-4 py-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 shadow-xl text-white text-sm font-medium flex items-center gap-2">
+          <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {toast.message}
         </div>
       </div>
 
