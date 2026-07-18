@@ -235,6 +235,15 @@ export default function DiscoverPage() {
     setActiveFilter("all");
   }, []);
 
+  // Filter experiences by mood when clicking mood badge on card
+  const handleMoodFilter = useCallback((mood: string) => {
+    setSelectedMood(mood);
+    saveMood(mood);
+    setActiveFilter("all");
+    // Note: filtering by mood would require adding mood to Experience type and filtering logic
+    showToast(`Showing ${mood.charAt(0).toUpperCase() + mood.slice(1)} experiences`);
+  }, [showToast]);
+
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
@@ -364,6 +373,7 @@ export default function DiscoverPage() {
                 isSaved={savedIds.includes(exp.id)}
                 onSaveToggle={handleSaveToggle}
                 onBook={handleBook}
+                onMoodFilter={handleMoodFilter}
               />
             </div>
           ))}

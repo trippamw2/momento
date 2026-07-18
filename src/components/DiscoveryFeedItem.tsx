@@ -13,6 +13,7 @@ interface DiscoveryFeedItemProps {
   onSaveToggle: (id: string, saved: boolean) => void;
   onBook: (id: string) => void;
   isSaved: boolean;
+  onMoodFilter?: (mood: string) => void;
 }
 
 function MediaPlayer({ 
@@ -98,6 +99,7 @@ export default function DiscoveryFeedItem({
   onSaveToggle,
   onBook,
   isSaved,
+  onMoodFilter,
 }: DiscoveryFeedItemProps) {
   const router = useRouter();
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -252,12 +254,21 @@ export default function DiscoveryFeedItem({
       <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-white/5 via-transparent to-transparent" />
 
-      {/* Bottom content */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-10 z-10">
-        {/* Category/Mood badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/15 text-xs text-white/90 font-semibold mb-3">
+      {/* Bottom content - tighter padding for native feel */}
+      <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 md:p-8 z-10">
+        {/* Category/Mood badge - clickable to filter */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            const mood = exp.mood[0] || exp.category;
+            onMoodFilter?.(mood);
+          }}
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/15 text-xs text-white/90 font-semibold mb-3 active:scale-[0.98] transition-transform cursor-pointer"
+          aria-label={`Filter by ${exp.mood[0] || exp.category}`}
+        >
           {exp.mood[0] || exp.category}
-        </div>
+        </button>
 
         {/* Title */}
         <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 leading-tight max-w-2xl">
@@ -291,18 +302,18 @@ export default function DiscoveryFeedItem({
         </div>
       </div>
 
-      {/* Floating action buttons (right side) */}
-      <div className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-4">
+      {/* Floating action buttons (right side) - smaller, tighter for native mobile feel */}
+      <div className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-3">
         {/* Save */}
         <button
           onClick={handleSave}
-          className="group/btn flex flex-col items-center gap-1"
+          className="group/btn flex flex-col items-center gap-0.5"
           aria-label={isSaved ? "Unsave" : "Save"}
         >
-          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:scale-110 active:scale-90">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:scale-105 active:scale-95">
             <svg
-              width="20"
-              height="20"
+              width="18"
+              height="18"
               viewBox="0 0 24 24"
               fill={isSaved ? "white" : "none"}
               stroke={isSaved ? "white" : "white"}
@@ -313,7 +324,7 @@ export default function DiscoveryFeedItem({
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
           </div>
-          <span className="text-[10px] text-white/70 group-hover/btn:text-white/90 transition-colors">
+          <span className="text-[9px] text-white/70 group-hover/btn:text-white/90 transition-colors">
             {isSaved ? "Saved" : "Save"}
           </span>
         </button>
@@ -321,11 +332,11 @@ export default function DiscoveryFeedItem({
         {/* Gift */}
         <button
           onClick={handleGift}
-          className="group/btn flex flex-col items-center gap-1"
+          className="group/btn flex flex-col items-center gap-0.5"
           aria-label="Gift"
         >
-          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:scale-110 active:scale-90">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:scale-105 active:scale-95">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 12 20 22 4 22 4 12" />
               <rect x="2" y="7" width="20" height="5" />
               <line x1="12" y1="22" x2="12" y2="7" />
@@ -333,29 +344,29 @@ export default function DiscoveryFeedItem({
               <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
             </svg>
           </div>
-          <span className="text-[10px] text-white/70 group-hover/btn:text-white/90 transition-colors">Gift</span>
+          <span className="text-[9px] text-white/70 group-hover/btn:text-white/90 transition-colors">Gift</span>
         </button>
 
         {/* Share */}
         <button
           onClick={handleShare}
-          className="group/btn flex flex-col items-center gap-1"
+          className="group/btn flex flex-col items-center gap-0.5"
           aria-label="Share"
         >
-          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:scale-110 active:scale-90">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:scale-105 active:scale-95">
             {shareFeedback ? (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             ) : (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
                 <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
                 <line x1="15.41" y1="6.51" x2="8.58" y2="10.49" />
               </svg>
             )}
           </div>
-          <span className="text-[10px] text-white/70 group-hover/btn:text-white/90 transition-colors">
+          <span className="text-[9px] text-white/70 group-hover/btn:text-white/90 transition-colors">
             {shareFeedback ? "Copied" : "Share"}
           </span>
         </button>
