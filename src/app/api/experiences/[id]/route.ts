@@ -8,7 +8,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     const { data: experience, error } = await admin
       .from("experiences")
-      .select("*, partner:partner_id(business_name, business_logo, business_description, cities, business_phone, business_email), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
+      .select("*, partner:partner_id(business_name, business_logo, business_description, cities, business_phone, business_email, user_id), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
       .eq("id", id)
       .single();
 

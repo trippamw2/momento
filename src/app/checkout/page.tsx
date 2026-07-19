@@ -39,13 +39,15 @@ export default function CheckoutPage() {
   const [error, setError] = useState("");
 
   const [form, setForm] = useState({
-    contact_phone: "",
-    contact_email: "",
-    special_requests: "",
-    gift_card_code: "",
+    contact_phone: searchParams.get("contact_phone") ?? "",
+    contact_email: searchParams.get("contact_email") ?? "",
+    special_requests: searchParams.get("special_requests") ?? "",
+    gift_card_code: searchParams.get("gift_card_code") ?? "",
   });
 
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("paychangu");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
+    (searchParams.get("payment_method") as PaymentMethod) ?? "paychangu"
+  );
   const [giftApplied, setGiftApplied] = useState(false);
   const [giftChecking, setGiftChecking] = useState(false);
   const [giftAmount, setGiftAmount] = useState(0);
@@ -82,6 +84,18 @@ export default function CheckoutPage() {
       .catch(() => { /* silent */ })
       .finally(() => setWalletLoading(false));
   }, [paymentMethod]);
+
+  // Auto-apply gift card if provided in URL
+  useEffect(() => {
+    const giftCardCode = searchParams.get("gift_card_code");
+    if (giftCardCode && paymentMethod === "voucher" && !giftApplied && !giftChecking) {
+      setForm(prev => ({ ...prev, gift_card_code: giftCardCode }));
+      // Small delay to let the form update
+      setTimeout(() => {
+        handleApplyGiftCard();
+      }, 100);
+    }
+  }, [searchParams, paymentMethod, giftApplied, giftChecking]);
 
   const totalPrice = (experience?.price ?? 0) * guests;
   const finalPrice = Math.max(0, totalPrice - (paymentMethod === "voucher" && giftApplied ? giftAmount : 0));

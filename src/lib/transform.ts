@@ -36,7 +36,7 @@ function resolveCoords(raw: Record<string, unknown>, city: string): { lat: numbe
 /** Transform a raw API experience shape into the app's `Experience` type. */
 export function transformExperience(raw: Record<string, unknown>): Experience {
   const images = (raw.images as Array<{ url: string; alt?: string; is_primary?: boolean; sort_order?: number }>) ?? [];
-  const partner = raw.partner as { business_name?: string; business_logo?: string; business_city?: string } | null;
+  const partner = raw.partner as { business_name?: string; business_logo?: string; business_city?: string; user_id?: string } | null;
   const moods = (raw.moods as Array<{ mood_id?: number; moods?: { id?: number; label?: string; emoji?: string } }>) ?? [];
   const rawReviews = (raw.reviews as Array<Record<string, unknown>>) ?? [];
 
@@ -73,6 +73,7 @@ export function transformExperience(raw: Record<string, unknown>): Experience {
     price: (raw.price as number) ?? 0,
     currency: (raw.currency as string) ?? "MWK",
     partner: partner?.business_name ?? "",
+    partnerUserId: partner?.user_id ?? undefined,
     location,
     city,
     distance: (raw.distance as string) ?? "",

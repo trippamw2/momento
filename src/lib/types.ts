@@ -76,6 +76,7 @@ export interface Experience {
   price: number;
   currency: string;
   partner: string;
+  partnerUserId?: string; // For messaging the host
   location: string;
   city: string;
   distance: string;

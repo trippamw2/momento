@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -13,15 +13,57 @@ interface DiscoveryFeedItemProps {
   onSaveToggle: (id: string, saved: boolean) => void;
   onBook: (id: string) => void;
   isSaved: boolean;
-  onMoodFilter?: (mood: string) => void;
 }
 
-function MediaPlayer({ 
-  media, 
-  isActive, 
+// ─── Social proof badge config ───
+
+interface SocialBadge {
+  label: string;
+  icon: string;
+}
+
+function getSocialBadge(exp: Experience): SocialBadge | null {
+  const { bookedCount, rating, giftCount, createdAt, featured } = exp;
+
+  // New badge (within 30 days)
+  if (createdAt) {
+    const age = Date.now() - new Date(createdAt).getTime();
+    if (age < 30 * 24 * 60 * 60 * 1000) {
+      return { label: "New", icon: "✨" };
+    }
+  }
+
+  // Trending (high bookings)
+  if (bookedCount && bookedCount > 80) {
+    return { label: "Trending", icon: "🔥" };
+  }
+
+  // Top Rated
+  if (rating >= 4.8) {
+    return { label: "Top Rated", icon: "⭐" };
+  }
+
+  // Featured
+  if (featured) {
+    return { label: "Featured", icon: "✦" };
+  }
+
+  // Frequently Gifted
+  if (giftCount && giftCount > 20) {
+    return { label: "Frequently Gifted", icon: "🎁" };
+  }
+
+  return null;
+}
+
+// ─── Media Player ───
+
+function MediaPlayer({
+  media,
+  isActive,
   onLoad,
-  poster 
-}: { 
+  poster
+}: {
   media: { type: MediaType; url: string; thumbnail?: string; duration?: number };
   isActive: boolean;
   onLoad?: () => void;
@@ -29,17 +71,14 @@ function MediaPlayer({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [loaded, setLoaded] = useState(false);
-  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     if (media.type === "video" || media.type === "reel") {
       if (isActive && videoRef.current) {
         videoRef.current.muted = true;
         videoRef.current.play().catch(() => {});
-        setPlaying(true);
       } else if (videoRef.current) {
         videoRef.current.pause();
-        setPlaying(false);
       }
     }
   }, [isActive, media.type]);
@@ -79,7 +118,6 @@ function MediaPlayer({
     );
   }
 
-  // Story type - show as image with story indicator
   return (
     <Image
       src={media.url}
@@ -93,31 +131,33 @@ function MediaPlayer({
   );
 }
 
+// ─── Main Component ───
+
 export default function DiscoveryFeedItem({
   experience: exp,
   isActive,
   onSaveToggle,
   onBook,
   isSaved,
-  onMoodFilter,
 }: DiscoveryFeedItemProps) {
   const router = useRouter();
   const [imgLoaded, setImgLoaded] = useState(false);
   const [shareFeedback, setShareFeedback] = useState(false);
-  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
-  const [showMediaPicker, setShowMediaPicker] = useState(false);
 
-  const allMedia = exp.media && exp.media.length > 0 
-    ? exp.media 
+  const allMedia = exp.media && exp.media.length > 0
+    ? exp.media
     : [{ type: "image" as MediaType, url: exp.image, thumbnail: exp.image }];
 
-  const currentMedia = allMedia[currentMediaIndex];
-  const hasMultipleMedia = allMedia.length > 1;
+  const currentMedia = allMedia[0];
 
-  // Track view when this item becomes active
+  // Track view on active
   if (isActive) {
     trackView(exp.id);
   }
+
+  const badge = useMemo(() => getSocialBadge(exp), [exp]);
+
+  // ─── Handlers ───
 
   const handleSave = useCallback(
     (e: React.MouseEvent) => {
@@ -167,35 +207,14 @@ export default function DiscoveryFeedItem({
     [exp.id, onBook]
   );
 
-  const handleMediaChange = useCallback((index: number) => {
-    setCurrentMediaIndex(index);
-    setShowMediaPicker(false);
-  }, []);
-
-  const handleNextMedia = useCallback(() => {
-    setCurrentMediaIndex((prev) => (prev + 1) % allMedia.length);
-  }, [allMedia.length]);
-
-  const handlePrevMedia = useCallback(() => {
-    setCurrentMediaIndex((prev) => (prev - 1 + allMedia.length) % allMedia.length);
-  }, [allMedia.length]);
-
-  // Auto-advance media for reels/stories when active
-  useEffect(() => {
-    if (isActive && (currentMedia.type === "reel" || currentMedia.type === "story")) {
-      const timer = setTimeout(() => {
-        handleNextMedia();
-      }, currentMedia.type === "story" ? 5000 : 15000);
-      return () => clearTimeout(timer);
-    }
-  }, [isActive, currentMedia, currentMediaIndex, handleNextMedia]);
+  const tagline = exp.emotionalHeadline || exp.subtitle;
 
   return (
     <Link
       href={`/experiences/${exp.id}`}
       className="relative w-full h-full flex items-center justify-center overflow-hidden bg-black"
     >
-      {/* Media carousel */}
+      {/* ─── Media ─── */}
       <div className="absolute inset-0">
         <MediaPlayer
           media={currentMedia}
@@ -203,120 +222,76 @@ export default function DiscoveryFeedItem({
           onLoad={() => setImgLoaded(true)}
           poster={currentMedia.thumbnail || exp.image}
         />
-        
+
         {/* Loading shimmer */}
-        {!imgLoaded && <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-white/5 animate-pulse" />}
-
-        {/* Media indicator dots */}
-        {hasMultipleMedia && (
-          <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
-            {allMedia.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => handleMediaChange(i)}
-                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                  i === currentMediaIndex
-                    ? "bg-white scale-125"
-                    : "bg-white/50 hover:bg-white/75"
-                }`}
-                aria-label={`View media ${i + 1}`}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Media type badge */}
-        {(currentMedia.type === "video" || currentMedia.type === "reel") && (
-          <div className="absolute top-4 left-4 z-10 flex items-center gap-1 px-2 py-1 rounded-full bg-black/60 backdrop-blur-sm text-xs text-white/90">
-            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            <span>{currentMedia.type === "reel" ? "Reel" : "Video"}</span>
-          </div>
-        )}
-
-        {/* Story progress bar */}
-        {currentMedia.type === "story" && isActive && (
-          <div className="absolute top-4 left-4 right-4 z-10 flex gap-1">
-            {allMedia.map((_, i) => (
-              <div
-                key={i}
-                className={`flex-1 h-0.5 rounded transition-all duration-300 ${
-                  i < currentMediaIndex ? "bg-white" : i === currentMediaIndex ? "bg-white" : "bg-white/30"
-                }`}
-              />
-            ))}
-          </div>
+        {!imgLoaded && (
+          <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-white/5 animate-pulse" />
         )}
       </div>
 
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-white/5 via-transparent to-transparent" />
+      {/* ─── Gradient overlays (clean, minimal) ─── */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/40" />
 
-      {/* Bottom content - tighter padding for native feel */}
+      {/* ─── Social Proof Badge (1 max, top left) ─── */}
+      {badge && (
+        <div className="absolute top-4 left-4 z-20">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-xs text-white/90 font-medium">
+            <span>{badge.icon}</span>
+            <span>{badge.label}</span>
+          </span>
+        </div>
+      )}
+
+      {/* ─── Bottom Content ─── */}
       <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 md:p-8 z-10">
-        {/* Category/Mood badge - clickable to filter */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            const mood = exp.mood[0] || exp.category;
-            onMoodFilter?.(mood);
-          }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/15 text-xs text-white/90 font-semibold mb-3 active:scale-[0.98] transition-transform cursor-pointer"
-          aria-label={`Filter by ${exp.mood[0] || exp.category}`}
-        >
-          {exp.mood[0] || exp.category}
-        </button>
-
         {/* Title */}
-        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 leading-tight max-w-2xl">
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-1 leading-tight max-w-2xl">
           {exp.title}
         </h2>
 
-        {/* Subtitle */}
-        <p className="text-white/80 text-sm sm:text-base max-w-xl line-clamp-2 mb-3">
-          {exp.subtitle}
-        </p>
+        {/* Emotional tagline */}
+        {tagline && (
+          <p className="text-white/70 text-sm sm:text-base max-w-xl line-clamp-1 mb-3 font-light">
+            {tagline}
+          </p>
+        )}
 
-        {/* Meta row + Book */}
-        <div className="flex items-center gap-2 text-white/50 text-xs">
-          <div className="flex flex-wrap items-center gap-3 flex-1 min-w-0">
-            <span className="flex items-center gap-1">
-              <span className="text-yellow-400">★</span> {exp.rating}
+        {/* Meta row: rating, price, location + Book CTA */}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3 flex-1 min-w-0 text-white/60 text-xs">
+            <span className="flex items-center gap-1 text-white/80">
+              <span className="text-yellow-400">★</span>
+              <span className="font-medium">{exp.rating}</span>
             </span>
-            <span>{exp.currency} {exp.price.toLocaleString()}</span>
-            <span className="hidden xs:inline">{exp.duration}</span>
+            <span className="font-semibold text-white text-sm">
+              {exp.currency} {exp.price.toLocaleString()}
+            </span>
             <span className="truncate">{exp.location}</span>
           </div>
+
           <button
             onClick={handleBook}
-            className="shrink-0 px-3 py-1 rounded-full bg-white text-black font-semibold text-[10px] hover:bg-white/90 transition-all duration-300 active:scale-[0.98] flex items-center gap-1"
+            className="shrink-0 px-4 py-1.5 rounded-full bg-white text-black font-semibold text-xs hover:bg-white/90 transition-all duration-300 active:scale-[0.97]"
           >
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-            </svg>
             Book
           </button>
         </div>
       </div>
 
-      {/* Floating action buttons (right side) - smaller, tighter for native mobile feel */}
-      <div className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-3">
+      {/* ─── Floating Action Buttons (right side, 3 max) ─── */}
+      <div className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-4">
         {/* Save */}
         <button
           onClick={handleSave}
           className="group/btn flex flex-col items-center gap-0.5"
           aria-label={isSaved ? "Unsave" : "Save"}
         >
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:scale-105 active:scale-95">
+          <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-white/15 active:scale-90">
             <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
+              width="18" height="18" viewBox="0 0 24 24"
               fill={isSaved ? "white" : "none"}
-              stroke={isSaved ? "white" : "white"}
+              stroke="white"
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -324,7 +299,7 @@ export default function DiscoveryFeedItem({
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
           </div>
-          <span className="text-[9px] text-white/70 group-hover/btn:text-white/90 transition-colors">
+          <span className="text-[9px] text-white/60 group-hover/btn:text-white/90 transition-colors">
             {isSaved ? "Saved" : "Save"}
           </span>
         </button>
@@ -335,7 +310,7 @@ export default function DiscoveryFeedItem({
           className="group/btn flex flex-col items-center gap-0.5"
           aria-label="Gift"
         >
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:scale-105 active:scale-95">
+          <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-white/15 active:scale-90">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 12 20 22 4 22 4 12" />
               <rect x="2" y="7" width="20" height="5" />
@@ -344,7 +319,7 @@ export default function DiscoveryFeedItem({
               <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
             </svg>
           </div>
-          <span className="text-[9px] text-white/70 group-hover/btn:text-white/90 transition-colors">Gift</span>
+          <span className="text-[9px] text-white/60 group-hover/btn:text-white/90 transition-colors">Gift</span>
         </button>
 
         {/* Share */}
@@ -353,7 +328,7 @@ export default function DiscoveryFeedItem({
           className="group/btn flex flex-col items-center gap-0.5"
           aria-label="Share"
         >
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:scale-105 active:scale-95">
+          <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-white/15 active:scale-90">
             {shareFeedback ? (
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
@@ -366,7 +341,7 @@ export default function DiscoveryFeedItem({
               </svg>
             )}
           </div>
-          <span className="text-[9px] text-white/70 group-hover/btn:text-white/90 transition-colors">
+          <span className="text-[9px] text-white/60 group-hover/btn:text-white/90 transition-colors">
             {shareFeedback ? "Copied" : "Share"}
           </span>
         </button>

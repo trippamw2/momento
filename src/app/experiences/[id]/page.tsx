@@ -26,7 +26,7 @@ async function tryFetchExperience(id: string) {
     // First try lookup by UUID (primary key)
     let { data: raw, error } = await admin
       .from("experiences")
-      .select("*, partner:partner_id(business_name, business_logo, business_description, business_city, business_phone, business_email), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
+      .select("*, partner:partner_id(business_name, business_logo, business_description, business_city, business_phone, business_email, user_id), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
       .eq("id", id)
       .single();
 
@@ -34,7 +34,7 @@ async function tryFetchExperience(id: string) {
     if (error || !raw) {
       const { data: slugResult } = await admin
         .from("experiences")
-        .select("*, partner:partner_id(business_name, business_logo, business_description, business_city, business_phone, business_email), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
+        .select("*, partner:partner_id(business_name, business_logo, business_description, business_city, business_phone, business_email, user_id), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
         .eq("slug", id)
         .single();
       if (slugResult) raw = slugResult;
@@ -71,9 +71,9 @@ async function tryFetchExperience(id: string) {
 
     const similarIds = (moodExps ?? []).map((e: { id: string }) => e.id);
 
-    const { data: allSimilar } = await admin
+const { data: allSimilar } = await admin
       .from("experiences")
-      .select("*, partner:partner_id(business_name, business_logo, business_city), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
+      .select("*, partner:partner_id(business_name, business_logo, business_city, user_id), images:experience_images(url, alt, is_primary, sort_order), moods:experience_moods(mood_id, moods(id, label, emoji))")
       .in("id", similarIds.length > 0 ? similarIds : [""])
       .limit(10);
 
