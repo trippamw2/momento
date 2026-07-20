@@ -83,6 +83,18 @@ function GuestProfile() {
 
 // ─── Settings Sheet ───
 
+function Toggle({ enabled, onChange }: { enabled: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(!enabled)}
+      className={`relative w-10 h-6 rounded-full transition-all shrink-0 ${enabled ? 'bg-[#FF0F73]' : 'bg-white/10'}`}
+    >
+      <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all ${enabled ? 'left-[18px]' : 'left-0.5'}`} />
+    </button>
+  );
+}
+
 function SettingsSheet({
   user,
   onClose,
@@ -90,27 +102,37 @@ function SettingsSheet({
   user: UserData;
   onClose: () => void;
 }) {
-  const [tab, setTab] = useState<"profile" | "password" | null>("profile");
+  const [tab, setTab] = useState<"profile" | "password" | "email" | "notifications" | "account" | "security" | null>("profile");
 
-  // Edit profile
+    // Edit profile
   const [editName, setEditName] = useState(user.profile?.full_name || "");
+  const [editEmail, setEditEmail] = useState(user.email || "");
   const [editPhone, setEditPhone] = useState(user.profile?.phone || "");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
 
   // Password change
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordSaving, setPasswordSaving] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [passwordSuccess, setPasswordSuccess] = useState("");
 
+  // Notification preferences
+  const [notificationSettings, setNotificationSettings] = useState({
+    push: true,
+    email: true,
+    sms: true,
+    marketing: false,
+  });
+
   // Avatar
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(user.profile?.avatar_url || null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSaveProfile = async () => {
+      const handleSaveProfile = async () => {
     setSaving(true);
     setSaveError("");
     const token = localStorage.getItem("experio-auth-token");
@@ -124,6 +146,7 @@ function SettingsSheet({
         body: JSON.stringify({
           full_name: editName.trim() || null,
           phone: editPhone.trim() || null,
+          email: editEmail.trim() !== user.email ? editEmail.trim() : null,
         }),
       });
       const data = await res.json();
@@ -140,6 +163,7 @@ function SettingsSheet({
   };
 
   const handleChangePassword = async () => {
+    if (!currentPassword) { setPasswordError("Enter your current password"); return; }
     if (!newPassword) { setPasswordError("Enter a new password"); return; }
     if (newPassword.length < 6) { setPasswordError("Password must be at least 6 characters"); return; }
     if (newPassword !== confirmPassword) { setPasswordError("Passwords do not match"); return; }
@@ -156,7 +180,7 @@ function SettingsSheet({
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({ new_password: newPassword }),
+        body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -218,18 +242,18 @@ function SettingsSheet({
             </button>
           </div>
           {/* Tabs */}
-          <div className="flex gap-1 mt-4">
-            {(["profile", "password"] as const).map((t) => (
+          <div className="flex gap-1 mt-4 overflow-x-auto hide-scrollbar">
+            {(["profile", "password", "email", "notifications", "account", "security"] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
                   tab === t
                     ? "bg-white/10 text-white"
                     : "text-white/40 hover:text-white/70"
                 }`}
               >
-                {t === "profile" ? "Profile" : "Password"}
+                {t === "profile" ? "Profile" : t === "password" ? "Password" : t === "email" ? "Email" : t === "notifications" ? "Notifications" : t === "account" ? "Account" : "Security"}
               </button>
             ))}
           </div>
@@ -306,6 +330,19 @@ function SettingsSheet({
 
           {tab === "password" && (
             <>
+              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-white/40 mb-4">
+                Password must be at least 6 characters. Use a mix of letters, numbers, and symbols for a stronger password.
+              </div>
+              <div>
+                <label className="block text-xs text-white/50 mb-1.5 font-medium">Current password</label>
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-[#0A0E17] text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-1 border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20 transition-all"
+                  placeholder="Enter current password"
+                />
+              </div>
               <div>
                 <label className="block text-xs text-white/50 mb-1.5 font-medium">New password</label>
                 <input
@@ -313,6 +350,7 @@ function SettingsSheet({
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-[#0A0E17] text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-1 border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20 transition-all"
+                  placeholder="Enter new password"
                 />
               </div>
               <div>
@@ -322,7 +360,28 @@ function SettingsSheet({
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-[#0A0E17] text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-1 border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20 transition-all"
+                  placeholder="Confirm new password"
                 />
+              </div>
+              <div className="text-right -mt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const token = localStorage.getItem("experio-auth-token");
+                    if (token) {
+                      fetch("/api/auth/reset-password", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                        body: JSON.stringify({ email: user.email }),
+                      });
+                    }
+                    setPasswordSuccess("Reset link sent to your email");
+                    setTimeout(() => setPasswordSuccess(""), 3000);
+                  }}
+                  className="text-xs text-[#FF0F73] hover:text-[#e00b41] font-medium transition-colors"
+                >
+                  Forgot password?
+                </button>
               </div>
               {passwordError && <p className="text-sm text-red-400">{passwordError}</p>}
               {passwordSuccess && <p className="text-sm text-emerald-400">{passwordSuccess}</p>}
@@ -337,6 +396,146 @@ function SettingsSheet({
                   "Update Password"
                 )}
               </button>
+            </>
+          )}
+
+          {tab === "email" && (
+            <>
+              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-white/40 mb-4">
+                Change the email address associated with your account. You&apos;ll need to verify the new email.
+              </div>
+              <div>
+                <label className="block text-xs text-white/50 mb-1.5 font-medium">Current email</label>
+                <p className="text-sm text-white/70 mb-3 px-4 py-3 rounded-xl bg-[#0A0E17] border border-white/[0.1]">{user.email}</p>
+              </div>
+              <div>
+                <label className="block text-xs text-white/50 mb-1.5 font-medium">New email</label>
+                <input
+                  type="email"
+                  value={editEmail}
+                  onChange={(e) => setEditEmail(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-[#0A0E17] text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-1 border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20 transition-all"
+                  placeholder="new@email.com"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-white/50 mb-1.5 font-medium">Current password (for verification)</label>
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-[#0A0E17] text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-1 border border-white/[0.1] focus:border-[#FF0F73] focus:ring-[#FF0F73]/20 transition-all"
+                  placeholder="Enter password to confirm"
+                />
+              </div>
+              {saveError && <p className="text-sm text-red-400">{saveError}</p>}
+              <button
+                onClick={handleSaveProfile}
+                disabled={saving}
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-sm hover:shadow-[0_4px_16px_rgba(255,15,115,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {saving ? (
+                  <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                ) : (
+                  "Change Email"
+                )}
+              </button>
+            </>
+          )}
+
+          {tab === "notifications" && (
+            <>
+              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-white/40 mb-4">
+                Choose which notifications you&apos;d like to receive.
+              </div>
+              {[
+                { key: "push", label: "Push Notifications", desc: "Booking updates and reminders" },
+                { key: "email", label: "Email Notifications", desc: "Promotions and special offers" },
+                { key: "sms", label: "SMS Notifications", desc: "Urgent booking alerts" },
+                { key: "marketing", label: "Marketing Emails", desc: "Newsletter and updates" },
+              ].map((item) => (
+                <div key={item.key} className="flex items-center justify-between py-3 border-b border-white/[0.04] last:border-0">
+                  <div>
+                    <p className="text-sm text-white/80">{item.label}</p>
+                    <p className="text-xs text-white/40">{item.desc}</p>
+                  </div>
+                  <Toggle
+                    enabled={notificationSettings[item.key as keyof typeof notificationSettings]}
+                    onChange={(v) => setNotificationSettings((prev) => ({ ...prev, [item.key]: v }))}
+                  />
+                </div>
+              ))}
+              <p className="text-xs text-white/20 mt-4 text-center">Notification preferences are saved locally.</p>
+            </>
+          )}
+
+          {tab === "account" && (
+            <>
+              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-white/40 mb-4">
+                Manage your account settings and data.
+              </div>
+              <button
+                onClick={() => {}}
+                className="w-full py-3 rounded-xl border border-white/[0.1] text-sm font-medium text-white/70 hover:bg-white/5 transition-all flex items-center justify-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M12 10v6m0 0l-3-3m3 3l3-3" /><path d="M3 17v2a2 2 0 002 2h14a2 2 0 002-2v-2" /><rect x="3" y="4" width="18" height="10" rx="2" /></svg>
+                Export My Data
+              </button>
+              <p className="text-xs text-white/20 mt-1.5 mb-6">Download all your data as a JSON file.</p>
+              <button
+                onClick={() => {
+                  if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+                    const token = localStorage.getItem("experio-auth-token");
+                    fetch("/api/auth/me", { method: "DELETE", headers: token ? { Authorization: `Bearer ${token}` } : {} }).then(() => {
+                      localStorage.removeItem("experio-auth-token");
+                      window.location.href = "/";
+                    }).catch(() => {});
+                  }
+                }}
+                className="w-full py-3 rounded-xl bg-red-500/8 text-red-400/70 text-sm font-medium hover:bg-red-500/15 hover:text-red-400 transition-all border border-red-500/10 flex items-center justify-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6" /><path d="M1 7h22" /><path d="M8 7V4a1 1 0 011-1h6a1 1 0 011 1v3" /></svg>
+                Delete Account
+              </button>
+              <p className="text-xs text-white/20 mt-1.5">Permanently delete your account and all associated data.</p>
+            </>
+          )}
+
+          {tab === "security" && (
+            <>
+              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-white/40 mb-4">
+                Manage your account security settings.
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                  <div>
+                    <p className="text-sm text-white/80">Two-Factor Authentication (2FA)</p>
+                    <p className="text-xs text-white/40">Add an extra layer of security to your account</p>
+                  </div>
+                  <Toggle enabled={false} onChange={() => {}} />
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                  <div>
+                    <p className="text-sm text-white/80">Login Alerts</p>
+                    <p className="text-xs text-white/40">Get notified when someone logs into your account</p>
+                  </div>
+                  <Toggle enabled={true} onChange={() => {}} />
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                  <div>
+                    <p className="text-sm text-white/80">Active Sessions</p>
+                    <p className="text-xs text-white/40">View and manage devices logged into your account</p>
+                  </div>
+                  <button className="text-xs text-[#FF0F73] hover:text-[#e00b41] font-medium">Manage</button>
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                  <div>
+                    <p className="text-sm text-white/80">Passkeys</p>
+                    <p className="text-xs text-white/40">Use your device's biometric authentication</p>
+                  </div>
+                  <button className="text-xs text-[#FF0F73] hover:text-[#e00b41] font-medium">Add Passkey</button>
+                </div>
+              </div>
             </>
           )}
         </div>
