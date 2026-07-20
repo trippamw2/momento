@@ -59,44 +59,65 @@ function timeAgo(dateStr: string): string {
 
 // ─── Tier Display Config ───
 
-const TIER_CONFIG: Record<string, { label: string; icon: string; color: string; minPoints: number }> = {
-  bronze: { label: "Bronze", icon: "🥉", color: "from-amber-700 to-amber-500", minPoints: 0 },
-  silver: { label: "Silver", icon: "🥈", color: "from-slate-400 to-slate-300", minPoints: 500 },
-  gold: { label: "Gold", icon: "🥇", color: "from-yellow-500 to-yellow-300", minPoints: 2000 },
-  platinum: { label: "Platinum", icon: "💎", color: "from-cyan-400 to-blue-400", minPoints: 5000 },
+function BronzeIcon() { return <svg className="w-5 h-5" viewBox="0 0 20 20" fill="#CD7F32"><circle cx="10" cy="10" r="8"/><path d="M10 4l1.5 4.5H16l-3.5 2.5 1.5 4.5L10 13l-4 2.5 1.5-4.5L4 8.5h4.5z" fill="rgba(255,255,255,0.3)"/></svg>; }
+function SilverIcon() { return <svg className="w-5 h-5" viewBox="0 0 20 20" fill="#C0C0C0"><circle cx="10" cy="10" r="8"/><path d="M10 4l1.5 4.5H16l-3.5 2.5 1.5 4.5L10 13l-4 2.5 1.5-4.5L4 8.5h4.5z" fill="rgba(255,255,255,0.3)"/></svg>; }
+function GoldIcon() { return <svg className="w-5 h-5" viewBox="0 0 20 20" fill="#FFD700"><circle cx="10" cy="10" r="8"/><path d="M10 4l1.5 4.5H16l-3.5 2.5 1.5 4.5L10 13l-4 2.5 1.5-4.5L4 8.5h4.5z" fill="rgba(255,255,255,0.3)"/></svg>; }
+function PlatinumIcon() { return <svg className="w-5 h-5" viewBox="0 0 20 20" fill="#00BFFF"><path d="M10 2L8 8H2l5 4-2 6 5-4 5 4-2-6 5-4h-6z"/></svg>; }
+
+const TIER_CONFIG: Record<string, { label: string; icon: React.ReactNode; color: string; minPoints: number }> = {
+  bronze: { label: "Bronze", icon: <BronzeIcon />, color: "from-amber-700 to-amber-500", minPoints: 0 },
+  silver: { label: "Silver", icon: <SilverIcon />, color: "from-slate-400 to-slate-300", minPoints: 500 },
+  gold: { label: "Gold", icon: <GoldIcon />, color: "from-yellow-500 to-yellow-300", minPoints: 2000 },
+  platinum: { label: "Platinum", icon: <PlatinumIcon />, color: "from-cyan-400 to-blue-400", minPoints: 5000 },
 };
 
-// ─── Transaction Icons (playful) ───
+// ─── Transaction SVG Icons ───
 
-const TX_ICONS: Record<string, { icon: string; label: string }> = {
-  deposit: { icon: "💰", label: "Top Up" },
-  withdrawal: { icon: "🎯", label: "Withdrawal" },
-  payment: { icon: "🎫", label: "Booking" },
-  refund: { icon: "↩️", label: "Refund" },
-  transfer_in: { icon: "📥", label: "Transfer In" },
-  transfer_out: { icon: "📤", label: "Transfer Out" },
-  cashback: { icon: "✨", label: "Cashback" },
-  bonus: { icon: "🎁", label: "Bonus" },
-  fee: { icon: "📋", label: "Fee" },
-  adjustment: { icon: "🔄", label: "Adjustment" },
-  gift_card_redemption: { icon: "🎀", label: "Gift Card" },
+function TxIconDeposit() { return <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="7" width="20" height="13" rx="2" /><path d="M16 12a2 2 0 11-4 0 2 2 0 014 0z" /><path d="M12 3v4m0 0l-2-2m2 2l2-2" /></svg>; }
+function TxIconWithdrawal() { return <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M12 5v14m0 0l-2-2m2 2l2-2" /><circle cx="12" cy="12" r="9" /></svg>; }
+function TxIconPayment() { return <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M9 5v10m6-10v10" /><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18" /></svg>; }
+function TxIconRefund() { return <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M7 16l-4-4m0 0l4-4m-4 4h18" /><path d="M17 8V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-2" /></svg>; }
+function TxIconTransferIn() { return <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M12 5v14m0 0l-3-3m3 3l3-3" /><path d="M5 12h14" /></svg>; }
+function TxIconTransferOut() { return <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M12 19V5m0 0l-3 3m3-3l3 3" /><path d="M19 12H5" /></svg>; }
+function TxIconCashback() { return <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M12 2l2.5 6.5L21 9l-5 4.5 1.5 6.5L12 16l-5.5 3.5L8 13.5 3 9l6.5-.5z" /></svg>; }
+function TxIconBonus() { return <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="7" width="20" height="12" rx="2" /><path d="M12 10a2 2 0 100 4 2 2 0 000-4z" /><path d="M2 11h20" /></svg>; }
+function TxIconFee() { return <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" /><path d="M14 2v6h6" /><path d="M12 18v-6m-3 3h6" /></svg>; }
+function TxIconAdjustment() { return <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M4 4v5h5" /><path d="M20 20v-5h-5" /><path d="M4 9a9 9 0 0115.36-5.36" /><path d="M20 15a9 9 0 01-15.36 5.36" /></svg>; }
+function TxIconGiftCard() { return <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="7" width="20" height="12" rx="2" /><path d="M12 11v6" /><path d="M9 14h6" /></svg>; }
+
+const TX_ICONS: Record<string, { icon: React.ReactNode; label: string }> = {
+  deposit: { icon: <TxIconDeposit />, label: "Top Up" },
+  withdrawal: { icon: <TxIconWithdrawal />, label: "Withdrawal" },
+  payment: { icon: <TxIconPayment />, label: "Booking" },
+  refund: { icon: <TxIconRefund />, label: "Refund" },
+  transfer_in: { icon: <TxIconTransferIn />, label: "Transfer In" },
+  transfer_out: { icon: <TxIconTransferOut />, label: "Transfer Out" },
+  cashback: { icon: <TxIconCashback />, label: "Cashback" },
+  bonus: { icon: <TxIconBonus />, label: "Bonus" },
+  fee: { icon: <TxIconFee />, label: "Fee" },
+  adjustment: { icon: <TxIconAdjustment />, label: "Adjustment" },
+  gift_card_redemption: { icon: <TxIconGiftCard />, label: "Gift Card" },
 };
 
 // ─── Action Button ───
 
-function ActionButton({ icon, label, href }: { icon: string; label: string; href: string }) {
+function ActionButton({ icon, label, href }: { icon: React.ReactNode; label: string; href: string }) {
   return (
     <Link
       href={href}
       className="flex flex-col items-center gap-1.5 group"
     >
-      <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-xl group-hover:bg-white/10 group-hover:border-white/20 transition-all duration-300 active:scale-95">
+      <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 group-hover:border-white/20 transition-all duration-300 active:scale-95">
         {icon}
       </div>
       <span className="text-[11px] text-white/50 group-hover:text-white/70 font-medium transition-colors">{label}</span>
     </Link>
   );
 }
+
+function WalletIcon() { return <svg className="w-6 h-6 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="7" width="20" height="13" rx="2" /><path d="M16 12a2 2 0 11-4 0 2 2 0 014 0z" /></svg>; }
+function GiftIcon() { return <svg className="w-6 h-6 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="7" width="20" height="12" rx="2" /><path d="M12 10a2 2 0 100 4 2 2 0 000-4z" /><path d="M2 11h20" /></svg>; }
+function SendIcon() { return <svg className="w-6 h-6 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M22 2L11 13" /><path d="M22 2l-7 20-4-9-9-4 20-7z" /></svg>; }
 
 // ─── Main Page ───
 
@@ -188,7 +209,7 @@ export default function WalletPage() {
       <div className="min-h-screen bg-[#05070B] flex items-center justify-center px-4">
         <div className="text-center max-w-sm">
           <div className="w-20 h-20 rounded-full bg-[#111827] flex items-center justify-center mx-auto mb-6 border border-white/[0.06]">
-            <span className="text-3xl">💰</span>
+            <svg className="w-10 h-10 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="7" width="20" height="13" rx="2" /><path d="M16 12a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
           </div>
           <h1 className="text-2xl font-bold text-white mb-2">Experience Wallet</h1>
           <p className="text-white/50 text-sm mb-8">Sign in to view your balance, rewards, and activity.</p>
@@ -219,7 +240,7 @@ export default function WalletPage() {
           {loyalty && (
             <div className="relative z-10 flex items-center justify-between mb-5">
               <div className="flex items-center gap-2">
-                <span className="text-xl">{tier.icon}</span>
+                <span className="shrink-0">{tier.icon}</span>
                 <div>
                   <p className="text-sm font-semibold text-white capitalize">{tier.label}</p>
                   <p className="text-[11px] text-white/40">{loyalty.points.toLocaleString()} points</p>
@@ -250,9 +271,9 @@ export default function WalletPage() {
 
           {/* Action Buttons: Top Up, Gift, Transfer */}
           <div className="relative z-10 flex items-center justify-center gap-6 sm:gap-8">
-            <ActionButton icon="💰" label="Top Up" href="/wallet/top-up" />
-            <ActionButton icon="🎁" label="Gift" href="/gift" />
-            <ActionButton icon="📤" label="Transfer" href="/wallet/transfer" />
+            <ActionButton icon={<WalletIcon />} label="Top Up" href="/wallet/top-up" />
+            <ActionButton icon={<GiftIcon />} label="Gift" href="/gift" />
+            <ActionButton icon={<SendIcon />} label="Transfer" href="/wallet/transfer" />
           </div>
         </div>
 
@@ -289,21 +310,21 @@ export default function WalletPage() {
             </div>
           ) : transactions.length === 0 ? (
             <div className="text-center py-10 rounded-2xl bg-[#111827]/50 border border-white/[0.06]">
-              <span className="text-2xl block mb-3">💫</span>
+              <svg className="w-8 h-8 mx-auto mb-3 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}><path strokeLinecap="round" strokeLinejoin="round" d="M12 2l2.5 6.5L21 9l-5 4.5 1.5 6.5L12 16l-5.5 3.5L8 13.5 3 9l6.5-.5z" /></svg>
               <p className="text-sm text-white/60">No activity yet</p>
               <p className="text-[11px] text-white/30 mt-1">Top up your wallet to get started</p>
             </div>
           ) : (
             <div className="space-y-1">
               {transactions.slice(0, 10).map((tx) => {
-                const meta = TX_ICONS[tx.type] || { icon: "•", label: tx.type.replace(/_/g, " ") };
+                const meta = TX_ICONS[tx.type] || { icon: <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="3" /></svg>, label: tx.type.replace(/_/g, " ") };
                 const isCredit = ["deposit", "refund", "transfer_in", "cashback", "bonus"].includes(tx.type);
                 return (
                   <div
                     key={tx.id}
                     className="flex items-center gap-3 p-3.5 rounded-xl hover:bg-white/[0.02] transition-all"
                   >
-                    <span className="text-lg shrink-0">{meta.icon}</span>
+                    <span className="shrink-0">{meta.icon}</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-white/80">
                         {tx.description || meta.label}

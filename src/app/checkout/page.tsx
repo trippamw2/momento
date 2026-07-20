@@ -18,11 +18,23 @@ interface Experience {
 
 type PaymentMethod = "paychangu" | "card" | "voucher" | "wallet";
 
-const PAYMENT_OPTIONS: { value: PaymentMethod; label: string; desc: string; icon: string }[] = [
-  { value: "paychangu", label: "Pay Direct", desc: "PayChangu mobile money", icon: "📱" },
-  { value: "card", label: "Card Payment", desc: "Credit or debit card", icon: "💳" },
-  { value: "voucher", label: "Gift Card / Voucher", desc: "Redeem a gift card", icon: "🎁" },
-  { value: "wallet", label: "Experio Wallet", desc: "Pay with wallet balance", icon: "💰" },
+const PAYMENT_OPTIONS: { value: PaymentMethod; label: string; desc: string; icon: React.ReactNode }[] = [
+  {
+    value: "paychangu", label: "Pay Direct", desc: "PayChangu mobile money",
+    icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>,
+  },
+  {
+    value: "card", label: "Card Payment", desc: "Credit or debit card",
+    icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="16" rx="2" /><line x1="2" y1="10" x2="22" y2="10" /><line x1="6" y1="14" x2="8" y2="14" /><line x1="10" y1="14" x2="14" y2="14" /></svg>,
+  },
+  {
+    value: "voucher", label: "Gift Card / Voucher", desc: "Redeem a gift card",
+    icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="7" width="20" height="12" rx="2" /><path d="M12 10a2 2 0 100 4 2 2 0 000-4z" /><path d="M2 11h20" /></svg>,
+  },
+  {
+    value: "wallet", label: "Experio Wallet", desc: "Pay with wallet balance",
+    icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="7" width="20" height="13" rx="2" /><path d="M16 12a2 2 0 11-4 0 2 2 0 014 0z" /></svg>,
+  },
 ];
 
 export default function CheckoutPage() {
@@ -308,7 +320,7 @@ export default function CheckoutPage() {
                     : "border-white/[0.08] bg-[#05070B] text-[#64748B] hover:border-white/20 hover:text-[#CBD5E1]"
                 }`}
               >
-                <span className="text-lg">{opt.icon}</span>
+                <span className="text-white/70">{opt.icon}</span>
                 <p className="text-caption font-semibold mt-1">{opt.label}</p>
                 <p className={`text-caption ${paymentMethod === opt.value ? "text-[#CBD5E1]" : "text-[#64748B]"}`}>{opt.desc}</p>
               </button>
@@ -333,7 +345,7 @@ export default function CheckoutPage() {
                     onClick={() => { setGiftApplied(false); setForm(f => ({ ...f, gift_card_code: "" })); setGiftAmount(0); setGiftError(""); }}
                     className="px-3 py-2 rounded-lg bg-emerald-500/20 text-emerald-400 text-caption font-semibold border border-emerald-500/30 hover:bg-emerald-500/30 transition-all whitespace-nowrap"
                   >
-                    ✓ Applied
+                    Applied
                   </button>
                 ) : (
                   <button
