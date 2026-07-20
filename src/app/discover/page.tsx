@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Experience } from "@/lib/types";
 import { getExperiences } from "@/lib/api-client";
 import { transformExperience } from "@/lib/transform";
-import { experiences as mockExperiences } from "@/lib/data";
 import { trackRecentlyViewed } from "@/lib/recently-viewed";
 import DiscoveryFeedItem from "@/components/DiscoveryFeedItem";
 
@@ -56,29 +55,35 @@ function haversineDistance(a: { lat: number; lng: number }, b: { lat: number; ln
 
 function SectionIcon({ icon }: { icon: string }) {
   switch (icon) {
+    case "✦":
+      return (
+        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l1.5 6.5L20 9l-5 4.5 1.5 7L12 16l-5.5 4.5L8 13.5 3 9l6.5-.5L12 2z" />
+        </svg>
+      );
     case "fire":
       return (
-        <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c0 0 4 4 4 8a4 4 0 11-8 0c0-1 .5-2 1-3M12 3v3m0 0c-1 1.5-1 3 0 4" />
+        <svg className="w-5 h-5 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9c0-3 2-6 4-8 0 0 1 3 1 5s-1 3-1 5c0 0 2-1 4-1 0 0-2 4-4 6s-4 2-4 2-4-1-6-3-2-4-2-4c2 0 4 1 4 1s-1-2-1-4 1-3 1-3c2 2 4 4 4 4z" />
         </svg>
       );
     case "pin":
       return (
-        <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <svg className="w-5 h-5 text-[#FF7A1A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
       );
     case "gem":
       return (
-        <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 3h12l4 6-10 12L2 9l4-6z" />
           <path strokeLinecap="round" strokeLinejoin="round" d="M2 9h20M12 3v18" />
         </svg>
       );
     case "sun":
       return (
-        <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <svg className="w-5 h-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <circle cx="12" cy="12" r="4" />
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" />
         </svg>
@@ -90,21 +95,15 @@ function SectionIcon({ icon }: { icon: string }) {
 
 function SectionHeader({ section }: { section: SectionDef }) {
   return (
-    <div className="snap-start w-full h-[calc(100dvh-64px)] relative flex items-center justify-center bg-gradient-to-b from-black via-black/95 to-black overflow-hidden">
-      {/* Ambient glow */}
-      <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#FF0F73]/5 rounded-full blur-3xl" />
-      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#FF7A1A]/5 rounded-full blur-3xl" />
-      <div className="text-center px-8 relative z-10 animate-[fadeIn_0.5s_ease-out]">
-        <div className="w-20 h-20 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
-          <SectionIcon icon={section.icon} />
-        </div>
-        <h2 className="text-4xl sm:text-5xl font-bold text-white mb-3 tracking-tight">
-          {section.label}
-        </h2>
-        <p className="text-white/40 text-base sm:text-lg font-light max-w-xs mx-auto">
-          {section.subtitle}
-        </p>
+    <div className="w-full px-4 py-5 flex items-center gap-4 border-b border-white/[0.04]">
+      <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center shrink-0">
+        <SectionIcon icon={section.icon} />
       </div>
+      <div className="flex-1 min-w-0">
+        <h2 className="text-base font-bold text-white">{section.label}</h2>
+        <p className="text-xs text-white/40">{section.subtitle}</p>
+      </div>
+      <div className="w-1 h-1 rounded-full bg-[#FF0F73]/60" />
     </div>
   );
 }
@@ -118,9 +117,30 @@ type FeedEntry =
 function buildFeedPlan(
   experiences: Experience[],
   nearMe: boolean,
-  userLocation: { lat: number; lng: number } | null
+  userLocation: { lat: number; lng: number } | null,
+  savedIds: string[] = [],
+  searchHistory: string[] = []
 ): FeedEntry[] {
   const plan: FeedEntry[] = [];
+
+  // Personalize "For You" based on saved items and search history
+  const preferredCategories = new Set<string>();
+  // Boost experiences matching user's saved items' categories
+  const savedExps = experiences.filter((e) => savedIds.includes(e.id));
+  savedExps.forEach((e) => preferredCategories.add(e.category));
+  // Also boost categories from search history keywords
+  searchHistory.forEach((q) => {
+    const ql = q.toLowerCase();
+    experiences.forEach((e) => {
+      if (
+        e.category.toLowerCase().includes(ql) ||
+        e.subtitle.toLowerCase().includes(ql) ||
+        e.title.toLowerCase().includes(ql)
+      ) {
+        preferredCategories.add(e.category);
+      }
+    });
+  });
 
   // Categorize experiences by mood/features for smart sections
   const trending = experiences.filter((e) => (e.bookedCount || 0) > 50 || e.rating >= 4.8);
@@ -147,8 +167,11 @@ function buildFeedPlan(
     return assigned;
   }
 
-  // Build sections
-  const forYou = assign(experiences, SECTIONS[0]);
+  // Build sections — "For You" prioritizes preferred categories
+  const forYouCandidates = preferredCategories.size > 0
+    ? [...experiences.filter((e) => preferredCategories.has(e.category)), ...experiences]
+    : experiences;
+  const forYou = assign(forYouCandidates, SECTIONS[0]);
   const trendExps = assign(trending, SECTIONS[1]);
   const nearbyExps = nearby.length > 0 ? assign(nearby, SECTIONS[2]) : [];
   const gemExps = assign(gems, SECTIONS[3]);
@@ -227,10 +250,10 @@ export default function DiscoverPage() {
       try {
         const res = await getExperiences({ limit: 40, page: 1 });
         const mapped = (res.experiences as Record<string, unknown>[]).map(transformExperience);
-        setExperiences(mapped.length > 0 ? mapped : mockExperiences);
+        setExperiences(mapped);
         setHasMore(mapped.length >= 40);
       } catch {
-        setExperiences(mockExperiences);
+        setExperiences([]);
         setHasMore(false);
       } finally {
         setLoading(false);
@@ -362,24 +385,9 @@ export default function DiscoverPage() {
 
   // Build the smart feed plan — section headers + experience cards
   const feedPlan = useMemo(
-    () => buildFeedPlan(experiences, nearMe, userLocation),
-    [experiences, nearMe, userLocation]
+    () => buildFeedPlan(experiences, nearMe, userLocation, savedIds, searchHistory),
+    [experiences, nearMe, userLocation, savedIds, searchHistory]
   );
-
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-        e.preventDefault();
-        const container = containerRef.current;
-        if (!container) return;
-        const delta = e.key === "ArrowDown" ? 1 : -1;
-        const next = Math.max(0, Math.min(feedPlan.length - 1, currentIndex + delta));
-        container.scrollTo({ top: next * container.clientHeight, behavior: "smooth" });
-      }
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [currentIndex, feedPlan.length]);
 
   const handleSaveToggle = useCallback((id: string, next: boolean) => {
     setSavedIds((prev) => {
@@ -493,10 +501,10 @@ export default function DiscoverPage() {
                     exp.category.toLowerCase().includes(searchQuery.toLowerCase())
                   );
                   if (filtered.length > 0) {
-                    // Scroll to first matching experience
+                    // Scroll to first matching experience card
                     const idx = feedPlan.findIndex((e) => e.type === "experience" && filtered.some((f) => f.id === (e as any).experience.id));
-                    if (idx >= 0 && containerRef.current) {
-                      containerRef.current.scrollTo({ top: idx * containerRef.current.clientHeight, behavior: "smooth" });
+                    if (idx >= 0 && itemRefs.current[idx]) {
+                      itemRefs.current[idx]!.scrollIntoView({ behavior: "smooth", block: "start" });
                     }
                   } else {
                     showToast("No experiences found for your search");
@@ -551,8 +559,7 @@ export default function DiscoverPage() {
       {/* ─── Scrollable Feed ─── */}
       <div
         ref={containerRef}
-        className="fixed inset-0 bg-black overflow-y-scroll snap-y snap-mandatory hide-scrollbar pt-[64px]"
-        style={{ scrollBehavior: "smooth" }}
+        className="fixed inset-0 bg-black overflow-y-scroll hide-scrollbar pt-[64px]"
       >
         <div className="flex flex-col items-center">
           {feedPlan.map((entry, i) => {
@@ -570,7 +577,7 @@ export default function DiscoverPage() {
                   }
                 }}
                 data-index={i}
-                className="snap-start w-full h-[calc(100dvh-64px)] relative"
+                className="w-full relative"
               >
                 <DiscoveryFeedItem
                   experience={entry.experience}

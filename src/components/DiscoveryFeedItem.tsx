@@ -29,28 +29,28 @@ function getSocialBadge(exp: Experience): SocialBadge | null {
   if (createdAt) {
     const age = Date.now() - new Date(createdAt).getTime();
     if (age < 30 * 24 * 60 * 60 * 1000) {
-      return { label: "New", icon: "✨" };
+      return { label: "New", icon: "new" };
     }
   }
 
   // Trending (high bookings)
   if (bookedCount && bookedCount > 80) {
-    return { label: "Trending", icon: "🔥" };
+    return { label: "Trending", icon: "trending" };
   }
 
   // Top Rated
   if (rating >= 4.8) {
-    return { label: "Top Rated", icon: "⭐" };
+    return { label: "Top Rated", icon: "star" };
   }
 
   // Featured
   if (featured) {
-    return { label: "Featured", icon: "✦" };
+    return { label: "Featured", icon: "featured" };
   }
 
   // Frequently Gifted
   if (giftCount && giftCount > 20) {
-    return { label: "Frequently Gifted", icon: "🎁" };
+    return { label: "Frequently Gifted", icon: "gift" };
   }
 
   return null;
@@ -212,139 +212,89 @@ export default function DiscoveryFeedItem({
   return (
     <Link
       href={`/experiences/${exp.id}`}
-      className="relative w-full h-full flex items-center justify-center overflow-hidden bg-black"
+      className="flex items-stretch gap-3 p-4 border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors"
     >
-      {/* ─── Media ─── */}
-      <div className="absolute inset-0">
-        <MediaPlayer
-          media={currentMedia}
-          isActive={isActive}
-          onLoad={() => setImgLoaded(true)}
-          poster={currentMedia.thumbnail || exp.image}
-        />
-
-        {/* Loading shimmer */}
-        {!imgLoaded && (
-          <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-white/5 animate-pulse" />
+      {/* ─── Media Thumbnail ─── */}
+      <div className="w-28 sm:w-36 h-28 sm:h-36 rounded-xl overflow-hidden shrink-0 bg-white/[0.03] relative">
+        <div className="absolute inset-0">
+          <img
+            src={currentMedia.url}
+            alt=""
+            className={`w-full h-full object-cover transition-opacity duration-500 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+            onLoad={() => setImgLoaded(true)}
+          />
+          {!imgLoaded && (
+            <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-white/5 animate-pulse" />
+          )}
+        </div>
+        {badge && (
+          <div className="absolute top-1.5 left-1.5 z-10">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-black/60 text-[9px] text-white/80 font-medium">
+              {badge.icon === "star" ? (
+                <svg className="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+              ) : badge.icon === "trending" ? (
+                <svg className="w-3 h-3 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+              ) : badge.icon === "new" ? (
+                <svg className="w-3 h-3 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              ) : (
+                <svg className="w-3 h-3 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+              )}
+              <span>{badge.label}</span>
+            </span>
+          </div>
         )}
       </div>
 
-      {/* ─── Gradient overlays (clean, minimal) ─── */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/40" />
-
-      {/* ─── Social Proof Badge (1 max, top left) ─── */}
-      {badge && (
-        <div className="absolute top-4 left-4 z-20">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-xs text-white/90 font-medium">
-            <span>{badge.icon}</span>
-            <span>{badge.label}</span>
-          </span>
-        </div>
-      )}
-
-      {/* ─── Bottom Content ─── */}
-      <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 md:p-8 z-10">
-        {/* Title */}
-        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-1 leading-tight max-w-2xl">
-          {exp.title}
-        </h2>
-
-        {/* Emotional tagline */}
-        {tagline && (
-          <p className="text-white/70 text-sm sm:text-base max-w-xl line-clamp-1 mb-3 font-light">
-            {tagline}
-          </p>
-        )}
-
-        {/* Meta row: rating, price, location + Book CTA */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-3 flex-1 min-w-0 text-white/60 text-xs">
-            <span className="flex items-center gap-1 text-white/80">
-              <span className="text-yellow-400">★</span>
-              <span className="font-medium">{exp.rating}</span>
+      {/* ─── Content ─── */}
+      <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+        <div>
+          <h2 className="text-sm font-bold text-white mb-0.5 leading-snug line-clamp-1">{exp.title}</h2>
+          {tagline && (
+            <p className="text-xs text-white/50 line-clamp-1 mb-2">{tagline}</p>
+          )}
+          <div className="flex items-center gap-2 text-[11px] text-white/40">
+            <span className="flex items-center gap-0.5">
+              <svg className="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+              <span className="text-white/70 font-medium">{exp.rating}</span>
             </span>
-            <span className="font-semibold text-white text-sm">
-              {exp.currency} {exp.price.toLocaleString()}
-            </span>
+            <span className="text-white/80 font-semibold">{exp.currency} {exp.price.toLocaleString()}</span>
             <span className="truncate">{exp.location}</span>
           </div>
+        </div>
 
+        {/* Action row */}
+        <div className="flex items-center gap-2 mt-2">
           <button
             onClick={handleBook}
-            className="shrink-0 px-4 py-1.5 rounded-full bg-white text-black font-semibold text-xs hover:bg-white/90 transition-all duration-300 active:scale-[0.97]"
+            className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-xs hover:shadow-[0_2px_8px_rgba(255,15,115,0.3)] transition-all active:scale-[0.97]"
           >
             Book
           </button>
-        </div>
-      </div>
-
-      {/* ─── Floating Action Buttons (right side, 3 max) ─── */}
-      <div className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-4">
-        {/* Save */}
-        <button
-          onClick={handleSave}
-          className="group/btn flex flex-col items-center gap-0.5"
-          aria-label={isSaved ? "Unsave" : "Save"}
-        >
-          <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-white/15 active:scale-90">
-            <svg
-              width="18" height="18" viewBox="0 0 24 24"
-              fill={isSaved ? "white" : "none"}
-              stroke="white"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          <button
+            onClick={handleSave}
+            className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${
+              isSaved
+                ? "border-[#FF0F73] text-[#FF0F73] bg-[#FF0F73]/10"
+                : "border-white/[0.1] text-white/50 hover:bg-white/5"
+            }`}
+          >
+            <svg className="w-3.5 h-3.5 inline mr-1" fill={isSaved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
-          </div>
-          <span className="text-[9px] text-white/60 group-hover/btn:text-white/90 transition-colors">
             {isSaved ? "Saved" : "Save"}
-          </span>
-        </button>
-
-        {/* Gift */}
-        <button
-          onClick={handleGift}
-          className="group/btn flex flex-col items-center gap-0.5"
-          aria-label="Gift"
-        >
-          <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-white/15 active:scale-90">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 12 20 22 4 22 4 12" />
-              <rect x="2" y="7" width="20" height="5" />
-              <line x1="12" y1="22" x2="12" y2="7" />
-              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
-              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
-            </svg>
-          </div>
-          <span className="text-[9px] text-white/60 group-hover/btn:text-white/90 transition-colors">Gift</span>
-        </button>
-
-        {/* Share */}
-        <button
-          onClick={handleShare}
-          className="group/btn flex flex-col items-center gap-0.5"
-          aria-label="Share"
-        >
-          <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-white/15 active:scale-90">
+          </button>
+          <button onClick={handleGift} className="px-3 py-1.5 rounded-lg border border-white/[0.1] text-white/50 text-xs hover:bg-white/5 transition-all">
+            <svg className="w-3.5 h-3.5 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><rect x="2" y="7" width="20" height="12" rx="2" /><path d="M12 10a2 2 0 100 4 2 2 0 000-4z" /><path d="M2 11h20" /></svg>
+            Gift
+          </button>
+          <button onClick={handleShare} className="px-3 py-1.5 rounded-lg border border-white/[0.1] text-white/50 text-xs hover:bg-white/5 transition-all">
             {shareFeedback ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+              <svg className="w-3.5 h-3.5 inline text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
             ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
-                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                <line x1="15.41" y1="6.51" x2="8.58" y2="10.49" />
-              </svg>
+              <svg className="w-3.5 h-3.5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.58" y2="10.49" /></svg>
             )}
-          </div>
-          <span className="text-[9px] text-white/60 group-hover/btn:text-white/90 transition-colors">
-            {shareFeedback ? "Copied" : "Share"}
-          </span>
-        </button>
+          </button>
+        </div>
       </div>
     </Link>
   );
