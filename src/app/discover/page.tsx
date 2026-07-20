@@ -21,14 +21,14 @@ interface SectionDef {
 
 const SECTIONS: SectionDef[] = [
   { key: "for-you", label: "For You", subtitle: "Handpicked just for you", icon: "✦" },
-  { key: "trending", label: "Trending", subtitle: "What everyone's loving", icon: "🔥" },
-  { key: "nearby", label: "Nearby", subtitle: "Experiences close to you", icon: "📍" },
-  { key: "hidden-gems", label: "Hidden Gems", subtitle: "Undiscovered treasures", icon: "💎" },
-  { key: "weekend", label: "Weekend Ideas", subtitle: "Make the most of your weekend", icon: "🌤" },
+  { key: "trending", label: "Trending", subtitle: "What everyone's loving", icon: "fire" },
+  { key: "nearby", label: "Nearby", subtitle: "Experiences close to you", icon: "pin" },
+  { key: "hidden-gems", label: "Hidden Gems", subtitle: "Undiscovered treasures", icon: "gem" },
+  { key: "weekend", label: "Weekend Ideas", subtitle: "Make the most of your weekend", icon: "sun" },
 ];
 
 // Each section gets roughly this many experience cards before the next section label
-const SECTION_SIZE = 3;
+const SECTION_SIZE = 6;
 
 // ─── Helpers ───
 
@@ -54,17 +54,54 @@ function haversineDistance(a: { lat: number; lng: number }, b: { lat: number; ln
 
 // ─── Section Header Component ───
 
+function SectionIcon({ icon }: { icon: string }) {
+  switch (icon) {
+    case "fire":
+      return (
+        <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c0 0 4 4 4 8a4 4 0 11-8 0c0-1 .5-2 1-3M12 3v3m0 0c-1 1.5-1 3 0 4" />
+        </svg>
+      );
+    case "pin":
+      return (
+        <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      );
+    case "gem":
+      return (
+        <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 3h12l4 6-10 12L2 9l4-6z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2 9h20M12 3v18" />
+        </svg>
+      );
+    case "sun":
+      return (
+        <svg className="w-8 h-8 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <circle cx="12" cy="12" r="4" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" />
+        </svg>
+      );
+    default:
+      return <span className="text-3xl">{icon}</span>;
+  }
+}
+
 function SectionHeader({ section }: { section: SectionDef }) {
   return (
-    <div className="snap-start w-full h-[calc(100dvh-72px)] relative flex items-center justify-center bg-black">
-      <div className="text-center px-8">
-        <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-5">
-          <span className="text-2xl">{section.icon}</span>
+    <div className="snap-start w-full h-[calc(100dvh-64px)] relative flex items-center justify-center bg-gradient-to-b from-black via-black/95 to-black overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#FF0F73]/5 rounded-full blur-3xl" />
+      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#FF7A1A]/5 rounded-full blur-3xl" />
+      <div className="text-center px-8 relative z-10 animate-[fadeIn_0.5s_ease-out]">
+        <div className="w-20 h-20 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+          <SectionIcon icon={section.icon} />
         </div>
-        <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2 tracking-tight">
+        <h2 className="text-4xl sm:text-5xl font-bold text-white mb-3 tracking-tight">
           {section.label}
         </h2>
-        <p className="text-white/50 text-sm sm:text-base font-light">
+        <p className="text-white/40 text-base sm:text-lg font-light max-w-xs mx-auto">
           {section.subtitle}
         </p>
       </div>
@@ -168,6 +205,10 @@ export default function DiscoverPage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [aiRecommendations, setAiRecommendations] = useState<Experience[]>([]);
+  const [aiExplanation, setAiExplanation] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -258,13 +299,66 @@ export default function DiscoverPage() {
 
   useEffect(() => {
     if (nearMe && !userLocation) {
-      navigator.geolocation?.getCurrentPosition(
+      if (!navigator.geolocation) {
+        showToast("Location not available on this device");
+        setNearMe(false);
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
         (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        () => setNearMe(false),
-        { timeout: 10000 }
+        () => {
+          showToast("Enable location access for nearby experiences");
+          setNearMe(false);
+        },
+        { timeout: 10000, enableHighAccuracy: false }
       );
     }
-  }, [nearMe, userLocation]);
+  }, [nearMe, userLocation, showToast]);
+
+  // Load AI recommendations on mount
+  useEffect(() => {
+    const loadAI = async () => {
+      setAiLoading(true);
+      try {
+        const res = await fetch("/api/ai?query=" + encodeURIComponent("recommend something for me based on trending experiences"));
+        const data = await res.json();
+        if (data.results && Array.isArray(data.results) && data.results.length > 0) {
+          setAiRecommendations(data.results);
+          setAiExplanation(data.explanation || "");
+        }
+      } catch {
+        // AI is optional - fail silently
+      } finally {
+        setAiLoading(false);
+      }
+    };
+    loadAI();
+  }, []);
+
+  // Load search history from localStorage on mount
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("experio-search-history");
+      if (raw) {
+        const history = JSON.parse(raw);
+        if (Array.isArray(history)) {
+          setSearchHistory(history.slice(0, 8));
+        }
+      }
+    } catch {}
+  }, []);
+
+  // Save search to history
+  const saveSearchToHistory = useCallback((query: string) => {
+    if (!query.trim()) return;
+    setSearchHistory((prev) => {
+      const updated = [query, ...prev.filter((q) => q !== query)].slice(0, 8);
+      try {
+        localStorage.setItem("experio-search-history", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  }, []);
 
   // Build the smart feed plan — section headers + experience cards
   const feedPlan = useMemo(
@@ -387,6 +481,28 @@ export default function DiscoverPage() {
               placeholder="Search experiences…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && searchQuery.trim()) {
+                  saveSearchToHistory(searchQuery.trim());
+                  showToast(`Searching for "${searchQuery.trim()}"…`);
+                  // Filter experiences locally
+                  const filtered = experiences.filter((exp) =>
+                    exp.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    exp.subtitle?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    exp.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    exp.category.toLowerCase().includes(searchQuery.toLowerCase())
+                  );
+                  if (filtered.length > 0) {
+                    // Scroll to first matching experience
+                    const idx = feedPlan.findIndex((e) => e.type === "experience" && filtered.some((f) => f.id === (e as any).experience.id));
+                    if (idx >= 0 && containerRef.current) {
+                      containerRef.current.scrollTo({ top: idx * containerRef.current.clientHeight, behavior: "smooth" });
+                    }
+                  } else {
+                    showToast("No experiences found for your search");
+                  }
+                }
+              }}
               autoFocus
               className="w-full pl-10 pr-8 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-white/30"
             />
@@ -395,6 +511,39 @@ export default function DiscoverPage() {
                 ×
               </button>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ─── AI Recommendations (optional) ─── */}
+      {aiRecommendations.length > 0 && (
+        <div className="fixed top-[64px] left-0 right-0 z-20 bg-black/95 backdrop-blur-md border-b border-white/[0.04] px-4 py-3">
+          <div className="flex items-center gap-2 mb-2">
+            <svg className="w-4 h-4 text-[#FF0F73]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+            <p className="text-sm text-white/90 font-medium">Recommended for you</p>
+          </div>
+          {aiExplanation && (
+            <p className="text-xs text-white/50 mb-2">{aiExplanation}</p>
+          )}
+          <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-1">
+            {aiRecommendations.map((exp) => (
+              <button
+                key={exp.id}
+                onClick={() => {
+                  trackRecentlyViewed(exp.id);
+                  router.push(`/experiences/${exp.id}`);
+                }}
+                className="flex-shrink-0 w-32 rounded-xl bg-white/[0.03] border border-white/[0.06] overflow-hidden hover:bg-white/[0.06] transition-all"
+              >
+                <div className="h-20 bg-gradient-to-br from-[#FF0F73]/20 to-[#FF7A1A]/20" />
+                <div className="p-2">
+                  <p className="text-xs text-white/80 font-medium truncate">{exp.title}</p>
+                  <p className="text-[10px] text-white/40 truncate">{exp.location}</p>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       )}
