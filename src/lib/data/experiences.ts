@@ -667,18 +667,26 @@ const rawExperiences: RawExperience[] = [
   },
 ];
 
-export const experiences: Experience[] = rawExperiences.map((e) => {
+export const experiences: Experience[] = rawExperiences.map((e, idx) => {
   const city = nearestCity(e.location);
+  const randomBooked = Math.floor(Math.random() * 200) + 10;
+  const randomGift = Math.floor(Math.random() * 50);
+  const daysAgo = Math.max(1, Math.floor(Math.random() * 90));
+  const createdDate = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000).toISOString();
   return {
     ...e,
     images: [e.image, ...getGalleryImages(e.galleryCategory)],
     partner: getPartner(e.title),
+    partnerUserId: `host-${e.id}`,
     includes: getIncludes(e.galleryCategory),
     capacity: getCapacity(e.galleryCategory),
     coordinates: getCoords(e.location),
     city,
     distance: "",
     reviews: generateReviews(e.id, e.rating),
+    bookedCount: randomBooked,
+    giftCount: randomGift,
+    createdAt: createdDate,
   };
 });
 

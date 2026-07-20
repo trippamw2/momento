@@ -39,8 +39,9 @@ export default function MobileBottomNav() {
       href: "/wallet",
       label: "Wallet",
       icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0V9M3 12V9" />
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <rect x="2" y="7" width="20" height="13" rx="2" ry="2" />
+          <path d="M16 12a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
       ),
       onClick: !signedIn ? (e: React.MouseEvent) => { e.preventDefault(); setAuthOpen(true); } : undefined,
