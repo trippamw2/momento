@@ -63,6 +63,9 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
   const [authOpen, setAuthOpen] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewSort, setReviewSort] = useState<"recent" | "highest" | "lowest">("recent");
+  const [guests, setGuests] = useState(1);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const router = useRouter();
 
   // Track view on mount
@@ -104,7 +107,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
     const token = localStorage.getItem("experio-auth-token");
     if (!token) { setAuthOpen(true); return; }
 
-    const hostUserId = typeof exp.partner === 'object' && exp.partner !== null ? (exp.partner as any).user_id : null;
+    const hostUserId = exp.partnerUserId || null;
     if (!hostUserId) return;
 
     try {
@@ -126,6 +129,9 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
 
   const handleBookNow = () => {
     const params = new URLSearchParams({ experience_id: exp.id });
+    if (selectedDate) params.set("experience_date", selectedDate);
+    if (selectedTime) params.set("experience_time", selectedTime);
+    params.set("guests_count", String(guests));
     router.push(`/checkout?${params.toString()}`);
   };
 
@@ -263,6 +269,38 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               </div>
             </div>
 
+            {/* Date & Guest Selection */}
+            <div className="mb-4 pb-4 border-b border-white/[0.08]">
+              <div className="mb-3">
+                <p className="text-xs text-white/40 mb-2">Choose date</p>
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[#FF0F73] [color-scheme:dark]"
+                />
+              </div>
+              <div>
+                <p className="text-xs text-white/40 mb-2">Number of guests</p>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setGuests(Math.max(1, guests - 1))}
+                    className="w-10 h-10 rounded-xl border border-white/10 text-white/60 hover:bg-white/5 transition-all text-lg flex items-center justify-center"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>
+                  </button>
+                  <span className="text-white font-semibold text-lg w-8 text-center">{guests}</span>
+                  <button
+                    onClick={() => setGuests(Math.min(exp.capacity, guests + 1))}
+                    className="w-10 h-10 rounded-xl border border-white/10 text-white/60 hover:bg-white/5 transition-all text-lg flex items-center justify-center"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                  </button>
+                  <span className="text-xs text-white/40 ml-2">Max {exp.capacity}</span>
+                </div>
+              </div>
+            </div>
+
             {/* Price + CTA */}
             <div className="flex items-center justify-between gap-4">
               <div>
@@ -272,9 +310,10 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               </div>
               <button
                 onClick={handleBookNow}
-                className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-sm hover:shadow-[0_4px_24px_rgba(255,15,115,0.3)] transition-all duration-300 active:scale-[0.98]"
+                disabled={!selectedDate}
+                className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-sm hover:shadow-[0_4px_24px_rgba(255,15,115,0.3)] transition-all duration-300 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                Book Now
+                {selectedDate ? "Book Now" : "Select Date"}
               </button>
             </div>
 
@@ -297,7 +336,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 href={`/gift?exp=${exp.id}`}
                 className="py-2.5 rounded-xl border border-white/[0.1] text-white/50 text-xs font-medium text-center hover:bg-white/5 hover:text-white/70 transition-all flex items-center justify-center gap-1.5"
               >
-                <span className="text-sm">🎁</span>
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><rect x="2" y="7" width="20" height="12" rx="2" /><path d="M12 10a2 2 0 100 4 2 2 0 000-4z" /><path d="M2 11h20" /></svg>
                 Gift
               </Link>
               <button
