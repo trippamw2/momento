@@ -32,7 +32,7 @@ const PAYMENT_OPTIONS: { value: PaymentMethod; label: string; desc: string; icon
     icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="7" width="20" height="12" rx="2" /><path d="M12 10a2 2 0 100 4 2 2 0 000-4z" /><path d="M2 11h20" /></svg>,
   },
   {
-    value: "wallet", label: "Experio Wallet", desc: "Pay with wallet balance",
+    value: "wallet", label: "Momento Wallet", desc: "Pay with wallet balance",
     icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="7" width="20" height="13" rx="2" /><path d="M16 12a2 2 0 11-4 0 2 2 0 014 0z" /></svg>,
   },
 ];

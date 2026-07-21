@@ -3,22 +3,6 @@ import { createAdminClient } from "@/lib/supabase-admin";
 import ErrorBoundaryWrapper from "./ErrorBoundaryWrapper";
 import ExperienceDetailClient from "@/components/ExperienceDetailClient";
 import { transformExperience } from "@/lib/transform";
-import { experiences as mockExperiences } from "@/lib/data";
-
-function getMockExperience(id: string) {
-  // Direct match by id
-  const direct = mockExperiences.find((e) => e.id === id);
-  if (direct) return direct;
-  // Fallback: if id is a UUID (DB slug fallback) or unknown, try matching by
-  // extracting the slug-like tail or by title slug
-  const slugified = id.replace(/^.*[/#]/, "").toLowerCase().replace(/\s+/g, "-");
-  const slugMatch = mockExperiences.find((e) => e.id === slugified);
-  if (slugMatch) return slugMatch;
-  // Last resort: if UUID doesn't match any mock, pick first mock as fallback
-  // to avoid 404 on valid-but-DB-only experience IDs
-  return mockExperiences[0] ?? null;
-}
-
 async function tryFetchExperience(id: string) {
   try {
     const admin = createAdminClient();
@@ -99,17 +83,6 @@ export default async function ExperienceDetail({ params }: { params: Promise<{ i
     );
   }
 
-  // Fall back to mock data
-  const mock = getMockExperience(id);
-  if (!mock) notFound();
-
-  const similar = mockExperiences
-    .filter((e) => e.id !== id)
-    .slice(0, 8);
-
-  return (
-    <ErrorBoundaryWrapper>
-      <ExperienceDetailClient experience={mock} similarExperiences={similar} />
-    </ErrorBoundaryWrapper>
-  );
+  // No data found — 404
+  notFound();
 }

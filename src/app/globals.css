@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* ── Brand Colors (Experio: #FF0F73 → #FF5B3A → #FF7A1A → #FFA22C) ── */
+  /* ── Brand Colors (Momento: #FF0F73 → #FF5B3A → #FF7A1A → #FFA22C) ── */
   --color-brand-primary: #FF0F73;
   --color-brand-secondary: #FF7A1A;
   --color-brand-pink: #FF0F73;
@@ -188,7 +188,7 @@ body {
   outline-color: var(--color-brand-coral);
 }
 
-/* ── Utility: Gradient Text (Experio: #FF0F73 → #FF5B3A → #FF7A1A) ── */
+/* ── Utility: Gradient Text (Momento: #FF0F73 → #FF5B3A → #FF7A1A) ── */
 .gradient-text {
   background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-coral), var(--color-brand-secondary));
   -webkit-background-clip: text;

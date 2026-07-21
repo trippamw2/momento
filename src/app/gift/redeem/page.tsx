@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { getGiftCardByCode, type GiftCardFull } from "@/lib/gift-engine";
-import { experiences } from "@/lib/data";
 
 export default function GiftRedeemPage() {
   return (

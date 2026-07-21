@@ -5,10 +5,10 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { getExperiences } from "@/lib/api-client";
 import { transformExperience } from "@/lib/transform";
-import { Mood, PRICE_RANGES, Experience } from "@/lib/types";
+import { Mood, PRICE_RANGES, Experience, Intention } from "@/lib/types";
 import { useGeolocation, getDistance, formatDist } from "@/lib/use-geolocation";
 import { AFRICAN_CITY_COORDS, findNearestCity } from "@/lib/geo";
-import { experiences as mockExperiences } from "@/lib/data";
+import { INTENTIONS, INTENTION_LABEL, INTENTION_EMOJI } from "@/lib/types";
 import ExperienceCard from "@/components/ExperienceCard";
 import { trackRecentlyViewed } from "@/lib/recently-viewed";
 
@@ -36,6 +36,7 @@ function filterExperiences(exps: Experience[], opts: {
   search?: string;
   category?: string;
   mood?: Mood | null;
+  intention?: Intention | null;
   priceRange?: string;
   location?: string;
   nearby?: boolean;
@@ -56,6 +57,9 @@ function filterExperiences(exps: Experience[], opts: {
   }
   if (opts.mood) {
     result = result.filter((e) => e.mood.includes(opts.mood as Mood));
+  }
+  if (opts.intention) {
+    result = result.filter((e) => e.intentions.includes(opts.intention!));
   }
   if (opts.priceRange && opts.priceRange !== "all") {
     const [min, max] = opts.priceRange.split("-").map(Number);
@@ -83,10 +87,17 @@ interface FilterState {
   search: string;
   category: string;
   mood: Mood | null;
+  intention: Intention | null;
   price: string;
   location: string;
   nearby: boolean;
   sortBy: string;
+}
+
+function parseIntentionParam(value: string | null): Intention | null {
+  if (!value) return null;
+  const valid: Intention[] = ["let-eat", "treat-me", "lets-go-out", "together", "get-away"];
+  return valid.includes(value as Intention) ? (value as Intention) : null;
 }
 
 function initialState(sp: URLSearchParams): FilterState {
@@ -94,6 +105,7 @@ function initialState(sp: URLSearchParams): FilterState {
     search: sp.get("q") || "",
     category: sp.get("category") || "All",
     mood: parseMoodParam(sp.get("mood")),
+    intention: parseIntentionParam(sp.get("intention")),
     price: sp.get("price") || "all",
     location: sp.get("location") || "All",
     nearby: sp.get("nearby") === "true",
@@ -276,7 +288,7 @@ function FilterSheet({
         <div className="sticky bottom-0 bg-[#111827] border-t border-white/[0.06] p-4 flex gap-3">
           <button
             onClick={() => {
-              setDraft({ search: filters.search, category: filters.category, mood: null, price: "all", location: "All", nearby: false, sortBy: "recommended" });
+              setDraft({ search: filters.search, category: filters.category, mood: null, intention: null, price: "all", location: "All", nearby: false, sortBy: "recommended" });
             }}
             className="flex-1 py-3 rounded-xl bg-[#1E293B] text-white/60 text-sm font-medium hover:bg-white/[0.05] transition-all"
           >
@@ -333,11 +345,9 @@ export default function ExperiencesPageContent() {
     getExperiences({ limit: 50 })
       .then((res) => {
         const mapped = (res.experiences as Record<string, unknown>[]).map(transformExperience);
-        setAllExperiences(mapped.length > 0 ? mapped : mockExperiences);
+        if (mapped.length > 0) setAllExperiences(mapped);
       })
-      .catch(() => {
-        setAllExperiences(mockExperiences);
-      })
+      .catch(() => { /* API unavailable — show empty state */ })
       .finally(() => setFetching(false));
   }, []);
 
@@ -350,7 +360,7 @@ export default function ExperiencesPageContent() {
   }, []);
 
   const clearFilters = useCallback(() => {
-    setFilters({ search: "", category: "All", mood: null, price: "all", location: "All", nearby: false, sortBy: "recommended" });
+    setFilters({ search: "", category: "All", mood: null, intention: null, price: "all", location: "All", nearby: false, sortBy: "recommended" });
     setVisibleCount(ITEMS_PER_PAGE);
   }, []);
 
@@ -367,6 +377,7 @@ export default function ExperiencesPageContent() {
       search: filters.search,
       category: filters.category,
       mood: filters.mood,
+      intention: filters.intention,
       priceRange: filters.price,
       location: filters.location,
       nearby: filters.nearby,
@@ -422,6 +433,7 @@ export default function ExperiencesPageContent() {
     if (filters.search) params.set("q", filters.search);
     if (filters.category !== "All") params.set("category", filters.category);
     if (filters.mood) params.set("mood", filters.mood.toLowerCase().replace(" ", "-"));
+    if (filters.intention) params.set("intention", filters.intention);
     if (filters.price !== "all") params.set("price", filters.price);
     if (filters.location !== "All") params.set("location", filters.location);
     if (filters.nearby) params.set("nearby", "true");
@@ -444,7 +456,18 @@ export default function ExperiencesPageContent() {
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="mb-6">
           <h1 className="text-display-sm font-bold text-[#F1F5F9] mb-1">
-            All <span className="bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] bg-clip-text text-transparent">Experiences</span>
+            {filters.intention ? (
+              <>
+                <span className="mr-2">{INTENTION_EMOJI[filters.intention]}</span>
+                <span className="bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] bg-clip-text text-transparent">
+                  {INTENTION_LABEL[filters.intention]}
+                </span>
+              </>
+            ) : (
+              <>
+                All <span className="bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] bg-clip-text text-transparent">Experiences</span>
+              </>
+            )}
           </h1>
           <p className="text-[#CBD5E1] text-body-lg">{filtered.length} moments to discover</p>
           {geo.position && filters.location !== "All" && (

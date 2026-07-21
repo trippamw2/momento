@@ -1,8 +1,8 @@
 import HostSidebar from "./components/HostSidebar";
 
 export const metadata = {
-  title: "Partner Dashboard — Experio",
-  description: "Manage your experiences, bookings, and host profile on Experio.",
+  title: "Partner Dashboard — Momento",
+  description: "Manage your experiences, bookings, and host profile on Momento.",
 };
 
 export default function PartnerLayout({ children }: { children: React.ReactNode }) {

@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { getExperiences } from "@/lib/api-client";
 import { transformExperience } from "@/lib/transform";
-import { experiences as mockExperiences } from "@/lib/data";
 import { Experience } from "@/lib/types";
 
 function loadSaved(): string[] {
@@ -45,11 +44,9 @@ export default function DiscoveryFeed() {
     getExperiences({ limit: 20 })
       .then((res) => {
         const mapped = (res.experiences as Record<string, unknown>[]).map(transformExperience);
-        setItems(mapped.length > 0 ? mapped.sort(() => Math.random() - 0.5) : [...mockExperiences].sort(() => Math.random() - 0.5));
+        if (mapped.length > 0) setItems(mapped.sort(() => Math.random() - 0.5));
       })
-      .catch(() => {
-        setItems([...mockExperiences].sort(() => Math.random() - 0.5));
-      });
+      .catch(() => { /* API unavailable — show empty state */ });
   }, []);
 
   const handleScroll = useCallback(() => {

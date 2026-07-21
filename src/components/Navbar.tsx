@@ -17,7 +17,7 @@ export default function Navbar() {
   const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("experio-auth-token") : null;
+    const token = typeof window !== "undefined" ? localStorage.getItem("momento-auth-token") : null;
     setSignedIn(!!token);
     getUnreadCount().then(setUnreadCount);
   }, []);
@@ -34,16 +34,16 @@ export default function Navbar() {
   }, []);
 
   const handleSignOut = async () => {
-    const token = localStorage.getItem("experio-auth-token");
+    const token = localStorage.getItem("momento-auth-token");
     try {
       await fetch("/api/auth/logout", {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
     } catch { /* still clear local state */ }
-    localStorage.removeItem("experio-auth-token");
-    localStorage.removeItem("experio-user-role");
-    localStorage.removeItem("experio-signup-role");
+    localStorage.removeItem("momento-auth-token");
+    localStorage.removeItem("momento-user-role");
+    localStorage.removeItem("momento-signup-role");
     setSignedIn(false);
     setProfileOpen(false);
     window.location.reload();

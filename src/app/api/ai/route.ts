@@ -1,6 +1,6 @@
 import { json, handleRouteError, getQueryParams } from "@/lib/api-helpers";
 import { createAdminClient } from "@/lib/supabase-admin";
-import type { Experience, Mood, ExperioCategory } from "@/lib/types";
+import type { Experience, Mood, ExperioCategory, Intention } from "@/lib/types";
 
 const GEMINI_MODEL = "gemini-2.0-flash";
 const GEMINI_MODEL_FALLBACK = "gemini-1.5-flash";
@@ -87,6 +87,18 @@ function dbExpToExperience(db: DbExperience): Experience {
   const cat = db.category as ExperioCategory;
   const images = GALLERY_SETS[cat] || GALLERY_SETS.Date;
   const coords = COORDINATES[db.location] || COORDINATES.Lilongwe;
+  // Derive intentions from tags (moods)
+  const moodToIntentions: Record<string, string[]> = {
+    Romantic: ["together"],
+    Relaxed: ["treat-me", "get-away"],
+    Social: ["lets-go-out"],
+    Culinary: ["let-eat"],
+    Active: ["lets-go-out"],
+    Luxurious: ["treat-me"],
+    Celebratory: ["together", "lets-go-out"],
+    Creative: ["treat-me"],
+  };
+  const intentions = [...new Set((db.tags || []).flatMap((t) => moodToIntentions[t] || []))];
     return {
       id: db.id,
     title: db.title,
@@ -96,12 +108,13 @@ function dbExpToExperience(db: DbExperience): Experience {
     images,
     price: db.price,
     currency: db.currency,
-    partner: PARTNER_NAMES[db.title] || `${db.title} by Experio`,
+    partner: PARTNER_NAMES[db.title] || `${db.title} by Momento`,
     location: db.location,
     city: db.location,
     distance: "",
     duration: db.duration,
     mood: (db.tags || []) as Mood[],
+    intentions: intentions as Intention[],
     rating: Number(db.rating),
     reviewCount: db.review_count,
     category: cat,
@@ -131,12 +144,25 @@ async function fetchExperiences(): Promise<DbExperience[]> {
  * Uses slug as the identifier.
  */
 function buildExperiencesContext(expList: DbExperience[]): string {
+  // Pre-compute intentions for each experience
+  const moodToIntentions: Record<string, string[]> = {
+    Romantic: ["together"],
+    Relaxed: ["treat-me", "get-away"],
+    Social: ["lets-go-out"],
+    Culinary: ["let-eat"],
+    Active: ["lets-go-out"],
+    Luxurious: ["treat-me"],
+    Celebratory: ["together", "lets-go-out"],
+    Creative: ["treat-me"],
+  };
   return expList
     .map(
-      (e) =>
-        `[ID:${e.slug}] ${e.title} — ${e.subtitle}. ${(e.description || "").slice(0, 120)}... ` +
-        `Category: ${e.category}. Mood: ${(e.tags || []).join(", ")}. ` +
-        `Location: ${e.location}. Price: MK ${Number(e.price).toLocaleString()}. Rating: ${e.rating}/5.`
+      (e) => {
+        const intentions = [...new Set((e.tags || []).flatMap((t) => moodToIntentions[t] || []))];
+        return `[ID:${e.slug}] ${e.title} — ${e.subtitle}. ${(e.description || "").slice(0, 120)}... ` +
+        `Intentions: ${intentions.join(", ") || "none"}. Category: ${e.category}. Mood: ${(e.tags || []).join(", ")}. ` +
+        `Location: ${e.location}. Price: MK ${Number(e.price).toLocaleString()}. Rating: ${e.rating}/5.`;
+      }
     )
     .join("\n");
 }
@@ -149,7 +175,7 @@ async function callGemini(query: string, apiKey: string, model: string, expList:
     const geminiUrl = `${GEMINI_API_BASE}/${model}:generateContent?key=${apiKey}`;
     const experienceCatalog = buildExperiencesContext(expList);
 
-    const prompt = `You are an AI lifestyle companion for Experio.life — an experience discovery platform that helps people answer "What do you feel like doing today?" Your job is to understand what the user is looking for and recommend the best matching experiences from the catalog below.
+    const prompt = `You are an AI lifestyle companion for Momento — an experience discovery platform that helps people answer "What do you feel like doing today?" Your job is to understand what the user is looking for and recommend the best matching experiences from the catalog below.
 
 USER QUERY: "${query}"
 
@@ -163,9 +189,10 @@ Respond ONLY with a JSON object in this exact format (no markdown, no code fence
 }
 
 Rules:
-- Select 1-5 experiences that best match the user's query (title, description, tags, category, price, location).
+- Match by INTENT first: "date night" → together, "relax" → treat-me, "go out" → lets-go-out, "food" → let-eat, "escape" → get-away.
+- Then match by mood tags, category, price, and location.
+- Select 1-5 experiences that best match the user's query.
 - If the user mentions a budget, prefer experiences within that range.
-- If the user mentions a mood or category, prefer matching experiences.
 - If the user mentions a location, prefer experiences in that city.
 - If nothing matches well, select the closest options and explain honestly.
 - The "explanation" must be in natural, warm language. Do NOT list IDs or technical details.

@@ -78,7 +78,7 @@ export default function BookingConfirmed({
 
   const handleAddToCalendar = () => {
     const ics = generateICS({
-      title: `Experio: ${title}`,
+      title: `Momento: ${title}`,
       date: experienceDate || new Date().toISOString(),
       location,
       description: `${guests} guest${guests > 1 ? "s" : ""} · Ref: ${bookingRef || "N/A"}`,

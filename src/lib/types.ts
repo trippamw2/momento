@@ -8,6 +8,44 @@ export type Mood =
   | "Celebratory"
   | "Creative";
 
+// ─── Intentions ───
+
+export type Intention =
+  | "let-eat"
+  | "treat-me"
+  | "lets-go-out"
+  | "together"
+  | "get-away";
+
+export interface IntentionConfig {
+  key: Intention;
+  emoji: string;
+  label: string;
+  description: string;
+  accent: string; // tailwind gradient
+  ctaDefault: string; // default CTA text for this intention
+}
+
+export const INTENTIONS: IntentionConfig[] = [
+  { key: "let-eat", emoji: "🍽", label: "Let's Eat", description: "I'm hungry — food or drinks", accent: "from-amber-500 to-orange-500", ctaDefault: "Let's Eat" },
+  { key: "treat-me", emoji: "✨", label: "Treat Me", description: "I deserve something nice", accent: "from-fuchsia-500 to-purple-500", ctaDefault: "Treat Me" },
+  { key: "lets-go-out", emoji: "☀️", label: "Let's Go Out", description: "I want to get out and do something", accent: "from-blue-500 to-cyan-500", ctaDefault: "Let's Go" },
+  { key: "together", emoji: "❤️", label: "Together", description: "Something for us — date night or group hang", accent: "from-rose-500 to-pink-500", ctaDefault: "I'm In" },
+  { key: "get-away", emoji: "🌍", label: "Get Away", description: "I need to escape — even if just for a day", accent: "from-emerald-500 to-teal-500", ctaDefault: "Escape" },
+];
+
+export const INTENTION_EMOJI: Record<Intention, string> = Object.fromEntries(
+  INTENTIONS.map((i) => [i.key, i.emoji])
+) as Record<Intention, string>;
+
+export const INTENTION_LABEL: Record<Intention, string> = Object.fromEntries(
+  INTENTIONS.map((i) => [i.key, i.label])
+) as Record<Intention, string>;
+
+export const INTENTION_DESCRIPTION: Record<Intention, string> = Object.fromEntries(
+  INTENTIONS.map((i) => [i.key, i.description])
+) as Record<Intention, string>;
+
 export interface ItineraryItem {
   time: string;
   title: string;
@@ -82,6 +120,7 @@ export interface Experience {
   distance: string;
   duration: string;
   mood: Mood[];
+  intentions: Intention[];
   emotionalHeadline?: string;
   bestTimeToVisit?: string;
   rating: number;

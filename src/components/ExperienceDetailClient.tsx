@@ -4,7 +4,9 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Experience, Review } from "@/lib/types";
+import { Experience, Review, Intention } from "@/lib/types";
+import { INTENTION_EMOJI, INTENTION_LABEL } from "@/lib/types";
+import { getIntentionCta } from "@/lib/intentions";
 import { trackView, trackBooked, trackSaved } from "@/lib/recommendation-engine";
 
 import ReviewCard from "./ReviewCard";
@@ -174,6 +176,15 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
           <div className="absolute inset-0 bg-gradient-to-t from-[#05070B]/70 via-transparent to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent" />
 
+          {/* Emotional headline overlay */}
+          {exp.emotionalHeadline && (
+            <div className="absolute bottom-20 left-4 sm:left-8 right-4 sm:right-8 z-20">
+              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white/90 italic leading-snug drop-shadow-lg">
+                &ldquo;{exp.emotionalHeadline}&rdquo;
+              </p>
+            </div>
+          )}
+
           {/* Top bar: Back + Save + Share */}
           <div className="absolute top-20 left-4 sm:left-8 right-4 sm:right-8 flex items-start justify-between z-10">
             <Link
@@ -246,6 +257,18 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
               ))}
             </div>
 
+            {/* Intention Badges */}
+            {exp.intentions && exp.intentions.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mb-4">
+                {exp.intentions.map((intention) => (
+                  <span key={intention} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#FF0F73]/10 text-xs text-[#FF0F73] border border-[#FF0F73]/20 font-medium">
+                    <span>{INTENTION_EMOJI[intention]}</span>
+                    <span>{INTENTION_LABEL[intention]}</span>
+                  </span>
+                ))}
+              </div>
+            )}
+
             {/* Title + Subtitle */}
             <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1 leading-tight">{exp.title}</h1>
             <p className="text-white/60 text-lg mb-5">{exp.subtitle}</p>
@@ -272,7 +295,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
             {/* Date & Guest Selection */}
             <div className="mb-4 pb-4 border-b border-white/[0.08]">
               <div className="mb-3">
-                <p className="text-xs text-white/40 mb-2">Choose date</p>
+                <p className="text-xs text-white/40 mb-2">Pick Your Moment</p>
                 <input
                   type="date"
                   value={selectedDate}
@@ -313,7 +336,7 @@ export default function ExperienceDetailClient({ experience: exp, similarExperie
                 disabled={!selectedDate}
                 className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-sm hover:shadow-[0_4px_24px_rgba(255,15,115,0.3)] transition-all duration-300 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {selectedDate ? "Book Now" : "Select Date"}
+                {selectedDate ? "Reserve My Moment" : "Pick Your Moment"}
               </button>
             </div>
 

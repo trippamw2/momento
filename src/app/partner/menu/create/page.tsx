@@ -95,7 +95,7 @@ export default function CreateListingPage() {
         },
         body: JSON.stringify({
           title: form.title,
-          subtitle: form.subtitle || `${form.title} — An Experio Experience`,
+          subtitle: form.subtitle || `${form.title} — A Momento Experience`,
           description: form.description,
           price: parseInt(form.price),
           duration: form.duration,

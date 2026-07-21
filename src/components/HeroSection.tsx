@@ -2,15 +2,19 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { INTENTION_DISPLAY_CONFIG } from "@/lib/intentions";
 
-const CATEGORIES = [
-  { emoji: "❤️", label: "Date", description: "Romantic dinners & sunset spots" },
-  { emoji: "🌿", label: "Chill", description: "Coffee shops, spas & cafés" },
-  { emoji: "🎉", label: "Celebrate", description: "Birthdays, nightlife & dining" },
-  { emoji: "🌍", label: "Escape", description: "Weekend getaways & adventures" },
-];
+function getTimeGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return "Good morning";
+  if (hour >= 12 && hour < 17) return "Good afternoon";
+  if (hour >= 17 && hour < 22) return "Good evening";
+  return "Good night";
+}
 
 export default function HeroSection() {
+  const greeting = getTimeGreeting();
+
   return (
     <section className="relative min-h-[90vh] sm:min-h-[92vh] flex items-center justify-center overflow-hidden">
       {/* Cinematic background */}
@@ -33,35 +37,38 @@ export default function HeroSection() {
         {/* Premium badge */}
         <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#111827]/90 border border-white/[0.1] text-[#CBD5E1] text-caption font-semibold mb-6 sm:mb-8 backdrop-blur-md shadow-sm tracking-wide uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-[#FF0F73] animate-pulse" />
-          Live Life.
+          Live the Moment.
         </div>
 
-        {/* Hero heading */}
-        <h1 className="text-display-sm sm:text-display-lg md:text-display-xl font-bold text-white mb-4 sm:mb-5 tracking-tight leading-[1.06] text-balance">
-          What do you feel
-          <span className="block mt-1 bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] bg-clip-text text-transparent">
-            like doing?
-          </span>
+        {/* Hero heading with greeting */}
+        <h1 className="text-display-sm sm:text-display-lg md:text-display-xl font-bold text-white mb-2 sm:mb-3 tracking-tight leading-[1.06] text-balance">
+          {greeting} 👋
         </h1>
-
-          <p className="text-[#CBD5E1] text-body-lg sm:text-heading-md max-w-xl mx-auto mb-10 sm:mb-12 leading-relaxed font-medium">
-          What are you in the mood for? Browse curated experiences across Malawi.
+        <p className="text-display-xs sm:text-display-sm font-bold text-white mb-4 sm:mb-5 tracking-tight leading-[1.06]">
+          <span className="bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] bg-clip-text text-transparent">
+            What are you in the mood for?
+          </span>
         </p>
 
-        {/* Category grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 max-w-2xl mx-auto">
-          {CATEGORIES.map((cat) => (
+        <p className="text-[#CBD5E1] text-body-lg sm:text-heading-md max-w-xl mx-auto mb-10 sm:mb-12 leading-relaxed font-medium">
+          Less planning. More living.
+        </p>
+
+        {/* Intention grid — 5 cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 max-w-4xl mx-auto">
+          {INTENTION_DISPLAY_CONFIG.map((intention, idx) => (
             <Link
-              key={cat.label}
-              href={`/experiences?category=${cat.label.toLowerCase()}`}
+              key={intention.key}
+              href={intention.href}
               className="group relative overflow-hidden rounded-xl p-3 sm:p-4 bg-[#111827] border border-white/[0.1] hover:border-[#FF0F73]/40 text-white transition-all duration-300 hover:shadow-[0_0_20px_rgba(255, 15, 115, 0.15)] hover:-translate-y-1"
+              style={{ animationDelay: `${idx * 80}ms` }}
             >
               <div className="relative z-10 flex flex-col items-center gap-1 text-center">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#1A2332] border-2 border-white/[0.1] flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-110">
-                  <span className="text-lg sm:text-xl">{cat.emoji}</span>
+                  <span className="text-lg sm:text-xl">{intention.emoji}</span>
                 </div>
-                <span className="text-caption sm:text-body-sm font-bold leading-tight text-white">{cat.label}</span>
-                <span className="text-[10px] sm:text-caption text-[#64748B] leading-snug">{cat.description}</span>
+                <span className="text-caption sm:text-body-sm font-bold leading-tight text-white">{intention.label}</span>
+                <span className="text-[10px] sm:text-caption text-[#64748B] leading-snug">{intention.description}</span>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Link>

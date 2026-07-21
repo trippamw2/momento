@@ -25,8 +25,8 @@ export interface DiscoveryRail {
 // ─── Storage ───
 
 const KEYS = {
-  INTERACTIONS: "experio-interactions",
-  CATEGORY_AFFINITY: "experio-category-affinity",
+  INTERACTIONS: "momento-interactions",
+  CATEGORY_AFFINITY: "momento-category-affinity",
 } as const;
 
 function loadInteractions(): UserInteraction[] {
@@ -105,6 +105,23 @@ function getUserCategoryAffinity(experiences: Experience[]): Record<string, numb
   return scores;
 }
 
+function getUserIntentionAffinity(experiences: Experience[]): Record<string, number> {
+  const interactions = loadInteractions();
+  const scores: Record<string, number> = {};
+
+  for (const exp of experiences) {
+    const expInteractions = interactions.filter((i) => i.experienceId === exp.id);
+    if (expInteractions.length > 0) {
+      const totalWeight = expInteractions.reduce((sum, i) => sum + i.weight, 0);
+      for (const intention of exp.intentions || []) {
+        scores[intention] = (scores[intention] || 0) + totalWeight;
+      }
+    }
+  }
+
+  return scores;
+}
+
 function getViewedExperienceIds(): Set<string> {
   return new Set(loadInteractions().filter((i) => i.type === "viewed").map((i) => i.experienceId));
 }
@@ -143,7 +160,8 @@ function getDayOfWeekBonus(): Record<string, number> {
 function scoreExperiences(
   experiences: Experience[],
   categoryAffinity: Record<string, number>,
-  userLocation?: Coordinates | null
+  userLocation?: Coordinates | null,
+  intentionAffinity?: Record<string, number>
 ): Experience[] {
   const interactedIds = getAllInteractedIds();
   const savedIds = getSavedExperienceIds();
@@ -156,6 +174,13 @@ function scoreExperiences(
 
     // Category affinity: prefer categories user has engaged with
     score += (categoryAffinity[exp.category] || 0) * 2;
+
+    // Intention affinity: prefer intentions user has engaged with
+    if (intentionAffinity) {
+      for (const intention of exp.intentions || []) {
+        score += (intentionAffinity[intention] || 0) * 3;
+      }
+    }
 
     // Saved/booked boost
     if (savedIds.has(exp.id)) score += 3;

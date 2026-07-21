@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Experience } from "@/lib/types";
+import { Experience, Intention } from "@/lib/types";
+import { INTENTION_EMOJI, INTENTION_LABEL } from "@/lib/types";
+import { getIntentionCta } from "@/lib/intentions";
 import { useState, useCallback } from "react";
 import { trackView, trackSaved } from "@/lib/recommendation-engine";
 
@@ -24,6 +26,27 @@ function loadSaved(): string[] {
   }
 }
 
+// Get primary intention for the experience
+function getPrimaryIntention(exp: Experience): Intention | null {
+  return exp.intentions?.[0] ?? null;
+}
+
+// Get CTA text based on primary intention
+function getCtaText(exp: Experience): string {
+  const primary = getPrimaryIntention(exp);
+  return primary ? getIntentionCta(primary) : "Let's Go";
+}
+
+// Intention badge component
+function IntentionBadge({ intention }: { intention: Intention }) {
+  return (
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 backdrop-blur-sm text-[10px] font-medium text-white/80 border border-white/10">
+      <span>{INTENTION_EMOJI[intention]}</span>
+      <span>{INTENTION_LABEL[intention]}</span>
+    </span>
+  );
+}
+
 export default function ExperienceCard({
   experience: exp,
   size = "md",
@@ -37,7 +60,7 @@ export default function ExperienceCard({
   const width = widthMap[size];
   const [saved, setSaved] = useState(() => loadSaved().includes(exp.id));
   const [imgLoaded, setImgLoaded] = useState(false);
-  const primaryMood = exp.mood?.[0];
+  const primaryIntention = getPrimaryIntention(exp);
 
   const toggleSave = useCallback(
     (e: React.MouseEvent) => {
@@ -92,6 +115,13 @@ export default function ExperienceCard({
         {/* Hover ring */}
         <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ring-1 ring-white/20" />
 
+        {/* Intention badge - top left */}
+        {primaryIntention && (
+          <div className="absolute top-3 left-3 z-10">
+            <IntentionBadge intention={primaryIntention} />
+          </div>
+        )}
+
         {/* Save button */}
         <div className="absolute top-3 right-3 z-10">
           <button
@@ -117,13 +147,14 @@ export default function ExperienceCard({
 
       {/* Info below image — photo-dominant, no overlay */}
       <div className="mt-2.5 px-0.5">
-        {primaryMood && (
-          <span className="text-caption text-[#64748B] font-medium uppercase tracking-wider">
-            {primaryMood}
-          </span>
+        {/* Emotional headline */}
+        {exp.emotionalHeadline && (
+          <p className="text-[11px] text-[#FF0F73]/80 font-medium italic line-clamp-1 mb-0.5">
+            &ldquo;{exp.emotionalHeadline}&rdquo;
+          </p>
         )}
 
-        <h3 className="text-[#F1F5F9] font-semibold text-body-sm leading-snug line-clamp-1 mt-0.5">
+        <h3 className="text-[#F1F5F9] font-semibold text-body-sm leading-snug line-clamp-1">
           {exp.title}
         </h3>
 
@@ -140,6 +171,13 @@ export default function ExperienceCard({
           <span className="flex items-center gap-1 text-caption text-[#CBD5E1]">
             <span className="text-yellow-400/80">&#9733;</span>
             {exp.rating}
+          </span>
+        </div>
+
+        {/* CTA button */}
+        <div className="mt-2">
+          <span className="inline-flex items-center justify-center w-full py-2 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white text-xs font-semibold transition-all duration-300 group-hover:shadow-[0_0_16px_rgba(255,15,115,0.4)]">
+            {getCtaText(exp)}
           </span>
         </div>
       </div>

@@ -68,7 +68,7 @@ function GuestProfile() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
           </svg>
         </div>
-        <h1 className="text-2xl font-bold text-white mb-2">Welcome to Experio</h1>
+        <h1 className="text-2xl font-bold text-white mb-2">Welcome to Momento</h1>
         <p className="text-white/50 text-sm mb-8">Sign in to view your profile, manage bookings, and more.</p>
         <Link
           href="/discover"
@@ -118,6 +118,36 @@ function SettingsSheet({
   const [passwordSaving, setPasswordSaving] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [passwordSuccess, setPasswordSuccess] = useState("");
+
+  // Toast for coming-soon features
+  const [toast, setToast] = useState("");
+
+  // Export data
+  const [exporting, setExporting] = useState(false);
+
+  const handleExportData = async () => {
+    setExporting(true);
+    const token = localStorage.getItem("experio-auth-token");
+    try {
+      const res = await fetch("/api/auth/me", {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!res.ok) throw new Error("fetch failed");
+      const data = await res.json();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `experio-export-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setToast("Could not export data. Try again.");
+      setTimeout(() => setToast(""), 2500);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   // Notification preferences
   const [notificationSettings, setNotificationSettings] = useState({
@@ -319,11 +349,7 @@ function SettingsSheet({
                 disabled={saving}
                 className="w-full py-3 rounded-xl bg-gradient-to-r from-[#FF0F73] to-[#FF7A1A] text-white font-semibold text-sm hover:shadow-[0_4px_16px_rgba(255,15,115,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                {saving ? (
-                  <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                ) : (
-                  "Save Changes"
-                )}
+                {saving ? "Saving..." : "Save Changes"}
               </button>
             </>
           )}
@@ -475,11 +501,16 @@ function SettingsSheet({
                 Manage your account settings and data.
               </div>
               <button
-                onClick={() => {}}
-                className="w-full py-3 rounded-xl border border-white/[0.1] text-sm font-medium text-white/70 hover:bg-white/5 transition-all flex items-center justify-center gap-2"
+                onClick={handleExportData}
+                disabled={exporting}
+                className="w-full py-3 rounded-xl border border-white/[0.1] text-sm font-medium text-white/70 hover:bg-white/5 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M12 10v6m0 0l-3-3m3 3l3-3" /><path d="M3 17v2a2 2 0 002 2h14a2 2 0 002-2v-2" /><rect x="3" y="4" width="18" height="10" rx="2" /></svg>
-                Export My Data
+                {exporting ? (
+                  <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                ) : (
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M12 10v6m0 0l-3-3m3 3l3-3" /><path d="M3 17v2a2 2 0 002 2h14a2 2 0 002-2v-2" /><rect x="3" y="4" width="18" height="10" rx="2" /></svg>
+                )}
+                {exporting ? "Exporting..." : "Export My Data"}
               </button>
               <p className="text-xs text-white/20 mt-1.5 mb-6">Download all your data as a JSON file.</p>
               <button
@@ -512,14 +543,14 @@ function SettingsSheet({
                     <p className="text-sm text-white/80">Two-Factor Authentication (2FA)</p>
                     <p className="text-xs text-white/40">Add an extra layer of security to your account</p>
                   </div>
-                  <Toggle enabled={false} onChange={() => {}} />
+                  <Toggle enabled={false} onChange={() => { setToast("2FA coming soon"); setTimeout(() => setToast(""), 2500); }} />
                 </div>
                 <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
                   <div>
                     <p className="text-sm text-white/80">Login Alerts</p>
                     <p className="text-xs text-white/40">Get notified when someone logs into your account</p>
                   </div>
-                  <Toggle enabled={true} onChange={() => {}} />
+                  <Toggle enabled={true} onChange={() => { setToast("Login alerts coming soon"); setTimeout(() => setToast(""), 2500); }} />
                 </div>
                 <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
                   <div>
@@ -539,6 +570,12 @@ function SettingsSheet({
             </>
           )}
         </div>
+        {/* Toast */}
+        {toast && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-white/90 backdrop-blur-sm text-xs text-[#222222] font-medium shadow-xl border border-white/20">
+            {toast}
+          </div>
+        )}
       </div>
     </div>
   );

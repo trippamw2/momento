@@ -20,78 +20,12 @@ interface Message {
   timestamp: string;
 }
 
-const mockConversations: Conversation[] = [
-  {
-    id: "1",
-    guestName: "Sarah Johnson",
-    guestAvatar: "SJ",
-    lastMessage: "Hi! I'm really excited about the cooking class tomorrow.",
-    lastMessageTime: "10:32 AM",
-    unreadCount: 2,
-    messages: [
-      { id: "1", sender: "guest", content: "Hi! I'm really excited about the cooking class tomorrow.", timestamp: "10:30 AM" },
-      { id: "2", sender: "guest", content: "What should I bring? Any dietary restrictions I should know about?", timestamp: "10:31 AM" },
-      { id: "3", sender: "guest", content: "Also, is there parking available at the venue?", timestamp: "10:32 AM" },
-      { id: "4", sender: "host", content: "Hi Sarah! Great to hear you're excited. Just bring yourself and an appetite!", timestamp: "10:35 AM" },
-      { id: "5", sender: "host", content: "No dietary restrictions for this class - we'll be making traditional Malawian dishes.", timestamp: "10:36 AM" },
-      { id: "6", sender: "host", content: "Yes, there's free parking right in front of the kitchen studio.", timestamp: "10:37 AM" },
-    ],
-  },
-  {
-    id: "2",
-    guestName: "Michael Chen",
-    guestAvatar: "MC",
-    lastMessage: "Thanks for the quick response! See you Saturday.",
-    lastMessageTime: "Yesterday",
-    unreadCount: 0,
-    messages: [
-      { id: "1", sender: "guest", content: "Hi, I booked the sunset boat tour for Saturday. What time should I arrive?", timestamp: "Yesterday 2:15 PM" },
-      { id: "2", sender: "host", content: "Hi Michael! Please arrive by 4:30 PM at the Lake Malawi dock. The boat leaves at 5 PM sharp.", timestamp: "Yesterday 2:18 PM" },
-      { id: "3", sender: "guest", content: "Thanks for the quick response! See you Saturday.", timestamp: "Yesterday 2:20 PM" },
-    ],
-  },
-  {
-    id: "3",
-    guestName: "Emily Davis",
-    guestAvatar: "ED",
-    lastMessage: "Can I add one more person to the booking?",
-    lastMessageTime: "Monday",
-    unreadCount: 1,
-    messages: [
-      { id: "1", sender: "guest", content: "Hi! We loved the hiking tour. Can I add one more person to our booking for next week?", timestamp: "Monday 9:00 AM" },
-      { id: "2", sender: "host", content: "Hi Emily! Thanks for the kind words. Let me check availability for next week.", timestamp: "Monday 9:15 AM" },
-      { id: "3", sender: "guest", content: "Can I add one more person to the booking?", timestamp: "Monday 10:30 AM" },
-    ],
-  },
-  {
-    id: "4",
-    guestName: "James Wilson",
-    guestAvatar: "JW",
-    lastMessage: "The pottery workshop was amazing! Will leave a review.",
-    lastMessageTime: "Last week",
-    unreadCount: 0,
-    messages: [
-      { id: "1", sender: "guest", content: "The pottery workshop was amazing! Will leave a review.", timestamp: "Last week" },
-      { id: "2", sender: "host", content: "So glad you enjoyed it James! Your pieces turned out beautifully.", timestamp: "Last week" },
-    ],
-  },
-  {
-    id: "5",
-    guestName: "Lisa Anderson",
-    guestAvatar: "LA",
-    lastMessage: "Question about the dietary options for the food tour",
-    lastMessageTime: "Last week",
-    unreadCount: 0,
-    messages: [
-      { id: "1", sender: "guest", content: "Hi! I'm vegetarian - are there options on the food tour?", timestamp: "Last week" },
-      { id: "2", sender: "host", content: "Absolutely! We have vegetarian options at every stop. Let me know of any other restrictions.", timestamp: "Last week" },
-    ],
-  },
-];
+// Empty default — fetched from API on mount
+const EMPTY_CONVERSATIONS: Conversation[] = [];
 
 export default function MessagesPage() {
   const { allowed: isPartner, loading: authLoading } = useAuthGuard({ requiredRole: "partner" });
-  const [conversations, setConversations] = useState<Conversation[]>(mockConversations);
+  const [conversations, setConversations] = useState<Conversation[]>(EMPTY_CONVERSATIONS);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [newMessage, setNewMessage] = useState("");
   const [mobileView, setMobileView] = useState<"list" | "chat">("list");

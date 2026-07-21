@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Discover — Experio",
+  title: "Discover — Momento",
   description: "Swipe through unforgettable experiences. Save, gift, share, or book instantly.",
 };
 

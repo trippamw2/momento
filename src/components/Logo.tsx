@@ -17,7 +17,7 @@ export default function Logo({ size = "md", showTagline = false }: LogoProps) {
     <Link href="/" className="flex items-center group">
       <Image
         src="/experio-logo.png"
-        alt="Experio"
+        alt="Momento"
         width={1280}
         height={683}
         className={`w-auto ${sizeClasses[size]} transition-transform duration-300 group-hover:scale-105 object-contain`}

@@ -1,4 +1,5 @@
-import { Experience, Mood, NavItem, DiscoveryRailKey, Review, ExperioCategory } from "../types";
+import { Experience, Mood, NavItem, DiscoveryRailKey, Review, ExperioCategory, Intention } from "../types";
+import { getIntentionsFromMoods } from "../intentions";
 import { haversineDistance, formatDistance, AFRICAN_CITY_COORDS } from "../geo";
 
 export const moods: { label: Mood; description: string; accent: string }[] = [
@@ -141,7 +142,7 @@ function getGalleryImages(category: string): string[] {
 }
 
 function getPartner(title: string): string {
-  return partners[title] || `${title} by Experio`;
+  return partners[title] || `${title} by Momento`;
 }
 
 function getIncludes(category: string): string[] {
@@ -187,6 +188,7 @@ interface RawExperience {
   location: string;
   duration: string;
   mood: Mood[];
+  intentions: Intention[];
   emotionalHeadline?: string;
   bestTimeToVisit?: string;
   rating: number;
@@ -208,6 +210,7 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "3 hours",
     mood: ["Romantic", "Luxurious"],
+    intentions: ["together", "treat-me"],
     emotionalHeadline: "Where the sky meets the lake, and time stands still",
     rating: 4.9,
     reviewCount: 178,
@@ -226,6 +229,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "4 hours",
     mood: ["Relaxed", "Social"],
+    intentions: ["treat-me", "get-away", "lets-go-out"],
     emotionalHeadline: "Your weekend deserves a little splash",
     rating: 4.8,
     reviewCount: 124,
@@ -244,6 +248,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "3 hours",
     mood: ["Romantic", "Culinary", "Luxurious"],
+    intentions: ["together", "let-eat", "treat-me"],
     emotionalHeadline: "The perfect table for tonight's memories",
     rating: 4.9,
     reviewCount: 89,
@@ -262,6 +267,7 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "6 hours",
     mood: ["Relaxed", "Luxurious"],
+    intentions: ["treat-me", "get-away"],
     emotionalHeadline: "A few hours where the world doesn't need you",
     rating: 4.7,
     reviewCount: 156,
@@ -280,6 +286,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "3 hours",
     mood: ["Culinary", "Social"],
+    intentions: ["let-eat", "lets-go-out"],
     emotionalHeadline: "Slow mornings. Good food. Even better company.",
     rating: 4.6,
     reviewCount: 203,
@@ -298,6 +305,7 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "2 nights",
     mood: ["Romantic", "Relaxed"],
+    intentions: ["together", "treat-me", "get-away"],
     emotionalHeadline: "Wake up somewhere that feels different",
     rating: 4.9,
     reviewCount: 67,
@@ -316,6 +324,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "6 hours",
     mood: ["Social", "Celebratory"],
+    intentions: ["lets-go-out", "together"],
     emotionalHeadline: "Because your besties deserve the best",
     rating: 4.7,
     reviewCount: 112,
@@ -334,6 +343,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "4 hours",
     mood: ["Celebratory", "Social"],
+    intentions: ["together", "lets-go-out"],
     emotionalHeadline: "Your day. Your way. Your moment to shine.",
     rating: 4.8,
     reviewCount: 91,
@@ -352,6 +362,7 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "2 days",
     mood: ["Relaxed", "Active"],
+    intentions: ["treat-me", "get-away", "lets-go-out"],
     emotionalHeadline: "Reset your soul. Find your center.",
     rating: 4.8,
     reviewCount: 45,
@@ -370,6 +381,7 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "2.5 hours",
     mood: ["Culinary", "Social"],
+    intentions: ["let-eat", "lets-go-out"],
     emotionalHeadline: "Sip, savour, and let the evening unfold",
     rating: 4.5,
     reviewCount: 54,
@@ -388,6 +400,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "6 hours",
     mood: ["Active", "Romantic"],
+    intentions: ["lets-go-out", "together"],
     emotionalHeadline: "For the kind of love that loves adventure",
     rating: 4.6,
     reviewCount: 78,
@@ -406,6 +419,7 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "90 minutes",
     mood: ["Romantic", "Relaxed"],
+    intentions: ["together", "treat-me", "get-away"],
     emotionalHeadline: "Side by side. In perfect stillness.",
     rating: 4.9,
     reviewCount: 143,
@@ -424,6 +438,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "3 hours",
     mood: ["Celebratory", "Creative"],
+    intentions: ["together", "lets-go-out", "treat-me"],
     emotionalHeadline: "Your best angles. Your best light. Your best self.",
     rating: 4.7,
     reviewCount: 99,
@@ -442,6 +457,7 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "3 hours",
     mood: ["Active", "Relaxed"],
+    intentions: ["lets-go-out", "treat-me", "get-away"],
     emotionalHeadline: "Peace on water. Paddles at dawn.",
     rating: 4.5,
     reviewCount: 63,
@@ -460,6 +476,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "3 hours",
     mood: ["Romantic", "Culinary", "Luxurious"],
+    intentions: ["together", "let-eat", "treat-me"],
     emotionalHeadline: "City lights. Fine wine. Your kind of evening.",
     rating: 4.8,
     reviewCount: 134,
@@ -478,6 +495,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "2 hours",
     mood: ["Culinary", "Social"],
+    intentions: ["let-eat", "lets-go-out"],
     emotionalHeadline: "Slow mornings start with great coffee",
     rating: 4.4,
     reviewCount: 87,
@@ -496,6 +514,7 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "4 hours",
     mood: ["Romantic", "Active"],
+    intentions: ["together", "lets-go-out"],
     emotionalHeadline: "Where the wild meets the romantic",
     rating: 4.9,
     reviewCount: 56,
@@ -514,6 +533,7 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "4 hours",
     mood: ["Romantic", "Luxurious"],
+    intentions: ["together", "treat-me"],
     emotionalHeadline: "Secluded sands. Starlit skies. Just the two of you.",
     rating: 5.0,
     reviewCount: 32,
@@ -532,6 +552,7 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "2 nights",
     mood: ["Romantic", "Active"],
+    intentions: ["together", "lets-go-out"],
     emotionalHeadline: "Roughing it, refined. Luxury under canvas.",
     rating: 4.7,
     reviewCount: 41,
@@ -550,6 +571,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "3 hours",
     mood: ["Creative", "Social"],
+    intentions: ["treat-me", "lets-go-out"],
     emotionalHeadline: "Wine in one hand. Brush in the other.",
     rating: 4.6,
     reviewCount: 73,
@@ -568,6 +590,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "3 hours",
     mood: ["Social", "Romantic"],
+    intentions: ["lets-go-out", "together"],
     emotionalHeadline: "Let the music move you. Let the night take over.",
     rating: 4.5,
     reviewCount: 68,
@@ -586,6 +609,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "4 hours",
     mood: ["Culinary", "Social", "Creative"],
+    intentions: ["let-eat", "lets-go-out", "treat-me"],
     emotionalHeadline: "Taste Malawi. Learn. Laugh. Eat.",
     rating: 4.6,
     reviewCount: 47,
@@ -604,6 +628,7 @@ const rawExperiences: RawExperience[] = [
     location: "Blantyre",
     duration: "4 hours",
     mood: ["Relaxed", "Active"],
+    intentions: ["treat-me", "get-away", "lets-go-out"],
     emotionalHeadline: "Breathe. Stretch. Exist. Find your flow.",
     rating: 4.7,
     reviewCount: 38,
@@ -622,6 +647,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "4 hours",
     mood: ["Social", "Relaxed"],
+    intentions: ["lets-go-out", "treat-me", "get-away"],
     emotionalHeadline: "Sun, games, and smiles all around",
     rating: 4.5,
     reviewCount: 82,
@@ -640,6 +666,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "2.5 hours",
     mood: ["Creative", "Social", "Celebratory"],
+    intentions: ["treat-me", "lets-go-out", "together"],
     emotionalHeadline: "Shake things up. Literally.",
     rating: 4.6,
     reviewCount: 55,
@@ -658,6 +685,7 @@ const rawExperiences: RawExperience[] = [
     location: "Lilongwe",
     duration: "2 hours",
     mood: ["Active", "Romantic"],
+    intentions: ["lets-go-out", "together"],
     emotionalHeadline: "Trails, gallops, and the open plains",
     rating: 4.4,
     reviewCount: 36,

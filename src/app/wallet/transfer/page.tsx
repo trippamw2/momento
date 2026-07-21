@@ -82,7 +82,7 @@ export default function TransferPage() {
     <div className="max-w-md mx-auto space-y-6">
       <div>
         <h1 className="text-heading-lg font-bold text-[#F1F5F9]">Send Money</h1>
-        <p className="text-body-sm text-[#64748B] mt-1">Transfer funds to another Experio user</p>
+        <p className="text-body-sm text-[#64748B] mt-1">Transfer funds to another Momento user</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">

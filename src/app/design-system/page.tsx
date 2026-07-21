@@ -4,7 +4,7 @@ import Button from "@/components/Button";
 import MoodPill from "@/components/MoodPill";
 import ContentRail from "@/components/ContentRail";
 import ExperienceCard from "@/components/ExperienceCard";
-import { experiences, moods } from "@/lib/data";
+// Design system page uses inline data only — no mock imports needed
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

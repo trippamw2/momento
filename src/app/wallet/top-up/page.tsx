@@ -72,7 +72,7 @@ export default function TopUpPage() {
     <div className="max-w-md mx-auto space-y-6">
       <div>
         <h1 className="text-heading-lg font-bold text-[#F1F5F9]">Top Up Wallet</h1>
-        <p className="text-body-sm text-[#64748B] mt-1">Add funds to your Experio wallet via mobile money</p>
+        <p className="text-body-sm text-[#64748B] mt-1">Add funds to your Momento wallet via mobile money</p>
       </div>
 
       {/* Amount Presets */}

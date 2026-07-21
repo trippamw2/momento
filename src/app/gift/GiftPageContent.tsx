@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import QRCode from "qrcode";
-import { experiences } from "@/lib/data";
 import GiftCard, { GIFT_CARD_VARIANTS } from "@/components/GiftCard";
 import { sendGiftCard } from "@/lib/gift-engine";
 import { downloadGiftPDF } from "@/lib/gift-card-pdf";
@@ -909,7 +908,7 @@ return (
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className={`text-[10px] font-bold ${selectedVariant.textColorSecondary} uppercase tracking-[0.15em]`}>Experio</p>
+                          <p className={`text-[10px] font-bold ${selectedVariant.textColorSecondary} uppercase tracking-[0.15em]`}>Momento</p>
                           <p className={`text-[8px] ${selectedVariant.textColorSecondary} opacity-60 tracking-wider uppercase`}>Gift Card</p>
                         </div>
                       </div>

@@ -3,7 +3,6 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { experiences, defaultCollections, defaultSavedIds } from "@/lib/data";
 import { Experience } from "@/lib/types";
 import { trackSaved } from "@/lib/recommendation-engine";
 import { getRecentlyViewed, RecentlyViewedItem } from "@/lib/recently-viewed";
@@ -32,7 +31,7 @@ interface ApiSavedItem {
 }
 
 /** Convert an API saved item's nested experience into a partial Experience usable by this page */
-function toMockExperience(apiExp: ApiSavedExperience): Experience | null {
+function apiToExperience(apiExp: ApiSavedExperience): Experience | null {
   if (!apiExp || !apiExp.id) return null;
   // Derive a city from location
   const city = (apiExp.location || "").split(",")[0].trim() || apiExp.location;
@@ -53,6 +52,7 @@ function toMockExperience(apiExp: ApiSavedExperience): Experience | null {
     distance: "",
     duration: apiExp.duration || "",
     mood: [],
+    intentions: [],
     rating: apiExp.rating ?? 0,
     reviewCount: apiExp.review_count ?? 0,
     category: (apiExp.category as Experience["category"]) || "Date",
@@ -86,12 +86,12 @@ function timeAgo(ts: number): string {
 }
 
 function loadState(): SavedState {
-  if (typeof window === "undefined") return { savedIds: defaultSavedIds, collections: defaultCollections };
+  if (typeof window === "undefined") return { savedIds: [], collections: [] };
   try {
     const raw = localStorage.getItem("experio-saved");
     if (raw) return JSON.parse(raw);
   } catch (e) { console.warn("Failed to load saved state:", e); }
-  return { savedIds: defaultSavedIds, collections: defaultCollections };
+  return { savedIds: [], collections: [] };
 }
 
 function saveState(state: SavedState) {
@@ -205,7 +205,7 @@ export default function SavedPageContent() {
         // Convert API experiences to Experience type and build ID map
         const expMap = new Map<string, Experience>();
         items.forEach((item) => {
-          const conv = toMockExperience(item.experience);
+          const conv = apiToExperience(item.experience);
           if (conv) expMap.set(item.experience_id, conv);
         });
         setApiExperiences(expMap);
@@ -225,15 +225,11 @@ export default function SavedPageContent() {
   useEffect(() => { saveState(state); }, [state]);
   useEffect(() => { saveFavorites(favoriteIds); }, [favoriteIds]);
 
-  // Combine mock experiences with API-fetched experiences for display
-  const allExperiences = useMemo(() => {
-    const merged = [...experiences];
-    // Add API experiences that aren't already in mock data (by ID)
-    apiExperiences.forEach((exp) => {
-      if (!merged.find((m) => m.id === exp.id)) merged.push(exp);
-    });
-    return merged;
-  }, [apiExperiences]);
+  // All experiences come from API — no mock fallback
+  const allExperiences = useMemo(
+    () => Array.from(apiExperiences.values()),
+    [apiExperiences]
+  );
 
   const savedExperiences = useMemo(
     () => allExperiences.filter((e) => state.savedIds.includes(e.id)),
@@ -476,7 +472,7 @@ export default function SavedPageContent() {
 
                   <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
                     {state.collections.map((col) => {
-                      const colExps = experiences.filter((e) => col.experienceIds.includes(e.id));
+                      const colExps = Array.from(apiExperiences.values()).filter((e) => col.experienceIds.includes(e.id));
                       const coverImg = colExps.length > 0 ? colExps[0].image : null;
                       return (
                         <div key={col.id} className="flex-shrink-0 w-48 group">
@@ -547,7 +543,7 @@ export default function SavedPageContent() {
                   </div>
                   <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
                     {getRecentlyViewed().slice(0, 6).map((rv) => {
-                      const exp = experiences.find((e) => e.id === rv.id);
+                      const exp = apiExperiences.get(rv.id);
                       if (!exp) return null;
                       return (
                         <Link
@@ -583,7 +579,7 @@ export default function SavedPageContent() {
                     <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                   </div>
                   <h2 className="text-heading-xl font-bold text-[#F1F5F9] mb-2">Don&apos;t miss out on your favourites.</h2>
-                  <p className="text-[#64748B] text-body-lg mb-6">Book now and live the moment.</p>
+                  <p className="text-[#64748B] text-body-lg mb-6">Reserve your moment.</p>
                   <Link
                     href="/experiences"
                     className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#FF0F73] text-white font-semibold text-body-sm hover:shadow-[0_4px_16px_rgba(255, 15, 115, 0.25)] transition-all duration-300"

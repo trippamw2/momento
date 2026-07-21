@@ -1,6 +1,7 @@
-import { Experience, Review, ExperioCategory, V2Category } from "./types";
+import { Experience, Review, ExperioCategory, V2Category, Intention } from "./types";
 import { mapV2CategoryToExperio } from "./categories";
 import { AFRICAN_CITY_COORDS } from "./geo";
+import { getIntentionsFromMoods } from "./intentions";
 
 const CITY_MAP: Record<string, string> = {
   "Cape Maclear": "Lilongwe",
@@ -80,6 +81,13 @@ export function transformExperience(raw: Record<string, unknown>): Experience {
     duration: (raw.duration as string) ?? "",
     mood: parsedMood,
     emotionalHeadline: (raw.emotionalHeadline as string) ?? undefined,
+    // Map intentions from raw data or compute from mood
+    intentions: (() => {
+      const rawIntentions = raw.intentions as Intention[] | undefined;
+      return rawIntentions && rawIntentions.length > 0
+        ? rawIntentions
+        : getIntentionsFromMoods(parsedMood);
+    })(),
     bestTimeToVisit: (raw.bestTimeToVisit as string) ?? undefined,
     rating: (raw.rating as number) ?? 0,
     reviewCount: (raw.review_count as number) ?? reviews.length,

@@ -6,12 +6,21 @@ export default function CalendarWidget() {
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
   const [year, setYear] = useState(today.getFullYear());
+  const [blockedDates, setBlockedDates] = useState<Set<number>>(new Set());
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDay = new Date(year, month, 1).getDay();
-  const blockedDates = new Set([5, 12, 19, 25]);
 
   const prev = () => { if (month === 0) { setMonth(11); setYear((y) => y - 1); } else setMonth((m) => m - 1); };
   const next = () => { if (month === 11) { setMonth(0); setYear((y) => y + 1); } else setMonth((m) => m + 1); };
+
+  const toggleDate = (date: number) => {
+    setBlockedDates((prev) => {
+      const next = new Set(prev);
+      if (next.has(date)) next.delete(date);
+      else next.add(date);
+      return next;
+    });
+  };
 
   const cells: (number | null)[] = Array(firstDay).fill(null);
   for (let d = 1; d <= daysInMonth; d++) cells.push(d);
@@ -41,6 +50,7 @@ export default function CalendarWidget() {
           return (
             <button
               key={d}
+              onClick={() => toggleDate(d)}
               className={`w-full aspect-square rounded-lg text-caption font-medium flex items-center justify-center transition-colors ${
                 blocked
                   ? "bg-red-50 text-red-500 line-through"

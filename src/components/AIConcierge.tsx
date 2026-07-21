@@ -90,12 +90,12 @@ export default function AIConcierge() {
   };
 
   const suggestions = [
-    "I'm feeling romantic 🌹",
-    "I want somewhere quiet ☕",
-    "Surprise me! ✨",
+    "I'm planning a date night 🍽",
+    "I need to relax and recharge ✨",
+    "Planning a celebration ❤️",
+    "I want to get out and have fun ☀️",
+    "I need to escape for a bit 🌍",
     "I have MWK 50,000 💰",
-    "I only have two hours ⏰",
-    "What's nearby? 📍",
   ];
 
   return (
@@ -103,7 +103,7 @@ export default function AIConcierge() {
       <div className="p-5 sm:p-6 rounded-2xl bg-[#0A101B] border border-white/[0.06]">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF0F73] to-[#F82D7B] flex items-center justify-center shadow-[0_4px_16px_rgba(255, 15, 115, 0.3)] overflow-hidden">
-            <Image src="/experio-icon.svg" alt="Experio" width={24} height={24} className="object-contain" />
+            <Image src="/experio-icon.svg" alt="Momento" width={24} height={24} className="object-contain" />
           </div>
           <div>
             <p className="text-body font-semibold text-white">AI Concierge</p>
@@ -130,7 +130,7 @@ export default function AIConcierge() {
               ) : (
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FF0F73] to-[#F82D7B] flex items-center justify-center flex-shrink-0 overflow-hidden shadow-[0_2px_8px_rgba(255,15,115,0.2)]">
-                    <Image src="/experio-icon.svg" alt="Experio" width={20} height={20} className="object-contain" />
+                    <Image src="/experio-icon.svg" alt="Momento" width={20} height={20} className="object-contain" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="p-4 rounded-xl bg-[#111827] border border-white/[0.06] mb-3">
@@ -191,7 +191,7 @@ export default function AIConcierge() {
           {thinking && (
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FF0F73] to-[#F82D7B] flex items-center justify-center flex-shrink-0 overflow-hidden">
-                <Image src="/experio-icon.svg" alt="Experio" width={20} height={20} className="object-contain" />
+                <Image src="/experio-icon.svg" alt="Momento" width={20} height={20} className="object-contain" />
               </div>
               <div className="p-4 rounded-xl bg-[#111827] border border-white/[0.06]">
                 <div className="flex items-center gap-2">
